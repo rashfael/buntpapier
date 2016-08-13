@@ -1,0 +1,13 @@
+.DS_Store
+[Tt]humbs.db
+
+~*
+*.log
+*.log.*
+
+node_modules
+public
+dist
+
+config.js
+.publish

@@ -1,0 +1,66 @@
+@import './_material-color'
+
+card()
+	border-radius 2px
+	box-shadow 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+	background-color clr-white
+	transition box-shadow .3s
+
+card-raised()
+	box-shadow 0 5px 5px 0 rgba(0,0,0,0.16),0 8px 10px 0 rgba(0,0,0,0.12)
+
+discard()
+	border-radius 0
+	box-shadow none
+
+parting-shadow-top()
+	box-shadow 0 2px 5px rgba(0,0,0,0.12)
+parting-shadow-bottom()
+	box-shadow 0 -2px 5px rgba(0,0,0,0.12)
+
+card-header()
+	width 100%
+	// border-bottom 1px solid clr-grey-600
+	padding 1rem 2rem
+	box-sizing border-box
+	background-color clr-light-blue-500
+	color clr-light-blue-50
+	font-weight 300
+
+border-separator()
+	1px solid clr-dividers-light
+
+border-separator-dark()
+	1px solid clr-dividers-dark
+
+table()
+	margin-top 16px
+	width 100%
+	tr
+		border-bottom border-separator()
+	tbody tr:last-child
+		border-bottom none
+
+	th
+		height 64px
+		color clr-secondary-text-light
+		padding-right 56px
+		text-align left
+		font-size 12px
+
+	tr.section
+		border-bottom none
+
+		th
+			font-size 20px
+			color clr-primary-text-light
+			padding-top 24px
+	td
+		font-size 13px
+		height 48px
+		padding-right 56px
+
+	td:first-child, th:first-child
+		padding-left 24px
+	td:last-child, th:last-child
+		padding-right 24px

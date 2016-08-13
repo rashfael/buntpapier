@@ -1,0 +1,41 @@
+// ---------------
+// Global Settings
+// ---------------
+
+@import '_material-color'
+
+// Default font settings
+$font-stack = 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif
+$font-size = 14
+$font-color = #333
+monospace = unquote("'Roboto Mono', 'Bitstream Vera Sans Mono', Consolas, Courier, monospace")
+
+ax-primary = #77bc1f
+navbar-background-color = #FFF
+
+background-color = #FFF
+
+nav-height = 52px
+content-width = 1200px
+footer-height = 3.3em
+
+rupture.scale = 0 480px 768px 992px 1200px 1800px
+rupture.scale-names = 'xs' 's' 'm' 'l' 'xl' 'hd'
+
+typography()
+	bold-italic()
+	headers()
+	lists()
+	text-selection()
+
+	p
+		paragraph()
+
+	small
+		small()
+
+	blockquote
+		blockquote()
+
+	.hyphenation
+		hyphenation()
