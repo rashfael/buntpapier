@@ -137,9 +137,7 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '~_settings'
-
-.quake-ripple-ink {
+.{$prefix}-ripple-ink {
 	display: block;
 	overflow: hidden;
 	border-radius: inherit;

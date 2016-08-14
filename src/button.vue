@@ -20,8 +20,6 @@ button.bunt-button(:class="styleClasses", :type="buttonType", :disabled="disable
 	//- 	slot(name="popover")
 </template>
 <style lang="stylus">
-@import '~_settings'
-
 .{$prefix}-button
 	font-size 14px
 	text-transform uppercase
