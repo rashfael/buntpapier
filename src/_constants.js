@@ -1,5 +1,5 @@
 const consts = {
-	prefix: 'coat'
+	prefix: 'bunt'
 }
 
 export default consts
