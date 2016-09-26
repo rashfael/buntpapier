@@ -79,7 +79,7 @@
 import consts from './_constants'
 
 export default {
-  props: {
+	props: {
 		type: {
 			type: String,
 			default: 'text'
@@ -109,16 +109,16 @@ export default {
 			type: Boolean,
 			default: false
 		},
-  },
-  data: function () {
-    return {
+	},
+	data: function () {
+		return {
 			focused: false
-    }
-  },
-  computed: {},
-  ready: function () {},
-  attached: function () {},
-  methods: {
+		}
+	},
+	computed: {},
+	ready: function () {},
+	attached: function () {},
+	methods: {
 	}
 }
 </script>

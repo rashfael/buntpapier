@@ -1,14 +1,14 @@
 {
   "name": "buntpapier",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
     "start": "node build/dev-server.js",
     "build": "node build/build.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "rashfael <rashfael@isobeef.org>",
+  "license": "MIT",
   "devDependencies": {
     "autoprefixer-stylus": "^0.9.2",
     "axis": "^0.6.1",

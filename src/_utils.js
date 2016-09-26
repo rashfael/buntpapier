@@ -1,8 +1,11 @@
 import consts from './_constants'
 
+const prefixReplace = /%PREFIX%/g
+
 const utils = {
-	prefixClasses(classes) {
-		
+	prefixTemplate(component) {
+		console.log(component)
+		component.template = component.template.replace(prefixReplace, consts.prefix)
 	}
 }
 
