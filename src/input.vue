@@ -18,6 +18,7 @@
 	input
 		border none
 		outline none
+		font-family $font-stack
 		font-size 16px
 		font-weight 400
 		width 100%
