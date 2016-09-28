@@ -7,7 +7,7 @@
 	//- 		button.close(v-if="multiple", @click="select(option)", type="button")
 	//- 			span(aria-hidden="true") &times;
 	// inline the input, use css from input component
-	.bunt-input.dense(v-el:search-container, :class="{focused: open, 'floating-label': search.length != 0 || value}")
+	.bunt-input.dense(v-el:search-container, :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty}")
 		.label-input-container
 			label(:for="name") {{label}}
 			input(type="text", v-el:search, :debounce="debounce", :name="name", v-model="rawSearch", v-show="searchable",
@@ -23,7 +23,7 @@
 		.underline
 		
 
-	ul.bunt-select-dropdown-menu(v-el:dropdown-menu, v-show="open",  :style="{ 'max-height': maxHeight, 'min-width': width+'px' }", @mousedown.prevent.stop="")
+	ul.bunt-select-dropdown-menu(v-el:dropdown-menu, v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 		li(v-for="option in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: $index === typeAheadPointer }", @mouseover="typeAheadPointer = $index", @mousedown.prevent.stop="select(option)")
 			{{ getOptionLabel(option) }}
 		li.divider(transition="fade", v-if="!filteredOptions.length")
@@ -48,11 +48,15 @@
 	border-radius 0 0 2px 2px
 	margin 0
 	padding 0
+	overflow-y scroll
+	overflow-x hidden
 	
 	li
 		list-style-type none
 		height 32px
 		line-height 32px
+		text-overflow ellipsis
+		white-space nowrap
 		&.highlight
 			background-color $highlight-color
 
@@ -235,7 +239,7 @@ export default {
 	},
 	ready () {
 		this.width = this.$els.searchContainer.getBoundingClientRect().width
-		new Tether({
+		this._tether = new Tether({
 			element: this.$els.dropdownMenu,
 			target: this.$els.searchContainer,
 			attachment: 'top left',
@@ -268,6 +272,9 @@ export default {
 		rawSearch (val) {
 			if(this.open)
 				this.search = val
+		},
+		filteredOptions () {
+			this._tether.position()
 		}
 	},
 
@@ -275,6 +282,7 @@ export default {
 		focus () {
 			this.open = true
 			this.$els.search.select()
+			this.$nextTick(() => this._tether.position()) // delay until after dropdown is rendered
 		},
 		/**
 		 * Select a given option.
@@ -383,10 +391,10 @@ export default {
 		 * @return {[type]} [description]
 		 */
 		onEscape() {
-			if (!this.search.length) {
+			if (!this.rawSearch.length) {
 				this.$els.search.blur()
 			} else {
-				this.search = ''
+				this.rawSearch = ''
 			}
 		},
 
