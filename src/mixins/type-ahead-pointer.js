@@ -51,10 +51,6 @@ module.exports = {
       } else if (this.taggable && this.search.length){
         this.select(this.search)
       }
-
-      if( this.clearSearchOnSelect ) {
-        this.search = "";
-      }
     },
   }
 }

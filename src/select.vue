@@ -10,14 +10,14 @@
 	.bunt-input.dense(v-el:search-container, :class="{focused: open, 'floating-label': search.length != 0 || value}")
 		.label-input-container
 			label(:for="name") {{label}}
-			input(type="text", v-el:search, :debounce="debounce", :name="name", v-model="search", v-show="searchable",
+			input(type="text", v-el:search, :debounce="debounce", :name="name", v-model="rawSearch", v-show="searchable",
 				@keydown.delete="maybeDeleteValue",
 				@keyup.esc="onEscape",
 				@keydown.up.prevent="typeAheadUp",
 				@keydown.down.prevent="typeAheadDown",
 				@keyup.enter.prevent="typeAheadSelect",
 				@blur="open = false",
-				@focus="open = true",
+				@focus="focus",
 				:placeholder="searchPlaceholder")
 			i.open-indicator.material-icons(v-el:open-indicator, role="presentation") arrow_drop_down
 		.underline
@@ -146,15 +146,6 @@ export default {
 		},
 
 		/**
-		 * Enables/disables clearing the search text when an option is selected.
-		 * @type {Boolean}
-		 */
-		clearSearchOnSelect: {
-			type: Boolean,
-			default: true
-		},
-
-		/**
 		 * Tells vue-select what key to use when generating option
 		 * labels when each `option` is an object.
 		 * @type {String}
@@ -237,6 +228,7 @@ export default {
 	data() {
 		return {
 			search: '',
+			rawSearch: '',
 			open: false,
 			width: 0
 		}
@@ -258,25 +250,32 @@ export default {
 		})
 	},
 	watch: {
-		value(val, old) {
+		value (val, old) {
 			if (this.multiple) {
 				this.onChange ? this.onChange(val) : null
 			} else {
 				this.onChange && val !== old ? this.onChange(val) : null
 			}
 		},
-		options() {
+		options () {
 			if (!this.taggable && this.resetOnOptionsChange) {
 				this.$set('value', this.multiple ? [] : null)
 			}
 		},
-		multiple(val) {
+		multiple (val) {
 			this.$set('value', val ? [] : null)
+		},
+		rawSearch (val) {
+			if(this.open)
+				this.search = val
 		}
 	},
 
 	methods: {
-
+		focus () {
+			this.open = true
+			this.$els.search.select()
+		},
 		/**
 		 * Select a given option.
 		 * @param  {Object||String} option
@@ -336,8 +335,9 @@ export default {
 			if (!this.multiple) {
 				this.open = !this.open
 				this.$els.search.blur()
-				this.search = this.getOptionLabel(option)
+				this.rawSearch = this.getOptionLabel(option)
 			}
+			this.search = ''
 		},
 
 		/**
