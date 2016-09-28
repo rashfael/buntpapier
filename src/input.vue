@@ -45,7 +45,7 @@
 			bottom 0
 			left 0
 			right 0
-			background-color $clr-secondary-text-light
+			background-color $clr-dividers-light
 			height 1px
 		&:after
 			background-color $clr-primary
@@ -68,7 +68,8 @@
 			width 133%
 
 	&.dense
-		height 60px
+		height 27px
+		margin-bottom 33px
 		padding-top 12px
 		/*input
 			font-size 13px*/
