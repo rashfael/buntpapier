@@ -35,13 +35,16 @@
 	position relative
 	.open-indicator
 		position absolute
-		right 0
+		right -6px
 		color $clr-secondary-text-light
 		font-size 28px
-		line-height 24px
+		line-height 20px
 		transition all 0.25s ease-in-out
 	&.open .open-indicator
 		transform rotate(180deg)
+	.bunt-input input
+		box-sizing border-box
+		padding-right 20px
 .{$prefix}-select-dropdown-menu
 	card()
 	border-top none
