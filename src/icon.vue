@@ -11,12 +11,3 @@ export default {
 	}
 }
 </script>
-<style lang="stylus">
-.{$prefix}-icon
-	font-size 24px
-	width @font-size
-	height @font-size
-	line-height @font-size
-	display inline-block
-	cursor inherit
-</style>

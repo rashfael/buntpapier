@@ -1,13 +1,19 @@
+// hardcoded values and defaults
 $prefix = 'bunt'
 
 $clr-primary = #77bc1f
 
 $font-stack = 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif
 $font-size = 14
-$font-color = $clr-primary-text-light
 
-// Default color
-$default-color = $clr-primary
-$spinner-default-color = $default-color
-// Text highlight color
-$highlight-color = $clr-primary
+// derived values
+variables()
+	// we have to use define() here, because scoping
+	
+	define('$font-color', $clr-primary-text-light, true)
+
+	// Default color
+	define('$default-color', $clr-primary, true)
+	define('$spinner-default-color', $clr-primary, true)
+	// Text highlight color
+	define('$highlight-color', $clr-primary, true)

@@ -30,40 +30,6 @@
 		li.text-center(transition="fade" v-if="!filteredOptions.length")
 			slot(name="no-options") Sorry, no matching options.
 </template>
-<style lang="stylus">
-.{$prefix}-select
-	position relative
-	.open-indicator
-		position absolute
-		right -6px
-		color $clr-secondary-text-light
-		font-size 28px
-		line-height 20px
-		transition all 0.25s ease-in-out
-	&.open .open-indicator
-		transform rotate(180deg)
-	.bunt-input input
-		box-sizing border-box
-		padding-right 20px
-.{$prefix}-select-dropdown-menu
-	card()
-	border-top none
-	border-radius 0 0 2px 2px
-	margin 0
-	padding 0
-	overflow-y scroll
-	overflow-x hidden
-	
-	li
-		list-style-type none
-		height 32px
-		line-height 32px
-		text-overflow ellipsis
-		white-space nowrap
-		&.highlight
-			background-color $highlight-color
-
-</style>
 <script>
 //nicked from sagalbot/vue-select
 import pointerScroll from './mixins/pointer-scroll'
