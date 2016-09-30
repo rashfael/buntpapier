@@ -1,10 +1,13 @@
+$button-height = 36px
+
 button()
 	.{$prefix}-button
+		font-family $font-stack
 		font-size 14px
 		text-transform uppercase
 		font-weight 500
-		line-height 1.71em
-		letter-spacing 0.02em
+		line-height $button-height
+		vertical-align middle
 
 		background none
 		overflow hidden
@@ -18,9 +21,9 @@ button()
 		cursor default
 
 		border-radius 2px
-		padding 8px 16px
+		padding 0 16px
 		min-width 80px
-		height 40px
+		height $button-height
 
 		&::-moz-focus-inner
 			border 0
@@ -34,6 +37,14 @@ button()
 
 		&:not([disabled])
 			cursor pointer
+			
+	.{$prefix}-button-content
+		display flex
+		
+	.{$prefix}-icon
+		height $button-height
+		line-height $button-height
+		font-size 20px
 
 	.{$prefix}-button-raised
 		box-shadow 0 0 2px alpha(black, 0.12), 0 2px 2px alpha(black, 0.2)
@@ -73,12 +84,8 @@ button()
 				background-color darken($clr-grey-200, 15%)
 				outline-color darken($clr-grey-200, 30%)
 
-			.quake-ripple-ink .ripple.held
+			.{$prefix}-ripple-ink .ripple.held
 				opacity 0.2
-
-			.quake-button-icon,
-			.quake-button-dropdown-icon
-				color $clr-secondary-text-light
 
 		for xcolor in $clr-names
 			&.color-{xcolor}
@@ -92,3 +99,27 @@ button()
 				body[modality="keyboard"] &:focus
 					background-color darken(lookup('$clr-' + xcolor), 20%)
 					outline-color darken(lookup('$clr-' + xcolor), 20%)
+					
+	.{$prefix}-button-clear
+		background-color transparent
+
+		&:hover:not([disabled]),
+		&.dropdown-open
+			background-color darken($clr-grey-200, 3%)
+
+		&.autofocus:focus,
+		body[modality="keyboard"] &:focus
+			outline-width 2px
+			outline-offset 0
+				
+		&.color-default
+			color $clr-primary-text-light
+			.{$prefix}-icon
+				color $clr-secondary-text-light
+			&.autofocus:focus,
+			body[modality="keyboard"] &:focus
+					outline-color darken($clr-grey-200, 25%)
+		
+		for xcolor in $clr-names
+			&.color-{xcolor}
+				color lookup('$clr-' + xcolor)

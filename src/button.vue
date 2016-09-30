@@ -1,6 +1,7 @@
 <template  lang="jade">
-button.bunt-button(:class="styleClasses", :type="buttonType", :disabled="disabled || loading", v-el:button)
+button.bunt-button(:class="styleClasses", :type="type", :disabled="disabled || loading", v-el:button)
 	.bunt-button-content(:class="{ 'invisible': loading }")
+		i.bunt-icon.material-icons(v-if="icon") {{{ icon }}}
 		//- quake-icon.quake-button-icon(:class="{ 'position-right': iconRight }", :icon="icon", v-if="showIcon")
 		.bunt-button-text
 			slot
@@ -28,11 +29,11 @@ export default {
 	name: `${consts.prefix}-button`,
 
 	props: {
-		type: {
+		style: {
 			type: String,
-			default: 'normal', // 'normal' or 'flat'
-			coerce(type) {
-				return `${consts.prefix}-button-${type}`
+			default: 'normal', // 'normal' or 'clear'
+			coerce(style) {
+				return `${consts.prefix}-button-${style}`
 			}
 		},
 		color: {
@@ -64,7 +65,7 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		buttonType: {
+		type: {
 			type: String,
 			default: 'submit'
 		}
@@ -72,7 +73,7 @@ export default {
 
 	computed: {
 		styleClasses() {
-			let classes = [this.type, this.color]
+			let classes = [this.style, this.color]
 
 			if (this.raised) {
 				classes.push(`${consts.prefix}-button-raised`)
@@ -86,15 +87,11 @@ export default {
 		},
 
 		spinnerColor() {
-			if (this.color === 'color-default' || this.type === 'quake-button-flat') {
+			if (this.color === 'color-default' || this.type === 'quake-button-clear') {
 				return 'black';
 			}
 
 			return 'white';
-		},
-
-		showIcon() {
-			return Boolean(this.icon)
 		}
 	},
 
