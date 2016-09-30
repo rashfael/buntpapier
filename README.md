@@ -1,5 +1,6 @@
 # buntpapier
 collection of vue components
+https://rashfael.github.io/buntpapier-docs/
 
 ## Goals
 Buntpapier aims to provide material design components for vue, with a focus on exposing variables and mixins via stylus.
