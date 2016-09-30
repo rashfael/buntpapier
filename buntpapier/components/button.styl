@@ -80,62 +80,15 @@ button()
 			.quake-button-dropdown-icon
 				color $clr-secondary-text-light
 
-		/*&.color-primary
-			background-color $md-brand-primary
-
-			&:hover:not([disabled]),
-			&.dropdown-open
-				background-color darken($md-brand-primary, 15%)
-
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-				background-color darken($md-brand-primary, 20%)
-				outline-color darken($md-brand-primary, 20%)
-
-		&.color-accent
-			background-color $md-brand-accent
-
-			&:hover:not([disabled]),
-			&.dropdown-open
-				background-color darken($md-brand-accent, 15%)
-
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-				background-color darken($md-brand-accent, 20%)
-				outline-color darken($md-brand-accent, 20%)
-
-		&.color-success
-			background-color $md-green
-
-			&:hover:not([disabled]),
-			&.dropdown-open
-				background-color darken($md-green, 15%)
-
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-				background-color darken($md-green, 20%)
-				outline-color darken($md-green, 20%)
-
-		&.color-warning
-			background-color $md-orange
-
-			&:hover:not([disabled]),
-			&.dropdown-open
-				background-color darken($md-orange, 15%)
-
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-				background-color darken($md-orange, 20%)
-				outline-color darken($md-orange, 20%)
-
-		&.color-danger
-			background-color $md-red
-
-			&:hover:not([disabled]),
-			&.dropdown-open
-				background-color darken($md-red, 15%)
-
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-				background-color darken($md-red, 20%)
-				outline-color:darken($md-red, 20%)*/
+		for xcolor in $clr-names
+			&.color-{xcolor}
+				background-color lookup('$clr-' + xcolor)
+			
+				&:hover:not([disabled]),
+				&.dropdown-open
+					background-color darken(lookup('$clr-' + xcolor), 15%)
+				
+				&.autofocus:focus,
+				body[modality="keyboard"] &:focus
+					background-color darken(lookup('$clr-' + xcolor), 20%)
+					outline-color darken(lookup('$clr-' + xcolor), 20%)

@@ -7,14 +7,8 @@ button.bunt-button(:class="styleClasses", :type="buttonType", :disabled="disable
 				span(v-text="text")
 		//- quake-icon.quake-button-dropdown-icon(icon="&#xe5c5;", v-if="!iconRight && showDropdownIcon && (hasDropdownMenu || hasPopover)")
 	//- quake-progress-circular.quake-button-spinner(:color="spinnerColor", :size="18", :stroke="4.5", disable-transition, v-show="loading")
-	ripple-ink(v-if="!hideRippleInk && !disabled", :trigger="$els.button")
+	ripple-ink(v-if="!noInk && !disabled", :trigger="$els.button")
 
-	//- quake-menu.quake-button-dropdown-menu(:trigger="$els.button", :options="menuOptions"
-	//- 	:show-icons="showMenuIcons", :show-secondary-text="showMenuSecondaryText"
-	//- 	:open-on="openDropdownOn", @option-selected="menuOptionSelect"
-	//- 	:dropdown-position="dropdownPosition", v-if="hasDropdownMenu"
-	//- )
-	//-
 	//- quake-popover(:trigger="$els.button", :open-on="openDropdownOn", :dropdown-position="dropdownPosition"
 	//- 	v-if="hasPopover")
 	//- 	slot(name="popover")
@@ -43,7 +37,7 @@ export default {
 		},
 		color: {
 			type: String,
-			default: 'default', // 'default', 'primary', 'accent', 'success', 'warning', or 'danger'
+			default: 'default', // one of $clr-names
 			coerce(color) {
 				return 'color-' + color;
 			}
@@ -78,17 +72,17 @@ export default {
 
 	computed: {
 		styleClasses() {
-			let classes = [this.type, this.color];
+			let classes = [this.type, this.color]
 
 			if (this.raised) {
-				classes.push(`${consts.prefix}-button-raised`);
+				classes.push(`${consts.prefix}-button-raised`)
 			}
 
 			if (this.hasDropdownMenu || this.hasPopover) {
-				classes.push('has-dropdown');
+				classes.push('has-dropdown')
 			}
 
-			return classes;
+			return classes
 		},
 
 		spinnerColor() {
@@ -100,7 +94,7 @@ export default {
 		},
 
 		showIcon() {
-			return Boolean(this.icon);
+			return Boolean(this.icon)
 		}
 	},
 

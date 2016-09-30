@@ -1,7 +1,16 @@
 // hardcoded values and defaults
 $prefix = 'bunt'
 
-$clr-primary = #77bc1f
+// defines named colors
+// can be used to define arbitrary shorthands for use in buttons, icons, etc
+// you HAVE to declare $clr-NAME afterwards
+// 'default' is special and hardcoded
+$clr-names =  'primary', 'accent', 'success', 'warning', 'danger'
+$clr-primary = $clr-blue
+$clr-accent = $clr-purple-a400
+$clr-success = $clr-green
+$clr-warning = $clr-yellow
+$clr-danger = $clr-red
 
 $font-stack = 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif
 $font-size = 14
