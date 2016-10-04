@@ -23,18 +23,13 @@ var webpackConfig = merge(baseWebpackConfig, {
 		filename: utils.assetsPath('js/[name].[chunkhash].js'),
 		chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
 	},
+	vue: {
+		loaders: utils.cssLoaders({
+			sourceMap: true,
+			extract: true
+		})
+	},
 	plugins: [
-		new webpack.LoaderOptionsPlugin({
-			vue: {
-				loaders: utils.cssLoaders({
-					sourceMap: true,
-					extract: true
-				})
-			},
-			stylus: {
-				use: [require('nib')(),require('rupture')(),require('autoprefixer-stylus')(), require('buntpapier/stylus')()]
-			},
-		}),
 		new CleanWebpackPlugin(['dist'], {root: path.resolve(__dirname, '../')}),
 		new webpack.DefinePlugin({
 			'process.env': '"production"'
@@ -50,7 +45,7 @@ var webpackConfig = merge(baseWebpackConfig, {
 		// you can customize output by editing /index.html
 		// see https://github.com/ampedandwired/html-webpack-plugin
 		new HtmlWebpackPlugin({
-			template: 'index.html',
+			template: 'docs/index.html',
 			inject: true,
 			minify: {
 				removeComments: true,
