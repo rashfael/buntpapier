@@ -31,7 +31,7 @@ module.exports = {
     pixelsToPointerTop() {
       let pixelsToPointerTop = 0
       for (let i = 0; i < this.typeAheadPointer; i++) {
-        pixelsToPointerTop += this.$els.dropdownMenu.children[i].offsetHeight
+        pixelsToPointerTop += this.$refs.dropdownMenu.children[i].offsetHeight
       }
       return pixelsToPointerTop
     },
@@ -50,7 +50,7 @@ module.exports = {
      * @returns {number}
      */
     pointerHeight() {
-      let element = this.$els.dropdownMenu.children[this.typeAheadPointer]
+      let element = this.$refs.dropdownMenu.children[this.typeAheadPointer]
       return element ? element.offsetHeight : 0
     },
 
@@ -60,8 +60,8 @@ module.exports = {
      */
     viewport() {
       return {
-        top: this.$els.dropdownMenu.scrollTop,
-        bottom: this.$els.dropdownMenu.offsetHeight + this.$els.dropdownMenu.scrollTop
+        top: this.$refs.dropdownMenu.scrollTop,
+        bottom: this.$refs.dropdownMenu.offsetHeight + this.$refs.dropdownMenu.scrollTop
       }
     },
 
@@ -71,7 +71,7 @@ module.exports = {
      * @returns {*}
      */
     scrollTo(position) {
-      return this.$els.dropdownMenu.scrollTop = position
+      return this.$refs.dropdownMenu.scrollTop = position
     },
   }
 }

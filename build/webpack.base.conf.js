@@ -1,24 +1,25 @@
+var webpack = require('webpack')
 var path = require('path')
 var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 
 module.exports = {
 	entry: {
-		app: './src/main.js'
+		app: './docs/main.js'
 	},
 	output: {
 		path: path.resolve(__dirname, '../dist'),
-		publicPath: '/',
+		publicPath: '',
 		filename: '[name].js'
 	},
 	resolve: {
 		extensions: ['', '.js', '.json', '.vue'],
-		modules: [path.resolve(__dirname, "../src"), path.resolve('src/styles'), path.join(__dirname, '../node_modules')]
+		modules: [path.resolve(__dirname, "../src"), path.join(__dirname, '../node_modules')]
 	},
 	module: {
 		loaders: [
 			{ test: /\.vue$/, loader: 'vue' },
-			{ test: /\.js$/, loader: 'babel', include: projectRoot, exclude: /node_modules/ },
+			{ test: /\.js$/, loader: 'babel', exclude: /node_modules\/(?!buntpapier)/,query: {presets: ['es2015']} },
 			{ test: /\.json$/, loader: 'json' },
 			{ test: /\.html$/, loader: 'vue-html' },
 			{ test: /\.(png|jpe?g|gif|svg)(\?.*)?$/, loader: 'url',
@@ -33,10 +34,20 @@ module.exports = {
 			}}
 		]
 	},
+	stylus: {
+		use: [require('nib')(),require('rupture')(),require('autoprefixer-stylus')(), require('../stylus')()]
+	},
 	vue: {
 		loaders: utils.cssLoaders()
 	},
-	stylus: {
-		use: [require('nib')(),require('axis')(),require('rupture')(),require('autoprefixer-stylus')()]
-	}
+	// plugins: [
+	// 	new webpack.LoaderOptionsPlugin({
+	// 		vue: {
+	// 			loaders: utils.cssLoaders()
+	// 		},
+	// 		stylus: {
+	// 			use: [require('nib')(),require('rupture')(),require('autoprefixer-stylus')(), require('../stylus')()]
+	// 		},
+	// 	})
+	// ]
 }

@@ -7,10 +7,10 @@
 	//- 		button.close(v-if="multiple", @click="select(option)", type="button")
 	//- 			span(aria-hidden="true") &times;
 	// inline the input, use css from input component
-	.bunt-input.dense(v-el:search-container, :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty}")
+	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty}")
 		.label-input-container
 			label(:for="name") {{label}}
-			input(type="text", v-el:search, :debounce="debounce", :name="name", v-model="rawSearch", v-show="searchable",
+			input(type="text", ref="search", :name="name", v-model="rawSearch", v-show="searchable",
 				@keydown.delete="maybeDeleteValue",
 				@keyup.esc="onEscape",
 				@keydown.up.prevent="typeAheadUp",
@@ -19,12 +19,12 @@
 				@blur="open = false",
 				@focus="focus",
 				:placeholder="searchPlaceholder")
-			i.open-indicator.material-icons(v-el:open-indicator, role="presentation") arrow_drop_down
+			i.open-indicator.material-icons(ref="openIndicator", role="presentation") arrow_drop_down
 		.underline
 		
 
-	ul.bunt-select-dropdown-menu(v-el:dropdown-menu, v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
-		li(v-for="option in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: $index === typeAheadPointer }", @mouseover="typeAheadPointer = $index", @mousedown.prevent.stop="select(option)")
+	ul.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
+		li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @mousedown.prevent.stop="select(option)")
 			{{ getOptionLabel(option) }}
 		li.divider(transition="fade", v-if="!filteredOptions.length")
 		li.text-center(transition="fade" v-if="!filteredOptions.length")
@@ -35,6 +35,7 @@
 import pointerScroll from './mixins/pointer-scroll'
 import typeAheadPointer from './mixins/type-ahead-pointer'
 import Tether from 'tether'
+import fuzzysearch from 'fuzzysearch'
 
 export default {
 	mixins: [pointerScroll, typeAheadPointer],
@@ -206,11 +207,12 @@ export default {
 			width: 0
 		}
 	},
-	ready () {
-		this.width = this.$els.searchContainer.getBoundingClientRect().width
+	mounted () {
+		console.log(this.$refs)
+		this.width = this.$refs.searchContainer.getBoundingClientRect().width
 		this._tether = new Tether({
-			element: this.$els.dropdownMenu,
-			target: this.$els.searchContainer,
+			element: this.$refs.dropdownMenu,
+			target: this.$refs.searchContainer,
 			attachment: 'top left',
 			targetAttachment: 'bottom left',
 			constraints: [
@@ -250,7 +252,7 @@ export default {
 	methods: {
 		focus () {
 			this.open = true
-			this.$els.search.select()
+			this.$refs.search.select()
 			this.$nextTick(() => this._tether.position()) // delay until after dropdown is rendered
 		},
 		/**
@@ -311,7 +313,7 @@ export default {
 		onAfterSelect(option) {
 			if (!this.multiple) {
 				this.open = !this.open
-				this.$els.search.blur()
+				this.$refs.search.blur()
 				this.rawSearch = this.getOptionLabel(option)
 			}
 			this.search = ''
@@ -323,12 +325,12 @@ export default {
 		 * @return {void}
 		 */
 		toggleDropdown(e) {
-			if (e.target === this.$els.openIndicator || e.target === this.$els.search || e.target === this.$els.toggle || e.target === this.$el) {
+			if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
 				if (this.open) {
-					this.$els.search.blur() // dropdown will close on blur
+					this.$refs.search.blur() // dropdown will close on blur
 				} else {
 					this.open = true
-					this.$els.search.focus()
+					this.$refs.search.focus()
 				}
 			}
 		},
@@ -361,7 +363,7 @@ export default {
 		 */
 		onEscape() {
 			if (!this.rawSearch.length) {
-				this.$els.search.blur()
+				this.$refs.search.blur()
 			} else {
 				this.rawSearch = ''
 			}
@@ -373,7 +375,7 @@ export default {
 		 * @return {this.value}
 		 */
 		maybeDeleteValue() {
-			if (!this.$els.search.value.length && this.value) {
+			if (!this.$refs.search.value.length && this.value) {
 				return this.multiple ? this.value.pop() : this.$set('value', null)
 			}
 		},
@@ -433,7 +435,7 @@ export default {
 		 * @return {array}
 		 */
 		filteredOptions() {
-			let options = this.$options.filters.filterBy(this.options, this.search)
+			let options = this.search.length !== 0 ? this.options.filter((option) => fuzzysearch(this.search.toLowerCase(), option.toLowerCase())) : this.options.slice()
 			if (this.taggable && this.search.length && !this.optionExists(this.search)) {
 				options.unshift(this.search)
 			}

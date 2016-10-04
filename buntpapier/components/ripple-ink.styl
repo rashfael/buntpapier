@@ -1,42 +1,37 @@
 ripple-ink()
-	.{$prefix}-ripple-ink {
-		display: block;
-		overflow: hidden;
-		border-radius: inherit;
+	.{$prefix}-ripple-ink
+		display: block
+		overflow: hidden
+		border-radius: inherit
 
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
+		position: absolute
+		top: 0
+		left: 0
+		right: 0
+		bottom: 0
 
 		// Forces webkit to properly contain content within border-radius
-		-webkit-mask-image: -webkit-radial-gradient(circle, white, black);
-	}
+		-webkit-mask-image: -webkit-radial-gradient(circle, white, black)
 
-	.{$prefix}-ripple-ink .ripple {
-		position: absolute;
-		width: 0;
-		height: 0;
+	.ripple
+		position: absolute
 
-		pointer-events: none;
-		user-select: none;
+		pointer-events: none
+		user-select: none
 
-		border-radius: 50%;
-		background-color: currentColor;
-		background-clip: padding-box;
-
-		opacity: 0.2;
-		transform: scale(0);
-
-		transition: transform 0.4s ease-out, opacity 0.4s ease-out;
-
-		&.held {
-			opacity: 0.4;
-			transform: scale(1);
-		}
-
-		&.done {
-			opacity: 0!important;
-		}
-	}
+		border-radius: 50%
+		background-color: currentColor
+		background-clip: padding-box
+		
+		transition: transform 0.4s ease-out, opacity 0.4s ease-out
+		
+		opacity: .1
+		transform: scale(1)
+		
+	.ripple-ink-enter
+		opacity: .2
+		transform: scale(0)
+		
+	.ripple-ink-leave-active
+		opacity: 0
+		transition: transform 0.1s ease-out, opacity 0.1s ease-out

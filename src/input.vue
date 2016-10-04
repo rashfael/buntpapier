@@ -2,7 +2,7 @@
 .bunt-input.dense(:class="{focused: focused, 'floating-label': value.length != 0}")
 	.label-input-container
 		label(:for="name") {{label}}
-		input(:type="type", :name="name", v-model="value", :disabled="disabled", :readonly="readonly", @focus="focused = true", @blur="focused = false")
+		input(:type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="$emit('input', $event.target.value)", @focus="focused = true", @blur="focused = false")
 	.underline
 </template>
 <script>
@@ -23,8 +23,7 @@ export default {
 		placeholder: String,
 		value: {
 			type: [String, Number],
-			default: '',
-			twoWay: true
+			default: ''
 		},
 		disabled: {
 			type: Boolean,

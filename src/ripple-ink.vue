@@ -1,137 +1,73 @@
-<template>
-	<div class="bunt-ripple-ink"></div>
+<template lang="jade">
+.bunt-ripple-ink(@mousedown="mousedown($event)", @touchstart="touchstart($event)")
+	transition(name="ripple-ink")
+		.ripple(v-if="show", :style="style")
 </template>
 
 <script>
-var startRipple = function startRipple(eventType, event) {
-	var holder = event.currentTarget;
-
-	if (!holder.classList.contains('bunt-ripple-ink')) {
-		holder = holder.querySelector('.bunt-ripple-ink');
-
-		if (!holder) {
-			return;
-		}
-	}
-
-	// Store the event use to generate this ripple on the holder: don't allow
-	// further events of different types until we're done. Prevents double-
-	// ripples from mousedown/touchstart.
-	var prev = holder.getAttribute('data-quake-event');
-
-	if (prev && prev !== eventType) {
-		return;
-	}
-
-	holder.setAttribute('data-quake-event', eventType);
-
-	// Create and position the ripple
-	var rect = holder.getBoundingClientRect();
-	var x = event.offsetX;
-	var y;
-
-	if (x !== undefined) {
-		y = event.offsetY;
-	} else {
-		x = event.clientX - rect.left;
-		y = event.clientY - rect.top;
-	}
-
-	var ripple = document.createElement('div');
-	var max;
-
-	if (rect.width === rect.height) {
-		max = rect.width * 1.412;
-	} else {
-		max = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
-	}
-
-	var dim = max * 2 + 'px';
-
-	ripple.style.width = dim;
-	ripple.style.height = dim;
-	ripple.style.marginLeft = -max + x + 'px';
-	ripple.style.marginTop = -max + y + 'px';
-
-	// Activate/add the element
-	ripple.className = 'ripple';
-	holder.appendChild(ripple);
-
-	setTimeout(function() {
-		ripple.classList.add('held');
-	}, 0);
-
-	var releaseEvent = (eventType === 'mousedown' ? 'mouseup' : 'touchend');
-
-	var release = function() {
-		document.removeEventListener(releaseEvent, release);
-
-		ripple.classList.add('done');
-
-		// Larger than the animation duration in CSS
-		setTimeout(function() {
-			holder.removeChild(ripple);
-
-			if (!holder.children.length) {
-				holder.classList.remove('active')
-				holder.removeAttribute('data-quake-event');
-			}
-		}, 450);
-	};
-
-	document.addEventListener(releaseEvent, release);
-};
-
-var handleMouseDown = function handleMouseDown(e) {
-	// Trigger on left click only
-	if (e.button === 0) {
-		startRipple(e.type, e);
-	}
-};
-
-var handleTouchStart = function handleTouchStart(e) {
-	if (e.changedTouches) {
-		for (var i = 0; i < e.changedTouches.length; ++i) {
-			startRipple(e.type, e.changedTouches[i]);
-		}
-	}
-};
-
 import consts from './_constants'
+
 export default {
 	name: `${consts.prefix}-ripple-ink`,
-
-	props: {
-		trigger: {
-			type: Element,
-			required: true
+	data() {
+		return {
+			show: false,
+			style: null,
 		}
 	},
-
-	watch: {
-		trigger() {
-			this.initialize();
-		}
-	},
-
-	ready() {
-		this.initialize();
-	},
-
-	beforeDestory() {
-		if (this.trigger) {
-			this.trigger.removeEventListener('mousedown', handleMouseDown);
-			this.trigger.removeEventListener('touchstart', handleTouchStart);
-		}
-	},
-
 	methods: {
-		initialize() {
-			if (this.trigger) {
-				this.trigger.addEventListener('touchstart', handleTouchStart);
-				this.trigger.addEventListener('mousedown', handleMouseDown);
+		mousedown(e) {
+			if (e.button === 0) {
+				this.ripple(e.type, e)
 			}
+		},
+		touchstart(e) {
+			if (e.changedTouches) {
+				for (let i = 0; i < e.changedTouches.length; ++i) {
+					this.ripple(e.type, e.changedTouches[i])
+				}
+			}
+		},
+		ripple(eventType, e) {
+			const holder = this.$el
+			const prev = holder.getAttribute('data-ui-event')
+			if (prev && prev !== eventType) {
+				return
+			}
+			holder.setAttribute('data-ui-event', eventType)
+			let rect = holder.getBoundingClientRect()
+			let x = e.offsetX
+			let y
+			if (x !== undefined) {
+				y = e.offsetY
+			} else {
+				x = e.clientX - rect.left
+				y = e.clientY - rect.top
+			}
+			let max = rect.width === rect.height ?
+				rect.width * 1.412 : Math.sqrt(
+					(rect.width * rect.width) + (rect.height * rect.height)
+				)
+			let dim = (max * 2) + 'px'
+			this.style = {
+				width: dim,
+				height: dim,
+				marginLeft: -max + x + 'px',
+				marginTop: -max + y + 'px'
+			}
+			this.show = true
+			const releaseEvent = eventType === 'mousedown' ? 'mouseup' : 'touchend'
+			const release = () => {
+				holder.removeEventListener(releaseEvent, release)
+				
+				setTimeout(() => {
+					this.show = false
+					this.style = null
+					holder.removeAttribute('data-ui-event')
+				}, 200)
+			}
+			holder.addEventListener(releaseEvent, release)
 		}
 	}
-};
+}
 </script>
