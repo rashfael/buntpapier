@@ -30,18 +30,17 @@ export default {
 	mounted() {
 		if (this.target) {
 			const _target = this.$parent.$refs[this.target]
-			if (_target.constructor.name === 'VueComponent')
+			if (_target.$el)
 				this._target = _target.$el
 			else
-			 	this._target = _target
+				this._target = _target
 			this.drop = new Drop({
 				target: this._target,
 				content: this.$refs.dropdown,
 				position: this.dropdownPosition,
 				constrainToWindow: true,
 				openOn: this.openOn,
-			});
-			console.log(this.drop)
+			})
 
 			// TO FIX: Hacky workaround for Tether not positioning
 			// correctly for positions other than 'bottom left'
