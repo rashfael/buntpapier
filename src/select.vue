@@ -36,8 +36,10 @@ import pointerScroll from './mixins/pointer-scroll'
 import typeAheadPointer from './mixins/type-ahead-pointer'
 import Tether from 'tether'
 import fuzzysearch from 'fuzzysearch'
+import consts from './_constants'
 
 export default {
+	name: `${consts.prefix}-select`,
 	mixins: [pointerScroll, typeAheadPointer],
 
 	props: {
@@ -208,7 +210,6 @@ export default {
 		}
 	},
 	mounted () {
-		console.log(this.$refs)
 		this.width = this.$refs.searchContainer.getBoundingClientRect().width
 		this._tether = new Tether({
 			element: this.$refs.dropdownMenu,

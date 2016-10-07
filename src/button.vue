@@ -52,7 +52,7 @@ export default {
 		},
 		type: {
 			type: String,
-			default: 'submit'
+			default: 'button'
 		}
 	},
 
@@ -72,7 +72,7 @@ export default {
 		},
 
 		spinnerColor() {
-			if (this.color === 'color-default' || this.type === 'quake-button-clear') {
+			if (this.color === 'color-default' || this.style === 'clear') {
 				return 'black';
 			}
 

@@ -14,18 +14,26 @@
 		bunt-button(@click.native.prevent="", color="primary", icon="add") BUTTON
 		bunt-button(@click.native.prevent="", style="clear") CLICK ME
 		bunt-button(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
+		bunt-icon-button(@click.native.prevent="", color="primary") add
 		.progress-circular
 			bunt-progress-circular(size="tiny")
 			bunt-progress-circular(size="small")
 			bunt-progress-circular(size="normal")
 			bunt-progress-circular(size="big")
 			bunt-progress-circular(size="huge")
+		.popover
+			bunt-icon-button(ref="popoverButton", @click.native.prevent="", color="primary") add
+			bunt-popover(target="popoverButton")
+				h1 POPOVER
+		
+		bunt-tabs
+			bunt-tab(header="Tab 1")
+			bunt-tab(header="Tab 2")
 		
 </template>
 <script>
 import './styles/style.styl'
 export default {
-	el: '#app',
 	components: {},
 	replace: false,
 	data () {

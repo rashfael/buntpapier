@@ -1,0 +1,63 @@
+$button-height = 36px
+
+icon-button()
+	.{$prefix}-icon-button
+		line-height $button-height
+		vertical-align middle
+
+		background none
+		overflow hidden
+		outline none
+		border none
+
+		position relative
+		display inline-flex
+		align-items center
+		justify-content center
+		cursor default
+
+		border-radius 50%
+		padding 0 16px
+		height $button-height
+		width $button-height
+
+		&::-moz-focus-inner
+			border 0
+
+		&.autofocus:focus,
+		body[modality="keyboard"] &:focus
+			outline-style solid
+
+		&[disabled]
+			opacity 0.6
+
+		&:not([disabled])
+			cursor pointer
+					
+		background-color transparent
+
+		&:hover:not([disabled]),
+		&.dropdown-open
+			background-color darken($clr-grey-200, 3%)
+
+		&.autofocus:focus,
+		body[modality="keyboard"] &:focus
+			outline-width 2px
+			outline-offset 0
+				
+		&.color-default
+			color $clr-primary-text-light
+			.{$prefix}-icon
+				color $clr-secondary-text-light
+			&.autofocus:focus,
+			body[modality="keyboard"] &:focus
+					outline-color darken($clr-grey-200, 25%)
+		
+		for xcolor in $clr-names
+			&.color-{xcolor}
+				color lookup('$clr-' + xcolor)
+			
+		.{$prefix}-icon
+			height $button-height
+			line-height $button-height
+			font-size 20px

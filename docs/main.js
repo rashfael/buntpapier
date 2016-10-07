@@ -5,4 +5,4 @@ import App from './App'
 
 Vue.use(Buntpapier)
 
-new Vue(App)
+new Vue(App).$mount('#app')

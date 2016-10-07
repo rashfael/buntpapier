@@ -9,6 +9,7 @@
 import consts from './_constants'
 
 export default {
+	name: `${consts.prefix}-input`,
 	props: {
 		type: {
 			type: String,
