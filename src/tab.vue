@@ -7,11 +7,6 @@ import consts from './_constants'
 
 export default {
 	name: `${consts.prefix}-tab`,
-	data() {
-		return {
-			id: ''
-		}
-	},
 	props: {
 		header: String,
 		icon: String,
@@ -19,26 +14,19 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		_id: String,
+		id: String,
 	},
-
 	computed: {
 		active() {
-			return this.$parent.activeTab === this
+			return this.$parent.activeTabObj === this
 		}
 	},
-
 	watch: {
-		active() {
-			if (this.active) {
+		active(val) {
+			if (val) {
 				this.$emit('selected', this.id)
 			} else {
 				this.$emit('deselected', this.id)
-			}
-		},
-		id() {
-			if (this._id) {
-				this.id = this._id
 			}
 		}
 	}

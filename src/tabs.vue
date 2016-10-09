@@ -3,7 +3,7 @@
 	.bunt-tabs-header
 		ul.bunt-tabs-header-items(role="tablist", ref="tabsContainer")
 			bunt-tab-header-item(:type="type", :id="tab.id", :icon="tab.icon", :text="tab.header",
-				:active="activeTab === tab", :disabled="tab.disabled",
+				:active="activeTabObj === tab", :disabled="tab.disabled",
 				@click.native="select(tab, index)",
 				v-for="(tab, index) in tabs", ref="tabElements")
 		.bunt-tabs-indicator(:class="[indicatorState]", :style="indicatorStyle", @transitionend="onIndicatorTransitionEnd")
@@ -26,11 +26,15 @@ export default {
 		type: {
 			type: String,
 			default: 'text', // 'text', 'icon', or 'icon-and-text'styleObject
+		},
+		activeTab: {
+			type: [Number, String, Object, Function],
+			
 		}
 	},
 	data() {
 		return {
-			activeTab: null,
+			activeTabObj: null,
 			tabs: null,
 			indicatorState: '', // '', 'expand', 'contract'
 			indicatorTransform: { // this is the 'live' css transform
@@ -55,8 +59,23 @@ export default {
 			}
 		}
 	},
-
-	mounted() {
+	watch: {
+		activeTab (val) {
+			activateTab(val)
+		},
+		// activeTabObj (val, oldVal) {
+		// 	if(this.activeTab === null) // nobody listens
+		// 		return
+		// 	if(typeof(this.activeTab) === 'number') { // treat as index
+		// 		const index = this.tabs.indexOf(val)
+		// 		this.activeTab = index
+		// 	} else if (typeof(this.activeTab) === 'string') { // treat as id
+		// 		const id = val.id
+		// 		this.activeTab = id
+		// 	}
+		// }
+	},
+	mounted () {
 		this.tabs = this.$children.slice(0)
 		// for(let child of this.$children)
 		// 	child.id = child.id || UUID.short(`${consts.prefix}-tab-`)
@@ -66,10 +85,19 @@ export default {
 		// Set the active tab element (to show indicator)
 		this.$nextTick(() => {
 			if (this.$refs.tabsContainer) 
-				this.select(this.$children[0], 0)
+				this.activateTab(this.activeTab || 0)
 		})
 	},
 	methods: {
+		activateTab(val) {
+			let index = null
+			if(typeof(val) === 'number') // treat as index
+				index = val
+			else if (typeof(val) === 'string') {// treat as id
+				index = this.tabs.findIndex((tab) => tab.id === val)
+			}
+			this.select(this.tabs[index], index)
+		},
 		select(tab, index) {
 			// if (tab.disabled || this.activeTab === tab)
 			// 	return
@@ -81,18 +109,18 @@ export default {
 				width: calcPercent(tabRect.width, width),
 				left: calcPercent(tabOffsetLeft, width)
 			}
-			if(this.activeTab == null) {
+			if(this.activeTabObj == null) {
 				// Position the bar without animation.
 				this.indicatorState = ''
 				this.indicatorTransform = {
 					width: this.indicatorTargetTransform.width,
 					left: this.indicatorTargetTransform.left
 				}
-				this.activeTab = tab
+				this.activeTabObj = tab
 				return
 			}
 			
-			let oldIndex = this.tabs.indexOf(this.activeTab)
+			let oldIndex = this.tabs.indexOf(this.activeTabObj)
 			let oldRect = this.$refs.tabElements[oldIndex].$el.getBoundingClientRect()
 			let m = 5 // wtf is m
 			// bar animation: expand
@@ -106,7 +134,7 @@ export default {
 					width: calcPercent(oldRect.left + oldRect.width - tabRect.left, width) - m,
 					left: calcPercent(tabOffsetLeft, width) + m
 				}
-			this.activeTab = tab
+			this.activeTabObj = tab
 		},
 		onIndicatorTransitionEnd () {
 			// bar animation: expand -> contract

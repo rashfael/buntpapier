@@ -42,9 +42,21 @@
 		h2 Tabs		
 	
 		bunt-tabs.tabs-default
+			bunt-tab(header="Tab 1", @selected="selectedTab = 'Tab 1'")
+			bunt-tab(header="Tab 2", @selected="selectedTab = 'Tab 2'")
+			bunt-tab(header="A longer Tab Heading", @selected="selectedTab = 'longer Heading'")
+			p Selected Tab: {{ selectedTab }}
+		
+		bunt-tabs.tabs-default(:activeTab="1")
 			bunt-tab(header="Tab 1")
 			bunt-tab(header="Tab 2")
 			bunt-tab(header="A longer Tab Heading")
+		
+		bunt-tabs.tabs-default(:activeTab="'three'")
+			bunt-tab(header="Tab 1", id="one")
+			bunt-tab(header="Tab 2", id="two")
+			bunt-tab(header="A longer Tab Heading", id="three")
+					
 		
 </template>
 <script>
@@ -55,7 +67,8 @@ export default {
 	data () {
 		return {
 			text: '',
-			password: ''
+			password: '',
+			selectedTab: ''
 		}
 	}
 }
