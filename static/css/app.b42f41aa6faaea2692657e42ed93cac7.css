@@ -53,7 +53,7 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
-form {
+#content {
   border-radius: 2px;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
   background-color: #fff;
@@ -62,6 +62,68 @@ form {
   padding: 2rem;
   width: 720px;
   box-sizing: border-box;
+}
+.popover-icon-button {
+  color: #2196f3;
+  background-color: transparent;
+}
+body[modality="keyboard"] .popover-icon-button:focus,
+.popover-icon-button:hover:not([disabled]),
+.popover-icon-button.dropdown-open {
+  background-color: rgba(0,0,0,0.1);
+}
+.popover-icon-button .bunt-icon {
+  color: #2196f3;
+}
+.icon-buttons-flat button {
+  color: rgba(0,0,0,0.87);
+}
+.icon-buttons-flat button:hover:not([disabled]),
+.icon-buttons-flat button.dropdown-open {
+  background-color: #e7e7e7;
+}
+.icon-buttons-flat button .bunt-icon {
+  color: rgba(0,0,0,0.87);
+}
+.icon-buttons-flat button.autofocus:focus,
+body[modality="keyboard"] .icon-buttons-flat button:focus {
+  outline-color: #b3b3b3;
+}
+.icon-buttons-clear {
+  background-color: #2196f3;
+}
+.icon-buttons-clear button {
+  color: #fff;
+  background-color: transparent;
+}
+body[modality="keyboard"] .icon-buttons-clear button:focus,
+.icon-buttons-clear button:hover:not([disabled]),
+.icon-buttons-clear button.dropdown-open {
+  background-color: rgba(0,0,0,0.1);
+}
+.icon-buttons-clear button .bunt-icon {
+  color: #fff;
+}
+.tabs-default .bunt-tabs-header {
+  background-color: #eee;
+}
+.tabs-default .bunt-tabs-header .bunt-tabs-header-items {
+  color: rgba(0,0,0,0.54);
+}
+.tabs-default .bunt-tabs-header .bunt-tabs-header-items .bunt-tab-header-item-icon {
+  color: rgba(0,0,0,0.54);
+}
+body[modality="keyboard"] .tabs-default .bunt-tabs-header .bunt-tab-header-item:focus {
+  outline: 1px solid #2196f3;
+}
+.tabs-default .bunt-tabs-header .bunt-tab-header-item.active {
+  color: #2196f3;
+}
+.tabs-default .bunt-tabs-header .bunt-tab-header-item.active .bunt-tab-header-item-icon {
+  color: #2196f3;
+}
+.tabs-default .bunt-tabs-indicator {
+  background-color: #2196f3;
 }html {
   font-size: 14px;
   font-size: 87.5%;
@@ -495,39 +557,10 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 .bunt-icon-button:not([disabled]) {
   cursor: pointer;
 }
-.bunt-icon-button:hover:not([disabled]),
-.bunt-icon-button.dropdown-open {
-  background-color: #e7e7e7;
-}
 .bunt-icon-button.autofocus:focus,
 body[modality="keyboard"] .bunt-icon-button:focus {
   outline-width: 2px;
   outline-offset: 0;
-}
-.bunt-icon-button.color-default {
-  color: rgba(0,0,0,0.87);
-}
-.bunt-icon-button.color-default .bunt-icon {
-  color: rgba(0,0,0,0.54);
-}
-.bunt-icon-button.color-default.autofocus:focus,
-body[modality="keyboard"] .bunt-icon-button.color-default:focus {
-  outline-color: #b3b3b3;
-}
-.bunt-icon-button.color-primary {
-  color: #2196f3;
-}
-.bunt-icon-button.color-accent {
-  color: #d500f9;
-}
-.bunt-icon-button.color-success {
-  color: #4caf50;
-}
-.bunt-icon-button.color-warning {
-  color: #ffeb3b;
-}
-.bunt-icon-button.color-danger {
-  color: #f44336;
 }
 .bunt-icon-button .bunt-icon {
   height: 36px;
@@ -988,20 +1021,7 @@ body[modality="keyboard"] .bunt-icon-button.color-default:focus {
   position: relative;
   width: 100%;
 }
-.bunt-tabs-header.background-color-default {
-  background-color: #eee;
-}
-body[modality="keyboard"] .bunt-tabs-header.background-color-default .ui-tab-header-item:focus {
-  outline: 1px solid #2196f3;
-}
-body[modality="keyboard"] .bunt-tabs-header.background-color-primary .ui-tab-header-item:focus,
-body[modality="keyboard"] .bunt-tabs-header.background-color-accent .ui-tab-header-item:focus,
-body[modality="keyboard"] .bunt-tabs-header.background-color-clear .ui-tab-header-item:focus {
-  outline: 1px solid #fff;
-}
-.bunt-tabs-header.background-color-primary .ui-tab-header-item .ui-ripple-ink .ripple.held,
-.bunt-tabs-header.background-color-accent .ui-tab-header-item .ui-ripple-ink .ripple.held,
-.bunt-tabs-header.background-color-clear .ui-tab-header-item .ui-ripple-ink .ripple.held {
+.bunt-tabs-header .bunt-tab-header-item .ui-ripple-ink .ripple.held {
   opacity: 0.7;
 }
 .bunt-tabs-header-items {
@@ -1012,36 +1032,6 @@ body[modality="keyboard"] .bunt-tabs-header.background-color-clear .ui-tab-heade
   list-style: none;
   margin: 0;
   padding: 0;
-}
-.bunt-tabs-header-items.text-color-black {
-  color: rgba(0,0,0,0.54);
-}
-.bunt-tabs-header-items.text-color-black .ui-tab-header-item-icon {
-  color: rgba(0,0,0,0.54);
-}
-.bunt-tabs-header-items.text-color-white {
-  color: rgba(255,255,255,0.65);
-}
-.bunt-tabs-header-items.text-color-white .bunt-tab-header-item-icon {
-  color: rgba(255,255,255,0.65);
-}
-.bunt-tabs-header-items.text-color-active-primary .bunt-tab-header-item.active {
-  color: #2196f3;
-}
-.bunt-tabs-header-items.text-color-active-primary .bunt-tab-header-item.active .bunt-tab-header-item-icon {
-  color: #2196f3;
-}
-.bunt-tabs-header-items.text-color-active-accent .bunt-tab-header-item.active {
-  color: #d500f9;
-}
-.bunt-tabs-header-items.text-color-active-accent .bunt-tab-header-item.active .bunt-tab-header-item-icon {
-  color: #d500f9;
-}
-.bunt-tabs-header-items.text-color-active-white .bunt-tab-header-item.active {
-  color: #fff;
-}
-.bunt-tabs-header-items.text-color-active-white .bunt-tab-header-item.active .bunt-tab-header-item-icon {
-  color: #fff;
 }
 .bunt-tab {
   outline: none;
@@ -1082,20 +1072,12 @@ body[modality="keyboard"] .bunt-tabs-header.background-color-clear .ui-tab-heade
   opacity: 0.4;
   cursor: default;
 }
-.bunt-tab-header-item-icon {
-  width: 24px;
-  height: 24px;
-}
-.bunt-tab-header-item-icon .bunt-icon {
-  cursor: inherit;
-}
 .bunt-tabs-indicator {
   position: absolute;
   height: 2px;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #f44336;
   -webkit-transform: scale(0);
           transform: scale(0);
   -webkit-transform-origin: left center;
