@@ -1,5 +1,6 @@
 $button-height = 36px
 
+// structural mixin, call only once
 icon-button()
 	.{$prefix}-icon-button
 		line-height $button-height
@@ -36,28 +37,51 @@ icon-button()
 					
 		background-color transparent
 
-		&:hover:not([disabled]),
-		&.dropdown-open
-			background-color darken($clr-grey-200, 3%)
-
 		&.autofocus:focus,
 		body[modality="keyboard"] &:focus
 			outline-width 2px
 			outline-offset 0
 				
-		&.color-default
-			color $clr-primary-text-light
-			.{$prefix}-icon
-				color $clr-secondary-text-light
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-					outline-color darken($clr-grey-200, 25%)
-		
-		for xcolor in $clr-names
-			&.color-{xcolor}
-				color lookup('$clr-' + xcolor)
+		// &.color-default
+		// 	color $clr-primary-text-light
+		// 	.{$prefix}-icon
+		// 		color $clr-secondary-text-light
+		// 	&.autofocus:focus,
+		// 	body[modality="keyboard"] &:focus
+		// 			outline-color darken($clr-grey-200, 25%)
+		// 
+		// for xcolor in $clr-names
+		// 	&.color-{xcolor}
+		// 		color lookup('$clr-' + xcolor)
 			
 		.{$prefix}-icon
 			height $button-height
 			line-height $button-height
 			font-size 20px
+			
+// styling/theming mixing
+// style = 'flat', 'filled', 'clear'
+icon-button-style(color = $clr-primary-text-light, style = 'flat')
+	color: color
+	if style is 'flat'
+		&:hover:not([disabled]),
+		&.dropdown-open
+			background-color: darken($clr-grey-200, 3%)
+		.{$prefix}-icon
+			color: color
+		&.autofocus:focus,
+		body[modality="keyboard"] &:focus
+				outline-color: darken($clr-grey-200, 25%)
+	// else if style is 'filled'
+
+	else if style is 'clear'
+		background-color: transparent
+		
+		body[modality="keyboard"] &:focus,
+		&:hover:not([disabled]),
+		&.dropdown-open
+				background-color: alpha(black, 0.1)
+		
+		.{$prefix}-icon
+			color: color
+	

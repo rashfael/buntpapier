@@ -2,33 +2,49 @@
 #buntpapier
 	#hero
 		h1 buntpapier
-
-	form
-		bunt-input(name="an-input", label="ein lustiges Eingabefeld", v-model="text")
-		bunt-input(name="an-input", label="Passwort!", type="password", v-model="password")
-		bunt-select(name="a-select", label="Select something", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
-
+	
+	#content
+		h2 Inputs
+		form
+			bunt-input(name="an-input", label="ein lustiges Eingabefeld", v-model="text")
+			bunt-input(name="an-input", label="Passwort!", type="password", v-model="password")
+			bunt-select(name="a-select", label="Select something", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
+		
+		h2 Buttons
 		bunt-button(@click.native.prevent="") CLICK ME
 		bunt-button(@click.native.prevent="", color="primary") BUTTON
 		bunt-button(@click.native.prevent="", icon="add") add
 		bunt-button(@click.native.prevent="", color="primary", icon="add") BUTTON
 		bunt-button(@click.native.prevent="", style="clear") CLICK ME
 		bunt-button(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
-		bunt-icon-button(@click.native.prevent="", color="primary") add
+		h2 Icon Buttons
+		.icon-buttons-flat
+			bunt-icon-button(@click.native.prevent="") add
+			bunt-icon-button(@click.native.prevent="") remove
+		.icon-buttons-clear
+			bunt-icon-button(@click.native.prevent="") add
+			bunt-icon-button(@click.native.prevent="") remove
+		
+		h2 Loading Indicators
 		.progress-circular
 			bunt-progress-circular(size="tiny")
 			bunt-progress-circular(size="small")
 			bunt-progress-circular(size="normal")
 			bunt-progress-circular(size="big")
 			bunt-progress-circular(size="huge")
+			
+		h2 Popover
 		.popover
-			bunt-icon-button(ref="popoverButton", @click.native.prevent="", color="primary") add
+			bunt-icon-button.popover-icon-button(ref="popoverButton", @click.native.prevent="") add
 			bunt-popover(target="popoverButton")
 				h1 POPOVER
-		
-		bunt-tabs
+				
+		h2 Tabs		
+	
+		bunt-tabs.tabs-default
 			bunt-tab(header="Tab 1")
 			bunt-tab(header="Tab 2")
+			bunt-tab(header="A longer Tab Heading")
 		
 </template>
 <script>
@@ -43,7 +59,7 @@ export default {
 		}
 	}
 }
-</script>
+</script>button
 <style lang="stylus">
 stripe(colors, angle, width)
 	$grad = 'repeating-linear-gradient(' + angle 
@@ -98,9 +114,21 @@ stripe(colors, angle, width)
 		background-image unquote(stripe(gradclrs, 90deg, 24px))
 		background-size 100% 100%
 		background-repeat no-repeat
-form
+#content
 	card()
 	padding 2rem
 	width 720px
 	box-sizing border-box
+	
+.popover-icon-button
+	icon-button-style($clr-primary, 'clear')
+
+.icon-buttons-flat button
+	icon-button-style()
+.icon-buttons-clear 
+	background-color $clr-primary
+	button
+		icon-button-style($clr-primary-text-dark, 'clear')
+.tabs-default
+	tabs-style()
 </style>

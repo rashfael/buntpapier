@@ -1,12 +1,12 @@
 <template lang="jade">
 .bunt-tabs(:class="styleClasses")
-	.bunt-tabs-header(:class="['background-color-'+backgroundColor]")
-		ul.bunt-tabs-header-items(:class="['text-color-'+textColor, 'text-color-active-'+textColorActive]", role="tablist", ref="tabsContainer")
+	.bunt-tabs-header
+		ul.bunt-tabs-header-items(role="tablist", ref="tabsContainer")
 			bunt-tab-header-item(:type="type", :id="tab.id", :icon="tab.icon", :text="tab.header",
 				:active="activeTab === tab", :disabled="tab.disabled",
 				@click.native="select(tab, index)",
 				v-for="(tab, index) in tabs", ref="tabElements")
-		.bunt-tabs-indicator(:class="['color-' + indicatorColor, indicatorState]", :style="indicatorStyle", @transitionend="onIndicatorTransitionEnd")
+		.bunt-tabs-indicator(:class="[indicatorState]", :style="indicatorStyle", @transitionend="onIndicatorTransitionEnd")
 	.bunt-tabs-body(ref="body")
 		slot
 </template>
@@ -26,30 +26,6 @@ export default {
 		type: {
 			type: String,
 			default: 'text', // 'text', 'icon', or 'icon-and-text'styleObject
-		},
-		backgroundColor: {
-			type: String,
-			default: 'default', // 'default', 'primary', 'accent', or 'clear'
-		},
-		textColor: {
-			type: String,
-			default: 'black', // 'black', or 'white'
-		},
-		textColorActive: {
-			type: String,
-			default: 'primary', // 'primary', 'accent', or 'white'
-		},
-		indicatorColor: {
-			type: String,
-			default: 'primary', // 'primary', 'accent', or 'white'
-		},
-		fullwidth: {
-			type: Boolean,
-			default: false
-		},
-		raised: {
-			type: Boolean,
-			default: false
 		}
 	},
 	data() {
@@ -70,10 +46,6 @@ export default {
 	computed: {
 		styleClasses() {
 			let classes = [`${consts.prefix}-tabs-type-${this.type}`]
-			if (this.raised)
-				classes.push('raised')
-			if (this.fullwidth)
-				classes.push('fullwidth')
 			return classes
 		},
 		indicatorStyle () {

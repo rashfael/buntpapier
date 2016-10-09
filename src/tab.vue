@@ -24,7 +24,7 @@ export default {
 
 	computed: {
 		active() {
-			return this.$parent.activeTab === this.id
+			return this.$parent.activeTab === this
 		}
 	},
 

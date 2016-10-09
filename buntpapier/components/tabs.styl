@@ -17,23 +17,9 @@ tabs()
 	.{$prefix}-tabs-header
 		position: relative
 		width: 100%
-
-		&.background-color-default
-			background-color: $clr-grey-200
-
-			.ui-tab-header-item
-				body[modality="keyboard"] &:focus
-					outline: 1px solid $clr-primary
-
-		&.background-color-primary,
-		&.background-color-accent,
-		&.background-color-clear
-			.ui-tab-header-item
-				body[modality="keyboard"] &:focus
-					outline: 1px solid $clr-white
-
-				.ui-ripple-ink .ripple.held
-					opacity: 0.7
+			
+		.{$prefix}-tab-header-item .ui-ripple-ink .ripple.held
+				opacity: 0.7
 
 	.{$prefix}-tabs-header-items
 		position: relative
@@ -41,39 +27,6 @@ tabs()
 		list-style: none
 		margin: 0
 		padding: 0
-
-		&.text-color-black
-			color: alpha(black, 0.54)
-
-			.ui-tab-header-item-icon
-				color: alpha(black, 0.54)
-
-		&.text-color-white
-			color: alpha(white, 0.65)
-
-			.{$prefix}-tab-header-item-icon
-				color: alpha(white, 0.65)
-
-		&.text-color-active-primary
-			.{$prefix}-tab-header-item.active
-				color: $clr-primary
-
-				.{$prefix}-tab-header-item-icon
-					color: $clr-primary
-
-		&.text-color-active-accent
-			.{$prefix}-tab-header-item.active
-				color: $clr-accent
-
-				.{$prefix}-tab-header-item-icon
-					color: $clr-accent
-
-		&.text-color-active-white
-			.{$prefix}-tab-header-item.active
-				color: white
-
-				.{$prefix}-tab-header-item-icon
-					color: white
 
 	// .{$prefix}-tabs-body
 	// 	background-color: white
@@ -122,14 +75,14 @@ tabs()
 	// 	@extends $truncate-text;
 	// }
 
-	.{$prefix}-tab-header-item-icon {
-		width: 24px;
-		height: 24px;
-
-		.{$prefix}-icon {
-			cursor: inherit;
-		}
-	}
+	// .{$prefix}-tab-header-item-icon {
+	// 	width: 24px;
+	// 	height: 24px;
+	// 
+	// 	.{$prefix}-icon {
+	// 		cursor: inherit;
+	// 	}
+	// }
 	
 	.{$prefix}-tabs-indicator
 		position: absolute
@@ -137,7 +90,7 @@ tabs()
 		bottom: 0
 		left: 0
 		right: 0
-		background-color: $clr-red
+		
 		transform: scale(0)
 		transform-origin: left center
 		transition: transform
@@ -154,3 +107,22 @@ tabs()
 		&.contract
 			transition-duration: 0.09s
 			transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1)
+			
+// styling/theming mixing
+tabs-style(background-color = $clr-grey-200, color = $clr-secondary-text-light, active-color = $clr-primary, indicator-color = $clr-primary)
+	.{$prefix}-tabs-header
+		background-color: background-color
+		.{$prefix}-tabs-header-items
+			color: $clr-secondary-text-light
+			.{$prefix}-tab-header-item-icon
+				color: $clr-secondary-text-light
+		.{$prefix}-tab-header-item
+			body[modality="keyboard"] &:focus
+				outline: 1px solid active-color
+		.{$prefix}-tab-header-item.active
+			color: active-color
+			.{$prefix}-tab-header-item-icon
+				color: active-color	
+	.{$prefix}-tabs-indicator
+		background-color: indicator-color
+	
