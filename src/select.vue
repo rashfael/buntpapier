@@ -226,13 +226,6 @@ export default {
 		})
 	},
 	watch: {
-		value (val, old) {
-			if (this.multiple) {
-				this.onChange ? this.onChange(val) : null
-			} else {
-				this.onChange && val !== old ? this.onChange(val) : null
-			}
-		},
 		options () {
 			if (!this.taggable && this.resetOnOptionsChange) {
 				this.$set('value', this.multiple ? [] : null)
@@ -273,15 +266,7 @@ export default {
 					}
 				}
 
-				if (this.multiple) {
-					if (!this.value) {
-						this.$set('value', [option])
-					} else {
-						this.value.push(option)
-					}
-				} else {
-					this.value = option
-				}
+				this.$emit('input', option)
 			}
 
 			this.onAfterSelect(option)
@@ -293,17 +278,7 @@ export default {
 		 * @return {void}
 		 */
 		deselect(option) {
-			if (this.multiple) {
-				let ref = -1
-				this.value.forEach((val) => {
-					if (val === option || typeof val === 'object' && val[this.optionLabel] === option[this.optionLabel]) {
-						ref = val
-					}
-				})
-				this.value.$remove(ref)
-			} else {
-				this.value = null
-			}
+			this.$emit('input', null)
 		},
 
 		/**
@@ -312,12 +287,9 @@ export default {
 		 * @return {void}
 		 */
 		onAfterSelect(option) {
-			if (!this.multiple) {
-				this.open = !this.open
-				this.$refs.search.blur()
-				this.rawSearch = this.getOptionLabel(option)
-			}
-			this.search = ''
+			this.open = !this.open
+			this.$refs.search.blur()
+			this.rawSearch = this.getOptionLabel(option)
 		},
 
 		/**
@@ -377,7 +349,7 @@ export default {
 		 */
 		maybeDeleteValue() {
 			if (!this.$refs.search.value.length && this.value) {
-				return this.multiple ? this.value.pop() : this.$set('value', null)
+				this.$emit('input', null)
 			}
 		},
 
@@ -436,7 +408,9 @@ export default {
 		 * @return {array}
 		 */
 		filteredOptions() {
-			let options = this.search.length !== 0 ? this.options.filter((option) => fuzzysearch(this.search.toLowerCase(), option.toLowerCase())) : this.options.slice()
+			let options = this.search.length !== 0
+				? this.options.filter((option) => fuzzysearch(this.search.toLowerCase(), this.getOptionLabel(option).toLowerCase()))
+				: this.options.slice()
 			if (this.taggable && this.search.length && !this.optionExists(this.search)) {
 				options.unshift(this.search)
 			}
