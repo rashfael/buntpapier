@@ -99,8 +99,8 @@ export default {
 			this.select(this.tabs[index], index)
 		},
 		select(tab, index) {
-			// if (tab.disabled || this.activeTab === tab)
-			// 	return
+			if (tab.disabled || this.activeTabObj === tab)
+				return
 			let rect = this.$refs.tabsContainer.getBoundingClientRect()
 			let width = rect.width
 			let tabRect = this.$refs.tabElements[index].$el.getBoundingClientRect()
