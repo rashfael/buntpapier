@@ -61,7 +61,7 @@ export default {
 	},
 	watch: {
 		activeTab (val) {
-			activateTab(val)
+			this.activateTab(val)
 		},
 		// activeTabObj (val, oldVal) {
 		// 	if(this.activeTab === null) // nobody listens
