@@ -1,11 +1,5 @@
 <template lang="jade">
 .bunt-select.dropdown(:class="dropdownClasses")
-	//- .dropdown-toggle.clearfix(v-el:toggle, type="button")
-	//- 	span.form-control(v-if="!searchable && isValueEmpty") {{ placeholder }}
-	//- 	span.selected-tag(v-for="option in valueAsArray", track-by="$index")
-	//- 		| {{ getOptionLabel(option) }}
-	//- 		button.close(v-if="multiple", @click="select(option)", type="button")
-	//- 			span(aria-hidden="true") &times;
 	// inline the input, use css from input component
 	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty}")
 		.label-input-container
@@ -94,15 +88,6 @@ export default {
 		},
 
 		/**
-		 * Equivalent to the `multiple` attribute on a `<select>` input.
-		 * @type {Object}
-		 */
-		multiple: {
-			type: Boolean,
-			default: false
-		},
-
-		/**
 		 * Equivalent to the `placeholder` attribute on an `<input>`.
 		 * @type {Object}
 		 */
@@ -145,60 +130,40 @@ export default {
 						return option[this.optionLabel]
 					}
 				}
-				return option;
+				return option
 			}
 		},
-
-		/**
-		 * An optional callback function that is called each time the selected
-		 * value(s) change. When integrating with Vuex, use this callback to trigger
-		 * an action, rather than using :value.sync to retreive the selected value.
-		 * @type {Function}
-		 * @default {null}
-		 */
-		onChange: Function,
-
-		/**
-		 * Enable/disable creating options from searchInput.
-		 * @type {Boolean}
-		 */
-		taggable: {
-			type: Boolean,
-			default: false
+		
+		optionValue: {
+			type: String,
+			default: 'id'
 		},
-
-		/**
-		 * When true, newly created tags will be added to
-		 * the options list.
-		 * @type {Boolean}
-		 */
-		pushTags: {
-			type: Boolean,
-			default: false
-		},
-
-		/**
-		 * User defined function for adding Options
-		 * @type {Function}
-		 */
-		createOption: {
-			type: Function,
-			default: function (newOption) {
-				if (typeof this.options[0] === 'object') {
-					return {[this.optionLabel]: newOption}
+		
+		getOptionValue: {
+			type: Function, 
+			default(option) {
+				if (typeof option === 'object') {
+					if (this.optionValue && option[this.optionValue]) {
+						return option[this.optionValue]
+					}
 				}
-				return newOption
+				return option
 			}
 		},
-
-		/**
-		 * When false, updating the options will not reset the select value
-		 * @type {Boolean}
-		 */
-		resetOnOptionsChange: {
-			type: Boolean,
-			default: false
-		},
+		
+		findOptionByValue: {
+			type: Function, 
+			default(value) {
+				const findFunc = (option) => {
+					
+					if (typeof option === 'object' && this.optionValue)
+						return option[this.optionValue] === value
+					return option === value
+				}
+				
+				return this.options.find(findFunc)
+			}
+		}
 	},
 
 	data() {
@@ -224,15 +189,11 @@ export default {
 			]
 			// offset: '-24px 0'
 		})
+		this.selectValue(this.value)
 	},
 	watch: {
-		options () {
-			if (!this.taggable && this.resetOnOptionsChange) {
-				this.$set('value', this.multiple ? [] : null)
-			}
-		},
-		multiple (val) {
-			this.$set('value', val ? [] : null)
+		value (value) {
+			this.selectValue(value)
 		},
 		rawSearch (val) {
 			if(this.open)
@@ -249,6 +210,10 @@ export default {
 			this.$refs.search.select()
 			this.$nextTick(() => this._tether.position()) // delay until after dropdown is rendered
 		},
+		selectValue(value) {
+			const option = this.findOptionByValue(value)
+			this.rawSearch = this.getOptionLabel(option) || ''
+		},
 		/**
 		 * Select a given option.
 		 * @param  {Object||String} option
@@ -258,15 +223,7 @@ export default {
 			if (this.isOptionSelected(option)) {
 				this.deselect(option)
 			} else {
-				if (this.taggable && !this.optionExists(option)) {
-					option = this.createOption(option)
-
-					if (this.pushTags) {
-						this.options.push(option)
-					}
-				}
-
-				this.$emit('input', option)
+				this.$emit('input', this.getOptionValue(option))
 			}
 
 			this.onAfterSelect(option)
@@ -289,7 +246,7 @@ export default {
 		onAfterSelect(option) {
 			this.open = !this.open
 			this.$refs.search.blur()
-			this.rawSearch = this.getOptionLabel(option)
+			this.rawSearch = this.getOptionLabel(option) || ''
 		},
 
 		/**
@@ -314,18 +271,6 @@ export default {
 		 * @return {Boolean}         True when selected || False otherwise
 		 */
 		isOptionSelected(option) {
-			if (this.multiple && this.value) {
-				let selected = false
-				this.value.forEach(opt => {
-					if (typeof opt === 'object' && opt[this.optionLabel] === option[this.optionLabel]) {
-						selected = true
-					} else if (opt === option) {
-						selected = true
-					}
-				})
-				return selected
-			}
-
 			return this.value === option
 		},
 
@@ -430,20 +375,6 @@ export default {
 			}
 
 			return true;
-		},
-
-		/**
-		 * Return the current value in array format.
-		 * @return {Array}
-		 */
-		valueAsArray() {
-			if (this.multiple) {
-				return this.value
-			} else if (this.value) {
-				return [this.value]
-			}
-
-			return []
 		}
 	}
 
