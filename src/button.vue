@@ -2,12 +2,10 @@
 button.bunt-button(:type="type", :disabled="disabled || loading", ref="button")
 	.bunt-button-content(:class="{ 'invisible': loading }")
 		i.bunt-icon.material-icons(v-if="icon", v-html="icon")
-		//- quake-icon.quake-button-icon(:class="{ 'position-right': iconRight }", :icon="icon", v-if="showIcon")
 		.bunt-button-text
 			slot
 				span(v-text="text")
-		//- quake-icon.quake-button-dropdown-icon(icon="&#xe5c5;", v-if="!iconRight && showDropdownIcon && (hasDropdownMenu || hasPopover)")
-	//- quake-progress-circular.quake-button-spinner(:color="spinnerColor", :size="18", :stroke="4.5", disable-transition, v-show="loading")
+	progress-circular(v-show="loading", size="small")
 	ripple-ink(v-if!="!noInk && !disabled")
 
 	//- quake-popover(:trigger="$els.button", :open-on="openDropdownOn", :dropdown-position="dropdownPosition"
@@ -17,8 +15,10 @@ button.bunt-button(:type="type", :disabled="disabled || loading", ref="button")
 <script>
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
+import ProgressCircular from './progress-circular'
 export default {
 	name: `${consts.prefix}-button`,
+	components: { ProgressCircular },
 	props: {
 		text: String,
 		icon: String,
@@ -46,13 +46,6 @@ export default {
 
 	computed: {
 	},
-
-	// components: {
-	// 	QuakeIcon,
-	// 	QuakeMenu,
-	// 	QuakePopover,
-	// 	QuakeProgressCircular
-	// },
 
 	mixins: [
 		// HasDropdown,

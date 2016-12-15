@@ -37,8 +37,23 @@ button()
 		&:not([disabled])
 			cursor pointer
 			
+		.{$prefix}-progress-circular
+			position absolute
+			top 50%
+			left 50%
+			&.active
+				animation button-container-rotate 1568ms linear infinite
+			@keyframes button-container-rotate
+				from
+					transform translate(-50%, -50%) rotate(0deg)
+				to
+					transform translate(-50%, -50%) rotate(360deg)
+			
 	.{$prefix}-button-content
 		display flex
+		
+		&.invisible
+			visibility hidden
 		
 	.{$prefix}-icon
 		height $button-height
@@ -98,4 +113,7 @@ button-style(style = 'flat', color = style is 'clear' ? $clr-primary-text-light 
 		// 	&.autofocus:focus,
 		// 	body[modality="keyboard"] &:focus
 		// 			outline-color darken($clr-grey-200, 25%)
+		
+	.{$prefix}-progress-circular .spinner-layer
+		border-color text-color
 		

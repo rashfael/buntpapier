@@ -18,6 +18,7 @@
 		bunt-button.button-primary(@click.native.prevent="", color="primary", icon="add") BUTTON
 		bunt-button.button-clear(@click.native.prevent="", style="clear") CLICK ME
 		bunt-button.button-clear-primary(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
+		bunt-button.button-primary(@click.native.prevent="", color="primary", :loading="true") NEVER! EVER!
 		h2 Icon Buttons
 		.icon-buttons-flat
 			bunt-icon-button(@click.native.prevent="") add
