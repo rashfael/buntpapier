@@ -12,12 +12,12 @@
 			p {{ selection }}
 			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
 		h2 Buttons
-		bunt-button(@click.native.prevent="") CLICK ME
-		bunt-button(@click.native.prevent="", color="primary") BUTTON
-		bunt-button(@click.native.prevent="", icon="add") add
-		bunt-button(@click.native.prevent="", color="primary", icon="add") BUTTON
-		bunt-button(@click.native.prevent="", style="clear") CLICK ME
-		bunt-button(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
+		bunt-button.button-default(@click.native.prevent="") CLICK ME
+		bunt-button.button-primary(@click.native.prevent="", color="primary") BUTTON
+		bunt-button.button-default(@click.native.prevent="", icon="add") add
+		bunt-button.button-primary(@click.native.prevent="", color="primary", icon="add") BUTTON
+		bunt-button.button-clear(@click.native.prevent="", style="clear") CLICK ME
+		bunt-button.button-clear-primary(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
 		h2 Icon Buttons
 		.icon-buttons-flat
 			bunt-icon-button(@click.native.prevent="") add
@@ -141,7 +141,15 @@ stripe(colors, angle, width)
 	padding 2rem
 	width 720px
 	box-sizing border-box
-	
+
+.button-default
+	button-style()
+.button-primary
+	button-style(color: $clr-primary)
+.button-clear
+	button-style(style: 'clear')
+.button-clear-primary
+		button-style(style: 'clear', color: $clr-primary)
 .popover-icon-button
 	icon-button-style($clr-primary, 'clear')
 

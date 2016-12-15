@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-button(:class="styleClasses", :type="type", :disabled="disabled || loading", ref="button")
+button.bunt-button(:type="type", :disabled="disabled || loading", ref="button")
 	.bunt-button-content(:class="{ 'invisible': loading }")
 		i.bunt-icon.material-icons(v-if="icon", v-html="icon")
 		//- quake-icon.quake-button-icon(:class="{ 'position-right': iconRight }", :icon="icon", v-if="showIcon")
@@ -20,18 +20,6 @@ import consts from './_constants'
 export default {
 	name: `${consts.prefix}-button`,
 	props: {
-		style: {
-			type: String,
-			default: 'normal' // 'normal' or 'clear'
-		},
-		color: {
-			type: String,
-			default: 'default' // one of $clr-names
-		},
-		raised: {
-			type: Boolean,
-			default: false
-		},
 		text: String,
 		icon: String,
 		iconRight: {
@@ -57,27 +45,6 @@ export default {
 	},
 
 	computed: {
-		styleClasses() {
-			let classes = [`${consts.prefix}-button-${this.style}`, `color-${this.color}`]
-
-			if (this.raised) {
-				classes.push(`${consts.prefix}-button-raised`)
-			}
-
-			if (this.hasDropdownMenu || this.hasPopover) {
-				classes.push('has-dropdown')
-			}
-
-			return classes
-		},
-
-		spinnerColor() {
-			if (this.color === 'color-default' || this.style === 'clear') {
-				return 'black';
-			}
-
-			return 'white';
-		}
 	},
 
 	// components: {

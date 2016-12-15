@@ -9,7 +9,6 @@ button()
 		line-height $button-height
 		vertical-align middle
 
-		background none
 		overflow hidden
 		outline none
 		border none
@@ -55,52 +54,32 @@ button()
 			outline none
 			box-shadow 0 0 5px alpha(black, 0.22), 0 3px 6px alpha(black, 0.3)
 
-	.{$prefix}-button-normal
+// styling/theming mixing
+// style = 'flat', 'clear'
+// use contrast instead of lightness?
+button-style(style = 'flat', color = style is 'clear' ? $clr-primary-text-light : $clr-grey-200, text-color = lightness(color) < 60% ? $clr-primary-text-dark : $clr-primary-text-light)
+	if style is 'flat'
+		color text-color
+		background-color color
+		
+		&:hover:not([disabled])
+			background-color darken(color, 15%)
+		
 		&.autofocus:focus,
 		body[modality="keyboard"] &:focus
 			outline-width 2px
 			outline-offset 2px
 
-		&.color-primary,
-		&.color-accent,
-		&.color-success,
-		&.color-warning,
-		&.color-danger
-			color $clr-white
+		&.autofocus:focus,
+		body[modality="keyboard"] &:focus
+			background-color darken(color, 15%)
+			outline-color darken(color, 25%)
 
-			.{$prefix}-ripple-ink .ripple.held
-				opacity: 0.7
+		.{$prefix}-ripple-ink .ripple.held
+			opacity: 0.7
 
-		&.color-default
-			color $clr-primary-text-light
-			background-color $clr-grey-200
-
-			&:hover:not([disabled]),
-			&.dropdown-open
-				background-color darken($clr-grey-200, 7.5%)
-
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-				background-color darken($clr-grey-200, 15%)
-				outline-color darken($clr-grey-200, 30%)
-
-			.{$prefix}-ripple-ink .ripple.held
-				opacity 0.2
-
-		for xcolor in $clr-names
-			&.color-{xcolor}
-				background-color lookup('$clr-' + xcolor)
-			
-				&:hover:not([disabled]),
-				&.dropdown-open
-					background-color darken(lookup('$clr-' + xcolor), 15%)
-				
-				&.autofocus:focus,
-				body[modality="keyboard"] &:focus
-					background-color darken(lookup('$clr-' + xcolor), 20%)
-					outline-color darken(lookup('$clr-' + xcolor), 20%)
-					
-	.{$prefix}-button-clear
+	else if style is 'clear'
+		color color
 		background-color transparent
 
 		&:hover:not([disabled]),
@@ -112,14 +91,11 @@ button()
 			outline-width 2px
 			outline-offset 0
 				
-		&.color-default
-			color $clr-primary-text-light
-			.{$prefix}-icon
-				color $clr-secondary-text-light
-			&.autofocus:focus,
-			body[modality="keyboard"] &:focus
-					outline-color darken($clr-grey-200, 25%)
+		// &.color-default
+		// 	color $clr-primary-text-light
+		// 	.{$prefix}-icon
+		// 		color $clr-secondary-text-light
+		// 	&.autofocus:focus,
+		// 	body[modality="keyboard"] &:focus
+		// 			outline-color darken($clr-grey-200, 25%)
 		
-		for xcolor in $clr-names
-			&.color-{xcolor}
-				color lookup('$clr-' + xcolor)
