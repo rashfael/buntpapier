@@ -63,6 +63,84 @@
   width: 720px;
   box-sizing: border-box;
 }
+.button-default {
+  color: rgba(0,0,0,0.87);
+  background-color: #eee;
+}
+.button-default:hover:not([disabled]) {
+  background-color: #cacaca;
+}
+.button-default.autofocus:focus,
+body[modality="keyboard"] .button-default:focus {
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+.button-default.autofocus:focus,
+body[modality="keyboard"] .button-default:focus {
+  background-color: #cacaca;
+  outline-color: #b3b3b3;
+}
+.button-default .bunt-ripple-ink .ripple.held {
+  opacity: 0.7;
+}
+.button-default .bunt-progress-circular .spinner-layer {
+  border-color: rgba(0,0,0,0.87);
+}
+.button-primary {
+  color: #fff;
+  background-color: #2196f3;
+}
+.button-primary:hover:not([disabled]) {
+  background-color: #0c81df;
+}
+.button-primary.autofocus:focus,
+body[modality="keyboard"] .button-primary:focus {
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+.button-primary.autofocus:focus,
+body[modality="keyboard"] .button-primary:focus {
+  background-color: #0c81df;
+  outline-color: #0b72c4;
+}
+.button-primary .bunt-ripple-ink .ripple.held {
+  opacity: 0.7;
+}
+.button-primary .bunt-progress-circular .spinner-layer {
+  border-color: #fff;
+}
+.button-clear {
+  color: rgba(0,0,0,0.87);
+  background-color: transparent;
+}
+.button-clear:hover:not([disabled]),
+.button-clear.dropdown-open {
+  background-color: #e7e7e7;
+}
+.button-clear.autofocus:focus,
+body[modality="keyboard"] .button-clear:focus {
+  outline-width: 2px;
+  outline-offset: 0;
+}
+.button-clear .bunt-progress-circular .spinner-layer {
+  border-color: #fff;
+}
+.button-clear-primary {
+  color: #2196f3;
+  background-color: transparent;
+}
+.button-clear-primary:hover:not([disabled]),
+.button-clear-primary.dropdown-open {
+  background-color: #e7e7e7;
+}
+.button-clear-primary.autofocus:focus,
+body[modality="keyboard"] .button-clear-primary:focus {
+  outline-width: 2px;
+  outline-offset: 0;
+}
+.button-clear-primary .bunt-progress-circular .spinner-layer {
+  border-color: #fff;
+}
 .popover-icon-button {
   color: #2196f3;
   background-color: transparent;
@@ -335,7 +413,6 @@ blockquote > figcaption:before {
   font-weight: 500;
   line-height: 36px;
   vertical-align: middle;
-  background: none;
   overflow: hidden;
   outline: none;
   border: none;
@@ -368,10 +445,42 @@ body[modality="keyboard"] .bunt-button:focus {
 .bunt-button:not([disabled]) {
   cursor: pointer;
 }
+.bunt-button .bunt-progress-circular {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+.bunt-button .bunt-progress-circular.active {
+  -webkit-animation: button-container-rotate 1568ms linear infinite;
+          animation: button-container-rotate 1568ms linear infinite;
+}
+@-webkit-keyframes button-container-rotate {
+  from {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+            transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+            transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes button-container-rotate {
+  from {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+            transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+            transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
 .bunt-button-content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+.bunt-button-content.invisible {
+  visibility: hidden;
 }
 .bunt-icon {
   height: 36px;
@@ -387,138 +496,6 @@ body[modality="keyboard"] .bunt-button:focus {
 body[modality="keyboard"] .bunt-button-raised:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0,0,0,0.22), 0 3px 6px rgba(0,0,0,0.3);
-}
-.bunt-button-normal.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal:focus {
-  outline-width: 2px;
-  outline-offset: 2px;
-}
-.bunt-button-normal.color-primary,
-.bunt-button-normal.color-accent,
-.bunt-button-normal.color-success,
-.bunt-button-normal.color-warning,
-.bunt-button-normal.color-danger {
-  color: #fff;
-}
-.bunt-button-normal.color-primary .bunt-ripple-ink .ripple.held,
-.bunt-button-normal.color-accent .bunt-ripple-ink .ripple.held,
-.bunt-button-normal.color-success .bunt-ripple-ink .ripple.held,
-.bunt-button-normal.color-warning .bunt-ripple-ink .ripple.held,
-.bunt-button-normal.color-danger .bunt-ripple-ink .ripple.held {
-  opacity: 0.7;
-}
-.bunt-button-normal.color-default {
-  color: rgba(0,0,0,0.87);
-  background-color: #eee;
-}
-.bunt-button-normal.color-default:hover:not([disabled]),
-.bunt-button-normal.color-default.dropdown-open {
-  background-color: #dcdcdc;
-}
-.bunt-button-normal.color-default.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal.color-default:focus {
-  background-color: #cacaca;
-  outline-color: #a7a7a7;
-}
-.bunt-button-normal.color-default .bunt-ripple-ink .ripple.held {
-  opacity: 0.2;
-}
-.bunt-button-normal.color-primary {
-  background-color: #2196f3;
-}
-.bunt-button-normal.color-primary:hover:not([disabled]),
-.bunt-button-normal.color-primary.dropdown-open {
-  background-color: #0c81df;
-}
-.bunt-button-normal.color-primary.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal.color-primary:focus {
-  background-color: #0b7ad1;
-  outline-color: #0b7ad1;
-}
-.bunt-button-normal.color-accent {
-  background-color: #d500f9;
-}
-.bunt-button-normal.color-accent:hover:not([disabled]),
-.bunt-button-normal.color-accent.dropdown-open {
-  background-color: #b500d4;
-}
-.bunt-button-normal.color-accent.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal.color-accent:focus {
-  background-color: #aa00c7;
-  outline-color: #aa00c7;
-}
-.bunt-button-normal.color-success {
-  background-color: #4caf50;
-}
-.bunt-button-normal.color-success:hover:not([disabled]),
-.bunt-button-normal.color-success.dropdown-open {
-  background-color: #419544;
-}
-.bunt-button-normal.color-success.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal.color-success:focus {
-  background-color: #3d8c40;
-  outline-color: #3d8c40;
-}
-.bunt-button-normal.color-warning {
-  background-color: #ffeb3b;
-}
-.bunt-button-normal.color-warning:hover:not([disabled]),
-.bunt-button-normal.color-warning.dropdown-open {
-  background-color: #ffe60c;
-}
-.bunt-button-normal.color-warning.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal.color-warning:focus {
-  background-color: #fbe200;
-  outline-color: #fbe200;
-}
-.bunt-button-normal.color-danger {
-  background-color: #f44336;
-}
-.bunt-button-normal.color-danger:hover:not([disabled]),
-.bunt-button-normal.color-danger.dropdown-open {
-  background-color: #f01d0d;
-}
-.bunt-button-normal.color-danger.autofocus:focus,
-body[modality="keyboard"] .bunt-button-normal.color-danger:focus {
-  background-color: #e21b0c;
-  outline-color: #e21b0c;
-}
-.bunt-button-clear {
-  background-color: transparent;
-}
-.bunt-button-clear:hover:not([disabled]),
-.bunt-button-clear.dropdown-open {
-  background-color: #e7e7e7;
-}
-.bunt-button-clear.autofocus:focus,
-body[modality="keyboard"] .bunt-button-clear:focus {
-  outline-width: 2px;
-  outline-offset: 0;
-}
-.bunt-button-clear.color-default {
-  color: rgba(0,0,0,0.87);
-}
-.bunt-button-clear.color-default .bunt-icon {
-  color: rgba(0,0,0,0.54);
-}
-.bunt-button-clear.color-default.autofocus:focus,
-body[modality="keyboard"] .bunt-button-clear.color-default:focus {
-  outline-color: #b3b3b3;
-}
-.bunt-button-clear.color-primary {
-  color: #2196f3;
-}
-.bunt-button-clear.color-accent {
-  color: #d500f9;
-}
-.bunt-button-clear.color-success {
-  color: #4caf50;
-}
-.bunt-button-clear.color-warning {
-  color: #ffeb3b;
-}
-.bunt-button-clear.color-danger {
-  color: #f44336;
 }
 .bunt-icon-button {
   line-height: 36px;
