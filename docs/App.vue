@@ -13,7 +13,7 @@
 			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
 		h2 Buttons
 		bunt-button.button-default(@click.native.prevent="") CLICK ME
-		bunt-button.button-primary(@click.native.prevent="", color="primary") BUTTON
+		bunt-button.button-primary(@click.native.prevent="", color="primary", tooltip="with a tooltip") BUTTON
 		bunt-button.button-default(@click.native.prevent="", icon="add") add
 		bunt-button.button-primary(@click.native.prevent="", color="primary", icon="add") BUTTON
 		bunt-button.button-clear(@click.native.prevent="", style="clear") CLICK ME

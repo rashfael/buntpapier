@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-button(:type="type", :disabled="disabled || loading", ref="button")
+button.bunt-button(:type="type", :disabled="disabled || loading", ref="button", @mouseenter="showTooltip = true", @mouseleave="showTooltip = false")
 	.bunt-button-content(:class="{ 'invisible': loading }")
 		i.bunt-icon.material-icons(v-if="icon", v-html="icon")
 		.bunt-button-text
@@ -7,21 +7,20 @@ button.bunt-button(:type="type", :disabled="disabled || loading", ref="button")
 				span(v-text="text")
 	progress-circular(v-show="loading", size="small")
 	ripple-ink(v-if!="!noInk && !disabled")
-
-	//- quake-popover(:trigger="$els.button", :open-on="openDropdownOn", :dropdown-position="dropdownPosition"
-	//- 	v-if="hasPopover")
-	//- 	slot(name="popover")
+	tooltip(v-if="tooltip", :show="showTooltip") {{ tooltip }}
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
 import ProgressCircular from './progress-circular'
+import Tooltip from './tooltip'
 export default {
 	name: `${consts.prefix}-button`,
-	components: { ProgressCircular },
+	components: { ProgressCircular, Tooltip },
 	props: {
 		text: String,
 		icon: String,
+		tooltip: String,
 		iconRight: {
 			type: Boolean,
 			default: false
@@ -43,7 +42,11 @@ export default {
 			default: 'button'
 		}
 	},
-
+	data () {
+		return {
+			showTooltip: false
+		}
+	},
 	computed: {
 	},
 
@@ -52,8 +55,7 @@ export default {
 		RippleInk
 	],
 
-	// directives: {
-	// 	disabled
-	// }
+	methods: {
+	}
 }
 </script>

@@ -1,0 +1,23 @@
+tooltip()
+	.{$prefix}-tooltip
+		position absolute
+		top 44px
+		background-color $clr-secondary-text-light
+		height 24px
+		white-space nowrap
+		line-height @height
+		padding 0 8px
+		
+		font-size 11px
+		font-weight 400
+		text-transform none
+		border-radius 2px
+		pointer-events none
+		user-select none
+		
+	.{$prefix}-tooltip-enter-active, .{$prefix}-tooltip-leave-active
+		transition opacity .2s, transform .2s
+	
+	.{$prefix}-tooltip-enter, .{$prefix}-tooltip-leave-active
+		opacity 0
+		transform translate(0, -36px)
