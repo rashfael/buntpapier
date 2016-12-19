@@ -413,7 +413,6 @@ blockquote > figcaption:before {
   font-weight: 500;
   line-height: 36px;
   vertical-align: middle;
-  overflow: hidden;
   outline: none;
   border: none;
   position: relative;
@@ -501,7 +500,6 @@ body[modality="keyboard"] .bunt-button-raised:focus {
   line-height: 36px;
   vertical-align: middle;
   background: none;
-  overflow: hidden;
   outline: none;
   border: none;
   position: relative;
@@ -1079,6 +1077,48 @@ body[modality="keyboard"] .bunt-icon-button:focus {
           transition-duration: 0.09s;
   -webkit-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
           transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+.bunt-tooltip {
+  position: absolute;
+  background-color: rgba(0,0,0,0.54);
+  color: #fff;
+  height: 24px;
+  white-space: nowrap;
+  line-height: 24px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 400;
+  text-transform: none;
+  border-radius: 2px;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 90000;
+}
+.bunt-tooltip.tooltip-position-bottom {
+  bottom: 0;
+  -webkit-transform: translate(0, 32px);
+          transform: translate(0, 32px);
+}
+.bunt-tooltip.tooltip-position-top {
+  top: 0;
+  -webkit-transform: translate(0, -32px);
+          transform: translate(0, -32px);
+}
+.bunt-tooltip.bunt-tooltip-enter-active,
+.bunt-tooltip.bunt-tooltip-leave-active {
+  -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+  transition: opacity 0.2s, -webkit-transform 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.2s, transform 0.2s, -webkit-transform 0.2s;
+}
+.bunt-tooltip.bunt-tooltip-enter,
+.bunt-tooltip.bunt-tooltip-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(0, 0);
+          transform: translate(0, 0);
 }
 body {
   margin: 0;
