@@ -1,8 +1,9 @@
+$tooltip-distance = 32px
 tooltip()
 	.{$prefix}-tooltip
 		position absolute
-		top 44px
 		background-color $clr-secondary-text-light
+		color $clr-primary-text-dark
 		height 24px
 		white-space nowrap
 		line-height @height
@@ -14,10 +15,18 @@ tooltip()
 		border-radius 2px
 		pointer-events none
 		user-select none
+		z-index 90000
 		
-	.{$prefix}-tooltip-enter-active, .{$prefix}-tooltip-leave-active
-		transition opacity .2s, transform .2s
-	
-	.{$prefix}-tooltip-enter, .{$prefix}-tooltip-leave-active
-		opacity 0
-		transform translate(0, -36px)
+		&.tooltip-position-bottom
+			bottom 0
+			transform translate(0, $tooltip-distance)
+		&.tooltip-position-top
+			top 0
+			transform translate(0, -1*$tooltip-distance)
+		
+		&.{$prefix}-tooltip-enter-active, &.{$prefix}-tooltip-leave-active
+			transition opacity .2s, transform .2s
+		
+		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
+			opacity 0
+			transform translate(0, 0)

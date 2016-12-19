@@ -21,11 +21,11 @@
 		bunt-button.button-primary(@click.native.prevent="", color="primary", :loading="true") NEVER! EVER!
 		h2 Icon Buttons
 		.icon-buttons-flat
-			bunt-icon-button(@click.native.prevent="") add
-			bunt-icon-button(@click.native.prevent="") remove
+			bunt-icon-button(@click.native.prevent="", tooltip="add") add
+			bunt-icon-button(@click.native.prevent="", tooltip="remove") remove
 		.icon-buttons-clear
-			bunt-icon-button(@click.native.prevent="") add
-			bunt-icon-button(@click.native.prevent="") remove
+			bunt-icon-button(@click.native.prevent="", tooltip="add") add
+			bunt-icon-button(@click.native.prevent="", tooltip="remove") remove
 		
 		h2 Loading Indicators
 		.progress-circular
