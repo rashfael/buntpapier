@@ -45,6 +45,9 @@ input()
 				transform-origin center center
 				transform scale3d(0,1,1)
 				transition transform .25s
+		.hint
+			font-size 13px
+			padding-top 4px
 
 		&.focused
 			.underline:after
@@ -67,3 +70,11 @@ input()
 				font-size 13px*/
 			label
 				padding-bottom 4px
+		
+		&.invalid
+			.hint //label, &.focused.floating-label label // material is a bit inconsistent here
+				color $clr-danger
+				
+			.underline
+				&:before, &:after
+					background-color $clr-danger

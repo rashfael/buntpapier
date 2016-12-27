@@ -4,6 +4,7 @@
 		h1 buntpapier
 	
 	#content
+		p {{$v}}
 		h2 Inputs
 		form
 			bunt-input(name="an-input", label="ein lustiges Eingabefeld", v-model="text")
@@ -11,6 +12,9 @@
 			bunt-select(name="a-select", label="Select something", v-model="selection", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
 			p {{ selection }}
 			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
+		h2 Validation!
+		form
+			bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
 		h2 Buttons
 		bunt-button.button-default(@click.native.prevent="") CLICK ME
 		bunt-button.button-primary(@click.native.prevent="", color="primary", tooltip="with a tooltip") BUTTON
@@ -63,6 +67,9 @@
 </template>
 <script>
 import './styles/style.styl'
+
+import { required } from '../src/vuelidate/validators' 
+
 export default {
 	components: {},
 	replace: false,
@@ -70,6 +77,7 @@ export default {
 		return {
 			text: '',
 			password: '',
+			name: '',
 			complexOptions: [
 				{id: 1, name: 'One'},
 				{id: 2, name: 'Two'},
@@ -79,6 +87,11 @@ export default {
 			activeComplexOption: 2,
 			selectedTab: '',
 			selection: null
+		}
+	},
+	validations: {
+		name: {
+			required: required('a man needs a name')
 		}
 	}
 }
