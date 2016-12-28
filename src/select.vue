@@ -1,7 +1,7 @@
 <template lang="jade">
 .bunt-select.dropdown(:class="dropdownClasses")
 	// inline the input, use css from input component
-	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty}")
+	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid: invalid}")
 		.label-input-container
 			label(:for="name") {{label}}
 			input(type="text", ref="search", :name="name", v-model="rawSearch", v-show="searchable",
@@ -10,12 +10,12 @@
 				@keydown.up.prevent="typeAheadUp",
 				@keydown.down.prevent="typeAheadDown",
 				@keyup.enter.prevent="typeAheadSelect",
-				@blur="open = false",
+				@blur="blur",
 				@focus="focus",
 				:placeholder="searchPlaceholder")
 			i.open-indicator.material-icons(ref="openIndicator", role="presentation") arrow_drop_down
 		.underline
-		
+		.hint {{ hintText }}
 
 	ul.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 		li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @mousedown.prevent.stop="select(option)")
@@ -163,7 +163,8 @@ export default {
 				
 				return this.options.find(findFunc)
 			}
-		}
+		},
+		validation: Object // vuelidate result
 	},
 
 	data() {
@@ -209,6 +210,10 @@ export default {
 			this.open = true
 			this.$refs.search.select()
 			this.$nextTick(() => this._tether.position()) // delay until after dropdown is rendered
+		},
+		blur () {
+			this.open = false
+			this.validation.$touch()
 		},
 		selectValue(value) {
 			const option = this.findOptionByValue(value)
@@ -375,6 +380,12 @@ export default {
 			}
 
 			return true;
+		},
+		invalid () {
+			return this.validation && this.validation.$error
+		},
+		hintText () {
+			return this.invalid ? this.validation.$messages.join() : null
 		}
 	}
 

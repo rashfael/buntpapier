@@ -4,7 +4,6 @@
 		h1 buntpapier
 	
 	#content
-		p {{$v}}
 		h2 Inputs
 		form
 			bunt-input(name="an-input", label="ein lustiges Eingabefeld", v-model="text")
@@ -15,6 +14,7 @@
 		h2 Validation!
 		form
 			bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
+			bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection")
 		h2 Buttons
 		bunt-button.button-default(@click.native.prevent="") CLICK ME
 		bunt-button.button-primary(@click.native.prevent="", color="primary", tooltip="with a tooltip") BUTTON
@@ -86,12 +86,16 @@ export default {
 			],
 			activeComplexOption: 2,
 			selectedTab: '',
-			selection: null
+			selection: null,
+			validSelection: null
 		}
 	},
 	validations: {
 		name: {
 			required: required('a man needs a name')
+		},
+		validSelection: {
+			required: required('I SAID SELECT SOMETHING')
 		}
 	}
 }
