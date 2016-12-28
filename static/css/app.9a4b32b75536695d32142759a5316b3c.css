@@ -608,6 +608,10 @@ body[modality="keyboard"] .bunt-icon-button:focus {
   transition: transform 0.25s;
   transition: transform 0.25s, -webkit-transform 0.25s;
 }
+.bunt-input .hint {
+  font-size: 13px;
+  padding-top: 4px;
+}
 .bunt-input.focused .underline:after {
   -webkit-transform: none;
           transform: none;
@@ -629,6 +633,13 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 }
 .bunt-input.dense label {
   padding-bottom: 4px;
+}
+.bunt-input.invalid .hint {
+  color: #f44336;
+}
+.bunt-input.invalid .underline:before,
+.bunt-input.invalid .underline:after {
+  background-color: #f44336;
 }
 .bunt-drop-element {
   position: absolute;
