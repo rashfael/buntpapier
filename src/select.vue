@@ -213,7 +213,7 @@ export default {
 		},
 		blur () {
 			this.open = false
-			this.validation.$touch()
+			if(this.validation) this.validation.$touch()
 		},
 		selectValue(value) {
 			const option = this.findOptionByValue(value)

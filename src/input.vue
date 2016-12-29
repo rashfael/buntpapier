@@ -60,11 +60,11 @@ export default {
 	methods: {
 		onInput ($event) {
 			this.$emit('input', $event.target.value)
-			this.validation.$touch()
+			if(this.validation) this.validation.$touch()
 		},
 		onBlur () {
 			this.focused = false
-			this.validation.$touch()
+			if(this.validation) this.validation.$touch()
 		}
 	}
 }
