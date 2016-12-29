@@ -50,7 +50,7 @@ function setDirtyRecursive (newState) {
   for (let i = 0; i < keys.length; i++) {
     const ruleOrNested = keys[i]
     const val = this[ruleOrNested]
-    if (isNested(val)) {
+    if (isNested(val) && val[method]) {
       val[method]()
     }
   }
