@@ -1,7 +1,7 @@
 <template lang="jade">
 button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @mouseenter="showTooltip = true", @mouseleave="showTooltip = false")
 	i.bunt-icon.material-icons
-		slot			
+		slot
 	ripple-ink(v-if!="!noInk && !disabled")
 	tooltip(v-if="tooltip", :show="showTooltip") {{ tooltip }}
 </template>
