@@ -496,6 +496,67 @@ body[modality="keyboard"] .bunt-button-raised:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0,0,0,0.22), 0 3px 6px rgba(0,0,0,0.3);
 }
+.bunt-checkbox {
+  cursor: pointer;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.bunt-checkbox input {
+  position: absolute;
+  cursor: inherit;
+  pointer-events: all;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  left: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+.bunt-checkbox label {
+  font-size: 14px;
+  line-height: 24px;
+}
+.bunt-checkbox .bunt-checkbox-box {
+  height: 20px;
+  width: 20px;
+  border-radius: 2px;
+  border: 2px solid rgba(0,0,0,0.54);
+  margin-right: 8px;
+  position: relative;
+  -webkit-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+}
+.bunt-checkbox .bunt-checkbox-box:after {
+  width: 6px;
+  height: 13px;
+  position: absolute;
+  top: 0;
+  left: 6px;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+  opacity: 0;
+  -webkit-transform: rotate(45deg) scale3D(0.15, 0.15, 1);
+          transform: rotate(45deg) scale3D(0.15, 0.15, 1);
+  -webkit-transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+  content: ' ';
+}
+.bunt-checkbox.checked .bunt-checkbox-box {
+  background-color: #2196f3;
+  border-color: #2196f3;
+}
+.bunt-checkbox.checked .bunt-checkbox-box:after {
+  opacity: 1;
+  -webkit-transform: rotate(45deg) scale3D(1, 1, 1);
+          transform: rotate(45deg) scale3D(1, 1, 1);
+  -webkit-transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
 .bunt-icon-button {
   line-height: 36px;
   vertical-align: middle;
@@ -987,6 +1048,65 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 .bunt-select-dropdown-menu li.highlight {
   background-color: #2196f3;
 }
+.bunt-switch {
+  cursor: pointer;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 20px;
+  margin-bottom: 8px;
+}
+.bunt-switch input {
+  position: absolute;
+  cursor: inherit;
+  pointer-events: all;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  left: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+.bunt-switch label {
+  font-size: 14px;
+  line-height: 14px;
+}
+.bunt-switch .bunt-switch-track {
+  height: 14px;
+  width: 36px;
+  border-radius: 30px;
+  background-color: rgba(0,0,0,0.38);
+  margin-right: 8px;
+  position: relative;
+  -webkit-transition: all 0.4s ease-out;
+  transition: all 0.4s ease-out;
+}
+.bunt-switch .bunt-switch-thumb {
+  height: 20px;
+  width: 20px;
+  background-color: #fafafa;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translate3d(-1px, -50%, 0px);
+          transform: translate3d(-1px, -50%, 0px);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12), 0 2px 1px -1px rgba(0,0,0,0.2);
+}
+.bunt-switch.checked .bunt-switch-track {
+  background-color: rgba(33,150,243,0.5);
+}
+.bunt-switch.checked .bunt-switch-thumb {
+  background-color: #2196f3;
+  -webkit-transform: translate3d(75%, -50%, 0px);
+          transform: translate3d(75%, -50%, 0px);
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+}
 .bunt-tabs {
   width: 100%;
   margin-bottom: 24px;
@@ -1130,6 +1250,41 @@ body[modality="keyboard"] .bunt-icon-button:focus {
   opacity: 0;
   -webkit-transform: translate(0, 0);
           transform: translate(0, 0);
+}
+.bunt-dialog-container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 90001;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.bunt-dialog-container .bunt-dialog {
+  z-index: 90003;
+  width: 50vw;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+  background-color: #fff;
+  -webkit-transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s;
+}
+.bunt-dialog-container .bunt-backdrop {
+  z-index: 90002;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.54);
 }
 body {
   margin: 0;
