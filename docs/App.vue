@@ -11,6 +11,9 @@
 			bunt-select(name="a-select", label="Select something", v-model="selection", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
 			p {{ selection }}
 			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
+			
+			bunt-switch(name="a name", label="turn me oooon", v-model="turnOn")
+			bunt-checkbox(name="a name", label="check it out", v-model="turnOn")
 		h2 Validation!
 		form
 			bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
@@ -38,7 +41,12 @@
 			bunt-progress-circular(size="normal")
 			bunt-progress-circular(size="big")
 			bunt-progress-circular(size="huge")
-			
+		
+		h2 Dialogs
+		.dialog
+			bunt-button(@click.native="dialogOpen = true") Open dialog
+			bunt-dialog(:open="dialogOpen", @close="dialogOpen = false")
+				h2 MUH DIALOG
 		h2 Popover
 		.popover
 			bunt-icon-button.popover-icon-button(ref="popoverButton", @click.native.prevent="") add
@@ -78,6 +86,7 @@ export default {
 			text: '',
 			password: '',
 			name: '',
+			turnOn: false,
 			complexOptions: [
 				{id: 1, name: 'One'},
 				{id: 2, name: 'Two'},
@@ -87,7 +96,8 @@ export default {
 			activeComplexOption: 2,
 			selectedTab: '',
 			selection: null,
-			validSelection: null
+			validSelection: null,
+			dialogOpen: false
 		}
 	},
 	validations: {
