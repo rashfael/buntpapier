@@ -1,5 +1,5 @@
 <template lang="jade">
-.bunt-input.dense(:class="{focused: focused, 'floating-label': value.length != 0, invalid: invalid}")
+.bunt-input.dense(:class="{focused: focused, 'floating-label': value !== null && value.length != 0, invalid: invalid}")
 	.label-input-container
 		label(:for="name") {{label}}
 		input(:type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur")
