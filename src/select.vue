@@ -288,6 +288,7 @@ export default {
 			if (!this.rawSearch.length) {
 				this.$refs.search.blur()
 			} else {
+				this.deselect()
 				this.rawSearch = ''
 			}
 		},
