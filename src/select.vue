@@ -13,7 +13,7 @@
 				@blur="blur",
 				@focus="focus",
 				:placeholder="searchPlaceholder")
-			i.open-indicator.material-icons(ref="openIndicator", role="presentation") arrow_drop_down
+			i.open-indicator.material-icons(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown") arrow_drop_down
 		.underline
 		.hint {{ hintText }}
 
@@ -261,11 +261,10 @@ export default {
 		 */
 		toggleDropdown(e) {
 			if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
-				if (this.open) {
-					this.$refs.search.blur() // dropdown will close on blur
-				} else {
-					this.open = true
+				if (!this.open) {
 					this.$refs.search.focus()
+				} else {
+					this.$refs.search.blur()
 				}
 			}
 		},
