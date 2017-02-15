@@ -413,6 +413,8 @@ blockquote > figcaption:before {
   font-weight: 500;
   line-height: 36px;
   vertical-align: middle;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
   outline: none;
   border: none;
   position: relative;
@@ -502,6 +504,8 @@ body[modality="keyboard"] .bunt-button-raised:focus {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
 }
 .bunt-checkbox input {
   position: absolute;
@@ -560,6 +564,8 @@ body[modality="keyboard"] .bunt-button-raised:focus {
 .bunt-icon-button {
   line-height: 36px;
   vertical-align: middle;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
   background: none;
   outline: none;
   border: none;
@@ -613,6 +619,8 @@ body[modality="keyboard"] .bunt-icon-button:focus {
           flex-direction: column;
   height: 72px;
   padding-top: 16px;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
 }
 .bunt-input .label-input-container {
   position: relative;
@@ -1016,6 +1024,7 @@ body[modality="keyboard"] .bunt-icon-button:focus {
   line-height: 20px;
   -webkit-transition: all 0.25s ease-in-out;
   transition: all 0.25s ease-in-out;
+  cursor: pointer;
 }
 .bunt-select.open .open-indicator {
   -webkit-transform: rotate(180deg);
@@ -1056,6 +1065,8 @@ body[modality="keyboard"] .bunt-icon-button:focus {
   display: flex;
   height: 20px;
   margin-bottom: 8px;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
 }
 .bunt-switch input {
   position: absolute;
