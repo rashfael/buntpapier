@@ -581,7 +581,7 @@ body[modality="keyboard"] .bunt-button-raised:focus {
           justify-content: center;
   cursor: default;
   border-radius: 50%;
-  padding: 0 16px;
+  padding: 0;
   height: 36px;
   width: 36px;
   background-color: transparent;
@@ -608,6 +608,7 @@ body[modality="keyboard"] .bunt-icon-button:focus {
   height: 36px;
   line-height: 36px;
   font-size: 20px;
+  width: auto;
 }
 .bunt-input {
   display: -webkit-box;
@@ -1222,6 +1223,7 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 }
 .bunt-tooltip {
   position: absolute;
+  left: 50%;
   background-color: rgba(0,0,0,0.54);
   color: #fff;
   height: 24px;
@@ -1241,13 +1243,13 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 }
 .bunt-tooltip.tooltip-position-bottom {
   bottom: 0;
-  -webkit-transform: translate(0, 32px);
-          transform: translate(0, 32px);
+  -webkit-transform: translate(-50%, 32px);
+          transform: translate(-50%, 32px);
 }
 .bunt-tooltip.tooltip-position-top {
   top: 0;
-  -webkit-transform: translate(0, -32px);
-          transform: translate(0, -32px);
+  -webkit-transform: translate(-50%, -32px);
+          transform: translate(-50%, -32px);
 }
 .bunt-tooltip.bunt-tooltip-enter-active,
 .bunt-tooltip.bunt-tooltip-leave-active {
@@ -1259,8 +1261,8 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 .bunt-tooltip.bunt-tooltip-enter,
 .bunt-tooltip.bunt-tooltip-leave-active {
   opacity: 0;
-  -webkit-transform: translate(0, 0);
-          transform: translate(0, 0);
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
 }
 .bunt-dialog-container {
   position: fixed;
