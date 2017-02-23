@@ -32,4 +32,4 @@ const lib = {
 	}
 }
 
-module.exports = lib
+export default lib
