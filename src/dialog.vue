@@ -20,6 +20,7 @@ export default {
 	created () {},
 	mounted () {
 		this.$nextTick(() => {
+			document.body.appendChild(this.$el)
 		})
 	},
 	methods: {
