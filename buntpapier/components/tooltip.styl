@@ -31,3 +31,26 @@ tooltip()
 		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
 			opacity 0
 			transform translate(-50%, 0)
+			
+			
+tooltip-bound-left()
+	.{$prefix}-tooltip
+		&.tooltip-position-bottom
+			left 0
+			transform translate(0, $tooltip-distance)
+		&.tooltip-position-top
+			left 0
+			transform translate(0, -1*$tooltip-distance)
+		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
+			transform translate(0, 0)
+			
+tooltip-bound-right()
+	.{$prefix}-tooltip
+		&.tooltip-position-bottom
+			right 0
+			transform translate(0, $tooltip-distance)
+		&.tooltip-position-top
+			right 0
+			transform translate(0, -1*$tooltip-distance)
+		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
+			transform translate(0, 0)
