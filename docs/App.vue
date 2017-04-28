@@ -26,6 +26,8 @@
 		bunt-button.button-clear(@click.native.prevent="", style="clear") CLICK ME
 		bunt-button.button-clear-primary(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
 		bunt-button.button-primary(@click.native.prevent="", color="primary", :loading="true") NEVER! EVER!
+		bunt-button.button-primary(@click.native.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
+		bunt-button.button-primary(@click.native.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
 		h2 Icon Buttons
 		.icon-buttons-flat
 			bunt-icon-button(@click.native.prevent="", tooltip="add") add
@@ -93,6 +95,7 @@ export default {
 				{id: 3, name: 'Three'},
 				{id: 5, name: 'Five'},
 			],
+			asyncLoading: false,
 			activeComplexOption: 2,
 			selectedTab: '',
 			selection: null,
@@ -106,6 +109,14 @@ export default {
 		},
 		validSelection: {
 			required: required('I SAID SELECT SOMETHING')
+		}
+	},
+	methods: {
+		loadAsync () {
+			this.asyncLoading = true
+			setTimeout(() => {
+				this.asyncLoading = false
+			}, 3000)
 		}
 	}
 }
