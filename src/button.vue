@@ -58,7 +58,7 @@ export default {
 	},
 	computed: {
 		showTooltip () {
-			return (this.tooltip && this.userShowTooltip) || !!this.errorMessage
+			return (this.tooltip && this.userShowTooltip && !this.showSuccess && !this.loading) || !!this.errorMessage
 		},
 		_tooltip () {
 			return this.errorMessage ? this.errorMessage : this.tooltip 
