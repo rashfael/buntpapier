@@ -67,7 +67,7 @@ export default {
 	},
 	watch: {
 		loading: 'loadingChanged',
-		errorMessage: 'errorChanged'
+		errorMessage: 'errorChanged',
 		error: 'errorChanged'
 	},
 	mixins: [
