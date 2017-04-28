@@ -58,7 +58,7 @@ export default {
 	},
 	computed: {
 		showTooltip () {
-			return (this.tooltip && this.userShowTooltip && !this.showSuccess && !this.loading) || !!this.errorMessage
+			return (this.tooltip && this.userShowTooltip) || !!this.errorMessage
 		},
 		_tooltip () {
 			return this.errorMessage ? this.errorMessage : this.tooltip 
@@ -77,6 +77,7 @@ export default {
 		loadingChanged (value) {
 			if (value) {
 				this._loading = value
+				this.userShowTooltip = false // button gets disabled and mouseleave is not registered
 				this.showSuccess = false
 				if (this.$successTimeout)
 					clearTimeout(this.$successTimeout)
