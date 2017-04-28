@@ -1,12 +1,12 @@
 <template lang="jade">
-button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", @mouseenter="userShowTooltip = true", @mouseleave="userShowTooltip = false", :class="{error: errorMessage, success: showSuccess}")
-	.bunt-button-content(:class="{invisible: loading || errorMessage || showSuccess }")
+button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", @mouseenter="userShowTooltip = true", @mouseleave="userShowTooltip = false", :class="{error: errorMessage || error, success: showSuccess}")
+	.bunt-button-content(:class="{invisible: loading || errorMessage || error || showSuccess }")
 		i.bunt-icon.material-icons(v-if="icon", v-html="icon")
 		.bunt-button-text
 			slot
 				span(v-text="text")
 	progress-circular(v-show="loading", size="small")
-	i.bunt-icon.material-icons.error(v-if="errorMessage") replay
+	i.bunt-icon.material-icons.error(v-if="errorMessage || error") replay
 	i.bunt-icon.material-icons.success(v-if="showSuccess") done
 	ripple-ink(v-if!="!noInk && !disabled")
 	tooltip(:show="showTooltip") {{ _tooltip }}
@@ -43,6 +43,7 @@ export default {
 			type: String,
 			default: 'button'
 		},
+		error: Boolean,
 		errorMessage: String,
 		successAfterLoading: {
 			type: Boolean,
@@ -67,6 +68,7 @@ export default {
 	watch: {
 		loading: 'loadingChanged',
 		errorMessage: 'errorChanged'
+		error: 'errorChanged'
 	},
 	mixins: [
 		// HasDropdown,
@@ -84,7 +86,7 @@ export default {
 			}
 			else {
 				this._loading = value
-				if (this.errorMessage) return
+				if (this.errorMessage || this.error) return
 				this.showSuccess = true
 				this.$successTimeout = setTimeout(() => {
 					this.showSuccess = false
