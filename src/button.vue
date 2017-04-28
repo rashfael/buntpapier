@@ -65,7 +65,8 @@ export default {
 		}
 	},
 	watch: {
-		loading: 'loadingChanged'
+		loading: 'loadingChanged',
+		errorMessage: 'errorChanged'
 	},
 	mixins: [
 		// HasDropdown,
@@ -74,15 +75,24 @@ export default {
 
 	methods: {
 		loadingChanged (value) {
-			if (value)
+			if (value) {
 				this._loading = value
+				this.showSuccess = false
+				if (this.$successTimeout)
+					clearTimeout(this.$successTimeout)
+			}
 			else {
 				this._loading = value
+				if (this.errorMessage) return
 				this.showSuccess = true
-				setTimeout(() => {
+				this.$successTimeout = setTimeout(() => {
 					this.showSuccess = false
 				}, 3000)
 			}
+		},
+		errorChanged (value) {
+			if (value !== null)
+				this.showSuccess = false
 		}
 	}
 }

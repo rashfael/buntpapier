@@ -28,6 +28,7 @@
 		bunt-button.button-primary(@click.native.prevent="", color="primary", :loading="true") NEVER! EVER!
 		bunt-button.button-primary(@click.native.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
 		bunt-button.button-primary(@click.native.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
+		bunt-button.button-primary(@click.native.prevent="loadAsync", color="primary", :loading="asyncLoading", :error-message="asyncError") async action
 		h2 Icon Buttons
 		.icon-buttons-flat
 			bunt-icon-button(@click.native.prevent="", tooltip="add") add
@@ -96,6 +97,7 @@ export default {
 				{id: 5, name: 'Five'},
 			],
 			asyncLoading: false,
+			asyncError: null,
 			activeComplexOption: 2,
 			selectedTab: '',
 			selection: null,
@@ -114,8 +116,10 @@ export default {
 	methods: {
 		loadAsync () {
 			this.asyncLoading = true
+			this.asyncError = null
 			setTimeout(() => {
 				this.asyncLoading = false
+				this.asyncError = "DERP"
 			}, 3000)
 		}
 	}
