@@ -67,21 +67,43 @@
   color: rgba(0,0,0,0.87);
   background-color: #eee;
 }
-.button-default:hover:not([disabled]) {
+.button-default:hover {
   background-color: #cacaca;
-}
-.button-default.autofocus:focus,
-body[modality="keyboard"] .button-default:focus {
-  outline-width: 2px;
-  outline-offset: 2px;
 }
 .button-default.autofocus:focus,
 body[modality="keyboard"] .button-default:focus {
   background-color: #cacaca;
   outline-color: #b3b3b3;
 }
+.button-default.autofocus:focus,
+body[modality="keyboard"] .button-default:focus {
+  outline-width: 2px;
+  outline-offset: 2px;
+}
 .button-default .bunt-ripple-ink .ripple.held {
   opacity: 0.7;
+}
+.button-default.error {
+  background-color: #f44336;
+}
+.button-default.error:hover {
+  background-color: #f01d0d;
+}
+.button-default.error.autofocus:focus,
+body[modality="keyboard"] .button-default.error:focus {
+  background-color: #f01d0d;
+  outline-color: #d4190c;
+}
+.button-default.success {
+  background-color: #4caf50;
+}
+.button-default.success:hover {
+  background-color: #419544;
+}
+.button-default.success.autofocus:focus,
+body[modality="keyboard"] .button-default.success:focus {
+  background-color: #419544;
+  outline-color: #39833c;
 }
 .button-default .bunt-progress-circular .spinner-layer {
   border-color: rgba(0,0,0,0.87);
@@ -90,21 +112,43 @@ body[modality="keyboard"] .button-default:focus {
   color: #fff;
   background-color: #2196f3;
 }
-.button-primary:hover:not([disabled]) {
+.button-primary:hover {
   background-color: #0c81df;
-}
-.button-primary.autofocus:focus,
-body[modality="keyboard"] .button-primary:focus {
-  outline-width: 2px;
-  outline-offset: 2px;
 }
 .button-primary.autofocus:focus,
 body[modality="keyboard"] .button-primary:focus {
   background-color: #0c81df;
   outline-color: #0b72c4;
 }
+.button-primary.autofocus:focus,
+body[modality="keyboard"] .button-primary:focus {
+  outline-width: 2px;
+  outline-offset: 2px;
+}
 .button-primary .bunt-ripple-ink .ripple.held {
   opacity: 0.7;
+}
+.button-primary.error {
+  background-color: #f44336;
+}
+.button-primary.error:hover {
+  background-color: #f01d0d;
+}
+.button-primary.error.autofocus:focus,
+body[modality="keyboard"] .button-primary.error:focus {
+  background-color: #f01d0d;
+  outline-color: #d4190c;
+}
+.button-primary.success {
+  background-color: #4caf50;
+}
+.button-primary.success:hover {
+  background-color: #419544;
+}
+.button-primary.success.autofocus:focus,
+body[modality="keyboard"] .button-primary.success:focus {
+  background-color: #419544;
+  outline-color: #39833c;
 }
 .button-primary .bunt-progress-circular .spinner-layer {
   border-color: #fff;
@@ -475,6 +519,13 @@ body[modality="keyboard"] .bunt-button:focus {
             transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+.bunt-button .bunt-icon.error,
+.bunt-button .bunt-icon.success {
+  position: absolute;
+}
+.bunt-button.error .bunt-tooltip {
+  background-color: #f44336;
+}
 .bunt-button-content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -681,6 +732,7 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 .bunt-input .hint {
   font-size: 13px;
   padding-top: 4px;
+  color: rgba(0,0,0,0.54);
 }
 .bunt-input.focused .underline:after {
   -webkit-transform: none;
