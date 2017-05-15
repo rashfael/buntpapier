@@ -57,6 +57,15 @@ input()
 			&.floating-label
 				label
 					color $clr-primary
+		
+		&.disabled
+			cursor not-allowed
+			input
+				cursor not-allowed
+				background-color transparent
+				color $clr-disabled-text-light
+			.underline::before
+				background repeating-linear-gradient(to right, $clr-dividers-light, $clr-dividers-light 4px, transparent 4px, transparent 8px)
 
 		&.floating-label
 			label
