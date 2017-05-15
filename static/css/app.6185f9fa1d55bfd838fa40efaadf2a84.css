@@ -741,6 +741,18 @@ body[modality="keyboard"] .bunt-icon-button:focus {
 .bunt-input.focused.floating-label label {
   color: #2196f3;
 }
+.bunt-input.disabled {
+  cursor: not-allowed;
+}
+.bunt-input.disabled input {
+  cursor: not-allowed;
+  background-color: transparent;
+  color: rgba(0,0,0,0.38);
+}
+.bunt-input.disabled .underline::before {
+  background: -webkit-repeating-linear-gradient(left, rgba(0,0,0,0.12), rgba(0,0,0,0.12) 4px, transparent 4px, transparent 8px);
+  background: repeating-linear-gradient(to right, rgba(0,0,0,0.12), rgba(0,0,0,0.12) 4px, transparent 4px, transparent 8px);
+}
 .bunt-input.floating-label label {
   -webkit-transform: translateY(-75%) scale(0.75);
           transform: translateY(-75%) scale(0.75);
