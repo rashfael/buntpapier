@@ -40,6 +40,7 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		hint: String,
 		validation: Object // vuelidate result
 	},
 	data: function () {
@@ -52,7 +53,7 @@ export default {
 			return this.validation && this.validation.$error
 		},
 		hintText () {
-			return this.invalid ? this.validation.$messages.join() : null
+			return this.invalid ? this.validation.$messages.join() : this.hint
 		}
 	},
 	ready: function () {},
