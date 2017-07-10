@@ -385,7 +385,11 @@ export default {
 			return this.validation && this.validation.$error
 		},
 		hintText () {
-			return this.invalid ? this.validation.$messages.join() : null
+			if (!this.validation || !this.validation.$params)
+				return
+			console.log(this.validation)
+			const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
+			return this.invalid ? errorMessages.filter(Boolean).join() : null
 		}
 	}
 

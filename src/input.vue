@@ -53,7 +53,10 @@ export default {
 			return this.validation && this.validation.$error
 		},
 		hintText () {
-			return this.invalid ? this.validation.$messages.join() : this.hint
+			if (!this.validation || !this.validation.$params)
+				return
+			const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
+			return this.invalid ? errorMessages.filter(Boolean).join() : null
 		}
 	},
 	ready: function () {},

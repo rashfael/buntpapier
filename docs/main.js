@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Buntpapier from '../src/'
-import Vuelidate from '../src/vuelidate'
+import Vuelidate from 'vuelidate'
 import App from './App'
 
 Vue.use(Buntpapier)
