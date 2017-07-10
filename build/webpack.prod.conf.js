@@ -9,6 +9,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var CompressionWebpackPlugin = require('compression-webpack-plugin')
 var CleanWebpackPlugin = require('clean-webpack-plugin')
+var BabiliPlugin = require("babili-webpack-plugin")
 
 var webpackConfig = merge(baseWebpackConfig, {
 	resolve: {
@@ -17,30 +18,47 @@ var webpackConfig = merge(baseWebpackConfig, {
 		}
 	},
 	module: {
-		loaders: utils.styleLoaders({ sourceMap: true, extract: true })
+		rules: [
+			{ test: /\.vue$/, use: [{
+				loader:'vue-loader',
+				options: {
+					loaders: {
+						stylus: ExtractTextPlugin.extract({
+							use: ['css-loader', 'stylus-loader'],
+							fallback: 'vue-style-loader'
+						})
+					}
+				}
+			}]},
+			{ test: /\.css$/, use: ExtractTextPlugin.extract({
+				fallback: 'style-loader',
+				use: 'css-loader'
+			})},
+			{ test: /\.styl$/, use: ExtractTextPlugin.extract({
+				fallback: 'style-loader',
+				use: ['css-loader', 'stylus-loader']
+			})}
+		]
 	},
 	output: {
 		filename: utils.assetsPath('js/[name].[chunkhash].js'),
 		chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-	},
-	vue: {
-		loaders: utils.cssLoaders({
-			sourceMap: true,
-			extract: true
-		})
 	},
 	plugins: [
 		new CleanWebpackPlugin(['dist'], {root: path.resolve(__dirname, '../')}),
 		new webpack.DefinePlugin({
 			'process.env': '"production"'
 		}),
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
+		new webpack.LoaderOptionsPlugin({
+			minimize: true,
+			debug: false
 		}),
+		new BabiliPlugin(),
 		// extract css into its own file
-		new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),
+		new ExtractTextPlugin({
+			filename: utils.assetsPath('css/[name].[contenthash].css'),
+			allChunks: true
+		}),
 		// generate dist index.html with correct asset hash for caching.
 		// you can customize output by editing /index.html
 		// see https://github.com/ampedandwired/html-webpack-plugin

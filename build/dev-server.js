@@ -7,6 +7,7 @@ var config = {
 }
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var DashboardPlugin = require('webpack-dashboard/plugin')
 var port = process.env.PORT || 8880
 
 var app = express()
@@ -31,14 +32,7 @@ compiler.plugin('compilation', function(compilation) {
 	})
 })
 
-// proxy api requests
-// Object.keys(proxyTable).forEach(function (context) {
-// 	var options = proxyTable[context]
-// 	if (typeof options === 'string') {
-// 		options = { target: options }
-// 	}
-// 	app.use(proxyMiddleware(context, options))
-// })
+compiler.apply(new DashboardPlugin())
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
@@ -55,7 +49,10 @@ app.use(staticPath, express.static('./static'))
 
 module.exports = app.listen(port, function(err) {
 	if (err) {
-		console.log(err)
+		if (require.main === module)
+			console.error(err)
+		else
+			throw err
 		return
 	}
 	console.log('Listening at http://localhost:' + port + '\n')

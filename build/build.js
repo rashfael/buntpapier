@@ -1,5 +1,6 @@
 // https://github.com/shelljs/shelljs
 require('shelljs/global')
+var fs = require('fs-extra')
 env.NODE_ENV = 'production'
 
 var path = require('path')
@@ -10,20 +11,21 @@ var webpackConfig = require('./webpack.prod.conf')
 var spinner = ora('building for production...')
 spinner.start()
 
-// FOR FUTURE STATIC ASSET PASTING
-// var assetsPath = path.resolve(__dirname, '../dist', 'static')
-// rm('-rf', assetsPath)
-// mkdir('-p', assetsPath)
-// cp('-R', 'static/', assetsPath)
-
 webpack(webpackConfig, function (err, stats) {
-  spinner.stop()
-  if (err) throw err
-  process.stdout.write(stats.toString({
-    colors: true,
-    modules: false,
-    children: false,
-    chunks: false,
-    chunkModules: false
-  }) + '\n')
+	spinner.stop()
+	// catches only fatal errors
+	if(err) {
+		process.stderr.write(err)
+		process.exit(1)
+	}
+	process.stdout.write(stats.toString({
+		colors: true,
+		modules: false,
+		children: false,
+		chunks: false,
+		chunkModules: false
+	}) + '\n')
+	fs.writeFile(path.resolve(__dirname, '../build-stats.json'), JSON.stringify(stats.toJson('verbose')))
+	if(stats.hasErrors())
+		process.exit(1)
 })

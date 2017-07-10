@@ -13,7 +13,11 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
 	module: {
-		loaders: utils.styleLoaders()
+		rules: [
+			{ test: /\.vue$/, use: ['vue-loader']},
+			{ test: /\.css$/, use: ['style-loader','css-loader'] },
+			{ test: /\.styl$/, use: ['style-loader','css-loader', 'stylus-loader'] }
+		]
 	},
 	resolve: {
 		alias: {
@@ -27,7 +31,6 @@ module.exports = merge(baseWebpackConfig, {
 			'process.env': '"development"'
 		}),
 		new webpack.HotModuleReplacementPlugin(),
-		new webpack.NoErrorsPlugin(),
 		new HtmlWebpackPlugin({
 			filename: 'index.html',
 			template: 'docs/index.html',
