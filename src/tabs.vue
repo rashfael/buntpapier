@@ -96,7 +96,7 @@ export default {
 			else if (typeof(val) === 'string') {// treat as id
 				index = this.tabs.findIndex((tab) => tab.id === val)
 			}
-			if (index > 0) {
+			if (index >= 0) {
 				this.select(this.tabs[index], index)
 			} else {
 				this.deselect()
