@@ -96,7 +96,12 @@ export default {
 			else if (typeof(val) === 'string') {// treat as id
 				index = this.tabs.findIndex((tab) => tab.id === val)
 			}
-			this.select(this.tabs[index], index)
+			if (index > 0) {
+				this.select(this.tabs[index], index)
+			} else {
+				this.deselect()
+			}
+				
 		},
 		select(tab, index) {
 			if (tab.disabled || this.activeTabObj === tab)
@@ -135,6 +140,11 @@ export default {
 					left: calcPercent(tabOffsetLeft, width) + m
 				}
 			this.activeTabObj = tab
+		},
+		deselect () {
+			this.activeTabObj = null
+			this.indicatorTransform.width = 0
+			this.indicatorTransform.left = 0
 		},
 		onIndicatorTransitionEnd () {
 			// bar animation: expand -> contract
