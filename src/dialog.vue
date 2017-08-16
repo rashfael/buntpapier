@@ -23,6 +23,9 @@ export default {
 			document.body.appendChild(this.$el)
 		})
 	},
+	beforeDestroy () {
+		document.body.removeChild(this.$el)
+	},
 	methods: {
 		close () {
 			this.$emit('close')
