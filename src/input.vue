@@ -4,7 +4,8 @@
 		label(:for="name") {{label}}
 		input(:type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur")
 	.underline
-	.hint {{ hintText }}
+	.hint(v-if="hintIsHtml", v-html="hintText")
+	.hint(v-else) {{ hintText }}
 </template>
 <script>
 import consts from './_constants'
@@ -41,6 +42,10 @@ export default {
 			default: false
 		},
 		hint: String,
+		hintIsHtml: {
+			type: Boolean,
+			default: false
+		},
 		validation: Object // vuelidate result
 	},
 	data: function () {

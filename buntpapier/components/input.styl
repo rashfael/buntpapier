@@ -50,6 +50,9 @@ input()
 			padding-top 4px
 			color $clr-secondary-text-light
 
+			p // nuke margins for raw html includes
+				margin 0
+
 		&.focused
 			.underline:after
 				transform none
@@ -57,7 +60,7 @@ input()
 			&.floating-label
 				label
 					color $clr-primary
-		
+
 		&.disabled
 			cursor not-allowed
 			input
@@ -80,11 +83,11 @@ input()
 				font-size 13px*/
 			label
 				padding-bottom 4px
-		
+
 		&.invalid
 			.hint //label, &.focused.floating-label label // material is a bit inconsistent here
 				color $clr-danger
-				
+
 			.underline
 				&:before, &:after
 					background-color $clr-danger

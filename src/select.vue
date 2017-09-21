@@ -15,7 +15,8 @@
 				:placeholder="searchPlaceholder")
 			i.open-indicator.material-icons(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown") arrow_drop_down
 		.underline
-		.hint {{ hintText }}
+		.hint(v-if="hintIsHtml", v-html="hintText")
+		.hint(v-else) {{ hintText }}
 
 	ul.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 		li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @mousedown.prevent.stop="select(option)")
@@ -133,14 +134,14 @@ export default {
 				return option
 			}
 		},
-		
+
 		optionValue: {
 			type: String,
 			default: 'id'
 		},
-		
+
 		getOptionValue: {
-			type: Function, 
+			type: Function,
 			default(option) {
 				if (typeof option === 'object') {
 					if (this.optionValue && option[this.optionValue]) {
@@ -150,19 +151,24 @@ export default {
 				return option
 			}
 		},
-		
+
 		findOptionByValue: {
-			type: Function, 
+			type: Function,
 			default(value) {
 				const findFunc = (option) => {
-					
+
 					if (typeof option === 'object' && this.optionValue)
 						return option[this.optionValue] === value
 					return option === value
 				}
-				
+
 				return this.options.find(findFunc)
 			}
+		},
+		hint: String,
+		hintIsHtml: {
+			type: Boolean,
+			default: false
 		},
 		validation: Object // vuelidate result
 	},
@@ -385,10 +391,11 @@ export default {
 			return this.validation && this.validation.$error
 		},
 		hintText () {
-			if (!this.validation || !this.validation.$params)
-				return
-			const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
-			return this.invalid ? errorMessages.filter(Boolean).join() : null
+			if (this.invalid && this.validation.$params) {
+				const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
+				return errorMessages.filter(Boolean).join()
+			}
+			return this.hint
 		}
 	}
 
