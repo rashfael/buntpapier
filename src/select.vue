@@ -144,7 +144,7 @@ export default {
 			type: Function,
 			default(option) {
 				if (typeof option === 'object') {
-					if (this.optionValue && option[this.optionValue]) {
+					if (this.optionValue !== undefined && option[this.optionValue] !== undefined) {
 						return option[this.optionValue]
 					}
 				}
