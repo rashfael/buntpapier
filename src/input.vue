@@ -17,7 +17,6 @@ export default {
 			type: String,
 			default: 'text'
 		},
-		id: String,
 		name: {
 			type: String,
 			required: true
