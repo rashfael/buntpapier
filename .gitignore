@@ -11,3 +11,4 @@ dist
 
 config.js
 .publish
+build-stats.json
