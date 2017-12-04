@@ -5,7 +5,7 @@
 			bunt-tab-header-item(:type="type", :id="tab.id", :icon="tab.icon", :text="tab.header",
 				:active="activeTabObj === tab", :disabled="tab.disabled",
 				@click.native="select(tab, index)",
-				v-for="(tab, index) in tabs", ref="tabElements")
+				v-for="(tab, index) in tabs", ref="tabElements", :key="tab.id")
 		.bunt-tabs-indicator(:class="[indicatorState]", :style="indicatorStyle", @transitionend="onIndicatorTransitionEnd")
 	.bunt-tabs-body(ref="body")
 		slot
@@ -29,7 +29,7 @@ export default {
 		},
 		activeTab: {
 			type: [Number, String, Object, Function],
-			
+
 		}
 	},
 	data() {
@@ -81,10 +81,10 @@ export default {
 		// 	child.id = child.id || UUID.short(`${consts.prefix}-tab-`)
 
 		// Set the active tab
-		
+
 		// Set the active tab element (to show indicator)
 		this.$nextTick(() => {
-			if (this.$refs.tabsContainer) 
+			if (this.$refs.tabsContainer)
 				this.activateTab(this.activeTab || 0)
 		})
 	},
@@ -101,7 +101,7 @@ export default {
 			} else {
 				this.deselect()
 			}
-				
+
 		},
 		select(tab, index) {
 			if (tab.disabled || this.activeTabObj === tab)
@@ -124,7 +124,7 @@ export default {
 				this.activeTabObj = tab
 				return
 			}
-			
+
 			let oldIndex = this.tabs.indexOf(this.activeTabObj)
 			let oldRect = this.$refs.tabElements[oldIndex].$el.getBoundingClientRect()
 			let m = 5 // wtf is m
