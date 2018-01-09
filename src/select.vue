@@ -198,6 +198,9 @@ export default {
 		})
 		this.selectValue(this.value)
 	},
+	beforeDestroy () {
+		this.$refs.dropdownMenu.remove()
+	},
 	watch: {
 		value (value) {
 			this.selectValue(value)
@@ -215,6 +218,7 @@ export default {
 		focus () {
 			this.open = true
 			this.$refs.search.select()
+			this.width = this.$refs.searchContainer.getBoundingClientRect().width
 			this.$nextTick(() => this._tether.position()) // delay until after dropdown is rendered
 		},
 		blur () {
