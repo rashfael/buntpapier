@@ -2,7 +2,7 @@
 #buntpapier
 	#hero
 		h1 buntpapier
-	
+
 	#content
 		h2 Inputs
 		form
@@ -12,7 +12,7 @@
 			bunt-select(name="a-select", label="Select something", v-model="selection", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
 			p {{ selection }}
 			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
-			
+
 			bunt-switch(name="a name", label="turn me oooon", v-model="turnOn")
 			bunt-checkbox(name="a name", label="check it out", v-model="turnOn")
 		h2 Validation!
@@ -37,7 +37,7 @@
 		.icon-buttons-clear
 			bunt-icon-button(@click.native.prevent="", tooltip="add") add
 			bunt-icon-button(@click.native.prevent="", tooltip="remove") remove
-		
+
 		h2 Loading Indicators
 		.progress-circular
 			bunt-progress-circular(size="tiny")
@@ -45,7 +45,7 @@
 			bunt-progress-circular(size="normal")
 			bunt-progress-circular(size="big")
 			bunt-progress-circular(size="huge")
-		
+
 		h2 Dialogs
 		.dialog
 			bunt-button(@click.native="dialogOpen = true") Open dialog
@@ -56,31 +56,40 @@
 			bunt-icon-button.popover-icon-button(ref="popoverButton", @click.native.prevent="") add
 			bunt-popover(target="popoverButton")
 				h1 POPOVER
-				
-		h2 Tabs		
-	
+
+		h2 Tabs
+
 		bunt-tabs.tabs-default(:active-tab="selectedTab")
 			bunt-tab(header="Tab 1", id="Tab 1", @selected="selectedTab = 'Tab 1'")
 			bunt-tab(header="Tab 2", id="Tab 2", @selected="selectedTab = 'Tab 2'")
 			bunt-tab(header="A longer Tab Heading", id="longer Heading" @selected="selectedTab = 'longer Heading'")
 			p Selected Tab: {{ selectedTab }}
-		
+
 		bunt-tabs.tabs-default(:activeTab="1")
 			bunt-tab(header="Tab 1")
 			bunt-tab(header="Tab 2")
 			bunt-tab(header="A longer Tab Heading")
-		
+
 		bunt-tabs.tabs-default(:active-tab="'three'")
 			bunt-tab(header="Tab 1", id="one")
+				h1 I AM A TAB
 			bunt-tab(header="Tab 2", id="two")
+				h1 I AM ANOTHER TAB
 			bunt-tab(header="A longer Tab Heading", id="three")
-					
-		
+
+		bunt-tabs.tabs-default
+			bunt-tab(header="Tab 1", id="one")
+				h1 I AM A TAB
+			bunt-tab(header="Tab 2", id="two")
+				h1 I AM ANOTHER TAB
+			bunt-tab(header="A longer Tab Heading", id="three")
+
+
 </template>
 <script>
 import './styles/style.styl'
 
-import { required } from '../src/vuelidate/validators' 
+import { required, email } from '../src/vuelidate/validators'
 
 export default {
 	components: {},
@@ -108,7 +117,8 @@ export default {
 	},
 	validations: {
 		name: {
-			required: required('a man needs a name')
+			required: required('a man needs a name'),
+			email: email('not a valid mail')
 		},
 		validSelection: {
 			required: required('I SAID SELECT SOMETHING')
@@ -127,8 +137,9 @@ export default {
 }
 </script>button
 <style lang="stylus">
+@import 'styles/style.styl'
 stripe(colors, angle, width)
-	$grad = 'repeating-linear-gradient(' + angle 
+	$grad = 'repeating-linear-gradient(' + angle
 	for $clr, $i in colors
 		$grad += ',' + $clr + ' ' + $i*width + ',' + $clr + ' ' + ($i + 1)*width
 	$grad += ')'
@@ -146,7 +157,7 @@ stripe(colors, angle, width)
 	margin 0 0 1rem 0
 	color $clr-white
 	gradclrs = $clr-red $clr-pink $clr-purple $clr-deep-purple $clr-indigo $clr-blue $clr-light-blue $clr-cyan $clr-teal $clr-green $clr-light-green $clr-lime $clr-yellow $clr-amber $clr-orange $clr-deep-orange //$clr-brown $clr-grey $clr-blue-grey
-	
+
 	h1
 		font-family 'Roboto Mono'
 		position relative
@@ -168,7 +179,7 @@ stripe(colors, angle, width)
 		background-size 100% 100%
 		background-repeat no-repeat
 		opacity 0.7
-		
+
 	&:after
 		content ''
 		display block
@@ -199,7 +210,7 @@ stripe(colors, angle, width)
 
 .icon-buttons-flat button
 	icon-button-style()
-.icon-buttons-clear 
+.icon-buttons-clear
 	background-color $clr-primary
 	button
 		icon-button-style($clr-primary-text-dark, 'clear')
