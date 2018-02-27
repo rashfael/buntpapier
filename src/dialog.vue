@@ -24,7 +24,9 @@ export default {
 		})
 	},
 	beforeDestroy () {
-		document.body.removeChild(this.$el)
+		if (this.$el.parentNode === document.body) {
+			document.body.removeChild(this.$el)
+		}
 	},
 	methods: {
 		close () {
