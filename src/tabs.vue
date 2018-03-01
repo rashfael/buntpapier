@@ -76,11 +76,13 @@ export default {
 		// }
 	},
 	mounted () {
-		this.tabs = this.$children.slice(0)
-		// for(let child of this.$children)
-		// 	child.id = child.id || UUID.short(`${consts.prefix}-tab-`)
-
-		// Set the active tab
+		this.updateTabs()
+		const observer = new MutationObserver((records) => {
+			this.updateTabs()
+			this.activateTab(this.activeTab || 0)
+		}).observe(this.$refs.body, {
+			childList: true
+		})
 
 		// Set the active tab element (to show indicator)
 		this.$nextTick(() => {
@@ -89,6 +91,9 @@ export default {
 		})
 	},
 	methods: {
+		updateTabs () {
+			this.tabs = this.$children.filter((tab) => tab._isTab)
+		},
 		activateTab(val) {
 			let index = null
 			if(typeof(val) === 'number') // treat as index
@@ -96,7 +101,7 @@ export default {
 			else if (typeof(val) === 'string') {// treat as id
 				index = this.tabs.findIndex((tab) => tab.id === val)
 			}
-			if (index >= 0) {
+			if (this.tabs[index]) {
 				this.select(this.tabs[index], index)
 			} else {
 				this.deselect()
@@ -114,7 +119,8 @@ export default {
 				width: calcPercent(tabRect.width, width),
 				left: calcPercent(tabOffsetLeft, width)
 			}
-			if(this.activeTabObj == null) {
+			let oldIndex = this.tabs.indexOf(this.activeTabObj)
+			if(oldIndex < 0) {
 				// Position the bar without animation.
 				this.indicatorState = ''
 				this.indicatorTransform = {
@@ -125,7 +131,6 @@ export default {
 				return
 			}
 
-			let oldIndex = this.tabs.indexOf(this.activeTabObj)
 			let oldRect = this.$refs.tabElements[oldIndex].$el.getBoundingClientRect()
 			let m = 5 // wtf is m
 			// bar animation: expand

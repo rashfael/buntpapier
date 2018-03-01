@@ -84,6 +84,11 @@
 				h1 I AM ANOTHER TAB
 			bunt-tab(header="A longer Tab Heading", id="three")
 
+		bunt-tabs.tabs-default(:activeTab="1")
+			bunt-tab(header="Tab 1")
+			bunt-tab(header="Tab 2")
+			bunt-tab(header="A dynamic heading", v-if="activateTab")
+		bunt-switch(name="tabswitch", label="toogle tab", v-model="activateTab")
 
 </template>
 <script>
@@ -112,7 +117,8 @@ export default {
 			selectedTab: '',
 			selection: null,
 			validSelection: null,
-			dialogOpen: false
+			dialogOpen: false,
+			activateTab: false
 		}
 	},
 	validations: {

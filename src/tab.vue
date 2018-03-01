@@ -17,7 +17,7 @@ export default {
 		id: String,
 	},
 	computed: {
-		active() {
+		active () {
 			return this.$parent.activeTabObj === this
 		}
 	},
@@ -29,6 +29,9 @@ export default {
 				this.$emit('deselected', this.id)
 			}
 		}
+	},
+	created () {
+		this._isTab = true
 	}
 }
 </script>
