@@ -63,23 +63,12 @@ export default {
 		activeTab (val) {
 			this.activateTab(val)
 		},
-		// activeTabObj (val, oldVal) {
-		// 	if(this.activeTab === null) // nobody listens
-		// 		return
-		// 	if(typeof(this.activeTab) === 'number') { // treat as index
-		// 		const index = this.tabs.indexOf(val)
-		// 		this.activeTab = index
-		// 	} else if (typeof(this.activeTab) === 'string') { // treat as id
-		// 		const id = val.id
-		// 		this.activeTab = id
-		// 	}
-		// }
 	},
 	mounted () {
 		this.updateTabs()
 		const observer = new MutationObserver((records) => {
 			this.updateTabs()
-			this.activateTab(this.activeTab || 0)
+			this.$nextTick(() => this.activateTab(this.activeTab || 0))
 		}).observe(this.$refs.body, {
 			childList: true
 		})
@@ -92,7 +81,9 @@ export default {
 	},
 	methods: {
 		updateTabs () {
-			this.tabs = this.$children.filter((tab) => tab._isTab)
+			// sort this via DOM because $children has no guaranteed order
+			const children = Array.from(this.$refs.body.children)
+			this.tabs = this.$children.filter((tab) => tab._isTab).sort((a, b) => children.indexOf(a.$el) - children.indexOf(b.$el))
 		},
 		activateTab(val) {
 			let index = null
@@ -109,17 +100,19 @@ export default {
 
 		},
 		select(tab, index) {
-			if (tab.disabled || this.activeTabObj === tab)
+			let oldIndex = this.tabs.indexOf(this.activeTabObj)
+			if (tab.disabled)
 				return
 			let rect = this.$refs.tabsContainer.getBoundingClientRect()
 			let width = rect.width
-			let tabRect = this.$refs.tabElements[index].$el.getBoundingClientRect()
+			const elements = Array.from(this.$refs.tabsContainer.children)
+			let tabRect = this.$refs.tabElements.sort((a, b) => elements.indexOf(a.$el) - elements.indexOf(b.$el))[index].$el.getBoundingClientRect()
 			let tabOffsetLeft = tabRect.left - rect.left
 			this.indicatorTargetTransform = {
 				width: calcPercent(tabRect.width, width),
 				left: calcPercent(tabOffsetLeft, width)
 			}
-			let oldIndex = this.tabs.indexOf(this.activeTabObj)
+
 			if(oldIndex < 0) {
 				// Position the bar without animation.
 				this.indicatorState = ''

@@ -61,7 +61,7 @@
 
 		bunt-tabs.tabs-default(:active-tab="selectedTab")
 			bunt-tab(header="Tab 1", id="Tab 1", @selected="selectedTab = 'Tab 1'")
-			bunt-tab(header="Tab 2", id="Tab 2", @selected="selectedTab = 'Tab 2'")
+			bunt-tab(header="Tab 2", id="Tab 2", @selected="selectedTab = 'Tab 2'", v-if="activateTab")
 			bunt-tab(header="A longer Tab Heading", id="longer Heading" @selected="selectedTab = 'longer Heading'")
 			p Selected Tab: {{ selectedTab }}
 
@@ -86,8 +86,9 @@
 
 		bunt-tabs.tabs-default(:activeTab="1")
 			bunt-tab(header="Tab 1")
-			bunt-tab(header="Tab 2")
 			bunt-tab(header="A dynamic heading", v-if="activateTab")
+			bunt-tab(header="Tab 2")
+
 		bunt-switch(name="tabswitch", label="toogle tab", v-model="activateTab")
 
 </template>
