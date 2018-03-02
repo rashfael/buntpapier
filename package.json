@@ -1,6 +1,6 @@
 {
   "name": "buntpapier",
-  "version": "0.21.4",
+  "version": "0.21.5",
   "description": "",
   "main": "src/index.js",
   "scripts": {
