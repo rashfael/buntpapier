@@ -56,17 +56,20 @@ export default {
 				marginTop: -max + y + 'px'
 			}
 			this.show = true
-			const releaseEvent = eventType === 'mousedown' ? 'mouseup' : 'touchend'
+			const releaseEvents = ['mouseleave', 'mouseup', 'touchend']
 			const release = () => {
-				holder.removeEventListener(releaseEvent, release)
-				
+				releaseEvents.forEach((eventName) => {
+					holder.removeEventListener(eventName, release)
+				})
 				setTimeout(() => {
 					this.show = false
 					this.style = null
 					holder.removeAttribute('data-ui-event')
 				}, 200)
 			}
-			holder.addEventListener(releaseEvent, release)
+			releaseEvents.forEach((eventName) => {
+				holder.addEventListener(eventName, release)
+			})
 		}
 	}
 }
