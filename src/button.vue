@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", @mouseenter="userShowTooltip = true", @mouseleave="userShowTooltip = false", :class="{error: errorMessage || error, success: showSuccess}")
+button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", :class="{error: errorMessage || error, success: showSuccess}", @mouseenter="userShowTooltip = true", @mouseleave="userShowTooltip = false", @click="$emit('click', $event)")
 	.bunt-button-content(:class="{invisible: loading || errorMessage || error || showSuccess }")
 		i.bunt-icon.material-icons(v-if="icon", v-html="icon")
 		.bunt-button-text
@@ -62,7 +62,7 @@ export default {
 			return (this.tooltip && this.userShowTooltip) || !!this.errorMessage
 		},
 		_tooltip () {
-			return this.errorMessage ? this.errorMessage : this.tooltip 
+			return this.errorMessage ? this.errorMessage : this.tooltip
 		}
 	},
 	watch: {

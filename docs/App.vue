@@ -20,23 +20,23 @@
 			bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
 			bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection")
 		h2 Buttons
-		bunt-button.button-default(@click.native.prevent="") CLICK ME
-		bunt-button.button-primary(@click.native.prevent="", color="primary", tooltip="with a tooltip") BUTTON
-		bunt-button.button-default(@click.native.prevent="", icon="add") add
-		bunt-button.button-primary(@click.native.prevent="", color="primary", icon="add") BUTTON
-		bunt-button.button-clear(@click.native.prevent="", style="clear") CLICK ME
-		bunt-button.button-clear-primary(@click.native.prevent="", style="clear", color="primary", icon="add") ADD
-		bunt-button.button-primary(@click.native.prevent="", color="primary", :loading="true") NEVER! EVER!
-		bunt-button.button-primary(@click.native.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
-		bunt-button.button-primary(@click.native.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
-		bunt-button.button-primary(@click.native.prevent="loadAsync", color="primary", :loading="asyncLoading", :error-message="asyncError") async action
+		bunt-button.button-default(@click.prevent="") CLICK ME
+		bunt-button.button-primary(@click.prevent="", color="primary", tooltip="with a tooltip") BUTTON
+		bunt-button.button-default(@click.prevent="", icon="add") add
+		bunt-button.button-primary(@click.prevent="", color="primary", icon="add") BUTTON
+		bunt-button.button-clear(@click.prevent="", style="clear") CLICK ME
+		bunt-button.button-clear-primary(@click.prevent="", style="clear", color="primary", icon="add") ADD
+		bunt-button.button-primary(@click.prevent="", color="primary", :loading="true") NEVER! EVER!
+		bunt-button.button-primary(@click.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
+		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
+		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading", :error-message="asyncError") async action
 		h2 Icon Buttons
 		.icon-buttons-flat
-			bunt-icon-button(@click.native.prevent="", tooltip="add") add
-			bunt-icon-button(@click.native.prevent="", tooltip="remove") remove
+			bunt-icon-button(@click.prevent="", tooltip="add") add
+			bunt-icon-button(@click.prevent="", tooltip="remove") remove
 		.icon-buttons-clear
-			bunt-icon-button(@click.native.prevent="", tooltip="add") add
-			bunt-icon-button(@click.native.prevent="", tooltip="remove") remove
+			bunt-icon-button(@click.prevent="", tooltip="add") add
+			bunt-icon-button(@click.prevent="", tooltip="remove") remove
 		h2 Button-style Links
 		bunt-link-button(:to="{name: 'derp'}") click me
 		bunt-link-button.link-button-colored(:to="{name: 'derp'}") click me
@@ -51,12 +51,12 @@
 
 		h2 Dialogs
 		.dialog
-			bunt-button(@click.native="dialogOpen = true") Open dialog
+			bunt-button(@click="dialogOpen = true") Open dialog
 			bunt-dialog(:open="dialogOpen", @close="dialogOpen = false")
 				h2 MUH DIALOG
 		h2 Popover
 		.popover
-			bunt-icon-button.popover-icon-button(ref="popoverButton", @click.native.prevent="") add
+			bunt-icon-button.popover-icon-button(ref="popoverButton", @click.prevent="") add
 			bunt-popover(target="popoverButton")
 				h1 POPOVER
 

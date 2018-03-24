@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @mouseenter="showTooltip = true", @mouseleave="showTooltip = false")
+button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @mouseenter="showTooltip = true", @mouseleave="showTooltip = false", @click="$emit('click', $event)")
 	i.bunt-icon.material-icons
 		slot
 	ripple-ink(v-if!="!noInk && !disabled")
