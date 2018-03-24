@@ -37,6 +37,9 @@
 		.icon-buttons-clear
 			bunt-icon-button(@click.native.prevent="", tooltip="add") add
 			bunt-icon-button(@click.native.prevent="", tooltip="remove") remove
+		h2 Button-style Links
+		bunt-link-button(:to="{name: 'derp'}") click me
+		bunt-link-button.link-button-colored(:to="{name: 'derp'}") click me
 
 		h2 Loading Indicators
 		.progress-circular
@@ -221,6 +224,10 @@ stripe(colors, angle, width)
 	background-color $clr-primary
 	button
 		icon-button-style($clr-primary-text-dark, 'clear')
+.bunt-link-button
+	margin: 0 4px
+.link-button-colored
+	link-button-style(color: $clr-primary)
 .tabs-default
 	tabs-style()
 </style>
