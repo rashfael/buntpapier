@@ -1,14 +1,7 @@
-<!--  http://materializecss.com/preloader.html -->
-
 <template lang="jade">
 .bunt-progress-circular.active(:class="[size, {center: center, page: page}]")
-	.spinner-layer
-		.circle-clipper.left
-			.circle
-		.gap-patch
-			.circle
-		.circle-clipper.right
-			.circle
+	svg(viewBox="25 25 50 50")
+		circle(cx="50", cy="50", r="20")
 </template>
 <script>
 
