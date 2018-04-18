@@ -2,7 +2,7 @@
  * Adapted from https://github.com/alice/modality
  * Version: 1.0.2
  */
-document.addEventListener('DOMContentLoaded', function() {
+const handleKeyboardModality = function() {
 	var hadKeyboardEvent = false;
 	var keyboardModalityWhitelist = [
 		'input:not([type])',
@@ -91,4 +91,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.body.addEventListener('blur', function() {
 		document.body.removeAttribute('modality');
 	}, true);
-});
+}
+
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', handleKeyboardModality)
+} else {
+	handleKeyboardModality()
+}
