@@ -2,7 +2,9 @@
 .bunt-checkbox(:class="{checked: value}")
 	input(type="checkbox", :name="name", :checked="value", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
 	.bunt-checkbox-box
-	label {{ label }}
+	label(v-if="label") {{ label }}
+	label(v-else)
+		slot
 </template>
 <script>
 import consts from './_constants'
