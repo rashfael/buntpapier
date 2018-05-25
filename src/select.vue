@@ -224,6 +224,7 @@ export default {
 		blur () {
 			this.open = false
 			if(this.validation) this.validation.$touch()
+			this.$emit('blur')
 		},
 		selectValue(value) {
 			const option = this.findOptionByValue(value)
