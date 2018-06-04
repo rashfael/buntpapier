@@ -15,6 +15,7 @@ input()
 			font-weight 400
 			width 100%
 			padding 0
+			background-color: transparent
 		label
 		/*line-height 24px*/
 			position absolute
@@ -91,3 +92,21 @@ input()
 			.underline
 				&:before, &:after
 					background-color $clr-danger
+
+input-style(style = 'light', spacing = true)
+	if style is 'dark'
+		input
+			color: $clr-primary-text-dark
+		label, .hint
+			color: $clr-secondary-text-dark
+
+		&.disabled
+			input
+				color: $clr-disabled-text-dark
+			.underline::before
+				background: repeating-linear-gradient(to right, $clr-dividers-dark, $clr-dividers-dark 4px, transparent 4px, transparent 8px)
+		.underline::before
+			background-color: $clr-dividers-dark
+
+	if spacing is false
+		margin-bottom: 0
