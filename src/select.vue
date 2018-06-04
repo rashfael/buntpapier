@@ -18,12 +18,14 @@
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
-	ul.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
-		li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @mousedown.prevent.stop="select(option)")
-			| {{ getOptionLabel(option) }}
-		li.divider(transition="fade", v-if="!filteredOptions.length")
-		li.text-center(transition="fade" v-if="!filteredOptions.length")
-			slot(name="no-options") Sorry, no matching options.
+	.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
+		slot(name="result-header")
+		ul
+			li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @mousedown.prevent.stop="select(option)")
+				| {{ getOptionLabel(option) }}
+			li.divider(transition="fade", v-if="!filteredOptions.length")
+			li.text-center(transition="fade" v-if="!filteredOptions.length")
+				slot(name="no-options") Sorry, no matching options.
 </template>
 <script>
 //nicked from sagalbot/vue-select
