@@ -30,6 +30,10 @@
 		bunt-button.button-primary(@click.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
 		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
 		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading", :error-message="asyncError") async action
+		h3 large button
+		bunt-button.button-large I AM LARGE
+		h3 huge button
+		bunt-button.button-huge I AM HUGE
 		h2 Icon Buttons
 		.icon-buttons-flat
 			bunt-icon-button(@click.prevent="", tooltip="add") add
@@ -215,6 +219,11 @@ stripe(colors, angle, width)
 	button-style(style: 'clear')
 .button-clear-primary
 		button-style(style: 'clear', color: $clr-primary)
+
+.button-large
+	button-style(size: 'large')
+.button-huge
+	button-style(size: 'huge')
 .popover-icon-button
 	icon-button-style($clr-primary, 'clear')
 
