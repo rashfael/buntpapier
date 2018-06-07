@@ -34,14 +34,14 @@ icon-button()
 
 		&:not([disabled])
 			cursor pointer
-					
+
 		background-color transparent
 
 		&.autofocus:focus,
 		body[modality="keyboard"] &:focus
 			outline-width 2px
 			outline-offset 0
-				
+
 		// &.color-default
 		// 	color $clr-primary-text-light
 		// 	.{$prefix}-icon
@@ -49,17 +49,17 @@ icon-button()
 		// 	&.autofocus:focus,
 		// 	body[modality="keyboard"] &:focus
 		// 			outline-color darken($clr-grey-200, 25%)
-		// 
+		//
 		// for xcolor in $clr-names
 		// 	&.color-{xcolor}
 		// 		color lookup('$clr-' + xcolor)
-			
+
 		.{$prefix}-icon
 			height $button-height
 			line-height $button-height
 			font-size 20px
 			width auto
-			
+
 // styling/theming mixing
 // style = 'flat', 'filled', 'clear'
 icon-button-style(color = $clr-primary-text-light, style = 'flat')
@@ -77,12 +77,11 @@ icon-button-style(color = $clr-primary-text-light, style = 'flat')
 
 	else if style is 'clear'
 		background-color: transparent
-		
+
 		body[modality="keyboard"] &:focus,
 		&:hover:not([disabled]),
 		&.dropdown-open
-				background-color: alpha(black, 0.1)
-		
+			background-color: alpha(black, 0.1)
+
 		.{$prefix}-icon
 			color: color
-	

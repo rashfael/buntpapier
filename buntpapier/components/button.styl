@@ -115,7 +115,7 @@ button-style(style = 'flat', color = style is 'clear' ? $clr-primary-text-light 
 		background-color transparent
 
 		&:hover:not([disabled])
-			background-color darken($clr-grey-200, 3%)
+			background-color: alpha(text-color, 0.08)
 
 		&.autofocus:focus,
 		body[modality="keyboard"] &:focus
