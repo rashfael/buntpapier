@@ -19,7 +19,7 @@ module.exports = {
 	},
 	module: {
 		rules: [
-			
+
 			{ test: /\.js$/, include: projectRoot, exclude: /node_modules\//, use: [{
 				loader: 'babel-loader',
 				options: {
@@ -39,6 +39,14 @@ module.exports = {
 			{ test: /\.(png|jpe?g|gif)(\?.*)?$/, use: [{
 				loader: 'url-loader',
 				options: {
+					limit: 10000,
+					name: utils.assetsPath('img/[name].[hash:7].[ext]')
+				}
+			}]},
+			{test: /\.svg(\?.*)?/, use: [{
+				loader: 'svg-url-loader',
+				options: {
+					noquotes: true,
 					limit: 10000,
 					name: utils.assetsPath('img/[name].[hash:7].[ext]')
 				}

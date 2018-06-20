@@ -1,13 +1,13 @@
 <template lang="jade">
 button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", :class="{error: errorMessage || error, success: showSuccess}", @mouseenter="userShowTooltip = true", @mouseleave="userShowTooltip = false", @click="$emit('click', $event)")
 	.bunt-button-content(:class="{invisible: loading || errorMessage || error || showSuccess }")
-		i.bunt-icon.material-icons(v-if="icon", v-html="icon")
+		i.bunt-icon.mdi(v-if="icon", :class="[iconClass]")
 		.bunt-button-text
 			slot
 				span(v-text="text")
 	progress-circular(v-show="loading", size="small")
-	i.bunt-icon.material-icons.error(v-if="errorMessage || error") replay
-	i.bunt-icon.material-icons.success(v-if="showSuccess") done
+	i.bunt-icon.mdi.mdi-replay.error(v-if="errorMessage || error")
+	i.bunt-icon.mdi.mdi-check.success(v-if="showSuccess")
 	ripple-ink(v-if!="!noInk && !disabled")
 	tooltip(:show="showTooltip") {{ _tooltip }}
 </template>
@@ -16,6 +16,8 @@ import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
 import ProgressCircular from './progress-circular'
 import Tooltip from './tooltip'
+import iconHelper from 'helpers/icon'
+
 export default {
 	name: `${consts.prefix}-button`,
 	components: { ProgressCircular, Tooltip },
@@ -63,6 +65,9 @@ export default {
 		},
 		_tooltip () {
 			return this.errorMessage ? this.errorMessage : this.tooltip
+		},
+		iconClass () {
+			return iconHelper.getClass(this.icon)
 		}
 	},
 	watch: {

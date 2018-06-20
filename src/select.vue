@@ -13,7 +13,7 @@
 				@blur="blur",
 				@focus="focus",
 				:placeholder="searchPlaceholder")
-			i.open-indicator.material-icons(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown") arrow_drop_down
+			i.open-indicator.mdi.mdi-menu-down(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown")
 		.underline
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}

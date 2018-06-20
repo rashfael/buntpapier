@@ -1,7 +1,6 @@
 <template lang="jade">
 button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @mouseenter="showTooltip = true", @mouseleave="showTooltip = false", @click="$emit('click', $event)")
-	i.bunt-icon.material-icons
-		slot
+	i.bunt-icon.mdi(:class="[iconClass]")
 	ripple-ink(v-if!="!noInk && !disabled")
 	tooltip(v-if="tooltip", :show="showTooltip") {{ tooltip }}
 </template>
@@ -9,6 +8,7 @@ button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
 import Tooltip from './tooltip'
+import iconHelper from 'helpers/icon'
 
 export default {
 	name: `${consts.prefix}-icon-button`,
@@ -37,6 +37,10 @@ export default {
 		styleClasses() {
 			let classes = [`color-${this.color}`]
 			return classes
+		},
+		iconClass () {
+			console.log(this.$slots.default)
+			return iconHelper.getClass(this.$slots.default[0].text)
 		}
 	},
 	mixins: [

@@ -100,6 +100,7 @@
 
 </template>
 <script>
+import '@mdi/font/css/materialdesignicons.css'
 import './styles/style.styl'
 
 import { required, email } from '../src/vuelidate/validators'

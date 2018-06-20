@@ -3,13 +3,14 @@ li.bunt-tab-header-item(role="tab", :class="['type-' + type, { 'active': active,
 	:tabindex="active ? 0 : -1", :aria-controls="id", :aria-selected="active ? 'true' : null",
 	:disabled="disabled", ref="item")
 	.bunt-tab-header-item-icon(v-if="type === 'icon' || type === 'icon-and-text'")
-		i.bunt-icon.material-icons(v-html="icon")
+		i.bunt-icon.mdi(:class="[iconClass]")
 	.bunt-tab-header-item-text(v-text="text", v-if="type === 'text' || type === 'icon-and-text'")
 	ripple-ink(v-if!="!noInk && !disabled")
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
+import iconHelper from 'helpers/icon'
 
 export default {
 	name: `${consts.prefix}-tab-header-item`,
@@ -32,6 +33,11 @@ export default {
 	},
 	mixins: [
 		RippleInk
-	]
+	],
+	computed: {
+		iconClass () {
+			return iconHelper.getClass(this.icon)
+		}
+	}
 }
 </script>
