@@ -10,7 +10,7 @@ li.bunt-tab-header-item(role="tab", :class="['type-' + type, { 'active': active,
 <script>
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
-import iconHelper from 'helpers/icon'
+import iconHelper from './helpers/icon'
 
 export default {
 	name: `${consts.prefix}-tab-header-item`,

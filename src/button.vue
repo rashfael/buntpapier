@@ -16,7 +16,7 @@ import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
 import ProgressCircular from './progress-circular'
 import Tooltip from './tooltip'
-import iconHelper from 'helpers/icon'
+import iconHelper from './helpers/icon'
 
 export default {
 	name: `${consts.prefix}-button`,
