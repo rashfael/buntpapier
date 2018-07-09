@@ -31,8 +31,8 @@ button()
 		body[modality="keyboard"] &:focus
 			outline-style solid
 
-		&[disabled]
-			opacity 0.6
+		&[disabled] .{$prefix}-button-content
+			opacity: 0.6
 
 		&:not([disabled])
 			cursor pointer
