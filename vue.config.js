@@ -24,7 +24,7 @@ module.exports = {
 	css: {
 		loaderOptions: {
 			stylus: {
-				use: [require('nib')(), require('rupture')(), require('autoprefixer-stylus')(), require('./stylus')()]
+				use: [require('nib')(), require('rupture')(), require('autoprefixer-stylus')()]
 			}
 		}
 	},
