@@ -9,6 +9,9 @@ import consts from './_constants'
 export default {
 	name: `${consts.prefix}-link-button`,
 	components: {},
+	mixins: [
+		RippleInk
+	],
 	props: {
 		to: Object
 	},
@@ -20,9 +23,6 @@ export default {
 	},
 	watch: {
 	},
-	mixins: [
-		RippleInk
-	],
 	methods: {
 	}
 }

@@ -17,17 +17,17 @@ export default {
 		},
 		size: {
 			type: String,
-			default: "normal"
+			default: 'normal'
 		}
 	},
-	data() {
+	data () {
 		return {
 		}
 	},
-	ready() {
+	ready () {
 
 	},
-	beforeDestroy() {
+	beforeDestroy () {
 
 	},
 	methods: {

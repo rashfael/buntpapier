@@ -18,7 +18,7 @@ export default {
 	},
 	watch: {
 		show (val) {
-			if(val) this.computePosition()
+			if (val) this.computePosition()
 		}
 	},
 	methods: {

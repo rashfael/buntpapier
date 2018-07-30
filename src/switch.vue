@@ -10,6 +10,7 @@ import consts from './_constants'
 
 export default {
 	name: `${consts.prefix}-switch`,
+	components: {},
 	props: {
 		value: {
 			type: Boolean,
@@ -29,7 +30,6 @@ export default {
 			default: false
 		},
 	},
-	components: {},
 	data () {
 		return {
 			focused: false
@@ -44,11 +44,11 @@ export default {
 	methods: {
 		onChange ($event) {
 			this.$emit('input', $event.target.checked)
-			if(this.validation) this.validation.$touch()
+			if (this.validation) this.validation.$touch()
 		},
 		onBlur () {
 			this.focused = false
-			if(this.validation) this.validation.$touch()
+			if (this.validation) this.validation.$touch()
 		}
 	}
 }

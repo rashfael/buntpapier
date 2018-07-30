@@ -14,6 +14,9 @@ import iconHelper from './helpers/icon'
 
 export default {
 	name: `${consts.prefix}-tab-header-item`,
+	mixins: [
+		RippleInk
+	],
 	props: {
 		id: String,
 		type: {
@@ -31,9 +34,6 @@ export default {
 			default: false
 		}
 	},
-	mixins: [
-		RippleInk
-	],
 	computed: {
 		iconClass () {
 			return iconHelper.getClass(this.icon)

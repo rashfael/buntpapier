@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "vue-cli-service serve",
-    "build": "vue-cli-service build --no-clean && cp -r snape/dist/build dist/snape",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy": "npm run build -s && gh-pages -d dist"
   },

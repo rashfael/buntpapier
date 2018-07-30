@@ -15,8 +15,8 @@
 import consts from './_constants'
 import BuntTabHeaderItem from './tab-header'
 
-const calcPercent = function(w, w0) {
-	return 100 * w / w0;
+const calcPercent = function (w, w0) {
+	return 100 * w / w0
 }
 
 export default {
@@ -32,7 +32,7 @@ export default {
 
 		}
 	},
-	data() {
+	data () {
 		return {
 			activeTabObj: null,
 			tabs: null,
@@ -48,7 +48,7 @@ export default {
 		}
 	},
 	computed: {
-		styleClasses() {
+		styleClasses () {
 			let classes = [`${consts.prefix}-tabs-type-${this.type}`]
 			return classes
 		},
@@ -85,11 +85,11 @@ export default {
 			const children = Array.from(this.$refs.body.children)
 			this.tabs = this.$children.filter((tab) => tab._isTab).sort((a, b) => children.indexOf(a.$el) - children.indexOf(b.$el))
 		},
-		activateTab(val) {
+		activateTab (val) {
 			let index = null
-			if(typeof(val) === 'number') // treat as index
+			if (typeof (val) === 'number') // treat as index
 				index = val
-			else if (typeof(val) === 'string') {// treat as id
+			else if (typeof (val) === 'string') { // treat as id
 				index = this.tabs.findIndex((tab) => tab.id === val)
 			}
 			if (this.tabs[index]) {
@@ -97,9 +97,8 @@ export default {
 			} else {
 				this.deselect()
 			}
-
 		},
-		select(tab, index) {
+		select (tab, index) {
 			let oldIndex = this.tabs.indexOf(this.activeTabObj)
 			if (tab.disabled)
 				return
@@ -113,7 +112,7 @@ export default {
 				left: calcPercent(tabOffsetLeft, width)
 			}
 
-			if(oldIndex < 0) {
+			if (oldIndex < 0) {
 				// Position the bar without animation.
 				this.indicatorState = ''
 				this.indicatorTransform = {

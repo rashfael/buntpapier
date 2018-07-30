@@ -9,26 +9,26 @@ import consts from './_constants'
 
 export default {
 	name: `${consts.prefix}-ripple-ink`,
-	data() {
+	data () {
 		return {
 			show: false,
 			style: null,
 		}
 	},
 	methods: {
-		mousedown(e) {
+		mousedown (e) {
 			if (e.button === 0) {
 				this.ripple(e.type, e)
 			}
 		},
-		touchstart(e) {
+		touchstart (e) {
 			if (e.changedTouches) {
 				for (let i = 0; i < e.changedTouches.length; ++i) {
 					this.ripple(e.type, e.changedTouches[i])
 				}
 			}
 		},
-		ripple(eventType, e) {
+		ripple (eventType, e) {
 			const holder = this.$el
 			const prev = holder.getAttribute('data-ui-event')
 			if (prev && prev !== eventType) {
@@ -44,8 +44,8 @@ export default {
 				x = e.clientX - rect.left
 				y = e.clientY - rect.top
 			}
-			let max = rect.width === rect.height ?
-				rect.width * 1.412 : Math.sqrt(
+			let max = rect.width === rect.height
+				? rect.width * 1.412 : Math.sqrt(
 					(rect.width * rect.width) + (rect.height * rect.height)
 				)
 			let dim = (max * 2) + 'px'

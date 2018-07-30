@@ -17,7 +17,7 @@ import Tab from './tab'
 import Dialog from './dialog'
 
 const lib = {
-	install(Vue) {
+	install (Vue) {
 		Vue.component(`${consts.prefix}-button`, Button)
 		Vue.component(`${consts.prefix}-checkbox`, Checkbox)
 		Vue.component(`${consts.prefix}-icon`, Icon)

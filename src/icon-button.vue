@@ -13,6 +13,9 @@ import iconHelper from './helpers/icon'
 export default {
 	name: `${consts.prefix}-icon-button`,
 	components: { Tooltip },
+	mixins: [
+		RippleInk
+	],
 	props: {
 		tooltip: String,
 		color: {
@@ -34,7 +37,7 @@ export default {
 		}
 	},
 	computed: {
-		styleClasses() {
+		styleClasses () {
 			let classes = [`color-${this.color}`]
 			return classes
 		}
@@ -44,8 +47,5 @@ export default {
 			return iconHelper.getClass(this.$slots.default[0].text)
 		}
 	},
-	mixins: [
-		RippleInk
-	]
 }
 </script>

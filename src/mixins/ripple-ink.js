@@ -1,4 +1,4 @@
-import RippleInk from '../ripple-ink';
+import RippleInk from '../ripple-ink'
 
 export default {
 	props: {
@@ -11,4 +11,4 @@ export default {
 	components: {
 		RippleInk
 	}
-};
+}

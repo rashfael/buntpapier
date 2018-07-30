@@ -28,7 +28,7 @@
 				slot(name="no-options") Sorry, no matching options.
 </template>
 <script>
-//nicked from sagalbot/vue-select
+// nicked from sagalbot/vue-select
 import pointerScroll from './mixins/pointer-scroll'
 import typeAheadPointer from './mixins/type-ahead-pointer'
 import Tether from 'tether'
@@ -66,7 +66,7 @@ export default {
 		 */
 		options: {
 			type: Array,
-			default() {
+			default () {
 				return []
 			},
 		},
@@ -127,7 +127,7 @@ export default {
 		 */
 		getOptionLabel: {
 			type: Function,
-			default(option) {
+			default (option) {
 				if (typeof option === 'object') {
 					if (this.optionLabel !== undefined && option[this.optionLabel] !== undefined) {
 						return option[this.optionLabel]
@@ -144,7 +144,7 @@ export default {
 
 		getOptionValue: {
 			type: Function,
-			default(option) {
+			default (option) {
 				if (typeof option === 'object') {
 					if (this.optionValue !== undefined && option[this.optionValue] !== undefined) {
 						return option[this.optionValue]
@@ -156,9 +156,8 @@ export default {
 
 		findOptionByValue: {
 			type: Function,
-			default(value) {
+			default (value) {
 				const findFunc = (option) => {
-
 					if (typeof option === 'object' && this.optionValue)
 						return option[this.optionValue] === value
 					return option === value
@@ -175,12 +174,92 @@ export default {
 		validation: Object // vuelidate result
 	},
 
-	data() {
+	data () {
 		return {
 			search: '',
 			rawSearch: '',
 			open: false,
 			width: 0
+		}
+	},
+
+	computed: {
+		/**
+		 * Classes to be output on .dropdown
+		 * @return {Object}
+		 */
+		dropdownClasses () {
+			return {
+				open: this.open,
+				searchable: this.searchable,
+				loading: this.loading
+			}
+		},
+
+		/**
+		 * Return the placeholder string if it's set
+		 * & there is no value selected.
+		 * @return {String} Placeholder text
+		 */
+		searchPlaceholder () {
+			if (this.isValueEmpty && this.placeholder) {
+				return this.placeholder
+			}
+		},
+
+		/**
+		 * The currently displayed options, filtered
+		 * by the search elements value. If tagging
+		 * true, the search text will be prepended
+		 * if it doesn't already exist.
+		 *
+		 * @return {array}
+		 */
+		filteredOptions () {
+			let options = this.search.length !== 0
+				? this.options.filter((option) => fuzzysearch(this.search.toLowerCase(), this.getOptionLabel(option).toLowerCase()))
+				: this.options.slice()
+			if (this.taggable && this.search.length && !this.optionExists(this.search)) {
+				options.unshift(this.search)
+			}
+			return options
+		},
+
+		/**
+		 * Check if there aren't any options selected.
+		 * @return {Boolean}
+		 */
+		isValueEmpty () {
+			if (this.value) {
+				if (typeof this.value === 'object') {
+					return !Object.keys(this.value).length
+				}
+				return !this.value.length
+			}
+
+			return true
+		},
+		invalid () {
+			return this.validation && this.validation.$error
+		},
+		hintText () {
+			if (this.invalid && this.validation.$params) {
+				const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
+				return errorMessages.filter(Boolean).join()
+			}
+			return this.hint
+		}
+	},
+	watch: {
+		value (value) {
+			this.selectValue(value)
+		},
+		rawSearch (val) {
+			if (this.open)
+				this.search = val
+		},
+		filteredOptions () {
+			this._tether.position()
 		}
 	},
 	mounted () {
@@ -203,18 +282,6 @@ export default {
 	beforeDestroy () {
 		this.$refs.dropdownMenu.remove()
 	},
-	watch: {
-		value (value) {
-			this.selectValue(value)
-		},
-		rawSearch (val) {
-			if(this.open)
-				this.search = val
-		},
-		filteredOptions () {
-			this._tether.position()
-		}
-	},
 
 	methods: {
 		focus () {
@@ -225,10 +292,10 @@ export default {
 		},
 		blur () {
 			this.open = false
-			if(this.validation) this.validation.$touch()
+			if (this.validation) this.validation.$touch()
 			this.$emit('blur')
 		},
-		selectValue(value) {
+		selectValue (value) {
 			const option = this.findOptionByValue(value)
 			this.rawSearch = this.getOptionLabel(option) || ''
 		},
@@ -237,7 +304,7 @@ export default {
 		 * @param  {Object||String} option
 		 * @return {void}
 		 */
-		select(option) {
+		select (option) {
 			if (this.isOptionSelected(option)) {
 				this.deselect(option)
 			} else {
@@ -252,7 +319,7 @@ export default {
 		 * @param  {Object||String} option
 		 * @return {void}
 		 */
-		deselect(option) {
+		deselect (option) {
 			this.$emit('input', null)
 		},
 
@@ -261,7 +328,7 @@ export default {
 		 * @param  {Object||String} option
 		 * @return {void}
 		 */
-		onAfterSelect(option) {
+		onAfterSelect (option) {
 			this.open = !this.open
 			this.$refs.search.blur()
 			this.rawSearch = this.getOptionLabel(option) || ''
@@ -272,7 +339,7 @@ export default {
 		 * @param  {Event} e
 		 * @return {void}
 		 */
-		toggleDropdown(e) {
+		toggleDropdown (e) {
 			if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
 				if (!this.open) {
 					this.$refs.search.focus()
@@ -287,7 +354,7 @@ export default {
 		 * @param  {Object||String}  option
 		 * @return {Boolean}         True when selected || False otherwise
 		 */
-		isOptionSelected(option) {
+		isOptionSelected (option) {
 			return this.value === option
 		},
 
@@ -296,7 +363,7 @@ export default {
 		 * Otherwise, blur the search input to close the dropdown.
 		 * @return {[type]} [description]
 		 */
-		onEscape() {
+		onEscape () {
 			if (!this.rawSearch.length) {
 				this.$refs.search.blur()
 			} else {
@@ -310,7 +377,7 @@ export default {
 		 * text in the search input, & there's tags to delete
 		 * @return {this.value}
 		 */
-		maybeDeleteValue() {
+		maybeDeleteValue () {
 			if (!this.$refs.search.value.length && this.value) {
 				this.$emit('input', null)
 			}
@@ -323,7 +390,7 @@ export default {
 		 * @param  {Object || String} option
 		 * @return {boolean}
 		 */
-		optionExists(option) {
+		optionExists (option) {
 			let exists = false
 
 			this.options.forEach(opt => {
@@ -337,74 +404,6 @@ export default {
 			return exists
 		}
 	},
-
-	computed: {
-		/**
-		 * Classes to be output on .dropdown
-		 * @return {Object}
-		 */
-		dropdownClasses() {
-			return {
-				open: this.open,
-				searchable: this.searchable,
-				loading: this.loading
-			}
-		},
-
-		/**
-		 * Return the placeholder string if it's set
-		 * & there is no value selected.
-		 * @return {String} Placeholder text
-		 */
-		searchPlaceholder() {
-			if (this.isValueEmpty && this.placeholder) {
-				return this.placeholder;
-			}
-		},
-
-		/**
-		 * The currently displayed options, filtered
-		 * by the search elements value. If tagging
-		 * true, the search text will be prepended
-		 * if it doesn't already exist.
-		 *
-		 * @return {array}
-		 */
-		filteredOptions() {
-			let options = this.search.length !== 0
-				? this.options.filter((option) => fuzzysearch(this.search.toLowerCase(), this.getOptionLabel(option).toLowerCase()))
-				: this.options.slice()
-			if (this.taggable && this.search.length && !this.optionExists(this.search)) {
-				options.unshift(this.search)
-			}
-			return options
-		},
-
-		/**
-		 * Check if there aren't any options selected.
-		 * @return {Boolean}
-		 */
-		isValueEmpty() {
-			if (this.value) {
-				if (typeof this.value === 'object') {
-					return !Object.keys(this.value).length
-				}
-				return !this.value.length
-			}
-
-			return true;
-		},
-		invalid () {
-			return this.validation && this.validation.$error
-		},
-		hintText () {
-			if (this.invalid && this.validation.$params) {
-				const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
-				return errorMessages.filter(Boolean).join()
-			}
-			return this.hint
-		}
-	}
 
 }
 </script>

@@ -21,6 +21,10 @@ import iconHelper from './helpers/icon'
 export default {
 	name: `${consts.prefix}-button`,
 	components: { ProgressCircular, Tooltip },
+	mixins: [
+		// HasDropdown,
+		RippleInk
+	],
 	props: {
 		text: String,
 		icon: String,
@@ -75,10 +79,6 @@ export default {
 		errorMessage: 'errorChanged',
 		error: 'errorChanged'
 	},
-	mixins: [
-		// HasDropdown,
-		RippleInk
-	],
 
 	methods: {
 		loadingChanged (value) {
@@ -88,8 +88,7 @@ export default {
 				this.showSuccess = false
 				if (this.$successTimeout)
 					clearTimeout(this.$successTimeout)
-			}
-			else {
+			} else {
 				this._loading = value
 				if (this.errorMessage || this.error) return
 				this.showSuccess = true

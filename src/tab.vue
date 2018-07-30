@@ -22,7 +22,7 @@ export default {
 		}
 	},
 	watch: {
-		active(val) {
+		active (val) {
 			if (val) {
 				this.$emit('selected', this.id)
 			} else {
