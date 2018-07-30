@@ -1,1 +1,14 @@
-{"presets": ["es2015", "stage-2"]}
+{
+	"presets": [
+		[
+			"@babel/env", {
+				"modules": false,
+				"loose": true,
+				"targets": {
+					"chrome": 66
+				}
+			}
+		]
+	],
+	"plugins": ["@babel/proposal-optional-chaining"]
+}
