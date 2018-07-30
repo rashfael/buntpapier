@@ -6,7 +6,6 @@
 *.log.*
 
 node_modules
-public
 dist
 
 config.js
