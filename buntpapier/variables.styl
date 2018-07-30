@@ -41,10 +41,12 @@ $material-leave-duration = .3s
 $material-leave-timing-function = cubic-bezier(.4, .0, 1, 1)
 $material-leave = all $material-leave-duration $material-leave-timing-function
 
+$material-easing = cubic-bezier(0.4, 0.0, 0.2, 1)
+
 // derived values
 variables()
 	// we have to use define() here, because scoping
-	
+
 	define('$font-color', $clr-primary-text-light, true)
 
 	// Default color

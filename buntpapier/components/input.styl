@@ -2,7 +2,7 @@ input()
 	.{$prefix}-input
 		display flex
 		flex-direction column
-		height 72px
+		height 76px
 		padding-top 16px
 		flex-shrink 0
 		.label-input-container
@@ -14,53 +14,46 @@ input()
 			font-size 16px
 			font-weight 400
 			width 100%
-			padding 0
+			padding: 16px 8px 16px 14px
 			background-color: transparent
+			border-radius: 4px
 		label
-		/*line-height 24px*/
 			position absolute
-			top 0
-			left 0
-			right 0
+			top 16px
+			left 16px
 			font-size 16px
 			font-weight 400
 			pointer-events none
 			color $clr-secondary-text-light
 			transition transform 0.25s, width 0.25s
 			transform-origin left top
-			/*line-height 24px*/
-		.underline
-			position relative
-			padding-top 8px
-			&:before, &:after
-				content ''
-				position absolute
-				bottom 0
-				left 0
-				right 0
-				background-color $clr-dividers-light
-				height 1px
-			&:after
-				background-color $clr-primary
-				height 2px
-				transform-origin center center
-				transform scale3d(0,1,1)
-				transition transform .25s
+		.outline
+			position: absolute
+			top: 0
+			left: 0
+			height: 100%
+			width: 100%
+			stroke: $clr-dividers-light
+			stroke-width: 1px
+			fill: none
+			pointer-events: none
+			stroke-dasharray: calc(var(--label-gap)/2 + 4) 0 100000
+			transition: stroke .15s $material-easing, stroke-width .15s $material-easing, stroke-dasharray .15s $material-easing
 		.hint
 			font-size 13px
 			padding-top 4px
+			padding-left 16px
 			color $clr-secondary-text-light
 
 			p // nuke margins for raw html includes
 				margin 0
 
 		&.focused
-			.underline:after
-				transform none
-
-			&.floating-label
-				label
-					color $clr-primary
+			.outline
+				stroke: $clr-primary
+				stroke-width: 2px
+			label
+				color $clr-primary
 
 		&.disabled
 			cursor not-allowed
@@ -71,27 +64,30 @@ input()
 			.underline::before
 				background repeating-linear-gradient(to right, $clr-dividers-light, $clr-dividers-light 4px, transparent 4px, transparent 8px)
 
-		&.floating-label
+		&.floating-label, &.focused
+			.outline
+				stroke-dasharray: 8 calc(var(--label-gap) + 8) 10000
 			label
-				transform translateY(-75%) scale(0.75)
-				width 133%
-
-		&.dense
-			height 27px
-			margin-bottom 33px
-			padding-top 12px
-			/*input
-				font-size 13px*/
-			label
-				padding-bottom 4px
+				transform: translateY(-24px) scale(0.75)
 
 		&.invalid
-			.hint //label, &.focused.floating-label label // material is a bit inconsistent here
+			.hint , label
 				color $clr-danger
 
-			.underline
-				&:before, &:after
-					background-color $clr-danger
+			.outline
+				stroke: $clr-danger
+				stroke-width: 2px
+
+		&.dense
+			height: 64px
+			input
+				padding 8px 8px 8px 14px
+			label
+				top: 8px
+			&.floating-label, &.focused
+				label
+					transform: translateY(-16px) scale(0.75)
+
 
 input-style(style = 'light', spacing = true)
 	if style is 'dark'

@@ -1,17 +1,20 @@
 <template lang="jade">
-.bunt-input.dense(:class!="{focused, 'floating-label': value !== null && value.length != 0, invalid, disabled}")
+.bunt-input.dense(:class!="{focused, 'floating-label': value !== null && value.length != 0, invalid, disabled, }", :style="{'--label-gap': floatingLabelWidth}")
 	.label-input-container
 		label(:for="name") {{label}}
 		input(:type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
-	.underline
+		svg.outline(ref="outline")
+			path(:d="outlineStroke")
 	.hint(v-if="hintIsHtml", v-html="hintText")
 	.hint(v-else) {{ hintText }}
 </template>
 <script>
 import consts from './_constants'
+import inputOutline from './mixins/input-outline'
 
 export default {
 	name: `${consts.prefix}-input`,
+	mixins: [inputOutline],
 	props: {
 		type: {
 			type: String,
@@ -64,8 +67,6 @@ export default {
 			return this.hint
 		}
 	},
-	ready: function () {},
-	attached: function () {},
 	methods: {
 		onInput ($event) {
 			this.$emit('input', $event.target.value)

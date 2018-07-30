@@ -1,7 +1,7 @@
 <template lang="jade">
 .bunt-select.dropdown(:class="dropdownClasses")
 	// inline the input, use css from input component
-	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid: invalid}")
+	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid: invalid}", :style="{'--label-gap': floatingLabelWidth}")
 		.label-input-container
 			label(:for="name") {{label}}
 			input(type="text", ref="search", :name="name", v-model="rawSearch", v-show="searchable",
@@ -14,7 +14,8 @@
 				@focus="focus",
 				:placeholder="searchPlaceholder")
 			i.open-indicator.mdi.mdi-menu-down(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown")
-		.underline
+			svg.outline(ref="outline")
+				path(:d="outlineStroke")
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
@@ -30,6 +31,7 @@
 <script>
 // nicked from sagalbot/vue-select
 import pointerScroll from './mixins/pointer-scroll'
+import inputOutline from './mixins/input-outline'
 import typeAheadPointer from './mixins/type-ahead-pointer'
 import Tether from 'tether'
 import fuzzysearch from 'fuzzysearch'
@@ -37,7 +39,7 @@ import consts from './_constants'
 
 export default {
 	name: `${consts.prefix}-select`,
-	mixins: [pointerScroll, typeAheadPointer],
+	mixins: [inputOutline, pointerScroll, typeAheadPointer],
 
 	props: {
 		name: {
