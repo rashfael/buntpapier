@@ -1,8 +1,7 @@
-var path = require('path'),
-	pkg = require('./package.json')
+const pkg = require('./package.json')
 
 exports = module.exports = function (opts) {
-	var implicit = !((opts && opts.implicit == false))
+	var implicit = !((opts && !opts.implicit))
 
 	return function (style) {
 		style.include(__dirname)
