@@ -2,6 +2,8 @@ import consts from './_constants'
 
 import './helpers/modality'
 
+import initDirectives from './directives'
+
 import Button from './button'
 import Checkbox from './checkbox'
 import Icon from './icon'
@@ -18,6 +20,7 @@ import Dialog from './dialog'
 
 const lib = {
 	install (Vue) {
+		initDirectives(Vue)
 		Vue.component(`${consts.prefix}-button`, Button)
 		Vue.component(`${consts.prefix}-checkbox`, Checkbox)
 		Vue.component(`${consts.prefix}-icon`, Icon)

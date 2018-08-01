@@ -1,0 +1,48 @@
+$native-scrollbar-width = 17px
+$rail-width = 15px
+$thumb-width = 11px
+.v-scrollbar
+	position: relative
+	overflow: hidden
+
+	.v-scrollbar-inner
+		width: 100%
+		height: 100%
+		overflow: scroll
+
+		&::-webkit-scrollbar
+			display: none
+
+	&.v-scrollbar-non-webkit .v-scrollbar-inner
+		width: 'calc(100% + %s)' % $native-scrollbar-width
+		height: 'calc(100% + %s)' % $native-scrollbar-width
+
+	.v-scrollbar-rail-x,
+	.v-scrollbar-rail-y
+		position: absolute
+		user-select: none
+
+	.v-scrollbar-thumb
+		position: absolute
+		background-color: $clr-blue-grey-600
+		opacity: .8
+		border-radius: $thumb-width
+
+	.v-scrollbar-rail-x
+		bottom: 0
+		left: 0
+		right: 0
+		height: $rail-width
+
+		.v-scrollbar-thumb
+			right: $rail-width - $thumb-width
+			height: $thumb-width
+	.v-scrollbar-rail-y
+		top: 0
+		bottom: 0
+		right: 0
+		width: $rail-width
+
+		.v-scrollbar-thumb
+			bottom: $rail-width - $thumb-width
+			width: $thumb-width

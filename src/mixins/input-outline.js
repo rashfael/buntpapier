@@ -22,7 +22,6 @@ export default {
 			const {width, height} = this.$refs.outline.getBoundingClientRect()
 			const radius = 4
 			const cornerWidth = radius + 1
-			console.log(this.$refs.outline)
 			this.outlineStroke = `M ${cornerWidth} 1
 			h ${width - 2 * cornerWidth}
 			a ${radius} ${radius} 0 0 1 ${radius} ${radius}

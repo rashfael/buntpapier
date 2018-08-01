@@ -19,21 +19,22 @@
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
-	.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open",  :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
-		slot(name="result-header")
-		ul
-			li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @mousedown.prevent.stop="select(option)")
-				| {{ getOptionLabel(option) }}
-			li.divider(transition="fade", v-if="!filteredOptions.length")
-			li.text-center(transition="fade" v-if="!filteredOptions.length")
-				slot(name="no-options") Sorry, no matching options.
+	.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="", v-scrollbar.y="")
+		div
+			slot(name="result-header")
+			ul
+				li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
+					| {{ getOptionLabel(option) }}
+				li.divider(transition="fade", v-if="!filteredOptions.length")
+				li.text-center(transition="fade" v-if="!filteredOptions.length")
+					slot(name="no-options") Sorry, no matching options.
 </template>
 <script>
 // nicked from sagalbot/vue-select
 import pointerScroll from './mixins/pointer-scroll'
 import inputOutline from './mixins/input-outline'
 import typeAheadPointer from './mixins/type-ahead-pointer'
-import Tether from 'tether'
+import Popper from 'popper.js'
 import fuzzysearch from 'fuzzysearch'
 import consts from './_constants'
 
@@ -261,28 +262,18 @@ export default {
 				this.search = val
 		},
 		filteredOptions () {
-			this._tether.position()
+			this._popper.scheduleUpdate()
 		}
 	},
 	mounted () {
 		this.width = this.$refs.searchContainer.getBoundingClientRect().width
-		this._tether = new Tether({
-			element: this.$refs.dropdownMenu,
-			target: this.$refs.searchContainer,
-			attachment: 'top left',
-			targetAttachment: 'bottom left',
-			constraints: [
-				{
-					to: 'window',
-					attachment: 'together'
-				}
-			]
-			// offset: '-24px 0'
+		this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
+			placement: 'bottom'
 		})
 		this.selectValue(this.value)
 	},
 	beforeDestroy () {
-		this.$refs.dropdownMenu.remove()
+		this._popper.destroy()
 	},
 
 	methods: {
@@ -290,7 +281,7 @@ export default {
 			this.open = true
 			this.$refs.search.select()
 			this.width = this.$refs.searchContainer.getBoundingClientRect().width
-			this.$nextTick(() => this._tether.position()) // delay until after dropdown is rendered
+			this.$nextTick(() => this._popper.scheduleUpdate()) // delay until after dropdown is rendered
 		},
 		blur () {
 			this.open = false

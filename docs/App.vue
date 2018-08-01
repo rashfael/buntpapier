@@ -98,6 +98,9 @@
 
 		bunt-switch(name="tabswitch", label="toogle tab", v-model="activateTab")
 
+		div.scrollbar(v-scrollbar="")
+			div
+				div.scrolling-content
 </template>
 <script>
 import '@mdi/font/css/materialdesignicons.css'
@@ -240,4 +243,12 @@ stripe(colors, angle, width)
 	link-button-style(color: $clr-primary)
 .tabs-default
 	tabs-style()
+
+.scrollbar
+	height: 400px
+	width: 600px
+	.scrolling-content
+		height: 900px
+		width: 1000px
+		background: radial-gradient(rgba(219,255,0,1) 0%, rgba(255,177,0,1) 12%, rgba(255,0,0,1) 21%, rgba(0,0,255,1) 33%, rgba(181,255,0,1) 56%, rgba(0,255,65,1) 66%, rgba(255,0,0,1) 85%, rgba(0,212,255,1) 100%)
 </style>
