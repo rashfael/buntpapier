@@ -27,8 +27,7 @@ class Scrollbars {
 
 		this.computeDimensions()
 		this.computeThumbPositions()
-		this.updateThumb('x')
-		this.updateThumb('y')
+		this.update()
 
 		this.innerEl.addEventListener('scroll', this.onScroll)
 		// observe all the changes and recompute
@@ -69,11 +68,26 @@ class Scrollbars {
 		}
 	}
 
+	destroy () {
+		this.resizeObserver.disconnect()
+		this.mutationObserver.disconnect()
+		document.removeEventListener('mousemove', this.onDocumentMousemove)
+		document.removeEventListener('mousedown', this.onDocumentMousedown)
+		document.removeEventListener('mouseup', this.onDocumentMouseup)
+		this.innerEl.removeEventListener('scroll', this.onScroll)
+		this.x.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
+		this.y.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
+	}
+
+	update () {
+		this.updateThumb('x')
+		this.updateThumb('y')
+	}
+
 	// EVENTS
 	onScroll (event) {
 		this.computeThumbPositions()
-		this.updateThumb('x')
-		this.updateThumb('y')
+		this.update()
 	}
 
 	onThumbMousedown (dimension, event) {
@@ -113,8 +127,7 @@ class Scrollbars {
 		console.log(entries)
 		this.computeDimensions()
 		this.computeThumbPositions()
-		this.updateThumb('x')
-		this.updateThumb('y')
+		this.update()
 	}
 
 	// COMPUTATIONS
@@ -141,13 +154,17 @@ class Scrollbars {
 
 	updateThumb (dimension) {
 		const state = this[dimension]
-		if (dimension === 'x') {
-			state.thumbEl.style.width = state.thumbLength + 'px'
-			state.thumbEl.style.left = state.thumbPosition + 'px'
-		}
-		if (dimension === 'y') {
-			state.thumbEl.style.height = state.thumbLength + 'px'
-			state.thumbEl.style.top = state.thumbPosition + 'px'
+		if (state.visibleRatio >= 1) {
+			state.thumbEl.style.display = 'none'
+		} else {
+			state.thumbEl.style.display = null
+			if (dimension === 'x') {
+				state.thumbEl.style.width = state.thumbLength + 'px'
+				state.thumbEl.style.left = state.thumbPosition + 'px'
+			} else if (dimension === 'y') {
+				state.thumbEl.style.height = state.thumbLength + 'px'
+				state.thumbEl.style.top = state.thumbPosition + 'px'
+			}
 		}
 	}
 }
@@ -155,13 +172,15 @@ class Scrollbars {
 export default function (Vue) {
 	Vue.directive('scrollbar', {
 		inserted (el, binding, vnode) {
-			new Scrollbars(Vue, el, binding, vnode)
+			el.__buntpapier__scrollbar = new Scrollbars(Vue, el, binding, vnode)
 		},
 		componentUpdated (el, binding, vnode, oldVnode) {
-
+			if (!el.__buntpapier__scrollbar) return
+			el.__buntpapier__scrollbar.update()
 		},
 		unbind (el, binding, vnode, oldVnode) {
-
+			if (!el.__buntpapier__scrollbar) return
+			el.__buntpapier__scrollbar.destroy()
 		}
 	})
 }
