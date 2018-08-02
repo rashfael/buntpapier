@@ -124,7 +124,6 @@ class Scrollbars {
 
 	onResize (entries) {
 		// TODO for performance, use values reported by the observer?
-		console.log(entries)
 		this.computeDimensions()
 		this.computeThumbPositions()
 		this.update()
