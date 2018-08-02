@@ -4,14 +4,14 @@ $thumb-width = 6px
 $thumb-width-hovered = 12px
 
 scrollbars()
-	.v-scrollbar
+	.bunt-scrollbar
 		position: relative
 		overflow: hidden
 
 		&:hover
-			.v-scrollbar-thumb
+			.bunt-scrollbar-thumb
 				opacity: .4
-		.v-scrollbar-inner
+		.bunt-scrollbar-inner
 			width: 100%
 			height: 100%
 			box-sizing: border-box
@@ -20,46 +20,46 @@ scrollbars()
 			&::-webkit-scrollbar
 				display: none
 
-		&.v-scrollbar-non-webkit .v-scrollbar-inner
+		&.bunt-scrollbar-non-webkit .bunt-scrollbar-inner
 			width: 'calc(100% + %s)' % $native-scrollbar-width
 			height: 'calc(100% + %s)' % $native-scrollbar-width
 
-		.v-scrollbar-rail-x,
-		.v-scrollbar-rail-y
+		.bunt-scrollbar-rail-x,
+		.bunt-scrollbar-rail-y
 			position: absolute
 			user-select: none
 
-		.v-scrollbar-thumb
+		.bunt-scrollbar-thumb
 			position: absolute
 			background-color: $clr-blue-grey-600
 			opacity: .2
 			border-radius: $thumb-width
 			transition: height .3s $material-easing, width .3s $material-easing, opacity .3s $material-easing
 
-		.v-scrollbar-rail-x
+		.bunt-scrollbar-rail-x
 			bottom: 0
 			left: 0
 			right: 0
 			height: $rail-width
 
-			.v-scrollbar-thumb
+			.bunt-scrollbar-thumb
 				bottom: 2px
 				height: $thumb-width
 
 			&:hover, &.active
-				.v-scrollbar-thumb
+				.bunt-scrollbar-thumb
 					height: $thumb-width-hovered
 					opacity: .8
-		.v-scrollbar-rail-y
+		.bunt-scrollbar-rail-y
 			top: 0
 			bottom: 0
 			right: 0
 			width: $rail-width
 
-			.v-scrollbar-thumb
+			.bunt-scrollbar-thumb
 				right: 2px
 				width: $thumb-width
 			&:hover, &.active
-				.v-scrollbar-thumb
+				.bunt-scrollbar-thumb
 					width: $thumb-width-hovered
 					opacity: .8

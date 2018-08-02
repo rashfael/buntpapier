@@ -16,11 +16,11 @@ class Scrollbars {
 		this.onResize = this.onResize.bind(this)
 		this.el = el
 		this.innerEl = el.firstElementChild
-		this.el.classList.add('v-scrollbar')
+		this.el.classList.add('bunt-scrollbar')
 		if (!IS_WEBKIT) {
-			this.el.classList.add('v-scrollbar-non-webkit')
+			this.el.classList.add('bunt-scrollbar-non-webkit')
 		}
-		this.innerEl.classList.add('v-scrollbar-inner')
+		this.innerEl.classList.add('bunt-scrollbar-inner')
 
 		this.createRail('x')
 		this.createRail('y')
@@ -54,10 +54,10 @@ class Scrollbars {
 
 	createRail (dimension) {
 		const railEl = document.createElement('div')
-		railEl.classList.add(`v-scrollbar-rail-${dimension}`)
+		railEl.classList.add(`bunt-scrollbar-rail-${dimension}`)
 
 		const thumbEl = document.createElement('div')
-		thumbEl.classList.add('v-scrollbar-thumb')
+		thumbEl.classList.add('bunt-scrollbar-thumb')
 
 		railEl.appendChild(thumbEl)
 		this.el.appendChild(railEl)
