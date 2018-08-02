@@ -94,6 +94,7 @@ class Scrollbars {
 		this.dragging = dimension
 		this.draggingOffset = event[`offset${dimension.toUpperCase()}`]
 		this.el.style.userSelect = 'none'
+		this[dimension].railEl.classList.add('active')
 		document.addEventListener('mousemove', this.onDocumentMousemove)
 		document.addEventListener('mouseup', this.onDocumentMouseup)
 	}
@@ -116,6 +117,7 @@ class Scrollbars {
 	}
 
 	onDocumentMouseup (event) {
+		this[this.dragging].railEl.classList.remove('active')
 		this.dragging = null
 		this.el.style.userSelect = ''
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
