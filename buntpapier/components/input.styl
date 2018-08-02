@@ -90,9 +90,6 @@ input()
 				stroke: $clr-danger
 				stroke-width: 2px
 
-		&.no-hint
-			height: 37px
-
 input-style(style = 'light', size = 'dense')
 	input-size(size)
 	if style is 'dark'
@@ -119,3 +116,6 @@ input-size(size)
 		&.floating-label, &.focused
 			label
 				transform: translateY(-24px) scale(0.75)
+
+	if size is 'compact'
+		height: 37px  // dont reserve space for hint
