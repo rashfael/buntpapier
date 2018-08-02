@@ -105,6 +105,9 @@ input()
 				input
 					padding-left: 4px
 
+		&.large
+			input-size(size = 'large')
+
 		&.no-hint
 			height: 37px
 
@@ -124,3 +127,16 @@ input-style(style = 'light', spacing = true)
 
 	if spacing is false
 		margin-bottom: 0
+
+input-size(size = 'dense')
+	if size is 'large'
+		height: 76px
+		input
+			padding 16px 8px 16px 11px
+		label
+			top: 16px
+		.hint
+			padding-top: 4px
+		&.floating-label, &.focused
+			label
+				transform: translateY(-24px) scale(0.75)
