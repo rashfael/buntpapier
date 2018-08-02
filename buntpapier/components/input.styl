@@ -2,7 +2,7 @@ input()
 	.{$prefix}-input
 		display flex
 		flex-direction column
-		height 76px
+		height 56px
 		padding-top 16px
 		flex-shrink 0
 		.label-input-container
@@ -20,12 +20,12 @@ input()
 			font-size 16px
 			font-weight 400
 			flex: 1
-			padding: 16px 8px 16px 11px
+			padding: 8px 8px 8px 12px
 			background-color: transparent
 			border-radius: 4px
 		label
 			position absolute
-			top 16px
+			top 8px
 			left 12px
 			font-size 16px
 			font-weight 400
@@ -51,7 +51,7 @@ input()
 			transition: stroke .15s $material-easing, stroke-width .15s $material-easing, stroke-dasharray .15s $material-easing
 		.hint
 			font-size 13px
-			padding-top 4px
+			padding-top 0
 			padding-left 16px
 			color $clr-secondary-text-light
 
@@ -80,7 +80,7 @@ input()
 			.outline
 				stroke-dasharray: 3 var(--label-gap) 10000
 			label
-				transform: translateY(-24px) scale(0.75)
+				transform: translateY(-16px) scale(0.75)
 
 		&.invalid
 			.hint , label
@@ -90,29 +90,11 @@ input()
 				stroke: $clr-danger
 				stroke-width: 2px
 
-		&.dense
-			height: 56px
-			input
-				padding 8px 8px 8px 12px
-			label
-				top: 8px
-			.hint
-				padding-top: 0
-			&.floating-label, &.focused
-				label
-					transform: translateY(-16px) scale(0.75)
-			&.with-icon
-				input
-					padding-left: 4px
-
-		&.large
-			input-size(size = 'large')
-
 		&.no-hint
 			height: 37px
 
 
-input-style(style = 'light', spacing = true)
+input-style(style = 'light', spacing = true, size = 'dense')
 	if style is 'dark'
 		input
 			color: $clr-primary-text-dark
@@ -127,6 +109,8 @@ input-style(style = 'light', spacing = true)
 
 	if spacing is false
 		margin-bottom: 0
+
+	input-size(size)
 
 input-size(size = 'dense')
 	if size is 'large'

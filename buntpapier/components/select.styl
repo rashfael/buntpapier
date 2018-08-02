@@ -16,11 +16,6 @@ select()
 		.bunt-input input
 			box-sizing border-box
 			padding-right 20px
-		&.large
-			.bunt-input
-				input-size(size = 'large')
-			.open-indicator
-				top: 16px
 	.{$prefix}-select-dropdown-menu
 		card()
 		border-top none
@@ -41,3 +36,11 @@ select()
 			white-space nowrap
 			&.highlight
 				background-color $highlight-color
+
+
+select-style(size = 'dense')
+	.bunt-input
+		input-size(size)
+	if size is 'large'
+		.open-indicator
+			top: 16px
