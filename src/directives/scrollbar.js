@@ -1,3 +1,5 @@
+import ResizeObserver from 'resize-observer-polyfill'
+
 // TODO throttling
 
 // partially nicked from https://github.com/DominikSerafin/vuebar/blob/development/vuebar.js
@@ -11,7 +13,7 @@ class Scrollbars {
 		this.onDocumentMouseup = this.onDocumentMouseup.bind(this)
 		this.onThumbMousedownX = this.onThumbMousedown.bind(this, 'x')
 		this.onThumbMousedownY = this.onThumbMousedown.bind(this, 'y')
-
+		this.onResize = this.onResize.bind(this)
 		this.el = el
 		this.innerEl = el.firstElementChild
 		this.el.classList.add('v-scrollbar')
@@ -29,6 +31,26 @@ class Scrollbars {
 		this.updateThumb('y')
 
 		this.innerEl.addEventListener('scroll', this.onScroll)
+		// observe all the changes and recompute
+		this.resizeObserver = new ResizeObserver(this.onResize)
+		this.resizeObserver.observe(this.el)
+		for (const el of this.innerEl.children) {
+			this.resizeObserver.observe(el)
+		}
+		this.mutationObserver = new MutationObserver((records) => {
+			for (const record of records) {
+				for (const addedNode of record.addedNodes) {
+					this.resizeObserver.observe(addedNode)
+				}
+				for (const removedNode of record.removedNodes) {
+					this.resizeObserver.unobserve(removedNode)
+				}
+			}
+			this.onResize()
+		})
+		this.mutationObserver.observe(this.innerEl, {
+			childList: true
+		})
 	}
 
 	createRail (dimension) {
@@ -84,6 +106,15 @@ class Scrollbars {
 		this.el.style.userSelect = ''
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
 		document.removeEventListener('mouseup', this.onDocumentMouseup)
+	}
+
+	onResize (entries) {
+		// TODO for performance, use values reported by the observer?
+		console.log(entries)
+		this.computeDimensions()
+		this.computeThumbPositions()
+		this.updateThumb('x')
+		this.updateThumb('y')
 	}
 
 	// COMPUTATIONS

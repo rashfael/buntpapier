@@ -101,6 +101,7 @@
 		div.scrollbar(v-scrollbar="")
 			div
 				div.scrolling-content
+				div.scrolling-content
 </template>
 <script>
 import '@mdi/font/css/materialdesignicons.css'

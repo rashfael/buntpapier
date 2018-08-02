@@ -1,10 +1,10 @@
+import ResizeObserver from 'resize-observer-polyfill'
 import Scrollbar from './scrollbar'
 
 export default function (Vue) {
 	Vue.directive('resizeObserver', {
 		bind (el, binding) {
-			if (!window.ResizeObserver) return
-			const observer = new window.ResizeObserver(binding.value)
+			const observer = new ResizeObserver(binding.value)
 			observer.observe(el)
 		}
 	})
