@@ -1,8 +1,13 @@
+<!--
+	TODO label animation WITH icon should go sideways, hint with icon should be on same height as input
+-->
 <template lang="jade">
-.bunt-input.dense(:class!="{focused, 'floating-label': value !== null && value.length != 0, invalid, disabled, }", :style="{'--label-gap': floatingLabelWidth}")
+.bunt-input.dense(:class!="{focused, 'floating-label': value !== null && value.length != 0, invalid, disabled, 'with-icon': icon}", :style="{'--label-gap': floatingLabelWidth}")
 	.label-input-container
 		label(:for="name") {{label}}
+		.icon.mdi(v-if="icon", :class="[iconClass]")
 		input(:type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
+		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		svg.outline(ref="outline")
 			path(:d="outlineStroke")
 	.hint(v-if="hintIsHtml", v-html="hintText")
@@ -10,6 +15,7 @@
 </template>
 <script>
 import consts from './_constants'
+import iconHelper from './helpers/icon'
 import inputOutline from './mixins/input-outline'
 
 export default {
@@ -56,6 +62,9 @@ export default {
 		}
 	},
 	computed: {
+		iconClass () {
+			return iconHelper.getClass(this.icon)
+		},
 		invalid () {
 			return this.validation && this.validation.$error
 		},

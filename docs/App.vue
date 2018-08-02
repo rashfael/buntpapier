@@ -9,6 +9,7 @@
 			bunt-input(name="an-input", label="ein lustiges Eingabefeld", v-model="text", hint="mit einem lustigen Hinweis")
 			bunt-input(name="disabled-input", label="this is disabled", :disabled="true", value="a disabled value", hint="with a hint")
 			bunt-input(name="an-input", label="Passwort!", type="password", v-model="password")
+			bunt-input(name="an-input", placeholder="I am a placeholder, not a label", v-model="text", icon="search")
 			bunt-select(name="a-select", label="Select something", v-model="selection", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
 			p {{ selection }}
 			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")

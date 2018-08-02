@@ -1,7 +1,8 @@
 const alias = {
 	add: 'plus',
 	done: 'check',
-	remove: 'minus'
+	remove: 'minus',
+	search: 'magnify'
 }
 
 export default {

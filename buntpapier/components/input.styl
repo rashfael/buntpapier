@@ -6,7 +6,13 @@ input()
 		padding-top 16px
 		flex-shrink 0
 		.label-input-container
-			position relative
+			position: relative
+			display: flex
+			align-items: center
+		.icon
+			font-size: 22px
+			color: $clr-secondary-text-light
+			padding: 0 0 0 8px
 		input
 			border none
 			outline none
@@ -14,19 +20,23 @@ input()
 			font-size 16px
 			font-weight 400
 			width 100%
-			padding: 16px 8px 16px 14px
+			padding: 16px 8px 16px 11px
 			background-color: transparent
 			border-radius: 4px
 		label
 			position absolute
 			top 16px
-			left 16px
+			left 12px
 			font-size 16px
 			font-weight 400
 			pointer-events none
 			color $clr-secondary-text-light
 			transition transform 0.25s, width 0.25s
 			transform-origin left top
+		.error-icon
+			font-size: 22px
+			color: $clr-danger
+			padding-right: 8px
 		.outline
 			position: absolute
 			top: 0
@@ -48,6 +58,10 @@ input()
 			p // nuke margins for raw html includes
 				margin 0
 
+		&.with-icon
+			input
+				padding-left: 4px
+
 		&.focused
 			.outline
 				stroke: $clr-primary
@@ -61,12 +75,10 @@ input()
 				cursor not-allowed
 				background-color transparent
 				color $clr-disabled-text-light
-			.underline::before
-				background repeating-linear-gradient(to right, $clr-dividers-light, $clr-dividers-light 4px, transparent 4px, transparent 8px)
 
 		&.floating-label, &.focused
 			.outline
-				stroke-dasharray: 8 calc(var(--label-gap) + 8) 10000
+				stroke-dasharray: 3 var(--label-gap) 10000
 			label
 				transform: translateY(-24px) scale(0.75)
 
@@ -81,7 +93,7 @@ input()
 		&.dense
 			height: 56px
 			input
-				padding 8px 8px 8px 14px
+				padding 8px 8px 8px 12px
 			label
 				top: 8px
 			.hint
@@ -89,22 +101,23 @@ input()
 			&.floating-label, &.focused
 				label
 					transform: translateY(-16px) scale(0.75)
+			&.with-icon
+				input
+					padding-left: 4px
 
 
 input-style(style = 'light', spacing = true)
 	if style is 'dark'
 		input
 			color: $clr-primary-text-dark
-		label, .hint
+		label, .hint, .icon
 			color: $clr-secondary-text-dark
 
 		&.disabled
 			input
 				color: $clr-disabled-text-dark
-			.underline::before
-				background: repeating-linear-gradient(to right, $clr-dividers-dark, $clr-dividers-dark 4px, transparent 4px, transparent 8px)
-		.underline::before
-			background-color: $clr-dividers-dark
+		.outline
+			stroke: $clr-dividers-dark
 
 	if spacing is false
 		margin-bottom: 0

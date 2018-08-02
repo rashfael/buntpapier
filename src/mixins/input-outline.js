@@ -1,4 +1,4 @@
-import { getTextMetrics } from 'helpers/text-metrics'
+import { getTextMetrics } from '../helpers/text-metrics'
 
 export default {
 	data: function () {
@@ -8,7 +8,7 @@ export default {
 	},
 	computed: {
 		floatingLabelWidth () {
-			return getTextMetrics(this.label, `12px 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif`).width
+			return this.label ? getTextMetrics(this.label, `12px 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif`).width + 8 : 0
 		}
 	},
 	mounted () {
