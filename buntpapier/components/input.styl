@@ -93,8 +93,8 @@ input()
 		&.no-hint
 			height: 37px
 
-
-input-style(style = 'light', spacing = true, size = 'dense')
+input-style(style = 'light', size = 'dense')
+	input-size(size)
 	if style is 'dark'
 		input
 			color: $clr-primary-text-dark
@@ -107,12 +107,7 @@ input-style(style = 'light', spacing = true, size = 'dense')
 		.outline
 			stroke: $clr-dividers-dark
 
-	if spacing is false
-		margin-bottom: 0
-
-	input-size(size)
-
-input-size(size = 'dense')
+input-size(size)
 	if size is 'large'
 		height: 76px
 		input
