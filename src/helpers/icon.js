@@ -2,7 +2,8 @@ const alias = {
 	add: 'plus',
 	done: 'check',
 	remove: 'minus',
-	search: 'magnify'
+	search: 'magnify',
+	'help_outline': 'help-circle-outline'
 }
 
 export default {
