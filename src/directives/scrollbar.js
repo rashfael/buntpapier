@@ -1,3 +1,9 @@
+// usage
+//
+// `v-scrollbar` | `v-scrollbar.x.y` : scrolling both axis
+// `v-scrollbar.x` | `v-scrollbar.y' : scrolling one axis`
+// CAUTION: in jade, you need to use `v-scrollbar.x=''` (empty value)
+
 import ResizeObserver from 'resize-observer-polyfill'
 
 // TODO throttling
@@ -7,6 +13,8 @@ const IS_WEBKIT = 'WebkitAppearance' in document.documentElement.style
 
 class Scrollbars {
 	constructor (Vue, el, binding, vnode) {
+		const scrollX = binding.modifiers.x
+		const scrollY = binding.modifiers.y
 		// bind all the event handlers
 		this.onScroll = this.onScroll.bind(this)
 		this.onDocumentMousemove = this.onDocumentMousemove.bind(this)
@@ -22,8 +30,10 @@ class Scrollbars {
 		}
 		this.innerEl.classList.add('bunt-scrollbar-inner')
 
-		this.createRail('x')
-		this.createRail('y')
+		if (scrollX)
+			this.createRail('x')
+		if (scrollY)
+			this.createRail('y')
 
 		this.computeDimensions()
 		this.computeThumbPositions()
