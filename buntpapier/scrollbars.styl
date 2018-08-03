@@ -1,4 +1,3 @@
-$native-scrollbar-width = 17px
 $rail-width = 15px
 $thumb-width = 6px
 $thumb-width-hovered = 12px
@@ -21,8 +20,7 @@ scrollbars()
 				display: none
 
 		&.bunt-scrollbar-non-webkit .bunt-scrollbar-inner
-			width: 'calc(100% + %s)' % $native-scrollbar-width
-			height: 'calc(100% + %s)' % $native-scrollbar-width
+			flex: 1 0 auto // force height when inside a flexbox
 
 		.bunt-scrollbar-rail-x,
 		.bunt-scrollbar-rail-y

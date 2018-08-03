@@ -11,6 +11,22 @@ import ResizeObserver from 'resize-observer-polyfill'
 // partially nicked from https://github.com/DominikSerafin/vuebar/blob/development/vuebar.js
 const IS_WEBKIT = 'WebkitAppearance' in document.documentElement.style
 
+function getScrollbarWidth () {
+	const outer = document.createElement('div')
+	outer.style.visibility = 'hidden'
+	outer.style.width = '100px'
+	outer.style.overflow = 'scroll'
+	const inner = document.createElement('div')
+	inner.style.width = '100%'
+	outer.appendChild(inner)
+	document.body.appendChild(outer)
+	const scrollbarWidth = outer.offsetWidth - inner.offsetWidth
+	outer.parentNode.removeChild(outer)
+	return scrollbarWidth
+}
+
+const SCROLLBAR_WIDTH = IS_WEBKIT ? 0 : getScrollbarWidth()
+
 class Scrollbars {
 	constructor (Vue, el, binding, vnode) {
 		const scrollX = binding.modifiers.x
@@ -27,6 +43,8 @@ class Scrollbars {
 		this.el.classList.add('bunt-scrollbar')
 		if (!IS_WEBKIT) {
 			this.el.classList.add('bunt-scrollbar-non-webkit')
+			this.innerEl.style.width = `calc(100% + ${SCROLLBAR_WIDTH}px)`
+			this.innerEl.style.height = `calc(100% + ${SCROLLBAR_WIDTH}px)`
 		}
 		this.innerEl.classList.add('bunt-scrollbar-inner')
 
@@ -103,7 +121,11 @@ class Scrollbars {
 	onThumbMousedown (dimension, event) {
 		this.dragging = dimension
 		this.draggingOffset = event[`offset${dimension.toUpperCase()}`]
-		this.el.style.userSelect = 'none'
+		if (IS_WEBKIT) {
+			this.el.style.userSelect = 'none'
+		} else {
+			document.body.style['-moz-user-select'] = 'none'
+		}
 		this[dimension].railEl.classList.add('active')
 		document.addEventListener('mousemove', this.onDocumentMousemove)
 		document.addEventListener('mouseup', this.onDocumentMouseup)
@@ -129,7 +151,11 @@ class Scrollbars {
 	onDocumentMouseup (event) {
 		this[this.dragging].railEl.classList.remove('active')
 		this.dragging = null
-		this.el.style.userSelect = ''
+		if (IS_WEBKIT) {
+			this.el.style.userSelect = ''
+		} else {
+			document.body.style['-moz-user-select'] = ''
+		}
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
 		document.removeEventListener('mouseup', this.onDocumentMouseup)
 	}
