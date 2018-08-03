@@ -40,13 +40,7 @@ class Scrollbars {
 		this.onResize = this.onResize.bind(this)
 		this.el = el
 		this.innerEl = el.firstElementChild
-		this.el.classList.add('bunt-scrollbar')
-		if (!IS_WEBKIT) {
-			this.el.classList.add('bunt-scrollbar-non-webkit')
-			this.innerEl.style.width = `calc(100% + ${SCROLLBAR_WIDTH}px)`
-			this.innerEl.style.height = `calc(100% + ${SCROLLBAR_WIDTH}px)`
-		}
-		this.innerEl.classList.add('bunt-scrollbar-inner')
+		this.refreshStyling()
 
 		if (scrollX)
 			this.createRail('x')
@@ -105,6 +99,16 @@ class Scrollbars {
 		this.innerEl.removeEventListener('scroll', this.onScroll)
 		this.x?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
 		this.y?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
+	}
+
+	refreshStyling () {
+		this.el.classList.add('bunt-scrollbar')
+		if (!IS_WEBKIT) {
+			this.el.classList.add('bunt-scrollbar-non-webkit')
+			this.innerEl.style.width = `calc(100% + ${SCROLLBAR_WIDTH}px)`
+			this.innerEl.style.height = `calc(100% + ${SCROLLBAR_WIDTH}px)`
+		}
+		this.innerEl.classList.add('bunt-scrollbar-inner')
 	}
 
 	update () {
@@ -209,12 +213,21 @@ class Scrollbars {
 
 export default function (Vue) {
 	Vue.directive('scrollbar', {
-		inserted (el, binding, vnode) {
+		bind (el, binding, vnode) {
 			el.__buntpapier__scrollbar = new Scrollbars(Vue, el, binding, vnode)
 		},
-		componentUpdated (el, binding, vnode, oldVnode) {
+		inserted (el) {
 			if (!el.__buntpapier__scrollbar) return
+			el.__buntpapier__scrollbar.refreshStyling()
 			el.__buntpapier__scrollbar.update()
+		},
+		componentUpdated (el, binding, vnode, oldVnode) {
+			if (!el.__buntpapier__scrollbar) {
+				el.__buntpapier__scrollbar = new Scrollbars(Vue, el, binding, vnode)
+			} else {
+				el.__buntpapier__scrollbar.refreshStyling()
+				el.__buntpapier__scrollbar.update()
+			}
 		},
 		unbind (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__scrollbar) return
