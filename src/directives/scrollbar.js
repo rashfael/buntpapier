@@ -85,8 +85,8 @@ class Scrollbars {
 		document.removeEventListener('mousedown', this.onDocumentMousedown)
 		document.removeEventListener('mouseup', this.onDocumentMouseup)
 		this.innerEl.removeEventListener('scroll', this.onScroll)
-		this.x.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
-		this.y.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
+		this.x?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
+		this.y?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
 	}
 
 	update () {
@@ -165,6 +165,7 @@ class Scrollbars {
 
 	updateThumb (dimension) {
 		const state = this[dimension]
+		if (!state) return
 		if (state.visibleRatio >= 1) {
 			state.thumbEl.style.display = 'none'
 		} else {
