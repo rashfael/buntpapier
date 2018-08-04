@@ -19,11 +19,11 @@
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
-	.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="", v-scrollbar.y="")
-		div
-			slot(name="result-header")
+	.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
+		slot(name="result-header")
+		.scrollable-menu(v-scrollbar.y="")
 			ul
-				li(v-for="option, index in filteredOptions", track-by="$index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
+				li(v-for="option, index in filteredOptions", :key="index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
 					| {{ getOptionLabel(option) }}
 				li.divider(transition="fade", v-if="!filteredOptions.length")
 				li.text-center(transition="fade" v-if="!filteredOptions.length")

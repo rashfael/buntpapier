@@ -20,9 +20,14 @@ select()
 		card()
 		border-top none
 		border-radius 0 0 2px 2px
-		// overflow-y: scroll
-		// overflow-x: hidden
 		z-index: 100
+		display: flex
+		flex-direction: column
+		.scrollable-menu
+			display: flex
+			flex-direction: column
+			flex: auto
+			min-height: 0
 		ul
 			margin: 0
 			padding: 0
