@@ -99,7 +99,7 @@
 
 		bunt-switch(name="tabswitch", label="toogle tab", v-model="activateTab")
 
-		div.scrollbar(v-scrollbar="")
+		div.scrollbar(v-scrollbar.x.y="")
 			div
 				div.scrolling-content
 				div.scrolling-content
