@@ -3,14 +3,7 @@ import Scrollbar from './scrollbar'
 
 export default function (Vue) {
 	Vue.directive('resizeObserver', {
-		inserted (el, binding) {
-			const observer = new ResizeObserver(binding.value)
-			observer.observe(el)
-			el.__buntpapier__resize_observer = observer
-		},
-		componentUpdated (el, binding) {
-			if (el.__buntpapier__resize_observer)
-				el.__buntpapier__resize_observer.disconnect()
+		bind (el, binding) {
 			const observer = new ResizeObserver(binding.value)
 			observer.observe(el)
 			el.__buntpapier__resize_observer = observer

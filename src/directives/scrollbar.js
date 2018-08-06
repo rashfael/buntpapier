@@ -28,9 +28,8 @@ function getScrollbarWidth () {
 const SCROLLBAR_WIDTH = IS_WEBKIT ? 0 : getScrollbarWidth()
 
 class Scrollbars {
-	constructor (Vue, el, binding, vnode) {
-		const scrollX = binding.modifiers.x
-		const scrollY = binding.modifiers.y
+	constructor (el, options) {
+		this.options = options
 		// bind all the event handlers
 		this.onScroll = this.onScroll.bind(this)
 		this.onDocumentMousemove = this.onDocumentMousemove.bind(this)
@@ -42,36 +41,40 @@ class Scrollbars {
 		this.innerEl = el.firstElementChild
 		this.refreshStyling()
 
-		if (scrollX)
+		if (options.scrollX)
 			this.createRail('x')
-		if (scrollY)
+		if (options.scrollY)
 			this.createRail('y')
 
-		this.computeDimensions()
-		this.computeThumbPositions()
-		this.update()
+		if (!options.manualCompute) {
+			this.computeDimensions()
+			this.computeThumbPositions()
+			this.update()
+		}
 
 		this.innerEl.addEventListener('scroll', this.onScroll)
 		// observe all the changes and recompute
-		this.resizeObserver = new ResizeObserver(this.onResize)
-		this.resizeObserver.observe(this.el)
-		for (const el of this.innerEl.children) {
-			this.resizeObserver.observe(el)
-		}
-		this.mutationObserver = new MutationObserver((records) => {
-			for (const record of records) {
-				for (const addedNode of record.addedNodes) {
-					this.resizeObserver.observe(addedNode)
-				}
-				for (const removedNode of record.removedNodes) {
-					this.resizeObserver.unobserve(removedNode)
-				}
+		if (!options.manualUpdate) {
+			this.resizeObserver = new ResizeObserver(this.onResize)
+			this.resizeObserver.observe(this.el)
+			for (const el of this.innerEl.children) {
+				this.resizeObserver.observe(el)
 			}
-			this.onResize()
-		})
-		this.mutationObserver.observe(this.innerEl, {
-			childList: true
-		})
+			this.mutationObserver = new MutationObserver((records) => {
+				for (const record of records) {
+					for (const addedNode of record.addedNodes) {
+						this.resizeObserver.observe(addedNode)
+					}
+					for (const removedNode of record.removedNodes) {
+						this.resizeObserver.unobserve(removedNode)
+					}
+				}
+				this.onResize()
+			})
+			this.mutationObserver.observe(this.innerEl, {
+				childList: true
+			})
+		}
 	}
 
 	createRail (dimension) {
@@ -118,8 +121,12 @@ class Scrollbars {
 
 	// EVENTS
 	onScroll (event) {
-		this.computeThumbPositions()
-		this.update()
+		if (this.options.onScroll) {
+			this.options.onScroll(event)
+		} else {
+			this.computeThumbPositions()
+			this.update()
+		}
 	}
 
 	onThumbMousedown (dimension, event) {
@@ -214,7 +221,10 @@ class Scrollbars {
 export default function (Vue) {
 	Vue.directive('scrollbar', {
 		bind (el, binding, vnode) {
-			el.__buntpapier__scrollbar = new Scrollbars(Vue, el, binding, vnode)
+			el.__buntpapier__scrollbar = new Scrollbars(el, {
+				scrollX: binding.modifiers.x,
+				scrollY: binding.modifiers.y
+			})
 		},
 		inserted (el) {
 			if (!el.__buntpapier__scrollbar) return
@@ -223,7 +233,10 @@ export default function (Vue) {
 		},
 		componentUpdated (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__scrollbar) {
-				el.__buntpapier__scrollbar = new Scrollbars(Vue, el, binding, vnode)
+				el.__buntpapier__scrollbar = new Scrollbars(el, {
+					scrollX: binding.modifiers.x,
+					scrollY: binding.modifiers.y
+				})
 			} else {
 				el.__buntpapier__scrollbar.refreshStyling()
 				el.__buntpapier__scrollbar.update()
@@ -235,3 +248,5 @@ export default function (Vue) {
 		}
 	})
 }
+
+export { IS_WEBKIT, SCROLLBAR_WIDTH, Scrollbars }
