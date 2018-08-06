@@ -1,5 +1,5 @@
 <template lang="jade">
-.bunt-select.dropdown(:class="dropdownClasses")
+.bunt-select.dropdown(:class="dropdownClasses", v-resize-observer="generateOutline")
 	// inline the input, use css from input component
 	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid: invalid}", :style="{'--label-gap': floatingLabelWidth}")
 		.label-input-container
