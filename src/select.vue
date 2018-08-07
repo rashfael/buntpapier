@@ -268,7 +268,8 @@ export default {
 	mounted () {
 		this.width = this.$refs.searchContainer.getBoundingClientRect().width
 		this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
-			placement: 'bottom'
+			placement: 'bottom',
+			positionFixed: true
 		})
 		this.selectValue(this.value)
 	},
