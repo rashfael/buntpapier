@@ -63,9 +63,11 @@ class Scrollbars {
 			this.mutationObserver = new MutationObserver((records) => {
 				for (const record of records) {
 					for (const addedNode of record.addedNodes) {
+						if (addedNode.nodeType !== Node.ELEMENT_NODE) continue
 						this.resizeObserver.observe(addedNode)
 					}
 					for (const removedNode of record.removedNodes) {
+						if (removedNode.nodeType !== Node.ELEMENT_NODE) continue
 						this.resizeObserver.unobserve(removedNode)
 					}
 				}
@@ -123,10 +125,9 @@ class Scrollbars {
 	onScroll (event) {
 		if (this.options.onScroll) {
 			this.options.onScroll(event)
-		} else {
-			this.computeThumbPositions()
-			this.update()
 		}
+		this.computeThumbPositions()
+		this.update()
 	}
 
 	onThumbMousedown (dimension, event) {
