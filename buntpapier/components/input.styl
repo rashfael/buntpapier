@@ -82,11 +82,15 @@ input()
 				cursor: not-allowed
 				background-color: $clr-grey-100
 				color: $clr-disabled-text-light
+
 			.outline
-				$dash = ''
-				for num in (1..135)
-					$dash += ' 10'
-				stroke-dasharray: 3 var(--label-gap) unquote($dash)
+				stroke-dasharray: 10
+			&.floating-label, &.focused
+				.outline
+					$dash = ''
+					for num in (1..135)
+						$dash += ' 10'
+					stroke-dasharray: 3 var(--label-gap) unquote($dash)
 
 		&.invalid
 			.hint , label

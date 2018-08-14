@@ -1,10 +1,10 @@
 <template lang="jade">
 .bunt-select.dropdown(:class="dropdownClasses", v-resize-observer="generateOutline")
 	// inline the input, use css from input component
-	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid: invalid}", :style="{'--label-gap': floatingLabelWidth}")
+	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid, disabled}", :style="{'--label-gap': floatingLabelWidth}")
 		.label-input-container
 			label(:for="name") {{label}}
-			input(type="text", ref="search", :name="name", v-model="rawSearch", v-show="searchable",
+			input(type="text", ref="search", :name="name", v-model="rawSearch", :disabled="disabled",
 				@keydown.delete="maybeDeleteValue",
 				@keyup.esc="onEscape",
 				@keydown.up.prevent="typeAheadUp",
@@ -48,15 +48,8 @@ export default {
 			required: true
 		},
 		label: String,
-		/**
-		 * Contains the currently selected value. Very similar to a
-		 * `value` attribute on an <input>. In most cases, you'll want
-		 * to set this as a two-way binding, using :value.sync. However,
-		 * this will not work with Vuex, in which case you'll need to use
-		 * the onChange callback property.
-		 * @type {Object||String||null}
-		 */
 		value: {
+			type: [String, Object, Number],
 			default: null
 		},
 
@@ -73,45 +66,18 @@ export default {
 				return []
 			},
 		},
-
-		/**
-		 * Sets the max-height property on the dropdown list.
-		 * @deprecated
-		 * @type {String}
-		 */
-		maxHeight: {
-			type: String,
-			default: '400px'
-		},
-
-		/**
-		 * Enable/disable filtering the options.
-		 * @type {Boolean}
-		 */
-		searchable: {
-			type: Boolean,
-			default: true
-		},
-
-		/**
-		 * Equivalent to the `placeholder` attribute on an `<input>`.
-		 * @type {Object}
-		 */
 		placeholder: {
 			type: String,
 			default: ''
 		},
-
-		/**
-		 * Sets a Vue transition property on the `.dropdown-menu`. vue-select
-		 * does not include CSS for transitions, you'll need to add them yourself.
-		 * @type {String}
-		 */
-		transition: {
-			type: String,
-			default: 'expand'
+		disabled: {
+			type: Boolean,
+			default: false
 		},
-
+		maxHeight: {
+			type: String,
+			default: '400px'
+		},
 		/**
 		 * Tells vue-select what key to use when generating option
 		 * labels when each `option` is an object.
@@ -121,7 +87,6 @@ export default {
 			type: String,
 			default: 'label'
 		},
-
 		/**
 		 * Callback to generate the label text. If {option}
 		 * is an object, returns option[this.optionLabel] by default.
@@ -139,12 +104,10 @@ export default {
 				return option
 			}
 		},
-
 		optionValue: {
 			type: String,
 			default: 'id'
 		},
-
 		getOptionValue: {
 			type: Function,
 			default (option) {
@@ -156,7 +119,6 @@ export default {
 				return option
 			}
 		},
-
 		findOptionByValue: {
 			type: Function,
 			default (value) {

@@ -19,7 +19,7 @@
 		h2 Validation!
 		form
 			bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
-			bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection")
+			bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection", :disabled="true")
 		h2 Buttons
 		bunt-button.button-default(@click.prevent="") CLICK ME
 		bunt-button.button-primary(@click.prevent="", color="primary", tooltip="with a tooltip") BUTTON
