@@ -12,8 +12,10 @@
 			bunt-input(name="an-input", placeholder="I am a placeholder, not a label", v-model="text", icon="search")
 			bunt-select(name="a-select", label="Select something", v-model="selection", :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']")
 			p {{ selection }}
-			bunt-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
-
+			bunt-select.complex-select(name="complex-select", label="complex select", v-model="activeComplexOption", :options="complexOptions", option-label="name")
+				template(slot-scope="{ option }")
+					.name {{ option.name }}
+					.id(:style="{'background-color': option.color}") {{ option.id }}
 			bunt-switch(name="a name", label="turn me oooon", v-model="turnOn")
 			bunt-checkbox(name="a name", label="check it out", v-model="turnOn")
 		h2 Validation!
@@ -123,10 +125,10 @@ export default {
 			name: '',
 			turnOn: false,
 			complexOptions: [
-				{id: 1, name: 'One'},
-				{id: 2, name: 'Two'},
-				{id: 3, name: 'Three'},
-				{id: 5, name: 'Five'},
+				{id: 1, name: 'One', color: 'red'},
+				{id: 2, name: 'Two', color: 'blue'},
+				{id: 3, name: 'Three', color: 'green'},
+				{id: 5, name: 'Five', color: 'orange'},
 			],
 			asyncLoading: false,
 			asyncError: null,
@@ -237,7 +239,15 @@ stripe(colors, angle, width)
 	button-style(size: 'huge')
 .popover-icon-button
 	icon-button-style($clr-primary, 'clear')
-
+.complex-select
+	ul li
+		display: flex
+		justify-content: space-between
+		.id
+			width: 120px
+			text-align: right
+			padding: 0 8px
+			color: $clr-secondary-text-dark
 .icon-buttons-flat button
 	icon-button-style()
 .icon-buttons-clear

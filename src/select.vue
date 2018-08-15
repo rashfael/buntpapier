@@ -24,7 +24,8 @@
 		.scrollable-menu(v-scrollbar.y="")
 			ul
 				li(v-for="option, index in filteredOptions", :key="index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
-					| {{ getOptionLabel(option) }}
+					slot(:option="option")
+						| {{ getOptionLabel(option) }}
 				li.divider(transition="fade", v-if="!filteredOptions.length")
 				li.text-center(transition="fade" v-if="!filteredOptions.length")
 					slot(name="no-options") Sorry, no matching options.
