@@ -31,6 +31,9 @@
 		bunt-button.button-primary(@click.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
 		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
 		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading", :error-message="asyncError") async action
+		.unbreakable-button
+			bunt-button.button-primary() You can't break me!
+
 		h3 large button
 		bunt-button.button-large I AM LARGE
 		h3 huge button
@@ -224,7 +227,10 @@ stripe(colors, angle, width)
 	button-style(style: 'clear')
 .button-clear-primary
 		button-style(style: 'clear', color: $clr-primary)
-
+.unbreakable-button
+	display: flex
+	width: 100px
+	margin: 32px 0
 .button-large
 	button-style(size: 'large')
 .button-huge
