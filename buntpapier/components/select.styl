@@ -43,9 +43,12 @@ select()
 				background-color $highlight-color
 
 
-select-style(size = 'dense')
+select-style(style = 'light', size = 'dense')
 	.bunt-input
-		input-size(size)
+		input-style(style: style, size: size)
+	if style is 'dark'
+		.open-indicator
+			color: $clr-secondary-text-dark
 	if size is 'large'
 		.open-indicator
 			top: 16px
