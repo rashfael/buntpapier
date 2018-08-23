@@ -1,57 +1,20 @@
-$tooltip-distance = 32px
 tooltip()
 	.{$prefix}-tooltip
-		position absolute
-		left 50%
-		background-color $clr-secondary-text-light
-		color $clr-primary-text-dark
-		height 24px
-		white-space nowrap
-		line-height @height
-		padding 0 8px
+		left: 0
+		top: 0
+		will-change: transform, opacity
+		background-color: $clr-secondary-text-light
+		color: $clr-primary-text-dark
+		height: 24px
+		white-space: nowrap
+		line-height: @height
+		padding: 0 8px
 
-		font-size 11px
-		font-weight 400
-		text-transform none
-		border-radius 2px
-		pointer-events none
-		user-select none
-		z-index 90000
-
-		&.tooltip-position-bottom
-			bottom 0
-			transform translate(-50%, $tooltip-distance)
-		&.tooltip-position-top
-			top 0
-			transform translate(-50%, -1*$tooltip-distance)
-
-		&.{$prefix}-tooltip-enter-active, &.{$prefix}-tooltip-leave-active
-			transition opacity .2s, transform .2s
-
-		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
-			opacity 0
-			transform translate(-50%, 0)
-
-
-tooltip-bound-left()
-	.{$prefix}-tooltip
-		&.tooltip-position-bottom
-			left 0
-			transform translate(0, $tooltip-distance)
-		&.tooltip-position-top
-			left 0
-			transform translate(0, -1*$tooltip-distance)
-		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
-			transform translate(0, 0)
-
-tooltip-bound-right()
-	.{$prefix}-tooltip
-		left auto
-		&.tooltip-position-bottom
-			right 0
-			transform translate(0, $tooltip-distance)
-		&.tooltip-position-top
-			right 0
-			transform translate(0, -1*$tooltip-distance)
-		&.{$prefix}-tooltip-enter, &.{$prefix}-tooltip-leave-active
-			transform translate(0, 0)
+		font-size: 11px
+		font-weight: 400
+		text-transform: none
+		border-radius: 2px
+		pointer-events: none
+		user-select: none
+		-moz-user-select: none
+		z-index: 90000

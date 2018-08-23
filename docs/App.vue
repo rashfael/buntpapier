@@ -39,14 +39,14 @@
 		h3 large button
 		bunt-button.button-large I AM LARGE
 		h3 huge button
-		bunt-button.button-huge I AM HUGE
+		bunt-button.button-huge(tooltip="SO HUGE") I AM HUGE
 		h2 Icon Buttons
 		.icon-buttons-flat
 			bunt-icon-button(@click.prevent="", tooltip="add") add
-			bunt-icon-button(@click.prevent="", tooltip="remove") remove
+			bunt-icon-button(@click.prevent="", tooltip="remove", tooltip-placement="top") remove
 		.icon-buttons-clear
 			bunt-icon-button(@click.prevent="", tooltip="add") add
-			bunt-icon-button(@click.prevent="", tooltip="remove") remove
+			bunt-icon-button(@click.prevent="", tooltip="remove", :tooltip-fixed="true") remove
 		h2 Button-style Links
 		bunt-link-button(:to="{name: 'derp'}") click me
 		bunt-link-button.link-button-colored(:to="{name: 'derp'}") click me
@@ -69,6 +69,12 @@
 			bunt-icon-button.popover-icon-button(ref="popoverButton", @click.prevent="") add
 			bunt-popover(target="popoverButton")
 				h1 POPOVER
+
+		h2 Tooltips on any element
+		.hoverable(v-tooltip.fixed="'HORRAY'") HOVER ME
+		.hoverable(v-tooltip.top="'HORRAY'") UP TOP
+		.hoverable(v-tooltip.left="'HORRAY'") LEFT
+		.hoverable(v-tooltip.right="'HORRAY'") RIGHT
 
 		h2 Tabs
 
@@ -251,6 +257,7 @@ stripe(colors, angle, width)
 .icon-buttons-flat button
 	icon-button-style()
 .icon-buttons-clear
+	overflow: hidden
 	background-color $clr-primary
 	button
 		icon-button-style($clr-primary-text-dark, 'clear')
@@ -258,6 +265,10 @@ stripe(colors, angle, width)
 	margin: 0 4px
 .link-button-colored
 	link-button-style(color: $clr-primary)
+.hoverable
+	width: 100px
+	border: 1px solid black
+	padding: 8px
 .tabs-default
 	tabs-style()
 

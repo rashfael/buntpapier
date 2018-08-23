@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", :class="{error: errorMessage || error, success: showSuccess}", @mouseenter="userShowTooltip = true", @mouseleave="userShowTooltip = false", @click="$emit('click', $event)")
+button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", :class="{error: errorMessage || error, success: showSuccess}", @click="$emit('click', $event)", v-tooltip="{text: _tooltip, show: !!this.errorMessage, placement: tooltipPlacement, fixed: tooltipFixed}")
 	.bunt-button-content(:class="{invisible: loading || errorMessage || error || showSuccess }")
 		i.bunt-icon.mdi(v-if="icon", :class="[iconClass]")
 		.bunt-button-text
@@ -9,18 +9,16 @@ button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess",
 	i.bunt-icon.mdi.mdi-replay.error(v-if="errorMessage || error")
 	i.bunt-icon.mdi.mdi-check.success(v-if="showSuccess")
 	ripple-ink(v-if!="!noInk && !disabled")
-	tooltip(:show="showTooltip") {{ _tooltip }}
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
 import ProgressCircular from './progress-circular'
-import Tooltip from './tooltip'
 import iconHelper from './helpers/icon'
 
 export default {
 	name: `${consts.prefix}-button`,
-	components: { ProgressCircular, Tooltip },
+	components: { ProgressCircular },
 	mixins: [
 		// HasDropdown,
 		RippleInk
@@ -28,7 +26,6 @@ export default {
 	props: {
 		text: String,
 		icon: String,
-		tooltip: String,
 		iconRight: {
 			type: Boolean,
 			default: false
@@ -54,19 +51,24 @@ export default {
 		successAfterLoading: {
 			type: Boolean,
 			default: true
+		},
+		tooltip: String,
+		tooltipPlacement: {
+			type: String,
+			default: 'bottom'
+		},
+		tooltipFixed: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data () {
 		return {
-			userShowTooltip: false,
 			_loading: false,
 			showSuccess: false
 		}
 	},
 	computed: {
-		showTooltip () {
-			return (this.tooltip && this.userShowTooltip) || !!this.errorMessage
-		},
 		_tooltip () {
 			return this.errorMessage ? this.errorMessage : this.tooltip
 		},

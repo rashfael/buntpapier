@@ -1,23 +1,19 @@
 <template lang="jade">
-button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @mouseenter="showTooltip = true", @mouseleave="showTooltip = false", @click="$emit('click', $event)")
+button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @click="$emit('click', $event)", v-tooltip="{text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
 	i.bunt-icon.mdi(:class="[iconClass()]")
 	ripple-ink(v-if!="!noInk && !disabled")
-	tooltip(v-if="tooltip", :show="showTooltip") {{ tooltip }}
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
 import consts from './_constants'
-import Tooltip from './tooltip'
 import iconHelper from './helpers/icon'
 
 export default {
 	name: `${consts.prefix}-icon-button`,
-	components: { Tooltip },
 	mixins: [
 		RippleInk
 	],
 	props: {
-		tooltip: String,
 		color: {
 			type: String,
 			default: 'default' // one of $clr-names
@@ -29,6 +25,15 @@ export default {
 		type: {
 			type: String,
 			default: 'button'
+		},
+		tooltip: String,
+		tooltipPlacement: {
+			type: String,
+			default: 'bottom'
+		},
+		tooltipFixed: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data () {

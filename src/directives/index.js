@@ -1,5 +1,6 @@
 import ResizeObserver from 'resize-observer-polyfill'
 import Scrollbar from './scrollbar'
+import Tooltip from './tooltip'
 
 export default function (Vue) {
 	Vue.directive('resizeObserver', {
@@ -15,4 +16,5 @@ export default function (Vue) {
 	})
 
 	Scrollbar(Vue)
+	Tooltip(Vue)
 }
