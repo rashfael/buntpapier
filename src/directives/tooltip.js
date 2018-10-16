@@ -1,7 +1,7 @@
 // Usage
 // v-tooltip="'text'" shows on hover
-// v-tooltip="{text: 'text', show: alwaysShow}" trigger show manually
 // v-tooltip.bottom="" control placement https://popper.js.org/popper-documentation.html#Popper.placements
+// v-tooltip="{text: 'text', show: alwaysShow, placement: 'right', fixed: true}" trigger show manually, set options programatically
 // v-tooltip.fixed="" use position: fixed to break free of stacking context (lags slightly when scrolling)
 
 import Popper from 'popper.js'

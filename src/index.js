@@ -9,6 +9,7 @@ import Checkbox from './checkbox'
 import Icon from './icon'
 import IconButton from './icon-button'
 import Input from './input'
+import InputOutlineContainer from './input-outline-container'
 import LinkButton from './link-button'
 import ProgressCircular from './progress-circular'
 import Popover from './popover'
@@ -26,6 +27,7 @@ const lib = {
 		Vue.component(`${consts.prefix}-icon`, Icon)
 		Vue.component(`${consts.prefix}-icon-button`, IconButton)
 		Vue.component(`${consts.prefix}-input`, Input)
+		Vue.component(`${consts.prefix}-input-outline-container`, InputOutlineContainer)
 		Vue.component(`${consts.prefix}-link-button`, LinkButton)
 		Vue.component(`${consts.prefix}-select`, Select)
 		Vue.component(`${consts.prefix}-popover`, Popover)
