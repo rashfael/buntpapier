@@ -32,10 +32,10 @@ button()
 		body[modality="keyboard"] &:focus
 			outline-style solid
 
-		&[disabled] .{$prefix}-button-content
+		&.disabled .{$prefix}-button-content
 			opacity: 0.6
 
-		&:not([disabled])
+		&:not(.disabled)
 			cursor pointer
 
 		.{$prefix}-progress-circular
@@ -115,7 +115,7 @@ button-style(style = 'flat', color = style is 'clear' ? $clr-primary-text-light 
 		color color
 		background-color transparent
 
-		&:hover:not([disabled])
+		&:hover:not(.disabled)
 			background-color: alpha(color, 0.08)
 
 		&.autofocus:focus,

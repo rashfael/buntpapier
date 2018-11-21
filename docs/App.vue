@@ -24,18 +24,18 @@
 			bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection", :disabled="true")
 		h2 Buttons
 		bunt-button.button-default(@click.prevent="") CLICK ME
-		bunt-button.button-primary(@click.prevent="", color="primary", tooltip="with a tooltip") BUTTON
+		bunt-button.button-primary(@click.prevent="", tooltip="with a tooltip") BUTTON
 		bunt-button.button-default(@click.prevent="", icon="add") add
-		bunt-button.button-primary(@click.prevent="", color="primary", icon="add") BUTTON
+		bunt-button.button-primary(@click.prevent="", icon="add") BUTTON
 		bunt-button.button-clear(@click.prevent="", style="clear") CLICK ME
-		bunt-button.button-clear-primary(@click.prevent="", style="clear", color="primary", icon="add") ADD
-		bunt-button.button-primary(@click.prevent="", color="primary", :loading="true") NEVER! EVER!
-		bunt-button.button-primary(@click.prevent="", color="primary", error-message="something bad happenend") NEVER! EVER!
-		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading") async action
-		bunt-button.button-primary(@click.prevent="loadAsync", color="primary", :loading="asyncLoading", :error-message="asyncError") async action
+		bunt-button.button-clear-primary(@click.prevent="", style="clear", icon="add") ADD
+		bunt-button.button-primary(@click.prevent="", :loading="true") NEVER! EVER!
+		bunt-button.button-primary(@click.prevent="", error-message="something bad happenend") NEVER! EVER!
+		bunt-button.button-primary(@click.prevent="loadAsync", :loading="asyncLoading") async action
+		bunt-button.button-primary(@click.prevent="loadAsync", :loading="asyncLoading", :error-message="asyncError") async action
 		.unbreakable-button
 			bunt-button.button-primary() You can't break me!
-
+		bunt-button.button-primary(@click="alert('WHY')", :disabled="true", tooltip="with a tooltip") disabled
 		h3 large button
 		bunt-button.button-large I AM LARGE
 		h3 huge button
@@ -47,6 +47,7 @@
 		.icon-buttons-clear
 			bunt-icon-button(@click.prevent="", tooltip="add") add
 			bunt-icon-button(@click.prevent="", tooltip="remove", :tooltip-fixed="true") remove
+			bunt-icon-button(@click.prevent="alert('WHY')", :disabled="true", tooltip="remove", :tooltip-fixed="true") remove
 		h2 Button-style Links
 		bunt-link-button(:to="{name: 'derp'}") click me
 		bunt-link-button.link-button-colored(:to="{name: 'derp'}") click me

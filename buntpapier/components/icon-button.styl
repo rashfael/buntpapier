@@ -29,10 +29,10 @@ icon-button()
 		body[modality="keyboard"] &:focus
 			outline-style solid
 
-		&[disabled] .{$prefix}-icon
+		&.disabled .{$prefix}-icon
 			opacity 0.6
 
-		&:not([disabled])
+		&:not(.disabled)
 			cursor pointer
 
 		background-color transparent
@@ -65,7 +65,7 @@ icon-button()
 icon-button-style(color = $clr-primary-text-light, style = 'flat')
 	color: color
 	if style is 'flat'
-		&:hover:not([disabled]),
+		&:hover:not(.disabled),
 		&.dropdown-open
 			background-color: darken($clr-grey-200, 3%)
 		.{$prefix}-icon
@@ -79,7 +79,7 @@ icon-button-style(color = $clr-primary-text-light, style = 'flat')
 		background-color: transparent
 
 		body[modality="keyboard"] &:focus,
-		&:hover:not([disabled]),
+		&:hover:not(.disabled),
 		&.dropdown-open
 			background-color: alpha(black, 0.1)
 

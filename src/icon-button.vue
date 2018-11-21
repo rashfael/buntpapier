@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-icon-button(:class="styleClasses", :type="type", :disabled="disabled", ref="button", @click="$emit('click', $event)", v-tooltip="{text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
+button.bunt-icon-button(:class="[`color-${this.color}`, {disabled}]", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="{text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
 	i.bunt-icon.mdi(:class="[iconClass()]")
 	ripple-ink(v-if!="!noInk && !disabled")
 </template>
@@ -41,15 +41,13 @@ export default {
 			showTooltip: false
 		}
 	},
-	computed: {
-		styleClasses () {
-			let classes = [`color-${this.color}`]
-			return classes
-		}
-	},
 	methods: {
 		iconClass () {
 			return iconHelper.getClass(this.$slots.default[0].text)
+		},
+		onClick (event) {
+			if (this.disabled) return
+			this.$emit('click', event)
 		}
 	},
 }

@@ -1,5 +1,5 @@
 <template lang="jade">
-button.bunt-button(:type="type", :disabled="disabled || loading || showSuccess", ref="button", :class="{error: errorMessage || error, success: showSuccess}", @click="$emit('click', $event)", v-tooltip="{text: _tooltip, show: !!this.errorMessage, placement: tooltipPlacement, fixed: tooltipFixed}")
+button.bunt-button(:type="type", ref="button", :class="{disabled: disabled || loading || showSuccess, error: errorMessage || error, success: showSuccess}", @click="onClick", v-tooltip="{text: _tooltip, show: !!this.errorMessage, placement: tooltipPlacement, fixed: tooltipFixed}", :aria-disabled="disabled")
 	.bunt-button-content(:class="{invisible: loading || errorMessage || error || showSuccess }")
 		i.bunt-icon.mdi(v-if="icon", :class="[iconClass]")
 		.bunt-button-text
@@ -102,6 +102,10 @@ export default {
 		errorChanged (value) {
 			if (value !== null)
 				this.showSuccess = false
+		},
+		onClick (event) {
+			if (this.disabled || this.loading || this.showSuccess) return
+			this.$emit('click', event)
 		}
 	}
 }
