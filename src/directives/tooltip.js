@@ -17,10 +17,22 @@ export default function (Vue) {
 			this.show = this.show.bind(this)
 			this.hide = this.hide.bind(this)
 			this.options.placement = options.placement || 'auto'
-			this.createTooltip()
+
+			this.el.addEventListener('mouseenter', this.show)
+			this.el.addEventListener('mouseleave', this.hide)
+		}
+
+		createTooltip () {
+			if (this.tooltipEl) return
+			this.tooltipEl = document.createElement('div')
+			this.tooltipEl.classList.add('bunt-tooltip')
+			this.tooltipEl.style.position = this.options.fixed ? 'fixed' : 'absolute'
+			this.tooltipEl.textContent = this.text
+			this.el.appendChild(this.tooltipEl)
 			this.popper = new Popper(this.el, this.tooltipEl, {
-				placement: options.placement,
-				positionFixed: options.fixed,
+				removeOnDestroy: true,
+				placement: this.options.placement,
+				positionFixed: this.options.fixed,
 				modifiers: {
 					offset: { offset: '0, 8' },
 					applyStyle: { enabled: false },
@@ -28,29 +40,17 @@ export default function (Vue) {
 						enabled: true,
 						fn: (data) => {
 							this.positions = data.popper
-							this.tooltipEl.style.position = options.fixed ? 'fixed' : 'absolute'
 							this.tooltipEl.style.transform = `translate3d(${Math.round(this.positions.left)}px, ${Math.round(this.positions.top)}px, 0)`
 						},
 						order: 900
 					}
 				}
 			})
-			this.el.addEventListener('mouseenter', this.show)
-			this.el.addEventListener('mouseleave', this.hide)
-		}
-
-		createTooltip () {
-			this.tooltipEl = document.createElement('div')
-			this.tooltipEl.classList.add('bunt-tooltip')
-			this.tooltipEl.style.display = 'none'
-			this.el.appendChild(this.tooltipEl)
 		}
 
 		update (text, forceDisplay) {
 			this.text = text
 			this.forceDisplay = forceDisplay
-			this.tooltipEl.textContent = this.text
-			this.popper.update()
 			Vue.nextTick(() => {
 				if (forceDisplay) {
 					this.show()
@@ -60,17 +60,23 @@ export default function (Vue) {
 			})
 		}
 
-		destroy () {
+		destroyTooltip () {
+			if (!this.popper) return
 			this.popper.destroy()
+			this.popper = null
+			this.tooltipEl = null
+		}
+
+		destroy () {
+			this.destroyTooltip()
 			this.el.removeEventListener('mouseenter', this.show)
 			this.el.removeEventListener('mouseleave', this.hide)
 		}
 
 		show () {
 			if (this.displaying || !this.text) return
+			this.createTooltip()
 			this.displaying = true
-			this.tooltipEl.style.display = null
-			this.popper.update()
 			Vue.nextTick(() => {
 				if (this.animation) {
 					this.animation.reverse()
@@ -106,7 +112,7 @@ export default function (Vue) {
 					})
 					this.animation.onfinish = () => {
 						if (this.animation.playbackRate < 0) { // hide finished
-							this.tooltipEl.style.display = 'none'
+							this.destroyTooltip()
 							this.animation = null
 						}
 					}
@@ -121,7 +127,7 @@ export default function (Vue) {
 				this.animation.reverse()
 			}
 			if (!this.text) { // hide fast
-				this.tooltipEl.style.display = 'none'
+				this.destroyTooltip()
 			}
 			// const animationOrigin = {
 			// 	top: Math.round(this.positions.top) - 52,
