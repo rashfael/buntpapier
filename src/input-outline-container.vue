@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 .bunt-input-outline-container(:class="{focused}", :style="{'--label-gap': floatingLabelWidth}", v-resize-observer="generateOutline")
 	label {{label}}
 	slot(:focus="focus", :blur="blur")

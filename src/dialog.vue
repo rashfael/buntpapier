@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 .bunt-dialog-container(v-if="open")
 	.bunt-dialog
 		slot

@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 button.bunt-icon-button(:class="[`color-${this.color}`, {disabled}]", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="{text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
 	i.bunt-icon.mdi(:class="[iconClass()]")
 	ripple-ink(v-if!="!noInk && !disabled")

@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 	i.bunt-icon.mdi(:class="[iconClass]")
 </template>
 <script>

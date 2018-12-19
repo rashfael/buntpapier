@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 router-link.bunt-link-button(:to="to")
 	slot
 	ripple-ink

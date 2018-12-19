@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 button.bunt-button(:type="type", ref="button", :class="{disabled: disabled || loading || showSuccess, error: errorMessage || error, success: showSuccess}", @click="onClick", v-tooltip="{text: _tooltip, show: !!this.errorMessage, placement: tooltipPlacement, fixed: tooltipFixed}", :aria-disabled="disabled")
 	.bunt-button-content(:class="{invisible: loading || errorMessage || error || showSuccess }")
 		i.bunt-icon.mdi(v-if="icon", :class="[iconClass]")

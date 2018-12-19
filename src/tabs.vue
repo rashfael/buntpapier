@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 .bunt-tabs(:class="styleClasses")
 	.bunt-tabs-header
 		ul.bunt-tabs-header-items(role="tablist", ref="tabsContainer")

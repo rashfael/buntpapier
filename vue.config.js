@@ -18,7 +18,7 @@ module.exports = {
 		module: {
 			rules: [
 				{
-					test: /\.jade$/,
+					test: /\.pug$/,
 					loader: 'pug-plain-loader'
 				}
 			]

@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 .bunt-checkbox(:class="{checked: value}")
 	input(type="checkbox", :name="name", :checked="value", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
 	.bunt-checkbox-box

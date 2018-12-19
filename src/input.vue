@@ -1,7 +1,7 @@
 <!--
 	TODO label animation WITH icon should go sideways, hint with icon should be on same height as input
 -->
-<template lang="jade">
+<template lang="pug">
 .bunt-input(:class!="{focused, 'floating-label': value !== null && value.length != 0, invalid, disabled, 'with-icon': icon}", :style="{'--label-gap': floatingLabelWidth}", v-resize-observer="generateOutline")
 	.label-input-container
 		label(:for="name") {{label}}

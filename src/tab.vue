@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 .bunt-tab(:id="id", role="tabpanel", :tabindex="active ? '0' : null", :aria-hidden="!active ? 'true' : null", v-show="active")
 	slot
 </template>

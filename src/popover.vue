@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 .bunt-popover-inner(role="dialog", tabindex="-1", @keydown.esc="closeDropdown", ref="dropdown")
 	slot
 </template>

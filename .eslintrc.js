@@ -24,7 +24,8 @@ module.exports = {
 			curly: 0,
 			'no-return-assign': 0,
 			'no-console': 'off',
-			'vue/require-default-prop': 0
+			'vue/require-default-prop': 0,
+			'vue/no-reserved-keys': 0
 		},
 
 		globals: {
@@ -36,7 +37,6 @@ module.exports = {
 		},
 
 		'extends': [
-			'plugin:vue/recommended',
-			'@vue/standard'
+			'plugin:vue/recommended'
 		]
 }

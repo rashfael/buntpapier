@@ -1,4 +1,4 @@
-<template lang="jade">
+<template lang="pug">
 li.bunt-tab-header-item(role="tab", :class="['type-' + type, { 'active': active, 'disabled': disabled }]",
 	:tabindex="active ? 0 : -1", :aria-controls="id", :aria-selected="active ? 'true' : null",
 	:disabled="disabled", ref="item")

@@ -2,7 +2,7 @@
 //
 // `v-scrollbar` | `v-scrollbar.x.y` : scrolling both axis
 // `v-scrollbar.x` | `v-scrollbar.y' : scrolling one axis`
-// CAUTION: in jade, you need to use `v-scrollbar.x=''` (empty value)
+// CAUTION: in pug, you need to use `v-scrollbar.x=''` (empty value)
 
 import ResizeObserver from 'resize-observer-polyfill'
 
