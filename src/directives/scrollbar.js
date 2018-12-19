@@ -8,25 +8,6 @@ import ResizeObserver from 'resize-observer-polyfill'
 
 // TODO throttling
 
-// partially nicked from https://github.com/DominikSerafin/vuebar/blob/development/vuebar.js
-const IS_WEBKIT = process.client && !('MozAppearance' in document.documentElement.style) // not quite true but Firefox fucked up 'WebkitAppearance'
-
-function getScrollbarWidth () {
-	const outer = document.createElement('div')
-	outer.style.visibility = 'hidden'
-	outer.style.width = '100px'
-	outer.style.overflow = 'scroll'
-	const inner = document.createElement('div')
-	inner.style.width = '100%'
-	outer.appendChild(inner)
-	document.body.appendChild(outer)
-	const scrollbarWidth = outer.offsetWidth - inner.offsetWidth
-	outer.parentNode.removeChild(outer)
-	return scrollbarWidth
-}
-
-const SCROLLBAR_WIDTH = !process.client || IS_WEBKIT ? 0 : getScrollbarWidth()
-
 class Scrollbars {
 	constructor (el, options) {
 		this.options = options
@@ -38,9 +19,7 @@ class Scrollbars {
 		this.onThumbMousedownY = this.onThumbMousedown.bind(this, 'y')
 		this.onResize = this.onResize.bind(this)
 		this.el = el
-		this.innerEl = el.firstElementChild
 		this.refreshStyling()
-
 		if (options.scrollX)
 			this.createRail('x')
 		if (options.scrollY)
@@ -51,13 +30,12 @@ class Scrollbars {
 			this.computeThumbPositions()
 			this.update()
 		}
-
-		this.innerEl.addEventListener('scroll', this.onScroll)
+		this.el.addEventListener('scroll', this.onScroll)
 		// observe all the changes and recompute
 		if (!options.manualUpdate) {
 			this.resizeObserver = new ResizeObserver(this.onResize)
 			this.resizeObserver.observe(this.el)
-			for (const el of this.innerEl.children) {
+			for (const el of this.el.children) {
 				this.resizeObserver.observe(el)
 			}
 			this.mutationObserver = new MutationObserver((records) => {
@@ -73,21 +51,22 @@ class Scrollbars {
 				}
 				this.onResize()
 			})
-			this.mutationObserver.observe(this.innerEl, {
+			this.mutationObserver.observe(this.el, {
 				childList: true
 			})
 		}
 	}
 
 	createRail (dimension) {
+		const railWrapperEl = document.createElement('div')
+		railWrapperEl.classList.add(`bunt-scrollbar-rail-wrapper-${dimension}`)
 		const railEl = document.createElement('div')
 		railEl.classList.add(`bunt-scrollbar-rail-${dimension}`)
-
 		const thumbEl = document.createElement('div')
 		thumbEl.classList.add('bunt-scrollbar-thumb')
-
+		railWrapperEl.appendChild(railEl)
 		railEl.appendChild(thumbEl)
-		this.el.appendChild(railEl)
+		this.el.appendChild(railWrapperEl)
 		thumbEl.addEventListener('mousedown', this[`onThumbMousedown${dimension.toUpperCase()}`])
 		this[dimension] = {
 			railEl,
@@ -101,19 +80,13 @@ class Scrollbars {
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
 		document.removeEventListener('mousedown', this.onDocumentMousedown)
 		document.removeEventListener('mouseup', this.onDocumentMouseup)
-		this.innerEl.removeEventListener('scroll', this.onScroll)
+		this.el.removeEventListener('scroll', this.onScroll)
 		this.x?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
 		this.y?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
 	}
 
 	refreshStyling () {
 		this.el.classList.add('bunt-scrollbar')
-		if (!IS_WEBKIT) {
-			this.el.classList.add('bunt-scrollbar-non-webkit')
-			this.innerEl.style.width = `calc(100% + ${SCROLLBAR_WIDTH}px)`
-			this.innerEl.style.height = `calc(100% + ${SCROLLBAR_WIDTH}px)`
-		}
-		this.innerEl.classList.add('bunt-scrollbar-inner')
 	}
 
 	update () {
@@ -133,11 +106,8 @@ class Scrollbars {
 	onThumbMousedown (dimension, event) {
 		this.dragging = dimension
 		this.draggingOffset = event[`offset${dimension.toUpperCase()}`]
-		if (IS_WEBKIT) {
-			this.el.style.userSelect = 'none'
-		} else {
-			document.body.style['-moz-user-select'] = 'none'
-		}
+		this.el.style.userSelect = 'none'
+		document.body.style['-moz-user-select'] = 'none'
 		this[dimension].railEl.classList.add('active')
 		document.addEventListener('mousemove', this.onDocumentMousemove)
 		document.addEventListener('mouseup', this.onDocumentMouseup)
@@ -145,17 +115,17 @@ class Scrollbars {
 
 	onDocumentMousemove (event) {
 		if (this.dragging === 'x') {
-			const maxX = this.innerEl.clientWidth - this.x.thumbLength
+			const maxX = this.el.clientWidth - this.x.thumbLength
 			const newPosition = event.clientX - this.el.getBoundingClientRect().left - this.draggingOffset
 			this.x.thumbPosition = Math.min(Math.max(0, newPosition), maxX)
-			this.innerEl.scrollLeft = this.x.thumbPosition / maxX * (this.innerEl.scrollWidth - this.innerEl.clientWidth)
+			this.el.scrollLeft = this.x.thumbPosition / maxX * (this.el.scrollWidth - this.el.clientWidth)
 		}
 
 		if (this.dragging === 'y') {
-			const maxY = this.innerEl.clientHeight - this.y.thumbLength
+			const maxY = this.el.clientHeight - this.y.thumbLength
 			const newPosition = event.clientY - this.el.getBoundingClientRect().top - this.draggingOffset
 			this.y.thumbPosition = Math.min(Math.max(0, newPosition), maxY)
-			this.innerEl.scrollTop = this.y.thumbPosition / maxY * (this.innerEl.scrollHeight - this.innerEl.clientHeight)
+			this.el.scrollTop = this.y.thumbPosition / maxY * (this.el.scrollHeight - this.el.clientHeight)
 		}
 		this.updateThumb(this.dragging)
 	}
@@ -163,11 +133,8 @@ class Scrollbars {
 	onDocumentMouseup (event) {
 		this[this.dragging].railEl.classList.remove('active')
 		this.dragging = null
-		if (IS_WEBKIT) {
-			this.el.style.userSelect = ''
-		} else {
-			document.body.style['-moz-user-select'] = ''
-		}
+		this.el.style.userSelect = ''
+		document.body.style['-moz-user-select'] = ''
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
 		document.removeEventListener('mouseup', this.onDocumentMouseup)
 	}
@@ -183,21 +150,23 @@ class Scrollbars {
 
 	computeDimensions () {
 		if (this.x) {
-			this.x.visibleRatio = this.innerEl.clientWidth / this.innerEl.scrollWidth
-			this.x.thumbLength = this.innerEl.clientWidth * this.x.visibleRatio
+			this.y.railLength = this.el.clientWidth
+			this.x.visibleRatio = this.el.clientWidth / this.el.scrollWidth
+			this.x.thumbLength = this.el.clientWidth * this.x.visibleRatio
 		}
 		if (this.y) {
-			this.y.visibleRatio = this.innerEl.clientHeight / this.innerEl.scrollHeight
-			this.y.thumbLength = this.innerEl.clientHeight * this.y.visibleRatio
+			this.y.railLength = this.el.clientHeight
+			this.y.visibleRatio = this.el.clientHeight / this.el.scrollHeight
+			this.y.thumbLength = this.el.clientHeight * this.y.visibleRatio
 		}
 	}
 
 	computeThumbPositions () {
 		if (this.x) {
-			this.x.thumbPosition = this.innerEl.scrollLeft / (this.innerEl.scrollWidth - this.innerEl.clientWidth) * (this.innerEl.clientWidth - this.x.thumbLength)
+			this.x.thumbPosition = this.el.scrollLeft / (this.el.scrollWidth - this.el.clientWidth) * (this.el.clientWidth - this.x.thumbLength)
 		}
 		if (this.y) {
-			this.y.thumbPosition = this.innerEl.scrollTop / (this.innerEl.scrollHeight - this.innerEl.clientHeight) * (this.innerEl.clientHeight - this.y.thumbLength)
+			this.y.thumbPosition = this.el.scrollTop / (this.el.scrollHeight - this.el.clientHeight) * (this.el.clientHeight - this.y.thumbLength)
 		}
 	}
 
@@ -209,9 +178,11 @@ class Scrollbars {
 		} else {
 			state.thumbEl.style.display = null
 			if (dimension === 'x') {
+				state.railEl.style.width = state.railLength + 'px'
 				state.thumbEl.style.width = state.thumbLength + 'px'
 				state.thumbEl.style.left = state.thumbPosition + 'px'
 			} else if (dimension === 'y') {
+				state.railEl.style.height = state.railLength + 'px'
 				state.thumbEl.style.height = state.thumbLength + 'px'
 				state.thumbEl.style.top = state.thumbPosition + 'px'
 			}
@@ -250,4 +221,4 @@ export default function (Vue) {
 	})
 }
 
-export { IS_WEBKIT, SCROLLBAR_WIDTH, Scrollbars }
+export { Scrollbars }

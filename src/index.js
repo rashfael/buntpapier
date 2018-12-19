@@ -18,8 +18,9 @@ import Tabs from './tabs'
 import Tab from './tab'
 import Dialog from './dialog'
 
+let Popover
 if (!process.server) {
-	const Popover = require('./popover')
+	Popover = require('./popover').default
 }
 
 const lib = {

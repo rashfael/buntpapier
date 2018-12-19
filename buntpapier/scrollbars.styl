@@ -5,22 +5,22 @@ $thumb-width-hovered = 12px
 scrollbars()
 	.bunt-scrollbar
 		position: relative
-		overflow: hidden
+		box-sizing: border-box
+		overflow: scroll
 
 		&:hover
 			.bunt-scrollbar-thumb
 				opacity: .4
-		.bunt-scrollbar-inner
-			width: 100%
-			height: 100%
-			box-sizing: border-box
-			overflow: scroll
 
-			&::-webkit-scrollbar
-				display: none
+		&::-webkit-scrollbar
+			display: none
+		scrollbar-width: none
 
-		&.bunt-scrollbar-non-webkit .bunt-scrollbar-inner
-			flex: 1 0 auto // force height when inside a flexbox
+
+		.bunt-scrollbar-rail-wrapper-x,
+		.bunt-scrollbar-rail-wrapper-y
+			position: sticky
+			user-select: none
 
 		.bunt-scrollbar-rail-x,
 		.bunt-scrollbar-rail-y
@@ -34,30 +34,38 @@ scrollbars()
 			border-radius: $thumb-width
 			transition: height .3s $material-easing, width .3s $material-easing, opacity .3s $material-easing
 
-		.bunt-scrollbar-rail-x
+		.bunt-scrollbar-rail-wrapper-x
 			bottom: 0
 			left: 0
-			right: 0
-			height: $rail-width
+			width: 0
+			height: 0
+			.bunt-scrollbar-rail-x
+				height: $rail-width
+				bottom: 0
 
-			.bunt-scrollbar-thumb
-				bottom: 2px
-				height: $thumb-width
-
-			&:hover, &.active
 				.bunt-scrollbar-thumb
-					height: $thumb-width-hovered
-					opacity: .8
-		.bunt-scrollbar-rail-y
-			top: 0
-			bottom: 0
-			right: 0
-			width: $rail-width
+					bottom: 2px
+					height: $thumb-width
 
-			.bunt-scrollbar-thumb
-				right: 2px
-				width: $thumb-width
-			&:hover, &.active
+				&:hover, &.active
+					.bunt-scrollbar-thumb
+						height: $thumb-width-hovered
+						opacity: .8
+		.bunt-scrollbar-rail-wrapper-y
+			bottom: 100%
+			left: 100%
+			height: 0
+			width: 0
+
+			.bunt-scrollbar-rail-y
+				width: $rail-width
+				right: 0
+				top: 0
+
 				.bunt-scrollbar-thumb
-					width: $thumb-width-hovered
-					opacity: .8
+					right: 2px
+					width: $thumb-width
+				&:hover, &.active
+					.bunt-scrollbar-thumb
+						width: $thumb-width-hovered
+						opacity: .8
