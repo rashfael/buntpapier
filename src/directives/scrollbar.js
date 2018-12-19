@@ -9,7 +9,7 @@ import ResizeObserver from 'resize-observer-polyfill'
 // TODO throttling
 
 // partially nicked from https://github.com/DominikSerafin/vuebar/blob/development/vuebar.js
-const IS_WEBKIT = !('MozAppearance' in document.documentElement.style) // not quite true but Firefox fucked up 'WebkitAppearance'
+const IS_WEBKIT = process.client && !('MozAppearance' in document.documentElement.style) // not quite true but Firefox fucked up 'WebkitAppearance'
 
 function getScrollbarWidth () {
 	const outer = document.createElement('div')
@@ -25,7 +25,7 @@ function getScrollbarWidth () {
 	return scrollbarWidth
 }
 
-const SCROLLBAR_WIDTH = IS_WEBKIT ? 0 : getScrollbarWidth()
+const SCROLLBAR_WIDTH = !process.client || IS_WEBKIT ? 0 : getScrollbarWidth()
 
 class Scrollbars {
 	constructor (el, options) {
