@@ -1,3 +1,5 @@
+// TODO look at this https://developers.google.com/web/updates/2017/03/custom-scrollbar
+
 // usage
 //
 // `v-scrollbar` | `v-scrollbar.x.y` : scrolling both axis
