@@ -18,7 +18,7 @@ import Tabs from './tabs'
 import Tab from './tab'
 import Dialog from './dialog'
 
-if (process.client) {
+if (!process.server) {
 	const Popover = require('./popover')
 }
 
@@ -33,7 +33,7 @@ const lib = {
 		Vue.component(`${consts.prefix}-input-outline-container`, InputOutlineContainer)
 		Vue.component(`${consts.prefix}-link-button`, LinkButton)
 		Vue.component(`${consts.prefix}-select`, Select)
-		if (process.client) Vue.component(`${consts.prefix}-popover`, Popover)
+		if (!process.server) Vue.component(`${consts.prefix}-popover`, Popover)
 		Vue.component(`${consts.prefix}-progress-circular`, ProgressCircular)
 		Vue.component(`${consts.prefix}-switch`, Switch)
 		Vue.component(`${consts.prefix}-tabs`, Tabs)

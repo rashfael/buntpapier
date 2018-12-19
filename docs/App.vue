@@ -112,9 +112,8 @@
 		bunt-switch(name="tabswitch", label="toogle tab", v-model="activateTab")
 
 		div.scrollbar(v-scrollbar.x.y="")
-			div
-				div.scrolling-content
-				div.scrolling-content
+			div.scrolling-content
+			div.scrolling-content
 </template>
 <script>
 import '@mdi/font/css/materialdesignicons.css'

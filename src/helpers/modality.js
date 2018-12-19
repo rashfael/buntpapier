@@ -93,7 +93,7 @@ const handleKeyboardModality = function () {
 	}, true)
 }
 
-if (process.client) {
+if (!process.server) {
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', handleKeyboardModality)
 	} else {
