@@ -3,10 +3,8 @@
 	slot
 </template>
 <script>
-import consts from './_constants'
-
 export default {
-	name: `${consts.prefix}-tab`,
+	name: `bunt-tab`,
 	props: {
 		header: String,
 		icon: String,

@@ -1,7 +1,7 @@
 $button-height = 36px
 
 button()
-	.{$prefix}-button, .{$prefix}-link-button
+	.bunt-button, .bunt-link-button
 		font-family $font-stack
 		font-size 14px
 		text-transform uppercase
@@ -32,13 +32,13 @@ button()
 		body[modality="keyboard"] &:focus
 			outline-style solid
 
-		&.disabled .{$prefix}-button-content
+		&.disabled .bunt-button-content
 			opacity: 0.6
 
 		&:not(.disabled)
 			cursor pointer
 
-		.{$prefix}-progress-circular
+		.bunt-progress-circular
 			position absolute
 			top 50%
 			left 50%
@@ -50,25 +50,25 @@ button()
 				to
 					transform translate(-50%, -50%) rotate(360deg)
 
-		.{$prefix}-icon.error, .{$prefix}-icon.success
+		.bunt-icon.error, .bunt-icon.success
 			position absolute
 
 		&.error
 			.bunt-tooltip
 				background-color $clr-danger
 
-	.{$prefix}-button-content
+	.bunt-button-content
 		display flex
 
 		&.invisible
 			visibility hidden
 
-	.{$prefix}-icon
+	.bunt-icon
 		height $button-height
 		line-height $button-height
 		font-size 20px
 
-	.{$prefix}-button-raised
+	.bunt-button-raised
 		box-shadow 0 0 2px alpha(black, 0.12), 0 2px 2px alpha(black, 0.2)
 		transition box-shadow 0.1s
 
@@ -102,7 +102,7 @@ button-style(style = 'flat', color = style is 'clear' ? $clr-primary-text-light 
 			outline-width 2px
 			outline-offset 2px
 
-		.{$prefix}-ripple-ink .ripple.held
+		.bunt-ripple-ink .ripple.held
 			opacity: 0.7
 
 		&.error
@@ -125,13 +125,13 @@ button-style(style = 'flat', color = style is 'clear' ? $clr-primary-text-light 
 
 		// &.color-default
 		// 	color $clr-primary-text-light
-		// 	.{$prefix}-icon
+		// 	.bunt-icon
 		// 		color $clr-secondary-text-light
 		// 	&.autofocus:focus,
 		// 	body[modality="keyboard"] &:focus
 		// 			outline-color darken($clr-grey-200, 25%)
 
-	.{$prefix}-progress-circular svg circle
+	.bunt-progress-circular svg circle
 		stroke: text-color
 
 	if size is 'large'

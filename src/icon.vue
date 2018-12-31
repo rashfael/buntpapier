@@ -2,11 +2,10 @@
 	i.bunt-icon.mdi(:class="[iconClass]")
 </template>
 <script>
-import consts from './_constants'
 import iconHelper from './helpers/icon'
 
 export default {
-	name: `${consts.prefix}-icon`,
+	name: `bunt-icon`,
 	props: {
 		icon: {
 			type: String,

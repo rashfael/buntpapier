@@ -5,9 +5,9 @@ router-link.bunt-link-button(:to="to")
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
-import consts from './_constants'
+
 export default {
-	name: `${consts.prefix}-link-button`,
+	name: `bunt-link-button`,
 	components: {},
 	mixins: [
 		RippleInk

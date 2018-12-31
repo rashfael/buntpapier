@@ -2,7 +2,7 @@ $button-height = 36px
 
 // structural mixin, call only once
 icon-button()
-	.{$prefix}-icon-button
+	.bunt-icon-button
 		line-height $button-height
 		vertical-align middle
 		flex-shrink 0
@@ -29,7 +29,7 @@ icon-button()
 		body[modality="keyboard"] &:focus
 			outline-style solid
 
-		&.disabled .{$prefix}-icon
+		&.disabled .bunt-icon
 			opacity 0.6
 
 		&:not(.disabled)
@@ -44,7 +44,7 @@ icon-button()
 
 		// &.color-default
 		// 	color $clr-primary-text-light
-		// 	.{$prefix}-icon
+		// 	.bunt-icon
 		// 		color $clr-secondary-text-light
 		// 	&.autofocus:focus,
 		// 	body[modality="keyboard"] &:focus
@@ -54,7 +54,7 @@ icon-button()
 		// 	&.color-{xcolor}
 		// 		color lookup('$clr-' + xcolor)
 
-		.{$prefix}-icon
+		.bunt-icon
 			height $button-height
 			line-height $button-height
 			font-size 20px
@@ -68,7 +68,7 @@ icon-button-style(color = $clr-primary-text-light, style = 'flat')
 		&:hover:not(.disabled),
 		&.dropdown-open
 			background-color: darken($clr-grey-200, 3%)
-		.{$prefix}-icon
+		.bunt-icon
 			color: color
 		&.autofocus:focus,
 		body[modality="keyboard"] &:focus
@@ -83,5 +83,5 @@ icon-button-style(color = $clr-primary-text-light, style = 'flat')
 		&.dropdown-open
 			background-color: alpha(black, 0.1)
 
-		.{$prefix}-icon
+		.bunt-icon
 			color: color

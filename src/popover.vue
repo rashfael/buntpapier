@@ -4,10 +4,9 @@
 </template>
 <script>
 import Drop from './drop'
-import consts from './_constants'
 
 export default {
-	name: `${consts.prefix}-popover`,
+	name: `bunt-popover`,
 	props: {
 		target: {
 			type: String

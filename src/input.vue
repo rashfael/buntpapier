@@ -14,12 +14,11 @@
 	.hint(v-else) {{ hintText }}
 </template>
 <script>
-import consts from './_constants'
 import iconHelper from './helpers/icon'
 import inputOutline from './mixins/input-outline'
 
 export default {
-	name: `${consts.prefix}-input`,
+	name: `bunt-input`,
 	mixins: [inputOutline],
 	props: {
 		type: {

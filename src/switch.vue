@@ -6,10 +6,8 @@
 	label {{ label }}
 </template>
 <script>
-import consts from './_constants'
-
 export default {
-	name: `${consts.prefix}-switch`,
+	name: `bunt-switch`,
 	components: {},
 	props: {
 		value: {

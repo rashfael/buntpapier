@@ -5,10 +5,8 @@
 </template>
 
 <script>
-import consts from './_constants'
-
 export default {
-	name: `${consts.prefix}-ripple-ink`,
+	name: `bunt-ripple-ink`,
 	data () {
 		return {
 			show: false,

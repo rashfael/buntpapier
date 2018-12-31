@@ -5,11 +5,10 @@ button.bunt-icon-button(:class="[`color-${this.color}`, {disabled}]", :type="typ
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
-import consts from './_constants'
 import iconHelper from './helpers/icon'
 
 export default {
-	name: `${consts.prefix}-icon-button`,
+	name: `bunt-icon-button`,
 	mixins: [
 		RippleInk
 	],

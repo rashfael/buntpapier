@@ -4,7 +4,6 @@
 		circle(cx="50", cy="50", r="20")
 </template>
 <script>
-
 export default {
 	props: {
 		center: {

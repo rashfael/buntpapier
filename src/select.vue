@@ -37,10 +37,10 @@ import inputOutline from './mixins/input-outline'
 import typeAheadPointer from './mixins/type-ahead-pointer'
 import Popper from 'popper.js'
 import fuzzysearch from 'fuzzysearch'
-import consts from './_constants'
+
 
 export default {
-	name: `${consts.prefix}-select`,
+	name: `bunt-select`,
 	mixins: [inputOutline, pointerScroll, typeAheadPointer],
 
 	props: {

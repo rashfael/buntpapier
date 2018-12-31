@@ -6,11 +6,10 @@
 		path(:d="outlineStroke")
 </template>
 <script>
-import consts from './_constants'
 import inputOutline from './mixins/input-outline'
 
 export default {
-	name: `${consts.prefix}-input-outline-container`,
+	name: `bunt-input-outline-container`,
 	mixins: [inputOutline],
 	props: {
 		label: String

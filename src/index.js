@@ -1,5 +1,3 @@
-import consts from './_constants'
-
 import './helpers/modality'
 
 import initDirectives from './directives'
@@ -26,20 +24,20 @@ if (!process.server) {
 const lib = {
 	install (Vue) {
 		initDirectives(Vue)
-		Vue.component(`${consts.prefix}-button`, Button)
-		Vue.component(`${consts.prefix}-checkbox`, Checkbox)
-		Vue.component(`${consts.prefix}-icon`, Icon)
-		Vue.component(`${consts.prefix}-icon-button`, IconButton)
-		Vue.component(`${consts.prefix}-input`, Input)
-		Vue.component(`${consts.prefix}-input-outline-container`, InputOutlineContainer)
-		Vue.component(`${consts.prefix}-link-button`, LinkButton)
-		Vue.component(`${consts.prefix}-select`, Select)
-		if (!process.server) Vue.component(`${consts.prefix}-popover`, Popover)
-		Vue.component(`${consts.prefix}-progress-circular`, ProgressCircular)
-		Vue.component(`${consts.prefix}-switch`, Switch)
-		Vue.component(`${consts.prefix}-tabs`, Tabs)
-		Vue.component(`${consts.prefix}-tab`, Tab)
-		Vue.component(`${consts.prefix}-dialog`, Dialog)
+		Vue.component(`bunt-button`, Button)
+		Vue.component(`bunt-checkbox`, Checkbox)
+		Vue.component(`bunt-icon`, Icon)
+		Vue.component(`bunt-icon-button`, IconButton)
+		Vue.component(`bunt-input`, Input)
+		Vue.component(`bunt-input-outline-container`, InputOutlineContainer)
+		Vue.component(`bunt-link-button`, LinkButton)
+		Vue.component(`bunt-select`, Select)
+		if (!process.server) Vue.component(`bunt-popover`, Popover)
+		Vue.component(`bunt-progress-circular`, ProgressCircular)
+		Vue.component(`bunt-switch`, Switch)
+		Vue.component(`bunt-tabs`, Tabs)
+		Vue.component(`bunt-tab`, Tab)
+		Vue.component(`bunt-dialog`, Dialog)
 	}
 }
 

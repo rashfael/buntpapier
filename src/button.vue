@@ -12,12 +12,11 @@ button.bunt-button(:type="type", ref="button", :class="{disabled: disabled || lo
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
-import consts from './_constants'
 import ProgressCircular from './progress-circular'
 import iconHelper from './helpers/icon'
 
 export default {
-	name: `${consts.prefix}-button`,
+	name: `bunt-button`,
 	components: { ProgressCircular },
 	mixins: [
 		// HasDropdown,

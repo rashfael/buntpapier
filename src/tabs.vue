@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import consts from './_constants'
 import BuntTabHeaderItem from './tab-header'
 
 const calcPercent = function (w, w0) {
@@ -20,7 +19,7 @@ const calcPercent = function (w, w0) {
 }
 
 export default {
-	name: `${consts.prefix}-tabs`,
+	name: `bunt-tabs`,
 	components: {BuntTabHeaderItem},
 	props: {
 		type: {
@@ -49,7 +48,7 @@ export default {
 	},
 	computed: {
 		styleClasses () {
-			let classes = [`${consts.prefix}-tabs-type-${this.type}`]
+			let classes = [`bunt-tabs-type-${this.type}`]
 			return classes
 		},
 		indicatorStyle () {

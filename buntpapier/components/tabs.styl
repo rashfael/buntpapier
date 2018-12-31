@@ -1,5 +1,5 @@
 tabs()
-	.{$prefix}-tabs
+	.bunt-tabs
 		width 100%
 		margin-bottom 24px
 
@@ -11,24 +11,24 @@ tabs()
 			border: none
 			box-shadow: 0 0 2px alpha(black, 0.12), 0 2px 2px alpha(black, 0.2)
 
-			.{$prefix}-tabs-body
+			.bunt-tabs-body
 				border: none
 
-	.{$prefix}-tabs-header
+	.bunt-tabs-header
 		position: relative
 		width: 100%
 			
-		.{$prefix}-tab-header-item .ui-ripple-ink .ripple.held
+		.bunt-tab-header-item .ui-ripple-ink .ripple.held
 				opacity: 0.7
 
-	.{$prefix}-tabs-header-items
+	.bunt-tabs-header-items
 		position: relative
 		display: flex
 		list-style: none
 		margin: 0
 		padding: 0
 
-	// .{$prefix}-tabs-body
+	// .bunt-tabs-body
 	// 	background-color: white
 	// 	border-radius: 0
 	// 	border: 1px solid $clr-grey-200
@@ -36,10 +36,10 @@ tabs()
 	// 	padding: 16px
 	// 	margin: 0
 
-	.{$prefix}-tab
+	.bunt-tab
 		outline: none
 	// tab header
-	.{$prefix}-tab-header-item {
+	.bunt-tab-header-item {
 		font-family: $font-stack;
 		position: relative;
 
@@ -59,7 +59,7 @@ tabs()
 			flex-direction: column;
 			height: 72px;
 
-			.{$prefix}-tab-header-item-icon {
+			.bunt-tab-header-item-icon {
 				margin-bottom: 4px;
 				margin-bottom: 4px;
 			}
@@ -71,20 +71,20 @@ tabs()
 		}
 	}
 
-	// .{$prefix}-tab-header-item-text {
+	// .bunt-tab-header-item-text {
 	// 	@extends $truncate-text;
 	// }
 
-	// .{$prefix}-tab-header-item-icon {
+	// .bunt-tab-header-item-icon {
 	// 	width: 24px;
 	// 	height: 24px;
 	// 
-	// 	.{$prefix}-icon {
+	// 	.bunt-icon {
 	// 		cursor: inherit;
 	// 	}
 	// }
 	
-	.{$prefix}-tabs-indicator
+	.bunt-tabs-indicator
 		position: absolute
 		height: 2px
 		bottom: 0
@@ -110,19 +110,19 @@ tabs()
 			
 // styling/theming mixing
 tabs-style(background-color = $clr-grey-200, color = $clr-secondary-text-light, active-color = $clr-primary, indicator-color = $clr-primary)
-	.{$prefix}-tabs-header
+	.bunt-tabs-header
 		background-color: background-color
-		.{$prefix}-tabs-header-items
+		.bunt-tabs-header-items
 			color: color
-			.{$prefix}-tab-header-item-icon
+			.bunt-tab-header-item-icon
 				color: color
-		.{$prefix}-tab-header-item
+		.bunt-tab-header-item
 			body[modality="keyboard"] &:focus
 				outline: 1px solid active-color
-		.{$prefix}-tab-header-item.active
+		.bunt-tab-header-item.active
 			color: active-color
-			.{$prefix}-tab-header-item-icon
+			.bunt-tab-header-item-icon
 				color: active-color	
-	.{$prefix}-tabs-indicator
+	.bunt-tabs-indicator
 		background-color: indicator-color
 	

@@ -7,10 +7,9 @@
 		slot
 </template>
 <script>
-import consts from './_constants'
 
 export default {
-	name: `${consts.prefix}-checkbox`,
+	name: `bunt-checkbox`,
 	components: {},
 	props: {
 		value: {
