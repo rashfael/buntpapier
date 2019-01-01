@@ -11,6 +11,7 @@ module.exports = {
 			{ text: 'Directives', link: '/directives/' },
 			{ text: 'Stylus Mixins', link: '/mixins' },
 			{ text: 'Validation', link: '/validation' },
+			{ text: 'Github', link: 'https://github.com/rashfael/buntpapier' },
 		],
 		sidebar: {
 			'/components/': [

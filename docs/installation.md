@@ -50,7 +50,6 @@ module.exports = {
 Example main.styl (only needed once)
 
 ```stylus
-$font-stack = 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, "Microsoft Yahei", "微软雅黑", STXihei, "华文细黑", sans-serif
 $clr-primary = $clr-green
 
 variables()

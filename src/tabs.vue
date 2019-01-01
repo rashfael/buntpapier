@@ -1,5 +1,5 @@
 <template lang="pug">
-.bunt-tabs(:class="styleClasses")
+.bunt-tabs(:class="styleClasses", v-resize-observer="_onResizeObserver")
 	.bunt-tabs-header
 		ul.bunt-tabs-header-items(role="tablist", ref="tabsContainer")
 			bunt-tab-header-item(:type="type", :id="tab.id", :icon="tab.icon", :text="tab.header",
@@ -79,6 +79,10 @@ export default {
 		})
 	},
 	methods: {
+		_onResizeObserver () {
+			if (this.$refs.tabsContainer)
+				this.activateTab(this.activeTab || 0)
+		},
 		updateTabs () {
 			// sort this via DOM because $children has no guaranteed order
 			const children = Array.from(this.$refs.body.children)
