@@ -8,6 +8,5 @@
 node_modules
 dist
 
-config.js
 .publish
 build-stats.json

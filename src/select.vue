@@ -91,7 +91,7 @@ export default {
 		/**
 		 * Callback to generate the label text. If {option}
 		 * is an object, returns option[this.optionLabel] by default.
-		 * @param  {Object || String} option
+		 * @param  {(string|Object)} option
 		 * @return {String}
 		 */
 		getOptionLabel: {
@@ -258,7 +258,7 @@ export default {
 		},
 		/**
 		 * Select a given option.
-		 * @param  {Object||String} option
+		 * @param  {(string|Object)} option
 		 * @return {void}
 		 */
 		select (option) {
@@ -273,7 +273,7 @@ export default {
 
 		/**
 		 * De-select a given option.
-		 * @param  {Object||String} option
+		 * @param  {(string|Object)} option
 		 * @return {void}
 		 */
 		deselect (option) {
@@ -282,7 +282,7 @@ export default {
 
 		/**
 		 * Called from this.select after each selection.
-		 * @param  {Object||String} option
+		 * @param  {(string|Object)} option
 		 * @return {void}
 		 */
 		onAfterSelect (option) {
@@ -308,7 +308,7 @@ export default {
 
 		/**
 		 * Check if the given option is currently selected.
-		 * @param  {Object||String}  option
+		 * @param  {(string|Object)}  option
 		 * @return {Boolean}         True when selected || False otherwise
 		 */
 		isOptionSelected (option) {
@@ -344,7 +344,7 @@ export default {
 		 * Determine if an option exists
 		 * within this.options array.
 		 *
-		 * @param  {Object || String} option
+		 * @param  {(string|Object)} option
 		 * @return {boolean}
 		 */
 		optionExists (option) {

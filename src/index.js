@@ -17,7 +17,7 @@ import Tab from './tab'
 import Dialog from './dialog'
 
 let Popover
-if (!process.server) {
+if (typeof window !== 'undefined') {
 	Popover = require('./popover').default
 }
 
@@ -32,7 +32,7 @@ const lib = {
 		Vue.component(`bunt-input-outline-container`, InputOutlineContainer)
 		Vue.component(`bunt-link-button`, LinkButton)
 		Vue.component(`bunt-select`, Select)
-		if (!process.server) Vue.component(`bunt-popover`, Popover)
+		if (typeof window !== 'undefined') Vue.component(`bunt-popover`, Popover)
 		Vue.component(`bunt-progress-circular`, ProgressCircular)
 		Vue.component(`bunt-switch`, Switch)
 		Vue.component(`bunt-tabs`, Tabs)

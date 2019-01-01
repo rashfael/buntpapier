@@ -92,8 +92,7 @@ const handleKeyboardModality = function () {
 		document.body.removeAttribute('modality')
 	}, true)
 }
-
-if (!process.server) {
+if (typeof document !== 'undefined') {
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', handleKeyboardModality)
 	} else {

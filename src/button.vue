@@ -33,10 +33,6 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		showDropdownIcon: {
-			type: Boolean,
-			default: true
-		},
 		disabled: {
 			type: Boolean,
 			default: false
