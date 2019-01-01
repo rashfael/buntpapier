@@ -46,6 +46,16 @@ module.exports = {
 }
 ```
 
+## Load buntpapier into vue
+```js
+import Buntpapier from 'buntpapier'
+import Vuelidate from 'vuelidate' // if you want validation
+import '@mdi/font/css/materialdesignicons.css'
+
+Vue.use(Buntpapier)
+Vue.use(Vuelidate)
+```
+
 ## Load buntpapier into your projects stylus style
 Example main.styl (only needed once)
 

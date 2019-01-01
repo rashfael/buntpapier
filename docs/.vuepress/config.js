@@ -1,3 +1,5 @@
+const webpack = require('webpack')
+
 module.exports = {
 	title: 'buntpapier',
 	description: 'yet another component library',
@@ -31,6 +33,11 @@ module.exports = {
 				'resize-observer'
 			]
 		}
+	},
+	configureWebpack: {
+		plugins: [
+			new webpack.EnvironmentPlugin(['BUILD'])
+		]
 	},
 	chainWebpack: (config, isServer) => {
 		config.module
