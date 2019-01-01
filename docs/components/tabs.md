@@ -88,7 +88,7 @@ export default {
 ```
 
 ### style
-```
+```stylus
 .tabs-default
 	tabs-style()
 ```
