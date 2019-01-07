@@ -1,9 +1,9 @@
 {
   "name": "buntpapier",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "author": "rashfael <rashfael@isobeef.org>",
-  "scripts": {  
+  "scripts": {
     "lint": "vue-cli-service lint",
     "build": "vuepress build docs",
     "deploy": "npm run build -s && gh-pages -d dist",
