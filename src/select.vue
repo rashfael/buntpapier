@@ -19,8 +19,8 @@
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
-	component(:is="usePortals ? 'portal' : 'div'", to="bunt-overlays")
-		.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
+	component(v-if="open", :is="usePortals ? 'portal' : 'div'", to="bunt-overlays")
+		.bunt-select-dropdown-menu(ref="dropdownMenu", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 			slot(name="result-header")
 			.scrollable-menu(v-scrollbar.y="")
 				ul
@@ -229,17 +229,10 @@ export default {
 		}
 	},
 	mounted () {
-		this.$nextTick(() => {
-			this.width = this.$refs.searchContainer.getBoundingClientRect().width
-			this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
-				placement: 'bottom',
-				positionFixed: true
-			})
-			this.selectValue(this.value)
-		})
+		this.selectValue(this.value)
 	},
 	beforeDestroy () {
-		this._popper.destroy()
+		this._popper?.destroy()
 	},
 
 	methods: {
@@ -248,10 +241,16 @@ export default {
 			this.search = ''
 			this.$refs.search.select()
 			this.width = this.$refs.searchContainer.getBoundingClientRect().width
-			this.$nextTick(() => this._popper.scheduleUpdate()) // delay until after dropdown is rendered
+			this.$nextTick(() => {
+				this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
+					placement: 'bottom',
+					positionFixed: true
+				})
+			})
 		},
 		blur () {
 			this.open = false
+			this.$nextTick(() => this._popper?.destroy())
 			if (this.validation) this.validation.$touch()
 			this.$emit('blur')
 		},
@@ -289,7 +288,6 @@ export default {
 		 * @return {void}
 		 */
 		onAfterSelect (option) {
-			this.open = !this.open
 			this.$refs.search.blur()
 			this.rawSearch = this.getOptionLabel(option) || ''
 		},
