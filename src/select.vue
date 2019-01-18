@@ -225,7 +225,7 @@ export default {
 				this.search = val
 		},
 		filteredOptions () {
-			this._popper.scheduleUpdate()
+			this._popper?.scheduleUpdate()
 		}
 	},
 	mounted () {
