@@ -20,7 +20,7 @@
 		.hint(v-else) {{ hintText }}
 
 	component(v-if="open", :is="usePortals ? 'portal' : 'div'", to="bunt-overlays")
-		.bunt-select-dropdown-menu(ref="dropdownMenu", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
+		.bunt-select-dropdown-menu(ref="dropdownMenu", :class="[dropdownClass]", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 			slot(name="result-header")
 			.scrollable-menu(v-scrollbar.y="")
 				ul
@@ -138,7 +138,8 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		validation: Object // vuelidate result
+		validation: Object, // vuelidate result
+		dropdownClass: String
 	},
 	data () {
 		return {
