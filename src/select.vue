@@ -19,16 +19,17 @@
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
-	.bunt-select-dropdown-menu(ref="dropdownMenu", v-show="open", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
-		slot(name="result-header")
-		.scrollable-menu(v-scrollbar.y="")
-			ul
-				li(v-for="option, index in filteredOptions", :key="index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
-					slot(:option="option")
-						| {{ getOptionLabel(option) }}
-				li.divider(transition="fade", v-if="!filteredOptions.length")
-				li.text-center(transition="fade" v-if="!filteredOptions.length")
-					slot(name="no-options") Sorry, no matching options.
+	component(v-if="open", :is="usePortals ? 'portal' : 'div'", to="bunt-overlays")
+		.bunt-select-dropdown-menu(ref="dropdownMenu", :class="[dropdownClass]", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
+			slot(name="result-header")
+			.scrollable-menu(v-scrollbar.y="")
+				ul
+					li(v-for="option, index in filteredOptions", :key="index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
+						slot(:option="option")
+							| {{ getOptionLabel(option) }}
+					li.divider(transition="fade", v-if="!filteredOptions.length")
+					li.text-center(transition="fade" v-if="!filteredOptions.length")
+						slot(name="no-options") Sorry, no matching options.
 </template>
 <script>
 // nicked from sagalbot/vue-select
@@ -137,18 +138,18 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		validation: Object // vuelidate result
+		validation: Object, // vuelidate result
+		dropdownClass: String
 	},
-
 	data () {
 		return {
 			search: '',
 			rawSearch: '',
 			open: false,
-			width: 0
+			width: 0,
+			usePortals: this.$root.$options.components.Portal !== undefined && this.$root.$options.components.PortalTarget !== undefined
 		}
 	},
-
 	computed: {
 		/**
 		 * Classes to be output on .dropdown
@@ -225,30 +226,32 @@ export default {
 				this.search = val
 		},
 		filteredOptions () {
-			this._popper.scheduleUpdate()
+			this._popper?.scheduleUpdate()
 		}
 	},
 	mounted () {
-		this.width = this.$refs.searchContainer.getBoundingClientRect().width
-		this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
-			placement: 'bottom',
-			positionFixed: true
-		})
 		this.selectValue(this.value)
 	},
 	beforeDestroy () {
-		this._popper.destroy()
+		this._popper?.destroy()
 	},
 
 	methods: {
 		focus () {
 			this.open = true
+			this.search = ''
 			this.$refs.search.select()
 			this.width = this.$refs.searchContainer.getBoundingClientRect().width
-			this.$nextTick(() => this._popper.scheduleUpdate()) // delay until after dropdown is rendered
+			this.$nextTick(() => {
+				this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
+					placement: 'bottom',
+					positionFixed: true
+				})
+			})
 		},
 		blur () {
 			this.open = false
+			this.$nextTick(() => this._popper?.destroy())
 			if (this.validation) this.validation.$touch()
 			this.$emit('blur')
 		},
@@ -286,7 +289,6 @@ export default {
 		 * @return {void}
 		 */
 		onAfterSelect (option) {
-			this.open = !this.open
 			this.$refs.search.blur()
 			this.rawSearch = this.getOptionLabel(option) || ''
 		},
