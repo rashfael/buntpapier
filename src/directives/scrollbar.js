@@ -71,9 +71,17 @@ class Scrollbars {
 		this.el.appendChild(railWrapperEl)
 		thumbEl.addEventListener('mousedown', this[`onThumbMousedown${dimension.toUpperCase()}`])
 		this[dimension] = {
+			railWrapperEl,
 			railEl,
 			thumbEl
 		}
+	}
+
+	updateRail (dimension) {
+		const state = this[dimension]
+		if (!state) return
+		const { railWrapperEl, railEl } = state
+
 	}
 
 	destroy () {
@@ -89,6 +97,12 @@ class Scrollbars {
 
 	refreshStyling () {
 		this.el.classList.add('bunt-scrollbar')
+		// expose padding as vars for use in rails
+		this.elStyles = window.getComputedStyle(this.el)
+		this.el.style.setProperty('--buntpapier-scrollbar-c-padding-top', this.elStyles.paddingTop)
+		this.el.style.setProperty('--buntpapier-scrollbar-c-padding-left', this.elStyles.paddingLeft)
+		this.el.style.setProperty('--buntpapier-scrollbar-c-padding-right', this.elStyles.paddingRight)
+		this.el.style.setProperty('--buntpapier-scrollbar-c-padding-bottom', this.elStyles.paddingBottom)
 	}
 
 	update () {
@@ -152,7 +166,7 @@ class Scrollbars {
 
 	computeDimensions () {
 		if (this.x) {
-			this.y.railLength = this.el.clientWidth
+			this.x.railLength = this.el.clientWidth
 			this.x.visibleRatio = this.el.clientWidth / this.el.scrollWidth
 			this.x.thumbLength = this.el.clientWidth * this.x.visibleRatio
 		}

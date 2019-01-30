@@ -41,7 +41,8 @@ scrollbars()
 			height: 0
 			.bunt-scrollbar-rail-x
 				height: $rail-width
-				bottom: 0
+				left: calc(-1 * var(--buntpapier-scrollbar-c-padding-left))
+				bottom: calc(-1 * var(--buntpapier-scrollbar-c-padding-bottom))
 
 				.bunt-scrollbar-thumb
 					bottom: 2px
@@ -59,8 +60,9 @@ scrollbars()
 
 			.bunt-scrollbar-rail-y
 				width: $rail-width
-				right: 0
-				top: 0
+				right: calc(-1 * var(--buntpapier-scrollbar-c-padding-right))
+				top: calc(-1 * var(--buntpapier-scrollbar-c-padding-top))
+				margin: -32px
 
 				.bunt-scrollbar-thumb
 					right: 2px
