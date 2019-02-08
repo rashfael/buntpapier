@@ -81,7 +81,7 @@ export default {
 	methods: {
 		_onResizeObserver () {
 			if (this.$refs.tabsContainer)
-				this.activateTab(this.activeTab || 0)
+				this.select(this.activeTabObj, this.tabs.indexOf(this.activeTabObj))
 		},
 		updateTabs () {
 			// sort this via DOM because $children has no guaranteed order
