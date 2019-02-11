@@ -106,6 +106,7 @@ class Scrollbars {
 	}
 
 	onThumbMousedown (dimension, event) {
+		event.stopPropagation()
 		this.dragging = dimension
 		this.draggingOffset = event[`offset${dimension.toUpperCase()}`]
 		this.el.style.userSelect = 'none'
