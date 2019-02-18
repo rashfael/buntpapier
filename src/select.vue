@@ -12,7 +12,8 @@
 				@keyup.enter.prevent="typeAheadSelect",
 				@blur="blur",
 				@focus="focus",
-				:placeholder="searchPlaceholder")
+				:placeholder="searchPlaceholder",
+				autocomplete="off")
 			i.open-indicator.mdi.mdi-menu-down(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown")
 			svg.outline(ref="outline")
 				path(:d="outlineStroke")
