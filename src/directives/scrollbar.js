@@ -153,7 +153,7 @@ class Scrollbars {
 
 	computeDimensions () {
 		if (this.x) {
-			this.y.railLength = this.el.clientWidth
+			this.x.railLength = this.el.clientWidth
 			this.x.visibleRatio = this.el.clientWidth / this.el.scrollWidth
 			this.x.thumbLength = this.el.clientWidth * this.x.visibleRatio
 		}
