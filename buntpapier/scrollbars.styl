@@ -36,6 +36,8 @@ scrollbars()
 			transition: height .3s $material-easing, width .3s $material-easing, opacity .3s $material-easing
 
 		.bunt-scrollbar-rail-wrapper-x
+			// using both top and bottom always positions the rail at the bottom
+			top: 100%
 			bottom: 0
 			left: 0
 			width: 0
@@ -54,7 +56,9 @@ scrollbars()
 						opacity: .8
 		.bunt-scrollbar-rail-wrapper-y
 			bottom: 100%
+			// using both left and right always positions the rail at the right
 			left: 100%
+			right: 0
 			height: 0
 			width: 0
 
