@@ -80,7 +80,7 @@ export default {
 	},
 	methods: {
 		_onResizeObserver () {
-			if (this.$refs.tabsContainer)
+			if (this.$refs.tabsContainer && this.activeTabObj)
 				this.select(this.activeTabObj, this.tabs.indexOf(this.activeTabObj))
 		},
 		updateTabs () {
@@ -103,7 +103,7 @@ export default {
 		},
 		select (tab, index) {
 			let oldIndex = this.tabs.indexOf(this.activeTabObj)
-			if (tab.disabled)
+			if (!tab || tab.disabled)
 				return
 			let rect = this.$refs.tabsContainer.getBoundingClientRect()
 			let width = rect.width
