@@ -3,7 +3,6 @@ const webpack = require('webpack')
 module.exports = {
 	title: 'buntpapier',
 	description: 'yet another component library',
-	base: '/buntpapier/',
 	dest: 'dist',
 	themeConfig: {
 		nav: [
