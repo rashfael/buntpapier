@@ -36,6 +36,9 @@ export default function (Vue) {
 				modifiers: {
 					offset: { offset: '0, 8' },
 					applyStyle: { enabled: false },
+					preventOverflow: {
+						boundariesElement: this.options.boundariesElement || 'scrollParent',
+					},
 					applyTooltipStyle: {
 						enabled: true,
 						fn: (data) => {
@@ -157,7 +160,8 @@ export default function (Vue) {
 			}
 			el.__buntpapier__tooltip = new Tooltip(el, {
 				placement: binding.value.placement || Object.keys(binding.modifiers).find(mod => ['auto', 'top', 'right', 'bottom', 'left'].find(pos => mod.startsWith(pos))),
-				fixed: binding.value.fixed || binding.modifiers.fixed
+				fixed: binding.value.fixed || binding.modifiers.fixed,
+				boundariesElement: binding.value.boundariesElement
 			})
 			el.__buntpapier__tooltip.update(text, binding.value.show)
 		},
