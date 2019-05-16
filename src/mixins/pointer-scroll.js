@@ -13,6 +13,7 @@ export default {
      * @returns {*}
      */
 		maybeAdjustScroll () {
+			if (!this.$refs.dropdownMenu) return
 			let pixelsToPointerTop = this.pixelsToPointerTop()
 			let pixelsToPointerBottom = this.pixelsToPointerBottom()
 
