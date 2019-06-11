@@ -15,6 +15,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "tether": "^1.4.5",
     "tether-drop": "^1.4.2",
+    "typeface-roboto-mono": "0.0.54",
     "vue": "^2.5.21"
   },
   "devDependencies": {
@@ -42,6 +43,7 @@
     "nib": "^1.1.2",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "roboto-fontface": "^0.10.0",
     "rupture": "^0.7.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
