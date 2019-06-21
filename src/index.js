@@ -1,5 +1,3 @@
-import './helpers/modality'
-
 import initDirectives from './directives'
 
 import Button from './button'
