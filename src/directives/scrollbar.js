@@ -21,6 +21,7 @@ class Scrollbars {
 		this.onThumbMousedownY = this.onThumbMousedown.bind(this, 'y')
 		this.onResize = this.onResize.bind(this)
 		this.el = el
+		this.railsParent = options.railsParent || this.el
 		this.refreshStyling()
 		if (options.scrollX)
 			this.createRail('x')
@@ -68,7 +69,7 @@ class Scrollbars {
 		thumbEl.classList.add('bunt-scrollbar-thumb')
 		railWrapperEl.appendChild(railEl)
 		railEl.appendChild(thumbEl)
-		this.el.appendChild(railWrapperEl)
+		this.railsParent.appendChild(railWrapperEl)
 		thumbEl.addEventListener('mousedown', this[`onThumbMousedown${dimension.toUpperCase()}`])
 		this[dimension] = {
 			railEl,
