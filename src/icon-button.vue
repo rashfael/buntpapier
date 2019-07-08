@@ -1,6 +1,7 @@
 <template lang="pug">
 button.bunt-icon-button(:class="[`color-${this.color}`, {disabled}]", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
-	i.bunt-icon.mdi(:class="[iconClass()]")
+	i.bunt-icon.mdi(v-if="iconClass()", :class="[iconClass()]")
+	slot(v-else)
 	ripple-ink(v-if!="!noInk && !disabled")
 </template>
 <script>
@@ -43,6 +44,7 @@ export default {
 	},
 	methods: {
 		iconClass () {
+			if (this.$slots.default[0].tag) return
 			return iconHelper.getClass(this.$slots.default[0].text)
 		},
 		onClick (event) {

@@ -60,6 +60,9 @@ icon-button()
 			font-size 20px
 			width auto
 
+		svg
+			height: 20px
+
 // styling/theming mixing
 // style = 'flat', 'filled', 'clear'
 icon-button-style(color = $clr-primary-text-light, style = 'flat')
@@ -70,6 +73,8 @@ icon-button-style(color = $clr-primary-text-light, style = 'flat')
 			background-color: darken($clr-grey-200, 3%)
 		.bunt-icon
 			color: color
+		svg
+			fill: color
 		&.autofocus:focus,
 		body[modality="keyboard"] &:focus
 				outline-color: darken($clr-grey-200, 25%)
@@ -85,3 +90,5 @@ icon-button-style(color = $clr-primary-text-light, style = 'flat')
 
 		.bunt-icon
 			color: color
+		svg
+			fill: color
