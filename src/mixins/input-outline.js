@@ -21,8 +21,8 @@ export default {
 		generateOutline () {
 			const {width, height} = this.$refs.outline.getBoundingClientRect()
 			const radius = 4
-			const cornerWidth = radius + 1
-			this.outlineStroke = `M ${cornerWidth} 1
+			const cornerWidth = radius + .5
+			this.outlineStroke = `M ${cornerWidth} .5
 			h ${width - 2 * cornerWidth}
 			a ${radius} ${radius} 0 0 1 ${radius} ${radius}
 			v ${height - 2 * cornerWidth}
