@@ -81,7 +81,6 @@ class Scrollbars {
 		this.resizeObserver.disconnect()
 		this.mutationObserver.disconnect()
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
-		document.removeEventListener('mousedown', this.onDocumentMousedown)
 		document.removeEventListener('mouseup', this.onDocumentMouseup, {capture: true})
 		this.el.removeEventListener('scroll', this.onScroll)
 		this.x?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
