@@ -82,7 +82,7 @@ class Scrollbars {
 		this.mutationObserver.disconnect()
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
 		document.removeEventListener('mousedown', this.onDocumentMousedown)
-		document.removeEventListener('mouseup', this.onDocumentMouseup)
+		document.removeEventListener('mouseup', this.onDocumentMouseup, {capture: true})
 		this.el.removeEventListener('scroll', this.onScroll)
 		this.x?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
 		this.y?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
@@ -114,7 +114,7 @@ class Scrollbars {
 		document.body.style['-moz-user-select'] = 'none'
 		this[dimension].railEl.classList.add('active')
 		document.addEventListener('mousemove', this.onDocumentMousemove)
-		document.addEventListener('mouseup', this.onDocumentMouseup)
+		document.addEventListener('mouseup', this.onDocumentMouseup, {capture: true})
 	}
 
 	onDocumentMousemove (event) {
@@ -140,7 +140,7 @@ class Scrollbars {
 		this.el.style.userSelect = ''
 		document.body.style['-moz-user-select'] = ''
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
-		document.removeEventListener('mouseup', this.onDocumentMouseup)
+		document.removeEventListener('mouseup', this.onDocumentMouseup, {capture: true})
 	}
 
 	onResize (entries) {
