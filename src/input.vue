@@ -6,7 +6,7 @@
 	.label-input-container
 		label(:for="name") {{label}}
 		.icon.mdi(v-if="icon", :class="[iconClass]")
-		input(:type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
+		input(ref="input", :type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		svg.outline(ref="outline")
 			path(:d="outlineStroke")
