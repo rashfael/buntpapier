@@ -22,6 +22,7 @@ module.exports = {
 				'input',
 				'select',
 				'checkbox',
+				'radio',
 				'switch',
 				'tabs',
 				'progress-circular'

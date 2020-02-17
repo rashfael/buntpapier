@@ -2,6 +2,7 @@ import initDirectives from './directives'
 
 import Button from './button'
 import Checkbox from './checkbox'
+import Radio from './radio'
 import Icon from './icon'
 import IconButton from './icon-button'
 import Input from './input'
@@ -24,6 +25,7 @@ const lib = {
 		initDirectives(Vue)
 		Vue.component(`bunt-button`, Button)
 		Vue.component(`bunt-checkbox`, Checkbox)
+		Vue.component(`bunt-radio`, Radio)
 		Vue.component(`bunt-icon`, Icon)
 		Vue.component(`bunt-icon-button`, IconButton)
 		Vue.component(`bunt-input`, Input)
