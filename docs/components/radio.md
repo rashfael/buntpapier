@@ -22,7 +22,7 @@ export default {
 
 ### template
 ```html
-<bunt-checkbox id="chbox-none" name="check-none" label="turn me ooooon" v-model="check" />
+<bunt-radio id="radio-one" name="radio" label="Pick me!" value="one" v-model="check" />
 ```
 
 ### style
@@ -34,8 +34,8 @@ export default {
 |:-----|:-----|:---------|:--------|:------------|
 | name | string | true | | native input name |
 | label | string | false | | floating label |
-| placeholder | string | false | | native placeholder text |
-| value | boolean | false | false | value (or use v-model) |
+| checked | any | false | false | checked value (or use v-model) |
+| value | any | false | false | value to emit |
 | disabled | boolean | false | false | disables input |
 
 ## slots
@@ -47,7 +47,7 @@ export default {
 
 | event | args | description |
 |:------|:-----|:------------|
-| input | value | emitted on every keypress or input (or use v-model) |
+| change | value | emitted on every input (or use v-model) |
 
 ## style mixin parameters
 has no mixin
