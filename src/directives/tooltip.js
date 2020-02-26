@@ -114,7 +114,7 @@ export default function (Vue) {
 						easing: 'ease-in-out',
 					})
 					this.animation.onfinish = () => {
-						if (this.animation.playbackRate < 0) { // hide finished
+						if (this.animation && this.animation.playbackRate < 0) { // hide finished
 							this.destroyTooltip()
 							this.animation = null
 						}
