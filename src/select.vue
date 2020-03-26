@@ -248,10 +248,18 @@ export default {
 			this.$refs.search.select()
 			this.width = this.$refs.searchContainer.getBoundingClientRect().width
 			this.$nextTick(() => {
-				this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, {
+				const options = {
 					placement: 'bottom',
 					positionFixed: true
-				})
+				}
+				if (this.icon) {
+					options.modifiers = {
+						offset: {
+							offset: '-15, 0'
+						}
+					}
+				}
+				this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
 			})
 		},
 		blur () {
