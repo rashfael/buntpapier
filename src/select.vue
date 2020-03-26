@@ -4,6 +4,7 @@
 	.bunt-input.dense(ref="searchContainer", :class="{focused: open, 'floating-label': rawSearch.length != 0 || !isValueEmpty, invalid, disabled}", :style="{'--label-gap': floatingLabelWidth}")
 		.label-input-container
 			label(:for="name") {{label}}
+			.icon.mdi(v-if="icon", :class="[iconClass]")
 			input(type="text", ref="search", :name="name", v-model="rawSearch", :disabled="disabled",
 				@keydown.delete="maybeDeleteValue",
 				@keyup.esc="onEscape",
@@ -39,7 +40,7 @@ import inputOutline from './mixins/input-outline'
 import typeAheadPointer from './mixins/type-ahead-pointer'
 import Popper from 'popper.js'
 import fuzzysearch from 'fuzzysearch'
-
+import iconHelper from './helpers/icon'
 
 export default {
 	name: `bunt-select`,
@@ -55,7 +56,7 @@ export default {
 			type: [String, Object, Number],
 			default: null
 		},
-
+		icon: String,
 		/**
 		 * An array of strings or objects to be used as dropdown choices.
 		 * If you are using an array of objects, vue-select will look for
@@ -206,6 +207,9 @@ export default {
 			}
 
 			return true
+		},
+		iconClass () {
+			return iconHelper.getClass(this.icon)
 		},
 		invalid () {
 			return this.validation && this.validation.$error
