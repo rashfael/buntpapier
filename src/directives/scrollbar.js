@@ -107,6 +107,9 @@ class Scrollbars {
 
 	onThumbMousedown (dimension, event) {
 		event.stopPropagation()
+		if (this.options._preventMousedown) {
+			event.preventDefault()
+		}
 		this.dragging = dimension
 		this.draggingOffset = event[`offset${dimension.toUpperCase()}`]
 		this.el.style.userSelect = 'none'
@@ -198,7 +201,8 @@ export default function (Vue) {
 		bind (el, binding, vnode) {
 			el.__buntpapier__scrollbar = new Scrollbars(el, {
 				scrollX: binding.modifiers.x,
-				scrollY: binding.modifiers.y
+				scrollY: binding.modifiers.y,
+				_preventMousedown: binding.value._preventMousedown
 			})
 		},
 		inserted (el) {

@@ -24,7 +24,7 @@
 	component(v-if="open", :is="usePortals ? 'portal' : 'div'", to="bunt-overlays")
 		.bunt-select-dropdown-menu(ref="dropdownMenu", :class="[dropdownClass]", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 			slot(name="result-header")
-			.scrollable-menu(v-scrollbar.y="")
+			.scrollable-menu(v-scrollbar.y="{_preventMousedown: true}")
 				ul
 					li(v-for="option, index in filteredOptions", :key="index", :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }", @mouseover="typeAheadPointer = index", @click.prevent.stop="select(option)")
 						slot(:option="option")
@@ -262,7 +262,7 @@ export default {
 				this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
 			})
 		},
-		blur () {
+		blur (event) {
 			this.open = false
 			this.$nextTick(() => this._popper?.destroy())
 			if (this.validation) this.validation.$touch()
