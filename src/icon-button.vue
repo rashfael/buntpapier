@@ -1,5 +1,5 @@
 <template lang="pug">
-button.bunt-icon-button(:class="[`color-${this.color}`, {disabled}]", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
+button.bunt-icon-button(:class="{disabled}", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
 	i.bunt-icon.mdi(v-if="iconClass()", :class="[iconClass()]")
 	slot(v-else)
 	ripple-ink(v-if!="!noInk && !disabled")
@@ -14,10 +14,6 @@ export default {
 		RippleInk
 	],
 	props: {
-		color: {
-			type: String,
-			default: 'default' // one of $clr-names
-		},
 		disabled: {
 			type: Boolean,
 			default: false
