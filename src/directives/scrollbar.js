@@ -202,7 +202,7 @@ export default function (Vue) {
 			el.__buntpapier__scrollbar = new Scrollbars(el, {
 				scrollX: binding.modifiers.x,
 				scrollY: binding.modifiers.y,
-				_preventMousedown: binding.value._preventMousedown
+				_preventMousedown: binding.value?._preventMousedown
 			})
 		},
 		inserted (el) {
