@@ -2,7 +2,7 @@
 	TODO label animation WITH icon should go sideways, hint with icon should be on same height as input
 -->
 <template lang="pug">
-.bunt-input(:class!="{focused, 'floating-label': value !== null && value.length != 0, invalid, disabled, 'with-icon': icon}", :style="{'--label-gap': floatingLabelWidth}", v-resize-observer="generateOutline")
+.bunt-input(:class!="{focused, 'floating-label': floatingLabel, invalid, disabled, 'with-icon': icon}", :style="{'--label-gap': floatingLabelWidth}", v-resize-observer="generateOutline")
 	.label-input-container
 		label(:for="name") {{label}}
 		.icon.mdi(v-if="icon", :class="[iconClass]")
@@ -73,6 +73,9 @@ export default {
 				return errorMessages.filter(Boolean).join()
 			}
 			return this.hint
+		},
+		floatingLabel () {
+			return Boolean(this.placeholder || this.value || this.value === 0)
 		}
 	},
 	methods: {
