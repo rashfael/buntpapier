@@ -1,5 +1,5 @@
 <template lang="pug">
-	i.bunt-icon.mdi(:class="[iconClass]")
+i.bunt-icon.mdi(:class="[iconClass]")
 </template>
 <script>
 import iconHelper from './helpers/icon'
