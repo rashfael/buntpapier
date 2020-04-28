@@ -20,10 +20,10 @@
 						.id(:style="{'background-color': option.color}") {{ option.id }}
 			bunt-switch(name="a name", label="turn me oooon", v-model="turnOn")
 			bunt-checkbox(name="a name", label="check it out", v-model="turnOn")
-		//- h2 Validation!
-		//- form
-		//- 	bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
-		//- 	bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection", :disabled="true")
+		h2 Validation!
+		form
+			bunt-input(name="name", label="enter a name", v-model="name", :validation="$v.name")
+			bunt-select(name="a-select", label="Select something", v-model="validSelection", :options="['Okay']", :validation="$v.validSelection")
 		h2 Buttons
 		bunt-button.button-default(@click.prevent="clicked++") CLICK ME {{ clicked }}
 		bunt-button.button-primary(@click.prevent="", tooltip="with a tooltip") BUTTON
@@ -126,7 +126,7 @@
 import '@mdi/font/css/materialdesignicons.css'
 import './style.styl'
 
-/* import { required, email } from '../src/validators' */
+import { required, email } from '../src/validators/vuelidate/validators/raw'
 
 export default {
 	components: {},
@@ -154,15 +154,29 @@ export default {
 			activateTab: false
 		}
 	},
-	/* validations: {
+	validations: {
 		name: {
-			required: required('a man needs a name'),
-			email: email('not a valid mail')
+			required: {
+				$validator: required,
+				$message: 'a man needs a name'
+			},
+			email: {
+				$validator: email,
+				$message: 'not a valid mail'
+			}
 		},
 		validSelection: {
-			required: required('I SAID SELECT SOMETHING')
+			required: {
+				$validator: required,
+				$message: 'I SAID SELECT SOMETHING'
+			}
 		}
-	}, */
+	},
+	computed: {
+	},
+	created () {
+		console.log('Component', this)
+	},
 	methods: {
 		loadAsync () {
 			this.asyncLoading = true

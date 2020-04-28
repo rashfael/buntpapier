@@ -1,12 +1,12 @@
 import { createApp } from 'vue'
 // import Router from 'vue-router'
 import Buntpapier from '../src/'
-// import Vuelidate from '@vuelidate/core'
+import { VuelidatePlugin } from '../src/validators/vuelidate'
 import App from './App'
 
 const app = createApp(App)
 app.use(Buntpapier)
-// app.use(Vuelidate)
+app.use(VuelidatePlugin)
 // Vue.use(Router)
 // App.router = new Router({
 // 	mode: 'history',

@@ -219,8 +219,8 @@ export default {
 			return this.validation && this.validation.$error
 		},
 		hintText () {
-			if (this.invalid && this.validation.$params) {
-				const errorMessages = Object.keys(this.validation.$params).map((key) => this.validation[key] ? null : this.validation.$params[key].message)
+			if (this.invalid && this.validation.$errors) {
+				const errorMessages = this.validation.$errors.map(error => error.$message)
 				return errorMessages.filter(Boolean).join()
 			}
 			return this.hint

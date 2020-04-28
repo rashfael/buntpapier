@@ -1,5 +1,5 @@
-import { withParams, req, len } from 'vuelidate/lib/validators/common'
-import { email as _email } from 'vuelidate/lib/validators'
+import { withParams, req, len } from './vuelidate/validators/common.js'
+import { email as _email } from './vuelidate/validators'
 
 const required = message => withParams({message: message}, req)
 const email = message => withParams({message: message}, _email)
