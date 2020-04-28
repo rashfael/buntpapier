@@ -6,7 +6,7 @@
 	.label-input-container
 		label(:for="name") {{label}}
 		.icon.mdi(v-if="icon", :class="[iconClass]")
-		input(ref="input", :type="type", :name="name", :value="value", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
+		input(ref="input", :type="type", :name="name", :value="modelValue", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		svg.outline(ref="outline")
 			path(:d="outlineStroke")
@@ -31,7 +31,7 @@ export default {
 		},
 		label: String,
 		placeholder: String,
-		value: {
+		modelValue: {
 			type: [String, Number],
 			default: ''
 		},
@@ -75,12 +75,12 @@ export default {
 			return this.hint
 		},
 		floatingLabel () {
-			return Boolean(this.placeholder || this.value || this.value === 0)
+			return Boolean(this.placeholder || this.modelValue || this.modelValue === 0)
 		}
 	},
 	methods: {
 		onInput ($event) {
-			this.$emit('input', $event.target.value)
+			this.$emit('update:modelValue', $event.target.value)
 			if (this.validation) this.validation.$touch()
 		},
 		onBlur () {

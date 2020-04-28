@@ -21,7 +21,7 @@
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
 
-	component(v-if="open", :is="usePortals ? 'portal' : 'div'", to="bunt-overlays")
+	teleport(v-if="open", to="#bunt-teleport-target")
 		.bunt-select-dropdown-menu(ref="dropdownMenu", :class="[dropdownClass]", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 			slot(name="result-header")
 			.scrollable-menu(v-scrollbar.y="{_preventMousedown: true}")
@@ -44,7 +44,7 @@ import iconHelper from './helpers/icon'
 
 export default {
 	name: `bunt-select`,
-	mixins: [inputOutline, pointerScroll, typeAheadPointer],
+	mixins: [inputOutline, typeAheadPointer, pointerScroll],
 
 	props: {
 		name: {
@@ -52,7 +52,7 @@ export default {
 			required: true
 		},
 		label: String,
-		value: {
+		modelValue: {
 			type: [String, Object, Number],
 			default: null
 		},
@@ -99,13 +99,15 @@ export default {
 		 */
 		getOptionLabel: {
 			type: Function,
-			default (option) {
-				if (typeof option === 'object') {
-					if (this.optionLabel !== undefined && option[this.optionLabel] !== undefined) {
-						return option[this.optionLabel]
+			default () {
+				return function (option) {
+					if (typeof option === 'object') {
+						if (this.optionLabel !== undefined && option[this.optionLabel] !== undefined) {
+							return option[this.optionLabel]
+						}
 					}
+					return option
 				}
-				return option
 			}
 		},
 		optionValue: {
@@ -114,25 +116,29 @@ export default {
 		},
 		getOptionValue: {
 			type: Function,
-			default (option) {
-				if (typeof option === 'object') {
-					if (this.optionValue !== undefined && option[this.optionValue] !== undefined) {
-						return option[this.optionValue]
+			default () {
+				return function (option) {
+					if (typeof option === 'object') {
+						if (this.optionValue !== undefined && option[this.optionValue] !== undefined) {
+							return option[this.optionValue]
+						}
 					}
+					return option
 				}
-				return option
 			}
 		},
 		findOptionByValue: {
 			type: Function,
-			default (value) {
-				const findFunc = (option) => {
-					if (typeof option === 'object' && this.optionValue)
-						return option[this.optionValue] === value
-					return option === value
-				}
+			default () {
+				return function (value) {
+					const findFunc = (option) => {
+						if (typeof option === 'object' && this.optionValue)
+							return option[this.optionValue] === value
+						return option === value
+					}
 
-				return this.options.find(findFunc)
+					return this.options.find(findFunc)
+				}
 			}
 		},
 		hint: String,
@@ -159,9 +165,7 @@ export default {
 		 */
 		dropdownClasses () {
 			return {
-				open: this.open,
-				searchable: this.searchable,
-				loading: this.loading
+				open: this.open
 			}
 		},
 
@@ -199,11 +203,11 @@ export default {
 		 * @return {Boolean}
 		 */
 		isValueEmpty () {
-			if (this.value) {
-				if (typeof this.value === 'object') {
-					return !Object.keys(this.value).length
+			if (this.modelValue) {
+				if (typeof this.modelValue === 'object') {
+					return !Object.keys(this.modelValue).length
 				}
-				return !this.value.length
+				return !this.modelValue.length
 			}
 
 			return true
@@ -235,32 +239,33 @@ export default {
 		}
 	},
 	mounted () {
-		this.selectValue(this.value)
+		this.selectValue(this.modelValue)
 	},
 	beforeDestroy () {
 		this._popper?.destroy()
 	},
 
 	methods: {
-		focus () {
+		async focus () {
 			this.open = true
 			this.search = ''
 			this.$refs.search.select()
 			this.width = this.$refs.searchContainer.getBoundingClientRect().width
-			this.$nextTick(() => {
-				const options = {
-					placement: 'bottom',
-					positionFixed: true
-				}
-				if (this.icon) {
-					options.modifiers = {
-						offset: {
-							offset: '-15, 0'
-						}
+			await this.$nextTick()
+			await this.$nextTick()
+			await this.$nextTick()
+			const options = {
+				placement: 'bottom',
+				positionFixed: true
+			}
+			if (this.icon) {
+				options.modifiers = {
+					offset: {
+						offset: '-15, 0'
 					}
 				}
-				this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
-			})
+			}
+			this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
 		},
 		blur (event) {
 			this.open = false
@@ -281,7 +286,7 @@ export default {
 			if (this.isOptionSelected(option)) {
 				this.deselect(option)
 			} else {
-				this.$emit('input', this.getOptionValue(option))
+				this.$emit('update:modelValue', this.getOptionValue(option))
 			}
 
 			this.onAfterSelect(option)
@@ -293,7 +298,7 @@ export default {
 		 * @return {void}
 		 */
 		deselect (option) {
-			this.$emit('input', null)
+			this.$emit('update:modelValue', null)
 		},
 
 		/**
@@ -327,7 +332,7 @@ export default {
 		 * @return {Boolean}         True when selected || False otherwise
 		 */
 		isOptionSelected (option) {
-			return this.value === option
+			return this.modelValue === option
 		},
 
 		/**
@@ -350,8 +355,8 @@ export default {
 		 * @return {this.value}
 		 */
 		maybeDeleteValue () {
-			if (!this.$refs.search.value.length && this.value) {
-				this.$emit('input', null)
+			if (!this.$refs.search.value.length && this.modelValue) {
+				this.$emit('update:modelValue', null)
 			}
 		},
 

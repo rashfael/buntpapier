@@ -5,7 +5,7 @@ li.bunt-tab-header-item(role="tab", :class="['type-' + type, { 'active': active,
 	.bunt-tab-header-item-icon(v-if="type === 'icon' || type === 'icon-and-text'")
 		i.bunt-icon.mdi(:class="[iconClass]")
 	.bunt-tab-header-item-text(v-text="text", v-if="type === 'text' || type === 'icon-and-text'")
-	ripple-ink(v-if!="!noInk && !disabled")
+	ripple-ink(v-if="!disabled")
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'

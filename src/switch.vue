@@ -1,6 +1,6 @@
 <template lang="pug">
-.bunt-switch(:class="{checked: value}")
-	input(type="checkbox", :name="name", :checked="value", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
+.bunt-switch(:class="{checked: modelValue}")
+	input(type="checkbox", :name="name", :checked="modelValue", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
 	.bunt-switch-track
 		.bunt-switch-thumb
 	label {{ label }}
@@ -10,7 +10,7 @@ export default {
 	name: `bunt-switch`,
 	components: {},
 	props: {
-		value: {
+		modelValue: {
 			type: Boolean,
 			default: false
 		},
@@ -41,7 +41,7 @@ export default {
 	},
 	methods: {
 		onChange ($event) {
-			this.$emit('input', $event.target.checked)
+			this.$emit('update:modelValue', $event.target.checked)
 			if (this.validation) this.validation.$touch()
 		},
 		onBlur () {

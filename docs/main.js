@@ -1,14 +1,15 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createApp } from 'vue'
+// import Router from 'vue-router'
 import Buntpapier from '../src/'
-import Vuelidate from 'vuelidate'
+// import Vuelidate from '@vuelidate/core'
 import App from './App'
 
-Vue.use(Buntpapier)
-Vue.use(Vuelidate)
-Vue.use(Router)
-App.router = new Router({
-	mode: 'history',
-	routes: []
-})
-new Vue(App).$mount('#app')
+const app = createApp(App)
+app.use(Buntpapier)
+// app.use(Vuelidate)
+// Vue.use(Router)
+// App.router = new Router({
+// 	mode: 'history',
+// 	routes: []
+// })
+app.mount('#app')

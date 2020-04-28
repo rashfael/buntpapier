@@ -23,8 +23,7 @@ export default {
 		return {
 		}
 	},
-	ready () {
-
+	created () {
 	},
 	beforeDestroy () {
 

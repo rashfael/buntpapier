@@ -2,9 +2,10 @@
 button.bunt-icon-button(:class="{disabled}", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
 	i.bunt-icon.mdi(v-if="iconClass()", :class="[iconClass()]")
 	slot(v-else)
-	ripple-ink(v-if!="!noInk && !disabled")
+	ripple-ink(v-if="!disabled")
 </template>
 <script>
+import { isText } from '@vue/compiler-core'
 import RippleInk from './mixins/ripple-ink'
 import iconHelper from './helpers/icon'
 
@@ -33,6 +34,7 @@ export default {
 		},
 		tooltipOptions: Object
 	},
+	emits: ['click'],
 	data () {
 		return {
 			showTooltip: false
@@ -40,8 +42,10 @@ export default {
 	},
 	methods: {
 		iconClass () {
-			if (this.$slots.default[0].tag) return
-			return iconHelper.getClass(this.$slots.default[0].text)
+			const slotNode = this.$slots.default()[0]
+			// HACK can't find the symbol exported in vue
+			if (slotNode?.type.toString() === 'Symbol(Text)') return iconHelper.getClass(slotNode.children)
+			return
 		},
 		onClick (event) {
 			if (this.disabled) return

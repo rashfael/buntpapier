@@ -1,5 +1,5 @@
 <template lang="pug">
-.bunt-ripple-ink(@mousedown="mousedown($event)", @touchstart="touchstart($event)")
+.bunt-ripple-ink(@mousedown="mousedown($event)", @touchstart.passive="touchstart($event)")
 	transition(name="ripple-ink")
 		.ripple(v-if="show", :style="style")
 </template>

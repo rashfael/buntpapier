@@ -1,5 +1,5 @@
 <template lang="pug">
-.bunt-tab(:id="id", role="tabpanel", :tabindex="active ? '0' : null", :aria-hidden="!active ? 'true' : null", v-show="active")
+.bunt-tab(:id="id", role="tabpanel", tabindex="0")
 	slot
 </template>
 <script>
@@ -12,14 +12,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		id: String,
-	},
-	computed: {
-		active () {
-			return this.$parent.activeTabObj === this
-		}
+		id: String
 	},
 	watch: {
+		// TODO reimplement?
 		active (val) {
 			if (val) {
 				this.$emit('selected', this.id)
@@ -27,9 +23,6 @@ export default {
 				this.$emit('deselected', this.id)
 			}
 		}
-	},
-	created () {
-		this._isTab = true
 	}
 }
 </script>

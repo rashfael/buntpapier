@@ -8,7 +8,7 @@ button.bunt-button(:type="type", ref="button", :class="{disabled: disabled || lo
 	progress-circular(v-show="loading", size="small")
 	i.bunt-icon.mdi.mdi-replay.error(v-if="errorMessage || error")
 	i.bunt-icon.mdi.mdi-check.success(v-if="showSuccess")
-	ripple-ink(v-if!="!noInk && !disabled")
+	ripple-ink(v-if="!disabled")
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
@@ -19,7 +19,6 @@ export default {
 	name: `bunt-button`,
 	components: { ProgressCircular },
 	mixins: [
-		// HasDropdown,
 		RippleInk
 	],
 	props: {
@@ -58,6 +57,7 @@ export default {
 		},
 		tooltipOptions: Object
 	},
+	emits: ['click'],
 	data () {
 		return {
 			_loading: false,

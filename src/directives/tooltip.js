@@ -3,7 +3,7 @@
 // v-tooltip.bottom="" control placement https://popper.js.org/popper-documentation.html#Popper.placements
 // v-tooltip="{text: 'text', show: alwaysShow, placement: 'right', fixed: true}" trigger show manually, set options programatically
 // v-tooltip.fixed="" use position: fixed to break free of stacking context (lags slightly when scrolling)
-
+import { nextTick } from 'vue'
 import Popper from 'popper.js'
 
 const ANIMATION_OFFSET = 32
@@ -54,7 +54,7 @@ export default function (Vue) {
 		update (text, forceDisplay) {
 			this.text = text
 			this.forceDisplay = forceDisplay
-			Vue.nextTick(() => {
+			nextTick(() => {
 				if (forceDisplay) {
 					this.show()
 				} else {
@@ -80,7 +80,7 @@ export default function (Vue) {
 			if (this.displaying || !this.text) return
 			this.createTooltip()
 			this.displaying = true
-			Vue.nextTick(() => {
+			nextTick(() => {
 				if (this.animation) {
 					this.animation.reverse()
 				} else {
@@ -151,7 +151,7 @@ export default function (Vue) {
 	}
 
 	Vue.directive('tooltip', {
-		bind (el, binding, vnode) {
+		mounted (el, binding, vnode) {
 			let text
 			if (typeof binding.value === 'string') {
 				text = binding.value
@@ -166,7 +166,7 @@ export default function (Vue) {
 			el.__buntpapier__tooltip.update(text, binding.value.show)
 		},
 
-		update (el, binding, vnode, oldVnode) {
+		updated (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__tooltip || binding.value === binding.oldValue) return
 			let text
 			if (typeof binding.value === 'string') {
@@ -176,7 +176,7 @@ export default function (Vue) {
 			}
 			el.__buntpapier__tooltip.update(text, binding.value.show)
 		},
-		unbind (el, binding, vnode, oldVnode) {
+		unmounted (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__tooltip) return
 			el.__buntpapier__tooltip.destroy()
 		}

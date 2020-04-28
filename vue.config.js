@@ -1,9 +1,9 @@
 const path = require('path')
 
 module.exports = {
-	baseUrl: process.env.NODE_ENV === 'production'
-		? '/buntpapier/'
-		: '/',
+	// baseUrl: process.env.NODE_ENV === 'production'
+	// 	? '/buntpapier/'
+	// 	: '/',
 	devServer: {
 		host: 'localhost',
 		port: 8080
@@ -32,5 +32,5 @@ module.exports = {
 		}
 	},
 
-	lintOnSave: true
+	lintOnSave: false
 }
