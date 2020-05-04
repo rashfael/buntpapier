@@ -19,7 +19,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "tether": "^1.4.5",
     "tether-drop": "^1.4.2",
-    "typeface-roboto-mono": "0.0.54",
+    "typeface-roboto-mono": "0.0.54"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
