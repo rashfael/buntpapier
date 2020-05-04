@@ -15,6 +15,10 @@ import Tabs from './tabs'
 import Tab from './tab'
 import Dialog from './dialog'
 
+import { VuelidatePlugin } from './validators/vuelidate'
+import validators from './validators/vuelidate/validators/raw'
+import { Scrollbars } from './directives/scrollbar'
+
 let Popover
 if (typeof window !== 'undefined') {
 	Popover = require('./popover').default
@@ -42,3 +46,4 @@ const lib = {
 }
 
 export default lib
+export { VuelidatePlugin, Scrollbars, validators }

@@ -5,9 +5,13 @@
   "author": "rashfael <rashfael@isobeef.org>",
   "scripts": {
     "lint": "vue-cli-service lint",
-    "build": "vuepress build docs",
-    "deploy": "npm run build -s && gh-pages -d dist",
-    "start": "vuepress dev docs"
+    "build:docs": "vuepress build docs",
+    "deploy": "npm run build:docs -s && gh-pages -d dist",
+    "start": "vuepress dev docs",
+    "build": "npm run build:buntpapier && npm run build:validators",
+    "build:buntpapier": "vue-cli-service build --target lib src/index.js --formats commonjs",
+    "build:validators": "vue-cli-service build --target lib --dest validators --name validators  --formats commonjs src/validators/vuelidate/validators/raw/index.js && cp validators-package.json validators/package.json",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "fuzzysearch": "^1.0.3",
@@ -16,7 +20,6 @@
     "tether": "^1.4.5",
     "tether-drop": "^1.4.2",
     "typeface-roboto-mono": "0.0.54",
-    "vue": "^3.0.0-beta.4"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
@@ -24,7 +27,7 @@
     "@vue/cli-plugin-babel": "^4.3.1",
     "@vue/cli-plugin-eslint": "^3.2.2",
     "@vue/cli-service": "^4.3.1",
-    "@vue/compiler-sfc": "^3.0.0-beta.4",
+    "@vue/compiler-sfc": "^3.0.0-beta.7",
     "@vue/eslint-config-standard": "^3.0.5",
     "autoprefixer-stylus": "^0.14.0",
     "babel-eslint": "8.2.1",
@@ -49,12 +52,13 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "tether-tooltip": "^1.2.0",
+    "vue": "^3.0.0-beta.7",
     "vue-cli-plugin-vue-next": "^0.1.2",
     "vue-router": "^3.0.2",
     "vuelidate": "git://github.com/vuelidate/vuelidate.git#next",
     "vuepress": "^0.14.8"
   },
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "dist/buntpapier.common.js",
   "repository": "rashfael/buntpapier"
 }
