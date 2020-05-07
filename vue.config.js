@@ -14,15 +14,7 @@ module.exports = {
 		},
 		resolve: {
 			modules: [path.resolve('src'), 'node_modules'],
-		},
-		module: {
-			rules: [
-				{
-					test: /\.pug$/,
-					loader: 'pug-plain-loader'
-				}
-			]
-		},
+		}
 	},
 	css: {
 		loaderOptions: {

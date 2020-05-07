@@ -154,8 +154,7 @@ export default {
 			search: '',
 			rawSearch: '',
 			open: false,
-			width: 0,
-			usePortals: this.$root.$options.components.Portal !== undefined && this.$root.$options.components.PortalTarget !== undefined
+			width: 0
 		}
 	},
 	computed: {

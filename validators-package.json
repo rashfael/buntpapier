@@ -1,0 +1,5 @@
+{
+  "name": "buntpapier-validators",
+  "license": "MIT",
+  "main": "validators.common.js"
+}
