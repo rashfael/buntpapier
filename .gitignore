@@ -7,7 +7,7 @@
 
 node_modules
 dist
-validators
+/validators
 
 .publish
 build-stats.json
