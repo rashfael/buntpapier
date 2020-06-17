@@ -99,15 +99,13 @@ export default {
 		 */
 		getOptionLabel: {
 			type: Function,
-			default () {
-				return function (option) {
-					if (typeof option === 'object') {
-						if (this.optionLabel !== undefined && option[this.optionLabel] !== undefined) {
-							return option[this.optionLabel]
-						}
+			default (option) {
+				if (typeof option === 'object') {
+					if (this.optionLabel !== undefined && option[this.optionLabel] !== undefined) {
+						return option[this.optionLabel]
 					}
-					return option
 				}
+				return option
 			}
 		},
 		optionValue: {
@@ -116,29 +114,25 @@ export default {
 		},
 		getOptionValue: {
 			type: Function,
-			default () {
-				return function (option) {
-					if (typeof option === 'object') {
-						if (this.optionValue !== undefined && option[this.optionValue] !== undefined) {
-							return option[this.optionValue]
-						}
+			default (option) {
+				if (typeof option === 'object') {
+					if (this.optionValue !== undefined && option[this.optionValue] !== undefined) {
+						return option[this.optionValue]
 					}
-					return option
 				}
+				return option
 			}
 		},
 		findOptionByValue: {
 			type: Function,
-			default () {
-				return function (value) {
-					const findFunc = (option) => {
-						if (typeof option === 'object' && this.optionValue)
-							return option[this.optionValue] === value
-						return option === value
-					}
-
-					return this.options.find(findFunc)
+			default (value) {
+				const findFunc = (option) => {
+					if (typeof option === 'object' && this.optionValue)
+						return option[this.optionValue] === value
+					return option === value
 				}
+
+				return this.options.find(findFunc)
 			}
 		},
 		hint: String,
