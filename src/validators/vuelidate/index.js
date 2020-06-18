@@ -58,15 +58,13 @@ export const VuelidateMixin = {
   beforeCreate () {
     const options = this.$options
     if (!options.validations) return
-
-    const validations = isFunction(options.validations)
-      ? options.validations.call(this)
-      : options.validations
     if (!options.computed) options.computed = {}
     if (options.computed.$v) return
 
     options.computed.$v = () => setValidations({
-      validations,
+      validations: isFunction(options.validations)
+        ? options.validations.call(this)
+        : options.validations,
       state: this
     })
   }
