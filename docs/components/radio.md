@@ -17,9 +17,6 @@ export default {
 <bunt-radio id="radio-two" name="radio" label="No, pick me!" value="two" v-model="check" />
 <bunt-radio id="radio-three" name="radio" label="Don't listen to them, pick me!" value="three" v-model="check" />
 
-<style lang="styl">
-</style>
-
 ### template
 ```html
 <bunt-radio id="radio-one" name="radio" label="Pick me!" value="one" v-model="check" />

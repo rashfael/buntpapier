@@ -15,9 +15,6 @@ export default {
 
 <bunt-checkbox id="chbox-none" name="check-none" label="turn me ooooon" v-model="check" />
 
-<style lang="styl">
-</style>
-
 ### template
 ```html
 <bunt-checkbox id="chbox-none" name="check-none" label="turn me ooooon" v-model="check" />

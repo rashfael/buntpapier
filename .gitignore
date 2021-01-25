@@ -10,4 +10,6 @@ dist
 /validators
 
 .publish
+.cache
+.temp
 build-stats.json

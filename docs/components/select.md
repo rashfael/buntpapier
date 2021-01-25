@@ -25,25 +25,13 @@ export default {
 <bunt-select id="select-none" name="a-select" label="Select something" v-model="selection" :options="['Delicious Pizza', 'All The Kebab', 'Burrrrrrito!', 'Noodles, Peking Duck', 'McKingC', 'Linsa mit Spätzle und Saita', 'Ice, Ice, Baby', 'Egg and bacon', 'Egg, sausage and bacon', 'Egg and Spam', 'Egg, bacon and Spam', 'Egg, bacon, sausage and Spam', 'Spam, bacon, sausage and Spam', 'Spam, egg, Spam, Spam, bacon and Spam', 'Spam, Spam, Spam, egg and Spam', 'Spam, Spam, Spam, Spam, Spam, Spam, baked beans, Spam, Spam, Spam and Spam', 'Lobster Thermidor aux crevettes with a Mornay sauce, garnished with truffle pâté, brandy and a fried egg on top, and Spam.']" />
 <p>{{ selection }}</p>
 <bunt-select id="select-complex" name="complex-select" label="complex select" icon="palette" v-model="activeComplexOption" :options="complexOptions" option-label="name">
-	<template slot-scope="{ option }">
+	<template v-slot="{ option }">
 		<div class="name">{{ option.name }}</div>
 		<div class="id" :style="{'background-color': option.color}">{{ option.id }}</div>
 	</template>
 </bunt-select>
 
-<style lang="styl">
-#select-none, #select-complex
-	select-style()
-#select-complex
-	ul li
-		display: flex
-		justify-content: space-between
-		.id
-			width: 120px
-			text-align: right
-			padding: 0 8px
-			color: $clr-secondary-text-dark
-</style>
+<div id="bunt-teleport-target"></div>
 
 ### template
 ```html

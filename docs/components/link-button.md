@@ -5,12 +5,6 @@ title: link-button
 
 <bunt-link-button id="lbtn-none" :to="{name: 'derp'}">it's a link</bunt-link-button>
 <bunt-link-button id="lbtn-primary" :to="{path: '/'}">with color!</bunt-link-button>
-<style lang="styl">
-#lbtn-none
-	link-button-style()
-#lbtn-primary
-	link-button-style(color: $clr-primary)
-</style>
 
 ### template
 ```html
