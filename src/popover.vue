@@ -55,7 +55,7 @@ export default {
 			// this.drop.on('close', this.dropdownClosed)
 		}
 	},
-	beforeDestroy () {
+	beforeUnmount () {
 		if (this.drop) {
 			this.drop.remove()
 			this.drop.destroy()

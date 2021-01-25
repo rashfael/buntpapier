@@ -218,7 +218,7 @@ export default function (Vue) {
 				el.__buntpapier__scrollbar.update()
 			}
 		},
-		unmounted (el, binding, vnode, oldVnode) {
+		beforeUnmount (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__scrollbar) return
 			el.__buntpapier__scrollbar.destroy()
 		}

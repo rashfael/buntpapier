@@ -11,9 +11,9 @@ button.bunt-button(:type="type", ref="button", :class="{disabled: disabled || lo
 	ripple-ink(v-if="!disabled")
 </template>
 <script>
-import RippleInk from './mixins/ripple-ink'
-import ProgressCircular from './progress-circular'
-import iconHelper from './helpers/icon'
+import RippleInk from './mixins/ripple-ink.js'
+import ProgressCircular from './progress-circular.vue'
+import iconHelper from './helpers/icon.js'
 
 export default {
 	name: `bunt-button`,

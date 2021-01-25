@@ -234,7 +234,7 @@ export default {
 	mounted () {
 		this.selectValue(this.modelValue)
 	},
-	beforeDestroy () {
+	beforeUnmount () {
 		this._popper?.destroy()
 	},
 

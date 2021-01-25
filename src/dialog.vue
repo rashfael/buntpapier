@@ -23,7 +23,7 @@ export default {
 			document.body.appendChild(this.$el)
 		})
 	},
-	beforeDestroy () {
+	beforeUnmount () {
 		if (this.$el.parentNode === document.body) {
 			document.body.removeChild(this.$el)
 		}

@@ -1,27 +1,25 @@
 import initDirectives from './directives'
 
-import Button from './button'
-import Checkbox from './checkbox'
-import Radio from './radio'
-import Icon from './icon'
-import IconButton from './icon-button'
-import Input from './input'
-import InputOutlineContainer from './input-outline-container'
-import LinkButton from './link-button'
-import ProgressCircular from './progress-circular'
-import Select from './select'
-import Switch from './switch'
+import Button from './button.vue'
+import Checkbox from './checkbox.vue'
+import Radio from './radio.vue'
+import Icon from './icon.vue'
+import IconButton from './icon-button.vue'
+import Input from './input.vue'
+import InputOutlineContainer from './input-outline-container.vue'
+import LinkButton from './link-button.vue'
+import ProgressCircular from './progress-circular.vue'
+import Select from './select.vue'
+import Switch from './switch.vue'
 import Tabs from './tabs'
-import Tab from './tab'
-import Dialog from './dialog'
+import Tab from './tab.vue'
+import Dialog from './dialog.vue'
 
-import { VuelidatePlugin } from './validators/vuelidate'
-import validators from './validators/vuelidate/validators/raw'
 import { Scrollbars } from './directives/scrollbar'
 
 let Popover
 if (typeof window !== 'undefined') {
-	Popover = require('./popover').default
+	Popover = import('./popover.vue').default
 }
 
 const lib = {
@@ -46,4 +44,4 @@ const lib = {
 }
 
 export default lib
-export { VuelidatePlugin, Scrollbars, validators }
+export { Scrollbars }

@@ -1,5 +1,9 @@
-import { h as createElement, ref, reactive, computed, onMounted, nextTick, watch } from 'vue'
-import BuntTabHeaderItem from './tab-header'
+import { h as createElement, ref, reactive, toRef, computed, onMounted, onBeforeUpdate, nextTick, watch, provide} from 'vue'
+import BuntTabHeaderItem from './tab-header.vue'
+
+const filterTabs = function (vnodes) {
+	return vnodes.filter(tab => tab.type.name === 'bunt-tab')
+}
 
 export default {
 	name: `bunt-tabs`,
@@ -12,10 +16,11 @@ export default {
 			type: [Number, String, Object, Function],
 		}
 	},
+	emits: ['update:modelValue'],
 	setup(props, { slots, emit }) {
-		const tabs = slots.default().filter(tab => tab.type.name === 'bunt-tab')
 		const state = reactive({
-			activeTab: props.modelValue,
+			tabs: filterTabs(slots.default()),
+			activeTab: null,
 			indicatorTargetTransform: null,
 			indicatorState: null,
 			indicatorTransform: null,
@@ -28,13 +33,17 @@ export default {
 		})
 
 		const tabsContainer = ref(null)
-		const tabElements = reactive([])
+		const tabElements = ref([])
+		onBeforeUpdate(() => {
+			tabElements.value = []
+		})
 
 		watch(
-			() => tabElements.length,
-			() => {
+			() => slots.default(),
+			async (els) => {
+				state.tabs = filterTabs(els)
 				// also renders the initial selection
-				let index = tabElements.findIndex(tab => tab.id === state.activeTab)
+				let index = tabElements.value.findIndex(tab => tab.id === state.activeTab)
 				if (index < 0 && props.modelValue === undefined) index = 0
 				select(index)
 			}
@@ -43,19 +52,21 @@ export default {
 			() => props.modelValue,
 			() => {
 				if (state.activeTab?.id === props.modelValue) return
-				state.activeTab = props.modelValue
-				select(tabElements.findIndex(tab => tab.id === state.activeTab))
+				select(tabElements.value.findIndex(tab => tab.id === props.modelValue))
 			}
 		)
 
-		const select = (index, tabs) => {
-			if (index < 0) return
-			const oldIndex = state.activeTab?.id ? (tabs?.findIndex(tab => tab.props.id === state.activeTab.id) ?? -1) : (state.activeTab?.index ?? -1)
+		const select = (idOrIndex) => {
+			const activeTab = state.tabs.find((tab) => tab.props.id === idOrIndex) || state.tabs[idOrIndex]
+			if (!activeTab) return
+
+			const index = state.tabs.indexOf(activeTab)
+			const oldIndex = state.tabs.indexOf(state.activeTab)
 			if (index === oldIndex) return
 			let rect = tabsContainer.value.getBoundingClientRect()
 			let width = rect.width
 			const elements = Array.from(tabsContainer.value.children)
-			let tabRect = tabElements[index].$el.getBoundingClientRect()
+			let tabRect = tabElements.value[index].$el.getBoundingClientRect()
 			let tabOffsetLeft = tabRect.left - rect.left
 			state.indicatorTargetTransform = {
 				width: tabRect.width / width,
@@ -70,7 +81,7 @@ export default {
 					left: state.indicatorTargetTransform.left
 				}
 			} else {
-				const oldRect = tabElements[oldIndex].$el.getBoundingClientRect()
+				const oldRect = tabElements.value[oldIndex].$el.getBoundingClientRect()
 				state.indicatorState = 'expand'
 
 				if (oldIndex < index) {
@@ -84,21 +95,20 @@ export default {
 					}
 				}
 			}
-			const tabId = tabElements[index].id
-			if (tabId) {
-				state.activeTab = {id: tabId}
-				emit('update:modelValue', tabId)
-			} else {
-				state.activeTab = {index}
-				emit('update:modelValue', index)
-			}
-
+			const getValue = (tab) => tab.props.id || state.tabs.indexOf(tab)
+			const oldValue = state.activeTab ? getValue(state.activeTab) : null
+			state.activeTab = activeTab
+			const newValue = getValue(state.activeTab)
+			if (newValue === props.modelValue) return
+			emit('update:modelValue', newValue)
+			if (!oldValue) return
+			state.activeTab?.props.onDeselected?.(oldValue)
+			state.activeTab?.props.onSelected?.(newValue)
 		}
 
+		onMounted(() => select(props.modelValue || 0))
+
 		return () => {
-			const tabs = slots.default().filter(tab => tab.type.name === 'bunt-tab')
-			const activeTab = tabs.find((tab, index) => state.activeTab?.id ? tab.props.id === state.activeTab.id : index === state.activeTab?.index)
-			tabElements.length = 0 // reset refs
 			return createElement('div', {
 				class: 'bunt-tabs'
 			}, [
@@ -109,20 +119,20 @@ export default {
 						class: 'bunt-tabs-header-items',
 						role: 'tablist',
 						ref: tabsContainer
-					}, tabs.map((tab, index) => {
+					}, state.tabs.map((tab, index) => {
 						return createElement(BuntTabHeaderItem, {
 							id: tab.props.id,
 							text: tab.props.header,
-							active: tab === activeTab,
+							active: tab === state.activeTab,
 							disabled: tab.props.disabled,
 							key: tab.props.id,
-							ref (el, ol, il) {
-								if (!el) return // no idea how this works, can't find docs for that
-								tabElements[index] = el
+							ref (el) {
+								if (!el) return
+								tabElements.value[index] = el
 							},
 							onClick () {
 								if (tab.props.disabled) return
-								select(index, tabs)
+								select(index, state.tabs)
 							}
 						})
 					})),
@@ -146,7 +156,7 @@ export default {
 					class: 'bunt-tabs-body',
 					role: 'tabpanel',
 					tabindex: 0
-				}, [activeTab?.children?.default()]) // just activeTab does not seem to work
+				}, state.activeTab?.children?.default()) // just activeTab does not seem to work
 			])
 		}
 	}

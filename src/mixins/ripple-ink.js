@@ -1,4 +1,4 @@
-import RippleInk from '../ripple-ink'
+import RippleInk from '../ripple-ink.vue'
 
 export default {
 	components: {

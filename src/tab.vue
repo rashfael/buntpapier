@@ -1,8 +1,7 @@
 <template lang="pug">
-.bunt-tab(:id="id", role="tabpanel", tabindex="0")
-	slot
 </template>
 <script>
+// this actually does nothing and will never actually get instantiated
 export default {
 	name: `bunt-tab`,
 	props: {
@@ -14,15 +13,6 @@ export default {
 		},
 		id: String
 	},
-	watch: {
-		// TODO reimplement?
-		active (val) {
-			if (val) {
-				this.$emit('selected', this.id)
-			} else {
-				this.$emit('deselected', this.id)
-			}
-		}
-	}
+	emits: ['selected', 'deselected']
 }
 </script>
