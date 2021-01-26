@@ -17,11 +17,6 @@ import Dialog from './dialog.vue'
 
 import { Scrollbars } from './directives/scrollbar'
 
-let Popover
-if (typeof window !== 'undefined') {
-	Popover = import('./popover.vue').default
-}
-
 const lib = {
 	install (Vue) {
 		initDirectives(Vue)
@@ -34,7 +29,6 @@ const lib = {
 		Vue.component(`bunt-input-outline-container`, InputOutlineContainer)
 		Vue.component(`bunt-link-button`, LinkButton)
 		Vue.component(`bunt-select`, Select)
-		if (typeof window !== 'undefined') Vue.component(`bunt-popover`, Popover)
 		Vue.component(`bunt-progress-circular`, ProgressCircular)
 		Vue.component(`bunt-switch`, Switch)
 		Vue.component(`bunt-tabs`, Tabs)
