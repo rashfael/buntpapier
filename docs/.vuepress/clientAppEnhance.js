@@ -1,5 +1,5 @@
 import Buntpapier from '../../src/'
-import Vuelidate from 'vuelidate'
+// import Vuelidate from 'vuelidate'
 import 'roboto-fontface'
 import 'typeface-roboto-mono'
 import '@mdi/font/css/materialdesignicons.css'
@@ -11,5 +11,5 @@ export default ({
 	siteData // site metadata
 }) => {
 	Vue.use(Buntpapier)
-	Vue.use(Vuelidate)
+	// Vue.use(Vuelidate)
 }

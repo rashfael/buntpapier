@@ -8,23 +8,21 @@
     "build:docs": "vuepress build docs",
     "deploy": "npm run build:docs -s && gh-pages -d dist",
     "start": "vuepress dev docs",
-    "build": "vue-cli-service build --target lib src/index.js --formats commonjs",
+    "build": "vue-cli-service build --target lib --formats commonjs src/index.js",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "fuzzysearch": "^1.0.3",
     "popper.js": "^1.16.1",
     "resize-observer-polyfill": "^1.5.1",
-    "tether": "^1.4.7",
-    "tether-drop": "^1.4.2",
     "typeface-roboto-mono": "0.0.54"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.12.7",
     "@mdi/font": "^5.9.55",
-    "@vue/cli-plugin-babel": "^4.5.10",
+    "@vue/cli-plugin-babel": "^4.5.11",
     "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^4.5.10",
+    "@vue/cli-service": "^4.5.11",
     "@vue/compiler-sfc": "^3.0.5",
     "@vue/eslint-config-standard": "^3.0.5",
     "autoprefixer-stylus": "^0.14.0",
@@ -52,9 +50,9 @@
     "tether-tooltip": "^1.2.0",
     "vitepress": "^0.11.4",
     "vue": "^3.0.5",
-    "vue-router": "^3.4.9",
+    "vue-router": "^3.5.1",
     "vuelidate": "git://github.com/vuelidate/vuelidate.git#next",
-    "vuepress": "^2.0.0-alpha.18"
+    "vuepress": "^2.0.0-alpha.19"
   },
   "license": "MIT",
   "main": "dist/buntpapier.common.js",

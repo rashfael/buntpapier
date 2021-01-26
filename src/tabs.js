@@ -40,7 +40,7 @@ export default {
 
 		watch(
 			() => slots.default(),
-			async (els) => {
+			(els) => {
 				state.tabs = filterTabs(els)
 				// also renders the initial selection
 				let index = tabElements.value.findIndex(tab => tab.id === state.activeTab)
