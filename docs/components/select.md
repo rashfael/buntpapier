@@ -92,7 +92,6 @@ export default {
 | get-option-label | function | false | using `option-label` | function to generate label from option objects|
 | option-value | string | false | 'id' | value attribute of option object |
 | get-option-value | function | false | using `option-value` | function to get value from option object |
-|
 | disabled | boolean | false | false | disables input |
 | validation | object | false | | vuelidate object (see validation) |
 

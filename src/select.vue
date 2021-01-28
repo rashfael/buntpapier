@@ -141,7 +141,8 @@ export default {
 			default: false
 		},
 		validation: Object, // vuelidate result
-		dropdownClass: String
+		dropdownClass: String,
+		dropdownOverflowElement: [String, Object]
 	},
 	data () {
 		return {
@@ -245,17 +246,19 @@ export default {
 			this.$refs.search.select()
 			this.width = this.$refs.searchContainer.getBoundingClientRect().width
 			await this.$nextTick()
-			await this.$nextTick()
-			await this.$nextTick()
 			const options = {
 				placement: 'bottom',
-				positionFixed: true
+				positionFixed: true,
+				modifiers: {}
 			}
 			if (this.icon) {
-				options.modifiers = {
-					offset: {
-						offset: '-15, 0'
-					}
+				options.modifiers.offset = {
+					offset: '-15, 0'
+				}
+			}
+			if (this.dropdownOverflowElement) {
+				options.modifiers.preventOverflow = {
+					boundariesElement: this.dropdownOverflowElement
 				}
 			}
 			this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
