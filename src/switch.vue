@@ -28,16 +28,11 @@ export default {
 			default: false
 		},
 	},
+	emits: ['update:modelValue'],
 	data () {
 		return {
 			focused: false
 		}
-	},
-	computed: {},
-	created () {},
-	mounted () {
-		this.$nextTick(() => {
-		})
 	},
 	methods: {
 		onChange ($event) {

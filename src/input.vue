@@ -55,6 +55,7 @@ export default {
 		},
 		validation: Object // vuelidate result
 	},
+	emits: ['update:modelValue'],
 	data: function () {
 		return {
 			focused: false

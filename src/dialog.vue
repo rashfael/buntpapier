@@ -12,12 +12,7 @@ export default {
 			default: false
 		}
 	},
-	data () {
-		return {
-		}
-	},
-	computed: {},
-	created () {},
+	emits: ['close'],
 	mounted () {
 		this.$nextTick(() => {
 			document.body.appendChild(this.$el)

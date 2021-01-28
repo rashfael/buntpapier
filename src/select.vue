@@ -144,6 +144,7 @@ export default {
 		dropdownClass: String,
 		dropdownOverflowElement: [String, Object]
 	},
+	emits: ['update:modelValue', 'blur'],
 	data () {
 		return {
 			search: '',
