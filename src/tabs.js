@@ -46,6 +46,9 @@ export default {
 				let index = tabElements.value.findIndex(tab => tab.id === state.activeTab)
 				if (index < 0 && props.modelValue === undefined) index = 0
 				select(index)
+			},
+			{
+				flush: 'post'
 			}
 		)
 		watch(
