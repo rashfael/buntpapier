@@ -2,7 +2,7 @@
   "name": "buntpapier",
   "version": "2.0.0-alpha.6",
   "description": "",
-  "author": "rashfael <rashfael@isobeef.org>",
+  "author": "rash <rash@rash.codes>",
   "scripts": {
     "lint": "vue-cli-service lint",
     "build:docs": "vuepress build docs",
@@ -56,5 +56,6 @@
   },
   "license": "MIT",
   "main": "dist/buntpapier.common.js",
-  "repository": "rashfael/buntpapier"
+  "repository": "rashfael/buntpapier",
+  "homepage": "https://buntpapier.rash.codes/"
 }
