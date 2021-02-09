@@ -5,7 +5,7 @@ button.bunt-icon-button(:class="{disabled}", :type="type", :aria-disabled="disab
 	ripple-ink(v-if="!disabled")
 </template>
 <script>
-import { Text } from '@vue/runtime-core'
+import { Text } from 'vue'
 import RippleInk from './mixins/ripple-ink'
 import iconHelper from './helpers/icon'
 
