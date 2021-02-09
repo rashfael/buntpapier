@@ -5,7 +5,7 @@ button.bunt-icon-button(:class="{disabled}", :type="type", :aria-disabled="disab
 	ripple-ink(v-if="!disabled")
 </template>
 <script>
-import { isText } from '@vue/compiler-core'
+import { Text } from '@vue/runtime-core'
 import RippleInk from './mixins/ripple-ink'
 import iconHelper from './helpers/icon'
 
@@ -44,7 +44,7 @@ export default {
 		iconClass () {
 			const slotNode = this.$slots.default()[0]
 			// HACK can't find the symbol exported in vue
-			if (slotNode?.type.toString() === 'Symbol(Text)') return iconHelper.getClass(slotNode.children)
+			if (slotNode?.type === Text) return iconHelper.getClass(slotNode.children)
 			return
 		},
 		onClick (event) {
