@@ -7,17 +7,11 @@
 		slot
 </template>
 <script>
-// TODO fix
-
 export default {
 	name: `bunt-radio`,
-	model: {
-		prop: 'checked',
-		event: 'change'
-	},
 	props: {
-		checked: null,
-		modelValue: Boolean,
+		modelValue: [Boolean, String],
+		value: String,
 		name: {
 			type: String,
 			required: true
@@ -40,12 +34,12 @@ export default {
 	},
 	computed: {
 		isChecked () {
-			return this.checked === this.modelValue
+			return this.value === this.modelValue
 		}
 	},
 	methods: {
 		onChange ($event) {
-			this.$emit('update:modelValue', $event.target.checked)
+			this.$emit('update:modelValue', this.value)
 			if (this.validation) this.validation.$touch()
 		},
 		onBlur () {
