@@ -7,7 +7,7 @@
     "lint": "vue-cli-service lint",
     "build:docs": "vuepress build docs",
     "deploy": "npm run build:docs -s && gh-pages -d dist",
-    "start": "vuepress dev docs",
+    "start": "vitepress dev docs",
     "build": "vue-cli-service build --target lib --formats commonjs src/index.js",
     "prepublishOnly": "npm run build"
   },
