@@ -222,7 +222,7 @@ export default {
 		}
 	},
 	watch: {
-		value (value) {
+		modelValue (value) {
 			this.selectValue(value)
 		},
 		rawSearch (val) {
