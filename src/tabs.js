@@ -1,4 +1,5 @@
-import { h as createElement, ref, reactive, toRef, computed, onMounted, onBeforeUpdate, nextTick, watch, provide} from 'vue'
+import { h as createElement, ref, reactive, toRef, computed, onMounted, onBeforeUpdate, onBeforeUnmount, nextTick, watch, provide} from 'vue'
+import ResizeObserver from 'resize-observer-polyfill'
 import BuntTabHeaderItem from './tab-header.vue'
 
 const filterTabs = function (vnodes) {
@@ -32,6 +33,7 @@ export default {
 			})
 		})
 
+		const $el = ref(null)
 		const tabsContainer = ref(null)
 		const tabElements = ref([])
 		onBeforeUpdate(() => {
@@ -59,13 +61,7 @@ export default {
 			}
 		)
 
-		const select = (idOrIndex) => {
-			const activeTab = state.tabs.find((tab) => tab.props.id === idOrIndex) || state.tabs[idOrIndex]
-			if (!activeTab) return
-
-			const index = state.tabs.indexOf(activeTab)
-			const oldIndex = state.tabs.indexOf(state.activeTab)
-			if (index === oldIndex) return
+		const animateIndicator = (index, oldIndex) => {
 			let rect = tabsContainer.value.getBoundingClientRect()
 			let width = rect.width
 			const elements = Array.from(tabsContainer.value.children)
@@ -76,7 +72,7 @@ export default {
 				left: tabOffsetLeft / width * 100
 			}
 
-			if (oldIndex < 0) {
+			if (oldIndex === undefined || oldIndex < 0) {
 				// position the bar without animation.
 				state.indicatorState = ''
 				state.indicatorTransform = {
@@ -98,6 +94,16 @@ export default {
 					}
 				}
 			}
+		}
+
+		const select = (idOrIndex) => {
+			const activeTab = state.tabs.find((tab) => tab.props.id === idOrIndex) || state.tabs[idOrIndex]
+			if (!activeTab) return
+
+			const index = state.tabs.indexOf(activeTab)
+			const oldIndex = state.tabs.indexOf(state.activeTab)
+			if (index === oldIndex) return
+			animateIndicator(index, oldIndex)
 			const getValue = (tab) => tab.props.id || state.tabs.indexOf(tab)
 			const oldValue = state.activeTab ? getValue(state.activeTab) : null
 			state.activeTab = activeTab
@@ -109,11 +115,24 @@ export default {
 			state.activeTab?.props.onSelected?.(newValue)
 		}
 
-		onMounted(() => select(props.modelValue || 0))
+		let observer
+		onMounted(() => {
+			select(props.modelValue || 0)
+			observer = new ResizeObserver(entries => {
+				if (tabsContainer.value && state.activeTab)
+					animateIndicator(state.tabs.indexOf(state.activeTab))
+			})
+			observer.observe($el.value)
+		})
+
+		onBeforeUnmount(() => {
+			observer.disconnect()
+		})
 
 		return () => {
 			return createElement('div', {
-				class: 'bunt-tabs'
+				class: 'bunt-tabs',
+				ref: $el
 			}, [
 				createElement('div', {
 					class: 'bunt-tabs-header'
