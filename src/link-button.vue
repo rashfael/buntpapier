@@ -1,7 +1,8 @@
 <template lang="pug">
-router-link.bunt-link-button(:to="to")
-	slot
-	ripple-ink
+router-link(:to="to", custom, v-slot="{ href, navigate }")
+	a.bunt-link-button(:href="href", @click="navigate($event); $emit('click', $event)")
+		slot
+		ripple-ink
 </template>
 <script>
 import RippleInk from './mixins/ripple-ink'
@@ -15,15 +16,6 @@ export default {
 	props: {
 		to: Object
 	},
-	data () {
-		return {
-		}
-	},
-	computed: {
-	},
-	watch: {
-	},
-	methods: {
-	}
+	emits: ['click']
 }
 </script>
