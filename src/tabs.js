@@ -40,6 +40,8 @@ export default {
 			tabElements.value = []
 		})
 
+		const getTabValue = (tab) => tab.props.id || state.tabs.indexOf(tab)
+
 		watch(
 			() => slots.default(),
 			(els) => {
@@ -56,12 +58,19 @@ export default {
 		watch(
 			() => props.modelValue,
 			() => {
-				if (state.activeTab?.id === props.modelValue) return
+				if (getTabValue(state.activeTab) === props.modelValue) return
 				select(tabElements.value.findIndex(tab => tab.id === props.modelValue))
 			}
 		)
 
 		const animateIndicator = (index, oldIndex) => {
+			if (index == null || index < 0) {
+				state.indicatorTransform = {
+					width: 0,
+					left: 0
+				}
+				return
+			}
 			let rect = tabsContainer.value.getBoundingClientRect()
 			let width = rect.width
 			const elements = Array.from(tabsContainer.value.children)
@@ -98,21 +107,19 @@ export default {
 
 		const select = (idOrIndex) => {
 			const activeTab = state.tabs.find((tab) => tab.props.id === idOrIndex) || state.tabs[idOrIndex]
-			if (!activeTab) return
-
 			const index = state.tabs.indexOf(activeTab)
 			const oldIndex = state.tabs.indexOf(state.activeTab)
-			if (index === oldIndex) return
-			animateIndicator(index, oldIndex)
-			const getValue = (tab) => tab.props.id || state.tabs.indexOf(tab)
-			const oldValue = state.activeTab ? getValue(state.activeTab) : null
+			const oldValue = state.activeTab ? getTabValue(state.activeTab) : null
+			if (oldValue) {
+				state.activeTab.props.onDeselected?.(oldValue)
+			}
 			state.activeTab = activeTab
-			const newValue = getValue(state.activeTab)
-			if (newValue === props.modelValue) return
-			emit('update:modelValue', newValue)
-			if (!oldValue) return
-			state.activeTab?.props.onDeselected?.(oldValue)
+			const newValue = state.activeTab ? getTabValue(state.activeTab) : null
+			if (newValue !== props.modelValue) {
+				emit('update:modelValue', newValue)
+			}
 			state.activeTab?.props.onSelected?.(newValue)
+			animateIndicator(index, oldIndex)
 		}
 
 		let observer

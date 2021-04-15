@@ -21,10 +21,11 @@ export default {
 
 
 <bunt-tabs class="tabs-default" v-model="activeTab">
-<bunt-tab id="Tab 1" header="Tab 1" @selected="selectedEvents.push($event)"/>
-<bunt-tab id="Tab 2" header="Tab 2" @selected="selectedEvents.push($event)"/>
-<bunt-tab id="longer Heading" header="A longer Tab Heading" @selected="selectedEvents.push($event)"/>
+<bunt-tab id="Tab 1" header="Tab 1" @selected="selectedEvents.push(`selected ${$event}`)" @deselected="selectedEvents.push(`deselected ${$event}`)"/>
+<bunt-tab id="Tab 2" header="Tab 2" @selected="selectedEvents.push(`selected ${$event}`)" @deselected="selectedEvents.push(`deselected ${$event}`)"/>
+<bunt-tab id="longer Heading" header="A longer Tab Heading" @selected="selectedEvents.push(`selected ${$event}`)" @deselected="selectedEvents.push(`deselected ${$event}`)"/>
 </bunt-tabs>
+<bunt-button @click="activeTab = null">deselect</bunt-button>
 <p>Selected Tab: {{ activeTab }}</p>
 <ul>
 <li v-for="event of selectedEvents">{{ event }}</li>
