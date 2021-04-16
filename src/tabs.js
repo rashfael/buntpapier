@@ -40,7 +40,7 @@ export default {
 			tabElements.value = []
 		})
 
-		const getTabValue = (tab) => tab.props.id || state.tabs.indexOf(tab)
+		const getTabValue = (tab) => tab ? tab.props.id || state.tabs.indexOf(tab) : null
 
 		watch(
 			() => slots.default(),
@@ -109,12 +109,12 @@ export default {
 			const activeTab = state.tabs.find((tab) => tab.props.id === idOrIndex) || state.tabs[idOrIndex]
 			const index = state.tabs.indexOf(activeTab)
 			const oldIndex = state.tabs.indexOf(state.activeTab)
-			const oldValue = state.activeTab ? getTabValue(state.activeTab) : null
+			const oldValue = getTabValue(state.activeTab)
 			if (oldValue) {
 				state.activeTab.props.onDeselected?.(oldValue)
 			}
 			state.activeTab = activeTab
-			const newValue = state.activeTab ? getTabValue(state.activeTab) : null
+			const newValue = getTabValue(state.activeTab)
 			if (newValue !== props.modelValue) {
 				emit('update:modelValue', newValue)
 			}
