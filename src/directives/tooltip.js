@@ -28,6 +28,7 @@ export default function (Vue) {
 			this.tooltipEl.classList.add('bunt-tooltip')
 			this.tooltipEl.style.position = this.options.fixed ? 'fixed' : 'absolute'
 			this.tooltipEl.textContent = this.text
+			this.tooltipEl.ariaHidden = "true"
 			this.el.appendChild(this.tooltipEl)
 			this.popper = new Popper(this.el, this.tooltipEl, {
 				removeOnDestroy: true,

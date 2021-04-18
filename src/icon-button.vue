@@ -1,6 +1,6 @@
 <template lang="pug">
-button.bunt-icon-button(:class="{disabled}", :type="type", :aria-disabled="disabled", ref="button", @click="onClick", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}")
-	i.bunt-icon.mdi(v-if="iconClass()", :class="[iconClass()]")
+button.bunt-icon-button(:class="{disabled}", :type="type", ref="button", @click="onClick", v-tooltip="tooltipOptions || {text: tooltip, placement: tooltipPlacement, fixed: tooltipFixed}", :aria-disabled="disabled", :aria-label="tooltip || iconClass()")
+	i.bunt-icon.mdi(v-if="iconClass()", :class="[iconClass()]", aria-hidden="true")
 	slot(v-else)
 	ripple-ink(v-if!="!noInk && !disabled")
 </template>
