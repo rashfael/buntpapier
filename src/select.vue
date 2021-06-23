@@ -142,7 +142,13 @@ export default {
 		},
 		validation: Object, // vuelidate result
 		dropdownClass: String,
-		dropdownOverflowElement: [String, Object]
+		dropdownOverflowElement: [String, Object],
+		filterByFunction: {
+			type: Function,
+			default (lowercasedSearch, option, fuzzyFn) {
+				return fuzzyFn(lowercasedSearch, this.getOptionLabel(option).toLowerCase())
+			}
+		}
 	},
 	emits: ['update:modelValue', 'blur'],
 	data () {
@@ -184,13 +190,8 @@ export default {
 		 * @return {array}
 		 */
 		filteredOptions () {
-			let options = this.search.length !== 0
-				? this.options.filter((option) => fuzzysearch(this.search.toLowerCase(), this.getOptionLabel(option).toLowerCase()))
-				: this.options.slice()
-			if (this.taggable && this.search.length && !this.optionExists(this.search)) {
-				options.unshift(this.search)
-			}
-			return options
+			if (!this.search) return this.options
+			return this.options.filter(option => this.filterByFunction(this.search.toLowerCase(), option, fuzzysearch))
 		},
 
 		/**
@@ -355,29 +356,7 @@ export default {
 			if (!this.$refs.search.value.length && this.modelValue) {
 				this.$emit('update:modelValue', null)
 			}
-		},
-
-		/**
-		 * Determine if an option exists
-		 * within this.options array.
-		 *
-		 * @param  {(string|Object)} option
-		 * @return {boolean}
-		 */
-		optionExists (option) {
-			let exists = false
-
-			this.options.forEach(opt => {
-				if (typeof opt === 'object' && opt[this.optionLabel] === option) {
-					exists = true
-				} else if (opt === option) {
-					exists = true
-				}
-			})
-
-			return exists
 		}
-	},
-
+	}
 }
 </script>
