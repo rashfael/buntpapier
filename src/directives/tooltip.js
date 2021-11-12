@@ -53,13 +53,16 @@ export default function (Vue) {
 
 		update (text, forceDisplay) {
 			this.text = text
+			const oldForceDisplay = this.forceDisplay
 			this.forceDisplay = forceDisplay
 			nextTick(() => {
 				if (forceDisplay) {
-					this.show()
+					if (!oldForceDisplay) this.show()
 				} else {
-					this.hide() // TODO instead of fast hiding, buffer text?
+					if (oldForceDisplay) this.hide() // TODO instead of fast hiding, buffer text?
 				}
+				if (this.tooltipEl) this.tooltipEl.textContent = this.text
+				if (this.popper) this.popper.update()
 			})
 		}
 
