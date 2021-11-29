@@ -184,7 +184,8 @@ export default {
 				createElement('div', {
 					class: 'bunt-tabs-body',
 					role: 'tabpanel',
-					tabindex: 0
+					tabindex: 0,
+					key: state.activeTab.props.id // forces proper lifecycle of tab contents
 				}, state.activeTab?.children?.default()) // just activeTab does not seem to work
 			])
 		}
