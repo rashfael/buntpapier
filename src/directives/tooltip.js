@@ -16,7 +16,6 @@ export default function (Vue) {
 			// bind all the event handlers
 			this.show = this.show.bind(this)
 			this.hide = this.hide.bind(this)
-			this.options.placement = options.placement || 'auto'
 
 			this.el.addEventListener('mouseenter', this.show)
 			this.el.addEventListener('mouseleave', this.hide)
@@ -29,6 +28,8 @@ export default function (Vue) {
 			this.tooltipEl.style.position = this.options.fixed ? 'fixed' : 'absolute'
 			this.tooltipEl.textContent = this.text
 			this.el.appendChild(this.tooltipEl)
+			const elStyle = getComputedStyle(this.el)
+			this.options.placement = elStyle.getPropertyValue('--tooltip-placement') || 'auto'
 			this.popper = createPopper(this.el, this.tooltipEl, {
 				placement: this.options.placement,
 				strategy: this.options.fixed ? 'fixed' : 'absolute',

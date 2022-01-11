@@ -126,7 +126,7 @@ function onClick (event) {
 
 </script>
 <template lang="pug">
-button.bunt-button(ref="el", :type="props.type", :class="{disabled: props.disabled, loading: props.loading, error: props.errorMessage || props.error, success: showSuccess}", :aria-disabled="disabled", v-tooltip="tooltipOptions || {text: tooltipText, show: !!props.errorMessage, placement: props.tooltipPlacement, fixed: props.tooltipFixed}", v-ripple-ink, @click="onClick")
+button.bunt-button(ref="el", :type="props.type", :class="{disabled: props.disabled, loading: props.loading, error: props.errorMessage || props.error, success: showSuccess}", :aria-disabled="disabled", v-tooltip="tooltipOptions || {text: tooltipText, show: !!props.errorMessage, fixed: props.tooltipFixed}", v-ripple-ink, @click="onClick")
 	.bunt-button-content
 		i.bunt-icon.mdi(v-if="iconClass", :class="[iconClass]")
 		.bunt-button-text
