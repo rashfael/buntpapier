@@ -1,0 +1,135 @@
+@import '../../../../buntpapier'
+variables()
+normalize-css()
+base()
+typography()
+components()
+scrollbars()
+
+$clr-primary = $clr-blue
+
+stripe(colors, angle, width)
+	$grad = 'repeating-linear-gradient(' + angle
+	for $clr, $i in colors
+		$grad += ',' + $clr + ' ' + $i*width + ',' + $clr + ' ' + ($i + 1)*width
+	$grad += ')'
+	return $grad
+$gradclrs = $clr-red $clr-pink $clr-purple $clr-deep-purple $clr-indigo $clr-blue $clr-light-blue $clr-cyan $clr-teal $clr-green $clr-light-green $clr-lime $clr-yellow $clr-amber $clr-orange $clr-deep-orange //$clr-brown $clr-grey $clr-blue-grey
+
+.content:not(.custom)
+	max-width: 1200px
+
+	a.bunt-link-button:hover
+		text-decoration: none
+table
+	th:last-child, td:last-child
+		width: 100%
+
+.dark-background
+	background-color: $clr-blue-grey
+	padding: 8px 16px
+
+
+.home-hero::before, .home-hero::after, header.nav-bar::before, header.nav-bar::after
+	content: ''
+	display: block
+	position: absolute
+	left: 0
+	top: 0
+	width: 100%
+	height: 24px
+	background-image:linear-gradient(to right, transparent, transparent 80%, white 95%), linear-gradient(to left, transparent, transparent 80%, white 95%), unquote(stripe($gradclrs, 90deg, 24px))
+	background-size: 100% 102%
+	background-repeat: no-repeat
+
+.home-hero
+	position: relative
+	h1
+		color: $clr-white
+		font-family 'Roboto Mono'
+		position: relative
+		line-height 60px
+		font-weight 400
+		font-size 36px
+		letter-spacing 2.25px
+		margin 0 0 0 2px
+		z-index 100
+	&::before
+		height: 64px
+		opacity 0.7
+
+header.nav-bar
+	.nav-bar-title
+		font-family 'Roboto Mono'
+		letter-spacing 2.25px
+		position: relative
+		z-index 100
+		color: $clr-white
+
+	&::before, &::after
+		width: 500px
+		background-image: linear-gradient(to right, transparent, transparent 55%, white 95%), unquote(stripe($gradclrs, 90deg, 24px))
+
+	&::before
+		height: 100%
+		opacity 0.7
+	&::after
+		height 21px
+
+// content pages
+
+.bunt-button
+	margin: 0 2px
+
+#btn-none, #btn-tooltip, #btn-icon
+	button-style()
+#btn-primary, #btn-disabled, #btn-loading, #btn-error
+	button-style(color: $clr-primary)
+#btn-clear
+	button-style(color: $clr-primary, style: 'clear')
+#btn-text-color
+	button-style(color: $clr-danger, text-color: $clr-yellow)
+#btn-large
+	button-style(size: 'large')
+#btn-huge
+	button-style(size: 'huge')
+
+#ibtn-none, #ibtn-tooltip
+	icon-button-style()
+#ibtn-primary, #ibtn-disabled
+	icon-button-style(color: $clr-primary)
+#ibtn-clear
+	icon-button-style(color: $clr-primary, style: 'clear')
+
+#input-normal, #input-password, #input-disabled, #input-placeholder
+	width: 420px
+	input-style()
+#input-compact
+	width: 420px
+	input-style(size: 'compact')
+#input-large
+	width: 420px
+	input-style(size: 'large')
+#input-dark
+	width: 420px
+	input-style(style: 'dark')
+
+#lbtn-none
+	link-button-style()
+#lbtn-primary
+	link-button-style(color: $clr-primary)
+
+#select-none, #select-complex
+	select-style()
+#select-complex
+	ul li
+		display: flex
+		justify-content: space-between
+		.id
+			width: 120px
+			text-align: right
+			padding: 0 8px
+			color: $clr-secondary-text-dark
+
+.tabs-default
+	tabs-style()

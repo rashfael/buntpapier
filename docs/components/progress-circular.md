@@ -11,9 +11,6 @@ title: progress-circular
 <bunt-progress-circular :center="true" size="huge" />
 <bunt-progress-circular :page="true" size="huge" />
 
-<style lang="styl">
-</style>
-
 ### template
 ```html
 <bunt-progress-circular size="tiny" />

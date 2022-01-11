@@ -198,19 +198,16 @@ class Scrollbars {
 
 export default function (Vue) {
 	Vue.directive('scrollbar', {
-		bind (el, binding, vnode) {
+		mounted (el, binding, vnode) {
 			el.__buntpapier__scrollbar = new Scrollbars(el, {
 				scrollX: binding.modifiers.x,
 				scrollY: binding.modifiers.y,
 				_preventMousedown: binding.value?._preventMousedown
 			})
-		},
-		inserted (el) {
-			if (!el.__buntpapier__scrollbar) return
 			el.__buntpapier__scrollbar.refreshStyling()
 			el.__buntpapier__scrollbar.update()
 		},
-		componentUpdated (el, binding, vnode, oldVnode) {
+		updated (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__scrollbar) {
 				el.__buntpapier__scrollbar = new Scrollbars(el, {
 					scrollX: binding.modifiers.x,
@@ -221,7 +218,7 @@ export default function (Vue) {
 				el.__buntpapier__scrollbar.update()
 			}
 		},
-		unbind (el, binding, vnode, oldVnode) {
+		beforeUnmount (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__scrollbar) return
 			el.__buntpapier__scrollbar.destroy()
 		}

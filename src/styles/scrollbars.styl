@@ -1,0 +1,76 @@
+$rail-width = 15px
+$thumb-width = 6px
+$thumb-width-hovered = 12px
+
+scrollbars()
+	.bunt-scrollbar
+		position: relative
+		box-sizing: border-box
+		overflow: scroll
+
+		&:hover
+			.bunt-scrollbar-thumb
+				opacity: .4
+
+		&::-webkit-scrollbar
+			display: none
+		scrollbar-width: none
+
+
+		.bunt-scrollbar-rail-wrapper-x,
+		.bunt-scrollbar-rail-wrapper-y
+			position: sticky
+			user-select: none
+			margin: 0 !important // don't get driveby margins from *
+
+		.bunt-scrollbar-rail-x,
+		.bunt-scrollbar-rail-y
+			position: absolute
+			user-select: none
+
+		.bunt-scrollbar-thumb
+			position: absolute
+			background-color: $clr-blue-grey-600
+			opacity: .2
+			border-radius: $thumb-width
+			transition: height .3s $material-easing, width .3s $material-easing, opacity .3s $material-easing
+
+		.bunt-scrollbar-rail-wrapper-x
+			// using both top and bottom always positions the rail at the bottom
+			top: 100%
+			bottom: 0
+			left: 0
+			width: 0
+			height: 0
+			.bunt-scrollbar-rail-x
+				height: $rail-width
+				bottom: 0
+
+				.bunt-scrollbar-thumb
+					bottom: 2px
+					height: $thumb-width
+
+				&:hover, &.active
+					.bunt-scrollbar-thumb
+						height: $thumb-width-hovered
+						opacity: .8
+		.bunt-scrollbar-rail-wrapper-y
+			bottom: 100%
+			// using both left and right always positions the rail at the right
+			left: 100%
+			right: 0
+			height: 0
+			width: 0
+
+			.bunt-scrollbar-rail-y
+				width: $rail-width
+				right: 0
+				top: 0
+
+				.bunt-scrollbar-thumb
+					right: 2px
+					width: $thumb-width
+				&:hover, &.active
+					.bunt-scrollbar-thumb
+						width: $thumb-width-hovered
+						opacity: .8

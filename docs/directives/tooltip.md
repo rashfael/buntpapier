@@ -11,11 +11,25 @@ title: v-tooltip
 
 `v-tooltip.fixed=""` use position: fixed to break free of stacking context (lags slightly when scrolling)
 
+<script>
+export default {
+	data () {
+		return {
+			count: 1
+		}
+	},
+	created () {
+		setInterval(() => this.count++, 500)
+	}
+}
+</script>
+
 <div class="tooltips">
 	<div class="tooltipable" v-tooltip.fixed="'HORRAY'">HOVER ME</div>
 	<div class="tooltipable" v-tooltip.top="'HORRAY'">UP TOP</div>
 	<div class="tooltipable" v-tooltip.left="'HORRAY'">LEFT</div>
 	<div class="tooltipable" v-tooltip.right-end="'HORRAY'">RIGHT ON THE END</div>
+	<div class="tooltipable" v-tooltip="`Count ${Array(count).join('a')}`">DYNAMIC TEXT</div>
 </div>
 
 <style lang="styl">

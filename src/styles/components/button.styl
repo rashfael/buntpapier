@@ -1,0 +1,116 @@
+// TODO
+// - flat/clear style
+
+// defaults
+:root
+	--button-color: var(--clr-grey-200)
+	--button-color-error: var(--clr-danger)
+	--button-color-success: var(--clr-success)
+
+$button-height = 36px
+
+bunt-lightness(color, amount)
+	return unquote('hsl(var(' + color + '-h), var(' + color + '-s), calc(var(' + color + '-l) * ' + amount + '))')
+
+button()
+	.bunt-button, .bunt-link-button
+		font-family: $font-stack
+		font-size: 14px
+		text-transform: uppercase
+		font-weight: 500
+		line-height: $button-height
+		vertical-align: middle
+		flex-shrink: 0
+		outline: none
+		border: none
+
+		position: relative
+		display: inline-flex
+		align-items: center
+		justify-content: center
+		
+		cursor: pointer
+
+		border-radius: 4px
+		padding: 0 16px
+		min-width: 80px
+		height: $button-height
+		white-space: nowrap // buttons can't be multiline
+
+		background-color: var(--button-color)
+		color: var(--_button-text-color)
+
+		.bunt-button-content
+			display: flex
+
+		.bunt-icon
+			height: $button-height
+			line-height: $button-height
+			font-size: 20px
+
+			&.error, &.success
+				position: absolute
+
+		&:hover
+			background-color: bunt-lightness(--_button-bg, 0.85)
+
+		&:focus-visible
+			outline-style: solid
+			background-color: bunt-lightness(--_button-bg, 0.85)
+			outline-color: bunt-lightness(--_button-bg, 0.75)
+			outline-width: 2px
+			outline-offset: 2px
+
+		&.disabled
+			cursor: default
+			.bunt-button-content
+				opacity: 0.6
+
+		// hide normal content when showing other content
+		&.loading, &.success
+			cursor: default
+		&.loading, &.success, &.error
+			.bunt-button-content
+				visibility: hidden
+
+		.bunt-progress-circular
+			--progress-size: small
+			position: absolute
+			top: 50%
+			left: 50%
+			animation: button-container-rotate 1568ms linear infinite
+			@keyframes button-container-rotate
+				from
+					transform: translate(-50%, -50%) rotate(0deg)
+				to
+					transform: translate(-50%, -50%) rotate(360deg)
+			svg circle
+				stroke: currentColor
+
+		&.success
+			background-color: var(--button-color-success)
+			&:hover
+				background-color: bunt-lightness(--_button-bg-success, 0.85)
+			&:focus-visible
+				background-color: bunt-lightness(--_button-bg-success, 0.85)
+				outline-color: bunt-lightness(--_button-bg-success, 0.75)
+
+		&.error
+			background-color: var(--button-color-error)
+			&:hover
+				background-color: bunt-lightness(--_button-bg-error, 0.85)
+			&:focus-visible
+				background-color: bunt-lightness(--_button-bg-error, 0.85)
+				outline-color: bunt-lightness(--_button-bg-error, 0.75)
+			.bunt-tooltip
+				background-color: var(--button-color-error)
+
+	.bunt-button--size-large
+		font-size: 18px
+		height: 52px
+		padding: 0 64px
+	.bunt-button--size-huge
+		font-size: 32px
+		font-weight: 300
+		height: 64px
+		padding: 8px 64px

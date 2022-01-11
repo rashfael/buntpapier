@@ -24,21 +24,6 @@ export default {
 	<bunt-input id="input-dark" v-model="inputText" name="dark-input" label="an input on dark background" hint="with a hint"/>
 </div>
 
-<style lang="styl">
-#input-normal, #input-password, #input-disabled, #input-placeholder
-	width: 420px
-	input-style()
-#input-compact
-	width: 420px
-	input-style(size: 'compact')
-#input-large
-	width: 420px
-	input-style(size: 'large')
-#input-dark
-	width: 420px
-	input-style(style: 'dark')
-</style>
-
 ### template
 ```html
 <bunt-input id="input-normal" v-model="inputText" name="an-input" label="ein lustiges Eingabefeld" hint="mit einem lustigen Hinweis"/>

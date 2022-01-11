@@ -23,20 +23,6 @@ title: button
 #### error
 <bunt-button id="btn-error" :error="true">a longish text</bunt-button>
 <bunt-button id="btn-error" error-message="something went wrong">a longish text</bunt-button>
-<style lang="styl">
-#btn-none, #btn-tooltip, #btn-icon
-	button-style()
-#btn-primary, #btn-disabled, #btn-loading, #btn-error
-	button-style(color: $clr-primary)
-#btn-clear
-	button-style(color: $clr-primary, style: 'clear')
-#btn-text-color
-	button-style(color: $clr-danger, text-color: $clr-warning)
-#btn-large
-	button-style(size: 'large')
-#btn-huge
-	button-style(size: 'huge')
-</style>
 
 ### template
 ```html
@@ -72,9 +58,9 @@ title: button
 #btn-text-color
 	button-style(color: $clr-danger, text-color: $clr-warning)
 #btn-large
-	button-style(size: 'large')
+	button-style(size: large)
 #btn-huge
-	button-style(size: 'huge')
+	button-style(size: huge)
 ```
 
 ## props

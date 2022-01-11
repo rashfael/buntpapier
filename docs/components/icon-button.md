@@ -11,14 +11,6 @@ title: icon-button
 #### tooltip
 <bunt-icon-button id="ibtn-tooltip" tooltip="hoorrraaaa">tooltip-outline</bunt-icon-button>
 <bunt-icon-button id="ibtn-tooltip" tooltip="hoorrraaaa" tooltip-placement="right">tooltip right</bunt-icon-button>
-<style lang="styl">
-#ibtn-none, #ibtn-tooltip
-	icon-button-style()
-#ibtn-primary, #ibtn-disabled
-	icon-button-style(color: $clr-primary)
-#ibtn-clear
-	icon-button-style(color: $clr-primary, style: 'clear')
-</style>
 
 ### template
 ```html

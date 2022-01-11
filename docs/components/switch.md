@@ -15,9 +15,6 @@ export default {
 
 <bunt-switch id="switch-none" name="switch-none" label="turn me ooooon" v-model="switchValue" />
 
-<style lang="styl">
-</style>
-
 ### template
 ```html
 <bunt-switch id="switch-none" name="switch-none" label="turn me ooooon" v-model="switch" />

@@ -3,8 +3,8 @@
 // v-tooltip.bottom="" control placement https://popper.js.org/popper-documentation.html#Popper.placements
 // v-tooltip="{text: 'text', show: alwaysShow, placement: 'right', fixed: true}" trigger show manually, set options programatically
 // v-tooltip.fixed="" use position: fixed to break free of stacking context (lags slightly when scrolling)
-
-import Popper from 'popper.js'
+import { nextTick } from 'vue'
+import { createPopper } from '@popperjs/core'
 
 const ANIMATION_OFFSET = 32
 
@@ -29,43 +29,53 @@ export default function (Vue) {
 			this.tooltipEl.style.position = this.options.fixed ? 'fixed' : 'absolute'
 			this.tooltipEl.textContent = this.text
 			this.el.appendChild(this.tooltipEl)
-			this.popper = new Popper(this.el, this.tooltipEl, {
-				removeOnDestroy: true,
+			this.popper = createPopper(this.el, this.tooltipEl, {
 				placement: this.options.placement,
-				positionFixed: this.options.fixed,
-				modifiers: {
-					offset: { offset: '0, 8' },
-					applyStyle: { enabled: false },
-					preventOverflow: {
-						boundariesElement: this.options.boundariesElement || 'scrollParent',
-					},
-					applyTooltipStyle: {
-						enabled: true,
-						fn: (data) => {
-							this.positions = data.popper
-							this.tooltipEl.style.transform = `translate3d(${Math.round(this.positions.left)}px, ${Math.round(this.positions.top)}px, 0)`
-						},
-						order: 900
+				strategy: this.options.fixed ? 'fixed' : 'absolute',
+				modifiers: [{
+					name: 'offset',
+					options: {
+						offset: [0, 8]
 					}
-				}
+				}, {
+					name: 'preventOverflow',
+					options: {
+						boundary: this.options.boundary || this.options.boundariesElement || 'clippingParents',
+					}
+				}, {
+					name: 'applyStyles',
+					enabled: false
+				}, {
+					name: 'applyTooltipStyle',
+					enabled: true,
+					phase: 'write',
+					fn: ({state}) => {
+						this.positions = state.modifiersData.popperOffsets
+						this.tooltipEl.style.transform = `translate3d(${Math.round(this.positions.x)}px, ${Math.round(this.positions.y)}px, 0)`
+					}
+				}]
 			})
 		}
 
 		update (text, forceDisplay) {
 			this.text = text
+			const oldForceDisplay = this.forceDisplay
 			this.forceDisplay = forceDisplay
-			Vue.nextTick(() => {
+			nextTick(() => {
 				if (forceDisplay) {
-					this.show()
+					if (!oldForceDisplay) this.show()
 				} else {
-					this.hide() // TODO instead of fast hiding, buffer text?
+					if (oldForceDisplay) this.hide() // TODO instead of fast hiding, buffer text?
 				}
+				if (this.tooltipEl) this.tooltipEl.textContent = this.text
+				if (this.popper) this.popper.update()
 			})
 		}
 
 		destroyTooltip () {
 			if (!this.popper) return
 			this.popper.destroy()
+			this.tooltipEl.remove()
 			this.popper = null
 			this.tooltipEl = null
 		}
@@ -80,35 +90,35 @@ export default function (Vue) {
 			if (this.displaying || !this.text) return
 			this.createTooltip()
 			this.displaying = true
-			Vue.nextTick(() => {
+			nextTick(() => {
 				if (this.animation) {
 					this.animation.reverse()
 				} else {
 					let animationOrigin
 					if (this.options.placement.startsWith('top')) {
 						animationOrigin = {
-							top: Math.round(this.positions.top) + ANIMATION_OFFSET,
-							left: Math.round(this.positions.left)
+							top: Math.round(this.positions.y) + ANIMATION_OFFSET,
+							left: Math.round(this.positions.x)
 						}
 					} else if (this.options.placement.startsWith('left')) {
 						animationOrigin = {
-							top: Math.round(this.positions.top),
-							left: Math.round(this.positions.left) + ANIMATION_OFFSET
+							top: Math.round(this.positions.y),
+							left: Math.round(this.positions.x) + ANIMATION_OFFSET
 						}
 					} else if (this.options.placement.startsWith('right')) {
 						animationOrigin = {
-							top: Math.round(this.positions.top),
-							left: Math.round(this.positions.left) - ANIMATION_OFFSET
+							top: Math.round(this.positions.y),
+							left: Math.round(this.positions.x) - ANIMATION_OFFSET
 						}
 					} else {
 						animationOrigin = {
-							top: Math.round(this.positions.top) - ANIMATION_OFFSET,
-							left: Math.round(this.positions.left)
+							top: Math.round(this.positions.y) - ANIMATION_OFFSET,
+							left: Math.round(this.positions.x)
 						}
 					}
 					this.animation = this.tooltipEl.animate([
 						{transform: `translate3d(${animationOrigin.left}px, ${animationOrigin.top}px, 0)`, opacity: 0},
-						{transform: `translate3d(${Math.round(this.positions.left)}px, ${Math.round(this.positions.top)}px, 0)`, opacity: 1}
+						{transform: `translate3d(${Math.round(this.positions.x)}px, ${Math.round(this.positions.y)}px, 0)`, opacity: 1}
 					], {
 						duration: 200,
 						easing: 'ease-in-out',
@@ -133,11 +143,11 @@ export default function (Vue) {
 				this.destroyTooltip()
 			}
 			// const animationOrigin = {
-			// 	top: Math.round(this.positions.top) - 52,
-			// 	left: Math.round(this.positions.left)
+			// 	top: Math.round(this.positions.y) - 52,
+			// 	left: Math.round(this.positions.x)
 			// }
 			// this.animation = this.tooltipEl.animate([
-			// 	{transform: `translate3d(${Math.round(this.positions.left)}px, ${Math.round(this.positions.top)}px, 0)`, opacity: 1},
+			// 	{transform: `translate3d(${Math.round(this.positions.x)}px, ${Math.round(this.positions.y)}px, 0)`, opacity: 1},
 			// 	{transform: `translate3d(${animationOrigin.left}px, ${animationOrigin.top}px, 0)`, opacity: 0}
 			// ], {
 			// 	duration: 2000,
@@ -151,7 +161,7 @@ export default function (Vue) {
 	}
 
 	Vue.directive('tooltip', {
-		bind (el, binding, vnode) {
+		mounted (el, binding, vnode) {
 			let text
 			if (typeof binding.value === 'string') {
 				text = binding.value
@@ -166,7 +176,7 @@ export default function (Vue) {
 			el.__buntpapier__tooltip.update(text, binding.value.show)
 		},
 
-		update (el, binding, vnode, oldVnode) {
+		updated (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__tooltip || binding.value === binding.oldValue) return
 			let text
 			if (typeof binding.value === 'string') {
@@ -176,7 +186,7 @@ export default function (Vue) {
 			}
 			el.__buntpapier__tooltip.update(text, binding.value.show)
 		},
-		unbind (el, binding, vnode, oldVnode) {
+		unmounted (el, binding, vnode, oldVnode) {
 			if (!el.__buntpapier__tooltip) return
 			el.__buntpapier__tooltip.destroy()
 		}

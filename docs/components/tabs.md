@@ -12,48 +12,46 @@ export default {
 	data () {
 		return {
 			activeTab: '',
-			activateTab: false
+			activateTab: false,
+			selectedEvents: []
 		}
 	}
 }
 </script>
 
-<template>
-	<bunt-tabs class="tabs-default" :active-tab="activeTab">
-		<bunt-tab id="Tab 1" header="Tab 1" @selected="activeTab = 'Tab 1'" />
-		<bunt-tab id="Tab 2" header="Tab 2" @selected="activeTab = 'Tab 2'" />
-		<bunt-tab id="longer Heading" header="A longer Tab Heading" @selected="activeTab = 'longer Heading'" />
-	</bunt-tabs>
-	<p>Selected Tab: {{ activeTab }}</p>
-	<h4>active tab via index</h4>
-	<bunt-tabs class="tabs-default" :active-tab="1">
-		<bunt-tab header="Tab 1" />
-		<bunt-tab header="Tab 2" />
-		<bunt-tab header="A longer Tab Heading" />
-	</bunt-tabs>
-	<h4>tab bodies</h4>
-	<bunt-tabs class="tabs-default" :active-tab="'one'">
-		<bunt-tab id="one" header="Tab 1">
-			<h1>I AM A TAB</h1>
-		</bunt-tab>
-		<bunt-tab id="two" header="Tab 2">
-			<h1> I AM ANOTHER TAB</h1>
-		</bunt-tab>
-		<bunt-tab id="three" header="A longer Tab Heading" />
-	</bunt-tabs>
-	<bunt-tabs class="tabs-default" :active-tab="1">
-		<bunt-tab header="Tab 1" />
-		<bunt-tab v-if="activateTab" header="A dynamic Tab Heading" />
-		<bunt-tab header="Tab 2" />
-	</bunt-tabs>
-	<bunt-switch id="switch-tabs" name="switch-tabs" label="toggle tab" v-model="activateTab" />
-</template>
 
-
-<style lang="styl">
-.tabs-default
-	tabs-style()
-</style>
+<bunt-tabs class="tabs-default" v-model="activeTab">
+<bunt-tab id="Tab 1" header="Tab 1" @selected="selectedEvents.push(`selected ${$event}`)" @deselected="selectedEvents.push(`deselected ${$event}`)"/>
+<bunt-tab id="Tab 2" header="Tab 2" @selected="selectedEvents.push(`selected ${$event}`)" @deselected="selectedEvents.push(`deselected ${$event}`)"/>
+<bunt-tab id="longer Heading" header="A longer Tab Heading" @selected="selectedEvents.push(`selected ${$event}`)" @deselected="selectedEvents.push(`deselected ${$event}`)"/>
+</bunt-tabs>
+<bunt-button @click="activeTab = null">deselect</bunt-button>
+<p>Selected Tab: {{ activeTab }}</p>
+<ul>
+<li v-for="event of selectedEvents">{{ event }}</li>
+</ul>
+<h4>active tab via index</h4>
+<bunt-tabs class="tabs-default" :active-tab="1">
+	<bunt-tab header="Tab 1" />
+	<bunt-tab header="Tab 2" />
+	<bunt-tab header="A longer Tab Heading" />
+</bunt-tabs>
+<h4>tab bodies</h4>
+<bunt-tabs class="tabs-default" :active-tab="'one'">
+	<bunt-tab id="one" header="Tab 1">
+		<h1>I AM A TAB</h1>
+	</bunt-tab>
+	<bunt-tab id="two" header="Tab 2">
+		<h1> I AM ANOTHER TAB</h1>
+	</bunt-tab>
+	<bunt-tab id="three" header="A longer Tab Heading" />
+</bunt-tabs>
+	<bunt-tabs class="tabs-default" :active-tab="1">
+	<bunt-tab header="Tab 1" />
+	<bunt-tab v-if="activateTab" header="A dynamic Tab Heading" />
+	<bunt-tab header="Tab 2" />
+</bunt-tabs>
+<bunt-switch id="switch-tabs" name="switch-tabs" label="toggle tab" v-model="activateTab" />
 
 ### template
 ```html
