@@ -41,7 +41,7 @@
     "gh-pages": "^1.2.0",
     "jstransformer-markdown": "^1.2.1",
     "nib": "^1.1.2",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-plain-loader": "^1.0.0",
     "roboto-fontface": "^0.10.0",
     "rupture": "^0.7.1",
