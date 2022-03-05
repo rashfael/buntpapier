@@ -50,7 +50,9 @@ export function useComputedStyle (el, customPropNames, computeStyle) {
 		prevComputedClasses = computedClasses
 	}
 	onMounted(() => {
-		registerHandler(generateStyle)
+		generateStyle()
+		const willChange = getComputedStyle(el.value).getPropertyValue('--bunt-will-change').trim() === 'all'
+		if (willChange) registerHandler(generateStyle)
 	})
 	onUnmounted(() => {
 		unregisterHandler(generateStyle)
