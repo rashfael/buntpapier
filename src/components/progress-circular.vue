@@ -18,6 +18,9 @@ useComputedStyle(el, {
 	if (size) {
 		classes.push(`bunt-progess-circular--size-${size}`)
 	}
+	if (layout) {
+		classes.push(`bunt-progess-circular--layout-${layout}`)
+	}
 	
 
 	return {style, classes}

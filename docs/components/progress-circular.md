@@ -3,13 +3,13 @@ title: progress-circular
 ---
 # progress-circular
 
-<bunt-progress-circular size="tiny" />
-<bunt-progress-circular size="small" />
+<bunt-progress-circular style="--progress-size: tiny" />
+<bunt-progress-circular style="--progress-size: small" />
 <bunt-progress-circular />
-<bunt-progress-circular size="big" />
-<bunt-progress-circular size="huge" />
-<bunt-progress-circular :center="true" size="huge" />
-<bunt-progress-circular :page="true" size="huge" />
+<bunt-progress-circular style="--progress-size: big" />
+<bunt-progress-circular style="--progress-size: huge" />
+<bunt-progress-circular style="--progress-size: huge; --progress-layout: center" />
+<bunt-progress-circular style="--progress-size: huge; --progress-layout: page" />
 
 ### template
 ```html
