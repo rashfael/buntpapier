@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <script setup>
-import { ref, toRef, toRefs, reactive, computed, watch, onMounted, useSlots } from 'vue'
+import { ref, computed, watch, useSlots } from 'vue'
 import Color from 'color'
 import { useComputedStyle } from '../computedStyle.js'
 import { firstReadable, CLR_PRIMARY_TEXT } from '../utils/colors.js'
@@ -55,7 +55,7 @@ useComputedStyle(el, {
 	'--button-color-success': 'successColor',
 	'--button-text-color': 'textColor',
 	'--button-size': 'size'
-}, ({color, errorColor, successColor, textColor, size}) => {
+}, ({ color, errorColor, successColor, textColor, size }) => {
 	const style = {}
 	const classes = []
 	if (size) {
@@ -84,7 +84,7 @@ useComputedStyle(el, {
 		style['--_button-bg-success-l'] = bgColor.lightness() + '%'
 	}
 
-	return {style, classes}
+	return { style, classes }
 })
 
 const tooltipText = computed(() => {
@@ -118,7 +118,6 @@ watch(() => props.error || props.errorMessage, (value) => {
 	}
 })
 
-
 function onClick (event) {
 	if (props.disabled || props.loading || showSuccess.value) return
 	emit('click', event)
@@ -126,7 +125,7 @@ function onClick (event) {
 
 </script>
 <template lang="pug">
-button.bunt-button(ref="el", :type="props.type", :class="{disabled: props.disabled, loading: props.loading, error: props.errorMessage || props.error, success: showSuccess}", :aria-disabled="disabled", v-tooltip="tooltipOptions || {text: tooltipText, show: !!props.errorMessage, fixed: props.tooltipFixed}", v-ripple-ink, @click="onClick")
+button.bunt-button(ref="el", :type="props.type", :class="{disabled: props.disabled, loading: props.loading, error: props.errorMessage || props.error, success: showSuccess}", :aria-disabled="disabled", v-tooltip="tooltipOptions || {text: tooltipText, show: !!props.errorMessage, fixed: props.tooltipFixed}", @click="onClick")
 	.bunt-button-content
 		i.bunt-icon.mdi(v-if="iconClass", :class="[iconClass]")
 		.bunt-button-text

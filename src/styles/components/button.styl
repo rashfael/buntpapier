@@ -7,7 +7,10 @@
 	--button-color-error: var(--clr-danger)
 	--button-color-success: var(--clr-success)
 
-$button-height = 36px
+$button-height = 32px
+
+$hover-lightness = 0.786
+$pressed-lightness = 0.607
 
 bunt-lightness(color, amount)
 	return unquote('hsl(var(' + color + '-h), var(' + color + '-s), calc(var(' + color + '-l) * ' + amount + '))')
@@ -16,7 +19,7 @@ button()
 	.bunt-button, .bunt-link-button
 		font-family: $font-stack
 		font-size: 14px
-		text-transform: uppercase
+		text-transform: capitalize
 		font-weight: 500
 		line-height: $button-height
 		vertical-align: middle
@@ -31,7 +34,7 @@ button()
 		
 		cursor: pointer
 
-		border-radius: 4px
+		border-radius: 100vmax // yolo
 		padding: 0 16px
 		min-width: 80px
 		height: $button-height
@@ -52,11 +55,14 @@ button()
 				position: absolute
 
 		&:hover
-			background-color: bunt-lightness(--_button-bg, 0.85)
+			background-color: bunt-lightness(--_button-bg, $hover-lightness)
+
+		&:active
+			background-color: bunt-lightness(--_button-bg, $pressed-lightness)
 
 		&:focus-visible
 			outline-style: solid
-			background-color: bunt-lightness(--_button-bg, 0.85)
+			background-color: bunt-lightness(--_button-bg, $hover-lightness)
 			outline-color: bunt-lightness(--_button-bg, 0.75)
 			outline-width: 2px
 			outline-offset: 2px
@@ -90,27 +96,26 @@ button()
 		&.success
 			background-color: var(--button-color-success)
 			&:hover
-				background-color: bunt-lightness(--_button-bg-success, 0.85)
+				background-color: bunt-lightness(--_button-bg-success, $hover-lightness)
 			&:focus-visible
-				background-color: bunt-lightness(--_button-bg-success, 0.85)
+				background-color: bunt-lightness(--_button-bg-success, $hover-lightness)
 				outline-color: bunt-lightness(--_button-bg-success, 0.75)
 
 		&.error
 			background-color: var(--button-color-error)
 			&:hover
-				background-color: bunt-lightness(--_button-bg-error, 0.85)
+				background-color: bunt-lightness(--_button-bg-error, $hover-lightness)
 			&:focus-visible
-				background-color: bunt-lightness(--_button-bg-error, 0.85)
+				background-color: bunt-lightness(--_button-bg-error, $hover-lightness)
 				outline-color: bunt-lightness(--_button-bg-error, 0.75)
 			.bunt-tooltip
 				background-color: var(--button-color-error)
 
 	.bunt-button--size-large
-		font-size: 18px
-		height: 52px
+		font-size: 16px
+		height: 40px
 		padding: 0 64px
 	.bunt-button--size-huge
-		font-size: 32px
-		font-weight: 300
-		height: 64px
+		font-size: 18px
+		height: 48px
 		padding: 8px 64px
