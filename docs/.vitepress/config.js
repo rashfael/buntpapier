@@ -15,7 +15,7 @@ module.exports = {
 		sidebar: {
 			'/components/': [{
 				text: 'Components',
-				children: [{
+				items: [{
 					text: 'button',
 					link: '/components/button'
 				}, {
@@ -52,7 +52,7 @@ module.exports = {
 			}],
 			'/directives/': [{
 				text: 'Directives',
-				children: [{
+				items: [{
 					text: 'scrollbar',
 					link: '/directives/scrollbar'
 				}, {
@@ -64,5 +64,8 @@ module.exports = {
 				}]
 			}]
 		}
+	},
+	vue: {
+		reactivityTransform: true
 	}
 }
