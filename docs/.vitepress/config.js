@@ -18,51 +18,51 @@ module.exports = {
 				items: [{
 					text: 'button',
 					link: '/components/button'
-				}, {
-					text: 'icon-button',
-					link: '/components/icon-button'
-				}, {
-					text: 'link-button',
-					link: '/components/link-button'
-				}, {
-					text: 'input',
-					link: '/components/input'
-				}, {
-					text: 'select',
-					link: '/components/select'
-				}, {
-					text: 'checkbox',
-					link: '/components/checkbox'
-				}, {
-					text: 'radio',
-					link: '/components/radio'
-				}, {
-					text: 'switch',
-					link: '/components/switch'
-				}, {
-					text: 'select',
-					link: '/components/select'
-				}, {
-					text: 'tabs',
-					link: '/components/tabs'
-				}, {
-					text: 'progress-circular',
-					link: '/components/progress-circular'
+				// }, {
+				// 	text: 'icon-button',
+				// 	link: '/components/icon-button'
+				// }, {
+				// 	text: 'link-button',
+				// 	link: '/components/link-button'
+				// }, {
+				// 	text: 'input',
+				// 	link: '/components/input'
+				// }, {
+				// 	text: 'select',
+				// 	link: '/components/select'
+				// }, {
+				// 	text: 'checkbox',
+				// 	link: '/components/checkbox'
+				// }, {
+				// 	text: 'radio',
+				// 	link: '/components/radio'
+				// }, {
+				// 	text: 'switch',
+				// 	link: '/components/switch'
+				// }, {
+				// 	text: 'select',
+				// 	link: '/components/select'
+				// }, {
+				// 	text: 'tabs',
+				// 	link: '/components/tabs'
+				// }, {
+				// 	text: 'progress-circular',
+				// 	link: '/components/progress-circular'
 				}]
 			}],
-			'/directives/': [{
-				text: 'Directives',
-				items: [{
-					text: 'scrollbar',
-					link: '/directives/scrollbar'
-				}, {
-					text: 'tooltip',
-					link: '/directives/tooltip'
-				}, {
-					text: 'resize-observer',
-					link: '/directives/resize-observer'
-				}]
-			}]
+			// '/directives/': [{
+			// 	text: 'Directives',
+			// 	items: [{
+			// 		text: 'scrollbar',
+			// 		link: '/directives/scrollbar'
+			// 	}, {
+			// 		text: 'tooltip',
+			// 		link: '/directives/tooltip'
+			// 	}, {
+			// 		text: 'resize-observer',
+			// 		link: '/directives/resize-observer'
+			// 	}]
+			// }]
 		}
 	},
 	vue: {
