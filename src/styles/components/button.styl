@@ -2,10 +2,11 @@
 // - flat/clear style
 
 // defaults
-:root
-	--button-color: var(--clr-grey-200)
-	--button-color-error: var(--clr-danger)
-	--button-color-success: var(--clr-success)
+@layer derived
+	.bunt-button, .bunt-link-button
+		--_button-color: var(--button-color, var(--clr-primary))
+		--_button-color-error: var(--button-color-error, var(--clr-danger))
+		--_button-color-success: var(--button-color-success, var(--clr-success))
 
 $button-height = 32px
 
@@ -40,7 +41,7 @@ button()
 		height: $button-height
 		white-space: nowrap // buttons can't be multiline
 
-		background-color: var(--button-color)
+		background-color: var(--_button-color)
 		color: var(--_button-text-color)
 
 		.bunt-button-content
@@ -94,7 +95,7 @@ button()
 				stroke: currentColor
 
 		&.success
-			background-color: var(--button-color-success)
+			background-color: var(--_button-color-success)
 			&:hover
 				background-color: bunt-lightness(--_button-bg-success, $hover-lightness)
 			&:focus-visible
@@ -102,14 +103,14 @@ button()
 				outline-color: bunt-lightness(--_button-bg-success, 0.75)
 
 		&.error
-			background-color: var(--button-color-error)
+			background-color: var(--_button-color-error)
 			&:hover
 				background-color: bunt-lightness(--_button-bg-error, $hover-lightness)
 			&:focus-visible
 				background-color: bunt-lightness(--_button-bg-error, $hover-lightness)
 				outline-color: bunt-lightness(--_button-bg-error, 0.75)
 			.bunt-tooltip
-				background-color: var(--button-color-error)
+				background-color: var(--_button-color-error)
 
 	.bunt-button--size-large
 		font-size: 16px

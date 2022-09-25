@@ -50,20 +50,27 @@ const el = ref()
 
 useComputedStyle(el, {
 	'--button-style': 'style',
-	'--button-color': 'color',
-	'--button-color-error': 'errorColor',
-	'--button-color-success': 'successColor',
+	'--_button-color': 'color',
+	'--_button-color-error': 'errorColor',
+	'--_button-color-success': 'successColor',
 	'--button-text-color': 'textColor',
 	'--button-size': 'size'
 }, ({ color, errorColor, successColor, textColor, size }) => {
 	const style = {}
 	const classes = []
+
 	if (size) {
 		classes.push(`bunt-button--size-${size}`)
 	}
 	if (color) {
 		style['--_button-text-color'] = textColor || firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], color, 3)
-		const bgColor = Color(color).hsl()
+		let bgColor
+		try {
+			bgColor = Color(color).hsl()
+		} catch (e) {
+			console.error('Could not parse color', e)
+			bgColor = Color('#FFF').hsl()
+		}
 		style['--_button-bg-h'] = bgColor.hue()
 		style['--_button-bg-s'] = bgColor.saturationl() + '%'
 		style['--_button-bg-l'] = bgColor.lightness() + '%'
@@ -71,14 +78,26 @@ useComputedStyle(el, {
 	// TODO might be overkill to compute the defaults all the time
 	if (errorColor) {
 		style['--_button-text-color-error'] = firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], errorColor, 3)
-		const bgColor = Color(errorColor).hsl()
+		let bgColor
+		try {
+			bgColor = Color(errorColor).hsl()
+		} catch (e) {
+			console.error('Could not parse color', e)
+			bgColor = Color('#FFF').hsl()
+		}
 		style['--_button-bg-error-h'] = bgColor.hue()
 		style['--_button-bg-error-s'] = bgColor.saturationl() + '%'
 		style['--_button-bg-error-l'] = bgColor.lightness() + '%'
 	}
 	if (successColor) {
 		style['--_button-text-color-success'] = firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], successColor, 3)
-		const bgColor = Color(successColor).hsl()
+		let bgColor
+		try {
+			bgColor = Color(successColor).hsl()
+		} catch (e) {
+			console.error('Could not parse color', e)
+			bgColor = Color('#FFF').hsl()
+		}
 		style['--_button-bg-success-h'] = bgColor.hue()
 		style['--_button-bg-success-s'] = bgColor.saturationl() + '%'
 		style['--_button-bg-success-l'] = bgColor.lightness() + '%'
@@ -122,6 +141,11 @@ function onClick (event) {
 	if (props.disabled || props.loading || showSuccess.value) return
 	emit('click', event)
 }
+
+// TODO make this conditial for docs?
+defineExpose({
+	el
+})
 
 </script>
 <template lang="pug">

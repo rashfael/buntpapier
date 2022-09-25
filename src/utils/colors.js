@@ -25,7 +25,12 @@ export function blend (background, foreground) {
 // returns first color with enough (>=4.5) contrast or failing that, the color with the highest contrast
 // on background, alpha gets blended
 export function firstReadable (colors, background = '#FFF', threshold = 4.5) {
-	background = Color(background)
+	try {
+		background = Color(background)
+	} catch (e) {
+		console.error('Could not parse color', e)
+		background = Color('#FFF')
+	}
 	let best
 	let bestContrast = 0
 	for (let color of colors) {
