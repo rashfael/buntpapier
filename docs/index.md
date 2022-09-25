@@ -2,11 +2,14 @@
 layout: home
 hero:
   name: buntpapier
-  text: "putting component styling back where it belongs:\n the stylesheet"
+  text: "a Vue 3 UI library putting component styling back where it belongs:\n the stylesheet"
   actions:
     - theme: brand
       text: Get Started
-      link: /installation
+      link: /guide/getting-started
+    - theme: alt
+      text: Why buntpapier
+      link: /guide/why
 features:
 - title: CSS Based Component Styling
   details: Style components with css custom properties from anywhere in your stylesheet. No `color` props here!

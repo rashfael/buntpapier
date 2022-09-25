@@ -1,4 +1,5 @@
 <script setup>
+// TODO link to API docs?
 import { onMounted, onUnmounted } from 'vue'
 import { registerHandler, unregisterHandler } from '../../../src/requestAnimationFrameMuxxer.js'
 
@@ -111,10 +112,12 @@ onUnmounted(() => {
 						label
 							input(type="color", :value="computedStyles[property.name]", @input="e => style[property.name] = e.target.value")
 						input(v-model="style[property.name]", :placeholder="property.default")
-					.value(v-else) {{ property.value }}
+					template(v-else) {{ property.value }}
 				.value(v-else-if="property.type === 'enum'")
-					select(v-model="style[property.name]")
-						option(v-for="value of property.values") {{ value }}
+					template(v-if="editable")
+						select(v-model="style[property.name]")
+							option(v-for="value of property.values") {{ value }}
+					template(v-else) {{ property.value }}
 </template>
 <style lang="stylus">
 .c-showcase
@@ -181,6 +184,9 @@ onUnmounted(() => {
 				color: #0095a8
 			.punctuation
 				color: #004d57
+			.value
+				margin-left: 4px
+				color: #00b368
 	
 	input:not([type="color"]), select
 		color: var(--clr-primary-text-light)
