@@ -1,98 +1,99 @@
 ---
 title: button
+layout: 'component'
 ---
-# button
 
-#### button styles
-<bunt-button id="btn-none">default</bunt-button>
-<bunt-button id="btn-primary">color</bunt-button>
-<bunt-button id="btn-clear">clear</bunt-button>
-<bunt-button id="btn-text-color">text color</bunt-button>
-<bunt-button id="btn-disabled" :disabled="true">disabled</bunt-button>
-### button sizes
-<bunt-button id="btn-none">normal</bunt-button>
-<bunt-button id="btn-large">large</bunt-button>
-<bunt-button id="btn-huge">huge</bunt-button>
-#### tooltip
-<bunt-button id="btn-tooltip" tooltip="hoorrraaaa">tooltip</bunt-button>
-<bunt-button id="btn-tooltip" tooltip="hoorrraaaa" tooltip-placement="right">tooltip right</bunt-button>
-#### icon
-<bunt-button id="btn-icon" icon="add">icon</bunt-button>
-#### loading
-<bunt-button id="btn-loading" :loading="true">a longish text</bunt-button>
-#### error
-<bunt-button id="btn-error" :error="true">a longish text</bunt-button>
-<bunt-button id="btn-error" error-message="something went wrong">a longish text</bunt-button>
+<script setup>
+const props = {
+	disabled: {type: 'boolean', default: false},
+	icon: {type: 'string'},
+	tooltip: {type: 'string'},
+	loading: {type: 'boolean', default: false},
+	error: {type: 'boolean', default: false},
+	errorMessage: {type: 'string'}
+}
+const style = {
+		'--button-color': {type: 'color', default: 'var(--clr-primary)', computed: '--_button-color'},
+		'--button-color-error': {type: 'color', default: 'var(--clr-danger)', computed: '--_button-color-error'},
+		'--button-color-success': {type: 'color', default: 'var(--clr-success)', computed: '--_button-color-success'},
+		'--button-text-color': {type: 'color', default: 'computed', computed: '--_button-text-color', description: 'Either --clr-primary-text-light or --clr-primary-text-dark, whichever has better contrast with --button-color'},
+		'--button-size': {type: 'enum', values: ['normal', 'large', 'huge'], default: 'normal'}
+	}
+</script>
 
-### template
-```html
-<bunt-button id="btn-none">default</bunt-button>
-<bunt-button id="btn-primary">color</bunt-button>
-<bunt-button id="btn-clear">clear</bunt-button>
-<bunt-button id="btn-text-color">text color</bunt-button>
-<bunt-button id="btn-disabled" :disabled="true">disabled</bunt-button>
+# Button
 
-<bunt-button id="btn-none">normal</bunt-button>
-<bunt-button id="btn-large">large</bunt-button>
-<bunt-button id="btn-huge">huge</bunt-button>
+## Playground
 
-<bunt-button id="btn-tooltip" tooltip="hoorrraaaa">tooltip</bunt-button>
-<bunt-button id="btn-tooltip" tooltip="hoorrraaaa" tooltip-placement="right">tooltip right</bunt-button>
+<Showcase
+	:editable="true"
+	componentName="bunt-button"
+	:slots="{default: 'Customize Me'}"
+	:props="props"
+	:style="style"
+></Showcase>
 
-<bunt-button id="btn-icon" icon="add">icon</bunt-button>
+## Examples
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'default'}"
+	:props="{}"
+	:style="{}"
+></Showcase>
 
-<bunt-button id="btn-loading" :loading="true">a longish text</bunt-button>
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'color'}"
+	:style="{
+		'--button-color': {type: 'color', value: 'var(--clr-orange)'}
+	}"
+></Showcase>
 
-<bunt-button id="btn-error" :error="true">a longish text</bunt-button>
-<bunt-button id="btn-error" error-message="something went wrong">a longish text</bunt-button>
-```
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'color'}"
+	:style="{
+		'--button-color': {type: 'color', value: 'var(--clr-yellow)'},
+		'--button-text-color': {type: 'color', value: 'var(--clr-red)'}
+	}"
+></Showcase>
 
-### style
-```stylus
-#btn-none, #btn-tooltip, #btn-icon
-	button-style()
-#btn-primary, #btn-disabled, #btn-loading, #btn-error
-	button-style(color: $clr-primary)
-#btn-clear
-	button-style(color: $clr-primary, style: 'clear')
-#btn-text-color
-	button-style(color: $clr-danger, text-color: $clr-warning)
-#btn-large
-	button-style(size: large)
-#btn-huge
-	button-style(size: huge)
-```
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'disabled'}"
+	:props="{disabled: {type: 'boolean', value: true}}"
+></Showcase>
 
-## props
-| prop | type | required | default | description |
-|:-----|:-----|:---------|:--------|:------------|
-| type | string | false | 'button' | native button type |
-| disabled | boolean | false | false | disables button (renders as disabled and does not emit click, other events and native events are unaffected) |
-| icon | string | false | | mdi icon name to display |
-| tooltip | string | false | | tooltip text |
-| tooltip-placement | string | false | 'bottom' | tooltip placement, see v-tooltip directive documentation |
-| tooltip-fixed | boolean | false | false | position tooltip fixed, see v-tooltip directive documentation |
-| loading | boolean | false | false | show loading indicator and disable button |
-| error | boolean | false | false | render the button error state |
-| errorMessage | string | false | | render the button error state and show a message as open tooltip |
-| text | string | false | | button text (recommended: use slot instead) |
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'with icon'}"
+	:props="{icon: {type: 'string', value: 'plus'}}"
+></Showcase>
 
-## slots
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'hover me!'}"
+	:props="{tooltip: {type: 'string', value: 'a tooltip!'}}"
+></Showcase>
 
-| slot | description |
-|:-----|:------------|
-| default | button text |
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'loading loading'}"
+	:props="{loading: {type: 'boolean', value: true}}"
+></Showcase>
 
-## events
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'error'}"
+	:props="{error: {type: 'boolean', value: true}}"
+></Showcase>
 
-| event | args | description |
-|:------|:-----|:------------|
-| click | null | |
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'error message'}"
+	:props="{errorMessage: {type: 'string', value: 'something went wrong!'}}"
+></Showcase>
 
-## style mixin parameters
-| parameter | type | default | description |
-|:----------|:-----|:--------|:------------|
-| style | 'flat', 'clear' | 'flat' | button style |
-| color | color | | background-color if flat style, text color if clear style|
-| text-color | color | automagic | text-color is automatically chosen depending on lightness of color |
-| size | 'normal', 'large', 'huge' | 'normal' | button size |
+## API
+
+<ApiDocs :props="props" :style="style"/>

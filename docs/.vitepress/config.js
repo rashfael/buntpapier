@@ -5,14 +5,30 @@ module.exports = {
 	themeConfig: {
 		nav: [
 			{ text: 'Home', link: '/' },
-			{ text: 'Installation', link: '/installation' },
+			// { text: 'Installation', link: '/installation' },
+			{ text: 'Guide', link: '/guide/getting-started' },
 			{ text: 'Components', link: '/components/' },
-			{ text: 'Directives', link: '/directives/' },
-			{ text: 'Stylus Mixins', link: '/mixins' },
-			{ text: 'Validation', link: '/validation' },
-			{ text: 'Github', link: 'https://github.com/rashfael/buntpapier' },
+			// { text: 'Directives', link: '/directives/' },
+			// { text: 'Stylus Mixins', link: '/mixins' },
+			// { text: 'Validation', link: '/validation' },
+		],
+		socialLinks: [
+			{ icon: 'github', link: 'https://github.com/rashfael/buntpapier' },
 		],
 		sidebar: {
+			'/guide/': [{
+				text: 'Guide',
+				items: [{
+					text: 'Getting Started',
+					link: '/guide/getting-started'
+				}, {
+					text: 'Why buntpapier?',
+					link: '/guide/why'
+				}, {
+					text: 'Migrating from v2',
+					link: '/guide/migrating-from-v2'
+				}]
+			}],
 			'/components/': [{
 				text: 'Components',
 				items: [{
@@ -63,6 +79,10 @@ module.exports = {
 			// 		link: '/directives/resize-observer'
 			// 	}]
 			// }]
+		},
+		footer: {
+			message: 'Released under the MIT License.',
+			copyright: 'Copyright © 2016-present rash.codes'
 		}
 	},
 	vue: {

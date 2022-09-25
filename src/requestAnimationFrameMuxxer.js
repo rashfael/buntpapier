@@ -7,7 +7,9 @@ function callHandlers () {
 	requestAnimationFrame(callHandlers)
 }
 
-callHandlers()
+if (!import.meta.env.SSR) {
+	callHandlers()
+}
 
 export function registerHandler (handler) {
 	handlers.push(handler)
