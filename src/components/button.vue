@@ -48,19 +48,24 @@ const slots = useSlots()
 
 const el = ref()
 
-useComputedStyle(el, {
+const { classes, style } = useComputedStyle(el, {
 	'--button-shape': 'shape',
+	'--button-weight': 'weight',
+	'--button-size': 'size',
 	'--_button-color': 'color',
 	'--_button-color-error': 'errorColor',
 	'--_button-color-success': 'successColor',
 	'--button-text-color': 'textColor',
-	'--button-size': 'size'
-}, ({ shape, color, errorColor, successColor, textColor, size }) => {
+}, ({ shape, weight, size, color, errorColor, successColor, textColor }) => {
 	const style = {}
 	const classes = []
 
 	if (shape) {
 		classes.push(`bunt-button--shape-${shape}`)
+	}
+
+	if (weight) {
+		classes.push(`bunt-button--weight-${weight}`)
 	}
 
 	if (size) {
@@ -153,7 +158,7 @@ defineExpose({
 
 </script>
 <template lang="pug">
-button.bunt-button(ref="el", :type="props.type", :class="{disabled: props.disabled, loading: props.loading, error: props.errorMessage || props.error, success: showSuccess}", :aria-disabled="disabled", v-tooltip="tooltipOptions || {text: tooltipText, show: !!props.errorMessage, fixed: props.tooltipFixed}", @click="onClick")
+button.bunt-button(ref="el", :type="props.type", :class="[...classes, {disabled: props.disabled, loading: props.loading, error: props.errorMessage || props.error, success: showSuccess}]", :aria-disabled="disabled", v-tooltip="tooltipOptions || {text: tooltipText, show: !!props.errorMessage, fixed: props.tooltipFixed}", @click="onClick")
 	.bunt-button-content
 		i.bunt-icon.mdi(v-if="iconClass", :class="[iconClass]")
 		.bunt-button-text
