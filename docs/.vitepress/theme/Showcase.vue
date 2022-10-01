@@ -83,7 +83,7 @@ onUnmounted(() => {
 		.template
 			.tag #[span.html &lt;]{{ componentName }}
 			.prop(v-for="prop of propsDefinition")
-				.name {{ prop.name }}
+				.name {{ prop.type !== 'string' ? ':' : ''}}{{ prop.name }}
 				span.html ="
 				template(v-if="editable")
 					label(v-if="prop.type === 'boolean'")
