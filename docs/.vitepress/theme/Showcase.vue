@@ -124,6 +124,9 @@ onUnmounted(() => {
 	border: 2px solid var(--clr-dividers-light)
 	border-radius: 6px
 	display: flex
+	& + .c-showcase
+		border-top: none
+		border-radius: 0
 	> *
 		flex: 1
 	.component

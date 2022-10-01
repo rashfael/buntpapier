@@ -14,7 +14,7 @@ const props = {
 }
 const style = {
 	'--button-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
-	'--button-type': {type: 'enum', values: ['elevated', 'filled', 'outlined', 'text'], default: 'filled'},
+	'--button-weight': {type: 'enum', values: [/* 'elevated', */ 'filled', 'outlined', 'text'], default: 'filled'},
 	'--button-color': {type: 'color', default: 'var(--clr-primary)', computed: '--_button-color'},
 	'--button-color-error': {type: 'color', default: 'var(--clr-danger)', computed: '--_button-color-error'},
 	'--button-color-success': {type: 'color', default: 'var(--clr-success)', computed: '--_button-color-success'},
@@ -64,6 +64,24 @@ const style = {
 	:props="{}"
 	:style="{
 		'--button-shape': {type: 'enum', value: 'squared'}
+	}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'outlined'}"
+	:props="{}"
+	:style="{
+		'--button-weight': {type: 'enum', value: 'outlined'}
+	}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'text'}"
+	:props="{}"
+	:style="{
+		'--button-weight': {type: 'enum', value: 'text'}
 	}"
 ></Showcase>
 

@@ -13,8 +13,14 @@ $button-height = 32px
 $hover-lightness = 0.786
 $pressed-lightness = 0.607
 
+$hover-alpha = 0.08
+$pressed-alpha = 0.12
+
 bunt-lightness(color, amount)
 	return unquote('hsl(var(' + color + '-h), var(' + color + '-s), calc(var(' + color + '-l) * ' + amount + '))')
+
+bunt-alpha(color, alpha)
+	return unquote('hsla(var(' + color + '-h), var(' + color + '-s), var(' + color + '-l), ' + alpha + ')')
 
 button()
 	.bunt-button, .bunt-link-button
@@ -117,6 +123,35 @@ button()
 
 	.bunt-button--shape-rounded
 		border-radius: 4px
+
+	.bunt-button--weight-outlined, .bunt-button--weight-text
+		background-color: transparent
+		color: var(--_button-color)
+		&:hover
+			background-color: bunt-alpha(--_button-bg, $hover-alpha)
+		&:active, &:focus-visible
+			background-color: bunt-alpha(--_button-bg, $pressed-alpha)
+		&.success
+			background-color: transparent
+			border-color: var(--_button-color-success)
+			color: var(--_button-color-success)
+			&:hover
+				background-color: bunt-alpha(--_button-bg-success, $hover-alpha)
+			&:active, &:focus-visible
+				background-color: bunt-alpha(--_button-bg-success, $pressed-alpha)
+		&.error
+			background-color: transparent
+			border-color: var(--_button-color-error)
+			color: var(--_button-color-error)
+			&:hover
+				background-color: bunt-alpha(--_button-bg-error, $hover-alpha)
+			&:active, &:focus-visible
+				background-color: bunt-alpha(--_button-bg-error, $pressed-alpha)
+	
+	.bunt-button--weight-outlined
+		border: 1px solid var(--_button-color)
+
+	// TODO grey text for disabled?
 
 	.bunt-button--size-large
 		font-size: 16px
