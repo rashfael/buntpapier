@@ -13,13 +13,15 @@ const props = {
 	errorMessage: {type: 'string'}
 }
 const style = {
-		'--button-color': {type: 'color', default: 'var(--clr-primary)', computed: '--_button-color'},
-		'--button-color-error': {type: 'color', default: 'var(--clr-danger)', computed: '--_button-color-error'},
-		'--button-color-success': {type: 'color', default: 'var(--clr-success)', computed: '--_button-color-success'},
-		'--button-text-color': {type: 'color', default: 'computed', computed: '--_button-text-color', description: 'Either --clr-primary-text-light or --clr-primary-text-dark, whichever has better contrast with --button-color'},
-		'--button-size': {type: 'enum', values: ['normal', 'large', 'huge'], default: 'normal'},
-		'--tooltip-placement': {type: 'enum', values: ['auto', 'top', 'right', 'bottom', 'left'], default: 'auto', description: 'Supports `-start` and `-end` suffix.'}
-	}
+	'--button-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
+	'--button-type': {type: 'enum', values: ['elevated', 'filled', 'outlined', 'text'], default: 'filled'},
+	'--button-color': {type: 'color', default: 'var(--clr-primary)', computed: '--_button-color'},
+	'--button-color-error': {type: 'color', default: 'var(--clr-danger)', computed: '--_button-color-error'},
+	'--button-color-success': {type: 'color', default: 'var(--clr-success)', computed: '--_button-color-success'},
+	'--button-text-color': {type: 'color', default: 'computed', computed: '--_button-text-color', description: 'Either --clr-primary-text-light or --clr-primary-text-dark, whichever has better contrast with --button-color'},
+	'--button-size': {type: 'enum', values: ['normal', 'large', 'huge'], default: 'normal'},
+	'--tooltip-placement': {type: 'enum', values: ['auto', 'top', 'right', 'bottom', 'left'], default: 'auto', description: 'Supports `-start` and `-end` suffix.'}
+}
 </script>
 
 # Button
@@ -34,12 +36,35 @@ const style = {
 	:style="style"
 ></Showcase>
 
+## API
+
+<ApiDocs :props="props" :style="style"/>
+
 ## Examples
+
 <Showcase
 	componentName="bunt-button"
 	:slots="{default: 'default'}"
 	:props="{}"
 	:style="{}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'rounded'}"
+	:props="{}"
+	:style="{
+		'--button-shape': {type: 'enum', value: 'rounded'}
+	}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'squared'}"
+	:props="{}"
+	:style="{
+		'--button-shape': {type: 'enum', value: 'squared'}
+	}"
 ></Showcase>
 
 <Showcase
@@ -97,7 +122,3 @@ const style = {
 	:slots="{default: 'error message'}"
 	:props="{errorMessage: {type: 'string', value: 'something went wrong!'}}"
 ></Showcase>
-
-## API
-
-<ApiDocs :props="props" :style="style"/>

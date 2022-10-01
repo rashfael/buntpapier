@@ -49,15 +49,19 @@ const slots = useSlots()
 const el = ref()
 
 useComputedStyle(el, {
-	'--button-style': 'style',
+	'--button-shape': 'shape',
 	'--_button-color': 'color',
 	'--_button-color-error': 'errorColor',
 	'--_button-color-success': 'successColor',
 	'--button-text-color': 'textColor',
 	'--button-size': 'size'
-}, ({ color, errorColor, successColor, textColor, size }) => {
+}, ({ shape, color, errorColor, successColor, textColor, size }) => {
 	const style = {}
 	const classes = []
+
+	if (shape) {
+		classes.push(`bunt-button--shape-${shape}`)
+	}
 
 	if (size) {
 		classes.push(`bunt-button--size-${size}`)
