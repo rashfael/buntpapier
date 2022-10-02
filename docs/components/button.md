@@ -141,3 +141,9 @@ const style = {
 	:slots="{default: 'error message'}"
 	:props="{errorMessage: {type: 'string', value: 'something went wrong!'}}"
 ></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'router-link'}"
+	:props="{to: {type: 'string', value: '/some-path'}}"
+></Showcase>
