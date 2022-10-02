@@ -59,7 +59,7 @@ let compEl = $ref(null)
 const computedStyles = $ref({})
 
 function fetchStyle () {
-	if (!compEl) return
+	if (!compEl?.el) return
 	const componentStyle = getComputedStyle(compEl.el)
 	for (const property of styleProperties) {
 		if (!property.computed) continue

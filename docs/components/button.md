@@ -10,7 +10,8 @@ const props = {
 	tooltip: {type: 'string'},
 	loading: {type: 'boolean', default: false},
 	error: {type: 'boolean', default: false},
-	errorMessage: {type: 'string'}
+	errorMessage: {type: 'string'},
+	to: {type: ['string', 'object'], description: 'vue-router\'s router-link location'}
 }
 const style = {
 	'--button-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},

@@ -1,4 +1,5 @@
 import DefaultTheme from 'vitepress/theme'
+import { createRouter, createMemoryHistory } from 'vue-router'
 import '@fontsource/roboto'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto-mono'
@@ -18,6 +19,11 @@ export default {
 		// app is the Vue 3 app instance from `createApp()`. router is VitePress'
 		// custom router. `siteData`` is a `ref`` of current site-level metadata.
 		app.use(Buntpapier)
+		// init vue-router just for the button showcase
+		app.use(createRouter({
+			history: createMemoryHistory(),
+			routes: []
+		}))
 		app.component('Showcase', Showcase)
 		app.component('ApiDocs', ApiDocs)
 	}
