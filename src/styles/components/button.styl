@@ -63,6 +63,7 @@ button()
 
 		&:hover
 			background-color: bunt-lightness(--_button-bg, $hover-lightness)
+			color: var(--_button-text-color) // guard against rogue vitepress css
 
 		&:active
 			background-color: bunt-lightness(--_button-bg, $pressed-lightness)
