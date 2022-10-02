@@ -25,12 +25,21 @@ const {
 })
 
 const props = $ref(Object.entries(propsObj).map(([name, content]) => ({ name, ...content })))
-const slots = $ref(Object.entries(slotsObj).map(([name, content]) => ({ name, content })))
+const slots = $ref(Object.entries(slotsObj).map(([name, content]) => ({ name, ...content })))
 const style = $ref(Object.entries(styleObj).map(([name, content]) => ({ name, ...content })))
 
 </script>
 <template lang="pug">
 .c-api-docs
+	.slots
+		h3 Slots
+		table
+			tr
+				th Slot
+				th Description
+			tr(v-for="slot of slots")
+				td {{ slot.name }}
+				td.description {{ slot.description }}
 	.props
 		h3 Props
 		table

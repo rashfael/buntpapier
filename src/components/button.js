@@ -163,6 +163,9 @@ export default {
 
 		return () => {
 			const textContent = slots.default?.() ?? text
+			const hasContent =
+				(typeof textContent === 'string' && textContent.length > 0) ||
+				(Array.isArray(textContent) && textContent.length > 0 && textContent.some(vnode => vnode.children))
 			const rootClasses = [
 				'bunt-button',
 				...classes,
@@ -170,7 +173,9 @@ export default {
 					disabled,
 					loading,
 					error: errorMessage || error,
-					success: showSuccess
+					success: showSuccess,
+					'with-icon': iconClass,
+					'icon-only': !hasContent && iconClass,
 				}
 			]
 			const content = [
@@ -180,7 +185,7 @@ export default {
 					iconClass && createElement('i', {
 						class: ['bunt-icon', 'mdi', iconClass]
 					}),
-					textContent && createElement('div', {
+					hasContent && createElement('div', {
 						class: 'bunt-button-text'
 					}, textContent)
 				])

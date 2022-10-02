@@ -4,14 +4,17 @@ layout: 'component'
 ---
 
 <script setup>
+const slots = {
+	default: {description: 'Button text. Leave empty to render icon button.'}
+}
 const props = {
 	disabled: {type: 'boolean', default: false},
-	icon: {type: 'string'},
+	icon: {type: 'string', description: 'To render just an icon button, leave slot empty.'},
 	tooltip: {type: 'string'},
 	loading: {type: 'boolean', default: false},
 	error: {type: 'boolean', default: false},
 	errorMessage: {type: 'string'},
-	to: {type: ['string', 'object'], description: 'vue-router\'s router-link location'}
+	to: {type: ['string', 'object'], description: 'vue-router\'s router-link location. If set, renders a router-link component instead of a button element.'}
 }
 const style = {
 	'--button-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
@@ -39,15 +42,19 @@ const style = {
 
 ## API
 
-<ApiDocs :props="props" :style="style"/>
+<ApiDocs :props="props" :style="style" :slots="slots"/>
 
 ## Examples
+
+### Shape
 
 <Showcase
 	componentName="bunt-button"
 	:slots="{default: 'default'}"
 	:props="{}"
-	:style="{}"
+	:style="{
+		'--button-shape': {type: 'enum', value: 'pill'}
+	}"
 ></Showcase>
 
 <Showcase
@@ -65,6 +72,17 @@ const style = {
 	:props="{}"
 	:style="{
 		'--button-shape': {type: 'enum', value: 'squared'}
+	}"
+></Showcase>
+
+### Weight
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'filled'}"
+	:props="{}"
+	:style="{
+		'--button-weight': {type: 'enum', value: 'filled'}
 	}"
 ></Showcase>
 
@@ -86,6 +104,31 @@ const style = {
 	}"
 ></Showcase>
 
+### Size
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'normal'}"
+	:props="{}"
+	:style="{'--button-size': {type: 'enum', value: 'normal'}}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'large'}"
+	:props="{}"
+	:style="{'--button-size': {type: 'enum', value: 'large'}}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'huge'}"
+	:props="{}"
+	:style="{'--button-size': {type: 'enum', value: 'huge'}}"
+></Showcase>
+
+### Custom Color
+
 <Showcase
 	componentName="bunt-button"
 	:slots="{default: 'color'}"
@@ -103,11 +146,7 @@ const style = {
 	}"
 ></Showcase>
 
-<Showcase
-	componentName="bunt-button"
-	:slots="{default: 'disabled'}"
-	:props="{disabled: {type: 'boolean', value: true}}"
-></Showcase>
+### Icon
 
 <Showcase
 	componentName="bunt-button"
@@ -117,11 +156,64 @@ const style = {
 
 <Showcase
 	componentName="bunt-button"
+	:slots="{default: ''}"
+	:props="{icon: {type: 'string', value: 'space-invaders'}}"
+	:style="{}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: ''}"
+	:props="{icon: {type: 'string', value: 'space-invaders'}}"
+	:style="{
+		'--button-shape': {type: 'enum', value: 'rounded'}
+	}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: ''}"
+	:props="{icon: {type: 'string', value: 'space-invaders'}}"
+	:style="{
+		'--button-shape': {type: 'enum', value: 'squared'}
+	}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: ''}"
+	:props="{icon: {type: 'string', value: 'space-invaders'}}"
+	:style="{
+		'--button-weight': {type: 'enum', value: 'outlined'}
+	}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: ''}"
+	:props="{icon: {type: 'string', value: 'space-invaders'}}"
+	:style="{
+		'--button-weight': {type: 'enum', value: 'text'}
+	}"
+></Showcase>
+
+### Tooltip
+
+<Showcase
+	componentName="bunt-button"
 	:slots="{default: 'hover me!'}"
 	:props="{tooltip: {type: 'string', value: 'a tooltip!'}}"
 	:style="{
 		'--tooltip-placement': {type: 'enum', value: 'left'}
 	}"
+></Showcase>
+
+### States
+
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'disabled'}"
+	:props="{disabled: {type: 'boolean', value: true}}"
 ></Showcase>
 
 <Showcase

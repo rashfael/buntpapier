@@ -1,5 +1,5 @@
 // TODO
-// - flat/clear style
+// - icon sizing?
 
 // defaults
 @layer derived
@@ -54,12 +54,21 @@ button()
 			display: flex
 
 		.bunt-icon
-			height: $button-height
-			line-height: $button-height
 			font-size: 20px
+			padding-right: 8px
 
 			&.error, &.success
 				position: absolute
+
+		&.with-icon
+			padding: 0 16px 0 12px
+
+		&.icon-only
+			padding: 0
+			min-width: 0
+			width: $button-height
+			.bunt-icon
+				padding-right: 0
 
 		&:hover
 			background-color: bunt-lightness(--_button-bg, $hover-lightness)
@@ -130,6 +139,7 @@ button()
 		color: var(--_button-color)
 		&:hover
 			background-color: bunt-alpha(--_button-bg, $hover-alpha)
+			color: var(--_button-color) // guard against rogue vitepress css
 		&:active, &:focus-visible
 			background-color: bunt-alpha(--_button-bg, $pressed-alpha)
 		&.success
@@ -157,8 +167,26 @@ button()
 	.bunt-button--size-large
 		font-size: 16px
 		height: 40px
+		line-height: @height
 		padding: 0 64px
+		.bunt-icon
+			font-size: 24px
+			padding-right: 16px
+		&.with-icon
+			padding: 0 64px 0 32px
+		&.icon-only
+			width: 40px
+			padding: 0
 	.bunt-button--size-huge
 		font-size: 18px
 		height: 48px
+		line-height: @height
 		padding: 8px 64px
+		.bunt-icon
+			font-size: 28px
+			padding-right: 16px
+		&.with-icon
+			padding: 0 64px 0 32px
+		&.icon-only
+			width: 48px
+			padding: 0
