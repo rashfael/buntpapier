@@ -1,4 +1,4 @@
-import { h as createElement, ref, reactive, toRef, computed, onMounted, onBeforeUpdate, onBeforeUnmount, nextTick, watch, provide, withDirectives, resolveComponent } from 'vue'
+import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps } from 'vue'
 import Color from 'color'
 import tooltipDirective from '../directives/tooltip.js'
 import { useComputedStyle } from '../computedStyle.js'
@@ -220,9 +220,8 @@ export default {
 				}, {
 					default ({ href, navigate }) {
 						return withDirectives(
-							createElement('a', {
+							createElement('a', mergeProps({
 								ref: el,
-								...attrs,
 								href,
 								class: rootClasses,
 								style,
@@ -232,7 +231,7 @@ export default {
 									navigate(event)
 									onClick(event)
 								}
-							}, content),
+							}, attrs), content),
 							tooltip)
 					}
 				})
