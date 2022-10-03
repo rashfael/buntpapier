@@ -17,6 +17,9 @@ const props = {
 	errorMessage: {type: 'string'},
 	to: {type: ['string', 'object'], description: 'vue-router\'s router-link location. If set, renders a router-link component instead of a button element.'}
 }
+const events = {
+	click: {}
+}
 const style = {
 	'--button-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
 	'--button-weight': {type: 'enum', values: [/* 'elevated', */ 'filled', 'outlined', 'text'], default: 'filled'},
@@ -45,7 +48,7 @@ All in one button component. Configurable as a text button, icon button or link 
 
 ## API
 
-<ApiDocs :props="props" :style="style" :slots="slots"/>
+<ApiDocs :slots="slots" :props="props" :events="events" :style="style"/>
 
 ## Examples
 

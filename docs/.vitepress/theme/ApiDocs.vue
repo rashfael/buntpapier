@@ -3,6 +3,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 const {
 	props: propsObj,
 	slots: slotsObj,
+	events: eventsObj,
 	style: styleObj
 } = defineProps({
 	editable: {
@@ -10,11 +11,15 @@ const {
 		default: false
 	},
 	componentName: String,
+	slots: {
+		type: Object,
+		default: () => ({})
+	},
 	props: {
 		type: Object,
 		default: () => ({})
 	},
-	slots: {
+	events: {
 		type: Object,
 		default: () => ({})
 	},
@@ -24,8 +29,9 @@ const {
 	},
 })
 
-const props = $ref(Object.entries(propsObj).map(([name, content]) => ({ name, ...content })))
 const slots = $ref(Object.entries(slotsObj).map(([name, content]) => ({ name, ...content })))
+const props = $ref(Object.entries(propsObj).map(([name, content]) => ({ name, ...content })))
+const events = $ref(Object.entries(eventsObj).map(([name, content]) => ({ name, ...content })))
 const style = $ref(Object.entries(styleObj).map(([name, content]) => ({ name, ...content })))
 
 </script>
@@ -54,6 +60,15 @@ const style = $ref(Object.entries(styleObj).map(([name, content]) => ({ name, ..
 				td.type(v-else) {{ prop.type }}
 				td {{ prop.default }}
 				td.description {{ prop.description }}
+	.events
+		h3 Events
+		table
+			tr
+				th Event
+				th Description
+			tr(v-for="event of events")
+				td {{ event.name }}
+				td.description {{ event.description }}
 	.style
 		h3 Style
 		table
