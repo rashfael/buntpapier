@@ -5,11 +5,12 @@ layout: 'component'
 
 <script setup>
 const slots = {
-	default: {description: 'Button text. Leave empty to render icon button.'}
+	default: {description: 'Button text. Leave empty to render icon button.'},
+	icon: {description: 'Use this slot if you want to display a custom icon. For MDI icons, use the `icon` prop instead.'}
 }
 const props = {
 	disabled: {type: 'boolean', default: false},
-	icon: {type: 'string', description: 'To render just an icon button, leave slot empty.'},
+	icon: {type: 'string', description: 'MDI iconset name. To render just an icon button, leave default slot empty.'},
 	tooltip: {type: 'string'},
 	loading: {type: 'boolean', default: false},
 	error: {type: 'boolean', default: false},
@@ -29,6 +30,8 @@ const style = {
 </script>
 
 # Button
+
+All in one button component. Configurable as a text button, icon button or link button taking vue-router props.
 
 ## Playground
 

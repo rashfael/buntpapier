@@ -166,6 +166,11 @@ export default {
 			const hasContent =
 				(typeof textContent === 'string' && textContent.length > 0) ||
 				(Array.isArray(textContent) && textContent.length > 0 && textContent.some(vnode => vnode.children))
+			const iconNode = slots.icon?.() ?? (
+				iconClass && createElement('i', {
+					class: ['bunt-icon', 'mdi', iconClass]
+				})
+			)
 			const rootClasses = [
 				'bunt-button',
 				...classes,
@@ -174,17 +179,15 @@ export default {
 					loading,
 					error: errorMessage || error,
 					success: showSuccess,
-					'with-icon': iconClass,
-					'icon-only': !hasContent && iconClass,
+					'with-icon': !!iconNode,
+					'icon-only': !hasContent && !!iconNode,
 				}
 			]
 			const content = [
 				createElement('div', {
 					class: 'bunt-button-content'
 				}, [
-					iconClass && createElement('i', {
-						class: ['bunt-icon', 'mdi', iconClass]
-					}),
+					iconNode,
 					hasContent && createElement('div', {
 						class: 'bunt-button-text'
 					}, textContent)
