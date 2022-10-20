@@ -40,9 +40,9 @@ module.exports = {
 				// }, {
 				// 	text: 'link-button',
 				// 	link: '/components/link-button'
-				// }, {
-				// 	text: 'input',
-				// 	link: '/components/input'
+				}, {
+					text: 'input',
+					link: '/components/input'
 				// }, {
 				// 	text: 'select',
 				// 	link: '/components/select'
