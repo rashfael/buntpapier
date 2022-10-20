@@ -191,43 +191,43 @@ onUnmounted(() => {
 				margin-left: 4px
 				color: #00b368
 	
-	input:not([type="color"]), select
-		color: var(--clr-primary-text-light)
-		font-family: 'Roboto Mono'
-		font-size: 16px
-		background-color: var(--clr-white)
-		border: 1px solid var(--clr-dividers-light)
-		padding: 0 4px
-	select
-		margin-left: 8px
+		input:not([type="color"]), select
+			color: var(--clr-primary-text-light)
+			font-family: 'Roboto Mono'
+			font-size: 16px
+			background-color: var(--clr-white)
+			border: 1px solid var(--clr-dividers-light)
+			padding: 0 4px
+		select
+			margin-left: 8px
 
-	.value-color
-		display: flex
-		align-items: center
-		label
-			display: block
-			height: 16px
-			width: @height
-			background-color: var(--value-color)
-			border: 1px solid var(--clr-grey-400)
-			border-radius: 50%
-			margin: 0 8px
-		input[type="color"]
-			visibility: hidden
-			width: 64px
-			height: 36px
+		.value-color
+			display: flex
+			align-items: center
+			label
+				display: block
+				height: 16px
+				width: @height
+				background-color: var(--value-color)
+				border: 1px solid var(--clr-grey-400)
+				border-radius: 50%
+				margin: 0 8px
+			input[type="color"]
+				visibility: hidden
+				width: 64px
+				height: 36px
 
 
-	&:not(.editable)
-		.settings
-			flex: 2
-		.style
-			border-left: 2px solid var(--clr-dividers-light)
+		&:not(.editable)
+			.settings
+				flex: 2
+			.style
+				border-left: 2px solid var(--clr-dividers-light)
 
-	&.editable
-		min-height: 360px
-		.settings
-			flex-direction: column
-		.style
-			border-top: 2px solid var(--clr-dividers-light)
+		&.editable
+			min-height: 360px
+			.settings
+				flex-direction: column
+			.style
+				border-top: 2px solid var(--clr-dividers-light)
 </style>
