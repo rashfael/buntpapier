@@ -28,7 +28,7 @@ const {
 	},
 })
 
-const propsDefinition = $ref(Object.entries(propsObj).map(([name, content]) => ({ name, ...content })))
+const propsDefinition = $ref(Object.entries(propsObj).map(([name, content]) => ({ name, ...content })).filter(prop => prop.name !== 'modelValue'))
 const slots = $ref(Object.entries(slotsObj).map(([name, content]) => ({ name, content })))
 const styleProperties = $ref(Object.entries(styleObj).map(([name, content]) => ({ name, ...content })))
 
@@ -55,6 +55,7 @@ for (const prop of propsDefinition) {
 }
 
 let compEl = $ref(null)
+let value = $ref('')
 
 const computedStyles = $ref({})
 
@@ -77,7 +78,7 @@ onUnmounted(() => {
 <template lang="pug">
 .c-showcase(:class="{'editable': editable}")
 	.component(:style="style")
-		component(:is="componentName", ref="compEl", v-bind="props")
+		component(:is="componentName", ref="compEl", v-bind="props", v-model="value")
 			template(v-for="slot of slots", #[slot.name]) {{ slot.content }}
 	.settings
 		.template
@@ -91,6 +92,11 @@ onUnmounted(() => {
 						.value {{ props[prop.name] }}
 					input(v-else, type="text", v-model="props[prop.name]")
 				.value(v-else) {{ prop.value }}
+				span.html "
+			.prop(v-if="propsObj.modelValue")
+				.name v-model
+				span.html ="
+				.value yourValue
 				span.html "
 			.tag #[span.html &gt;]
 			.slot(v-for="slot of slots", :key="slot.name")
