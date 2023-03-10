@@ -163,7 +163,7 @@ export default {
 								if (tab.props.disabled) return
 								select(index, state.tabs)
 							}
-						})
+						}, slots.headerItem ? () => slots.headerItem({id: tab.props.id, ...tab.props.header}) : null)
 					})),
 					createElement('div', {
 						class: ['bunt-tabs-indicator', state.indicatorState],

@@ -102,13 +102,14 @@ export default {
 | slot | description |
 |:-----|:------------|
 | default | put `bunt-tab` components here |
+| headerItem | customize header item rendering. Receives the tab id and the header object. |
 
 ## bunt-tab
 ### props
 | prop | type | required | default | description |
 |:-----|:-----|:---------|:--------|:------------|
 | id | string | false | | tab id used in bunt-tabs' `active-tab` |
-| header | string | true | | header label |
+| header | string, object | true | | header label. If you're using the headerItem slot, you can pass an object to it here. |
 | icon | string | false | | mdi icon name |
 | disabled | boolean | false | false | disables input |
 
