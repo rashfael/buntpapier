@@ -5,7 +5,7 @@
 export default {
 	name: `bunt-tab`,
 	props: {
-		header: String,
+		header: [String, Object],
 		icon: String,
 		disabled: {
 			type: Boolean,
