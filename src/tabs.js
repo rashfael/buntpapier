@@ -151,7 +151,7 @@ export default {
 					}, state.tabs.map((tab, index) => {
 						return createElement(BuntTabHeaderItem, {
 							id: tab.props.id,
-							text: tab.props.header,
+							text: typeof tab.props.header === 'string' ? tab.props.header : null,
 							active: tab === state.activeTab,
 							disabled: tab.props.disabled,
 							key: tab.props.id,
