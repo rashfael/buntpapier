@@ -9,7 +9,7 @@ const slots = {
 }
 const props = {
 	type: {type: 'string', default: 'text', description: 'native input element type attribute'},
-	label: {type: 'string'},
+	label: {type: 'string', default: 'label'},
 	placeholder: {type: 'string'},
 	hint: {type: 'string'},
 	icon: {type: 'string', description: 'MDI iconset name.'},
@@ -31,7 +31,7 @@ const style = {
 <Showcase
 	:editable="true"
 	componentName="bunt-input"
-	:slots="{default: 'Customize Me'}"
+	:slots="{}"
 	:props="props"
 	:style="style"
 ></Showcase>

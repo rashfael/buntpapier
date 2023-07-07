@@ -74,6 +74,17 @@ body
 		gap: 8px
 		padding: 8px
 		background-color: #ddd
+		&::before
+			align-self: flex-start
+			content: 'css'
+			display: block
+			padding: 0 8px
+			height: 24px
+			background-color: #eee
+			border-radius: 4px 0 4px 0
+			border-bottom: 1px solid #aaa
+			border-right: 1px solid #aaa
+			margin: -8px
 		.prop
 			font-family: monospace
 			display: flex

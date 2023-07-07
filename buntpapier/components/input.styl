@@ -1,0 +1,31 @@
+input-style(style = 'light', size = 'dense')
+	input-size(size)
+	if style is 'dark'
+		input
+			color: $clr-primary-text-dark
+		label, .hint, .icon, ::placeholder
+			color: $clr-secondary-text-dark
+
+		.bunt-input.disabled
+			input
+				color: $clr-disabled-text-dark
+				background-color: alpha($clr-white, 0.08)
+		.outline
+			stroke: $clr-dividers-dark
+
+input-size(size)
+	if size is 'large'
+		height: 76px
+		input
+			height: 55px
+			padding 16px 8px 16px 11px
+		label
+			top: 16px
+		.hint
+			padding-top: 4px
+		&.floating-label, &.focused
+			label
+				transform: translateY(-23px) scale(0.75)
+
+	if size is 'compact'
+		height: 37px  // dont reserve space for hint
