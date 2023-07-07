@@ -1,4 +1,6 @@
-module.exports = {
+// import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
+
+export default {
 	title: 'buntpapier',
 	description: 'yet another component library',
 	dest: 'dist',
@@ -86,6 +88,14 @@ module.exports = {
 		}
 	},
 	vue: {
-		reactivityTransform: true
-	}
+			// script: {
+			// 	propsDestructure: true
+			// },
+			reactivityTransform: true
+	},
+	// vite: {
+	// 	plugins: [
+	// 		ReactivityTransform()
+	// 	]
+	// }
 }

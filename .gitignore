@@ -10,3 +10,5 @@ dist
 
 .publish
 build-stats.json
+
+docs/.vitepress/cache
