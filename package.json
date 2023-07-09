@@ -56,7 +56,6 @@
   "repository": "rashfael/buntpapier",
   "dependencies": {
     "@popperjs/core": "^2.11.2",
-    "ast-kit": "^0.6.7",
     "color": "^4.1.0"
   }
 }
