@@ -1,9 +1,9 @@
 import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent } from 'vue'
 import Color from 'color'
-import tooltipDirective from '../directives/tooltip.js'
-import { useComputedStyle } from '../computedStyle.js'
-import { firstReadable, CLR_PRIMARY_TEXT } from '../utils/colors.js'
-import { getIconClass } from '../utils/icon.js'
+import tooltipDirective from '../directives/tooltip'
+import { useComputedStyle } from '../computedStyle'
+import { firstReadable, CLR_PRIMARY_TEXT } from '../utils/colors'
+import { getIconClass } from '../utils/icon'
 import ProgressCircular from './progress-circular.vue'
 
 export default {

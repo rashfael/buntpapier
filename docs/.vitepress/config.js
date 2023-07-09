@@ -48,9 +48,9 @@ export default {
 				// }, {
 				// 	text: 'select',
 				// 	link: '/components/select'
-				// }, {
-				// 	text: 'checkbox',
-				// 	link: '/components/checkbox'
+				}, {
+					text: 'checkbox',
+					link: '/components/checkbox'
 				// }, {
 				// 	text: 'radio',
 				// 	link: '/components/radio'

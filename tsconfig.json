@@ -4,7 +4,7 @@
 		"allowJs": true,
 		"checkJs": true,
 		"target": "esnext",
-		"module": "nodenext",
+		"moduleResolution": "node",
 		"noErrorTruncation": true
 
 		// "lib": ["ESNext", "DOM"]

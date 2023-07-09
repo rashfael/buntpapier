@@ -5,7 +5,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useComputedStyle } from '../computedStyle.js'
+import { useComputedStyle } from '../computedStyle'
 
 const el = ref()
 

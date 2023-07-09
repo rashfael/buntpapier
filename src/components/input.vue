@@ -3,9 +3,9 @@
 // - label animation WITH icon should go sideways, hint with icon should be on same height as input
 // - apply name and other attrs to input el
 import { ref, watch } from 'vue'
-import { useComputedStyle } from '../computedStyle.js'
-import { getIconClass } from '../utils/icon.js'
-import { useInputOutline } from '../utils/input-outline.js'
+import { useComputedStyle } from '../computedStyle'
+import { getIconClass } from '../utils/icon'
+import { useInputOutline } from '../utils/input-outline'
 
 const INPUT_SHAPE_RADII = {
 	squared: 0,
