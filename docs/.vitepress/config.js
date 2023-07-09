@@ -1,4 +1,4 @@
-// import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
+import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
 
 export default {
 	title: 'buntpapier',
@@ -87,15 +87,9 @@ export default {
 			copyright: 'Copyright © 2016-present rash.codes'
 		}
 	},
-	vue: {
-			// script: {
-			// 	propsDestructure: true
-			// },
-			reactivityTransform: true
-	},
-	// vite: {
-	// 	plugins: [
-	// 		ReactivityTransform()
-	// 	]
-	// }
+	vite: {
+		plugins: [
+			ReactivityTransform()
+		]
+	}
 }

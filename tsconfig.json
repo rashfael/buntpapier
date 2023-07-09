@@ -4,7 +4,9 @@
 		"allowJs": true,
 		"checkJs": true,
 		"target": "esnext",
-		"module": "nodenext"
+		"module": "nodenext",
+		"noErrorTruncation": true
+
 		// "lib": ["ESNext", "DOM"]
 	}
 }

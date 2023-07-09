@@ -32,6 +32,7 @@ module.exports = {
 		'vue/max-attributes-per-line': 0,
 		'import/first': 0, // does not work with multiple script tags
 		// 'no-unused-vars': 0 // does not with setup + pug
+		'@typescript-eslint/ban-ts-comment': 0
 	},
 	globals: {
 		localStorage: false,
