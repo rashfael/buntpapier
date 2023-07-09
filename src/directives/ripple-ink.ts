@@ -26,7 +26,7 @@ export default function (Vue) {
 				} = el.getBoundingClientRect()
 				const x = clientX - containerX
 				const y = clientY - containerY
-				const radius = Math.sqrt(Math.max(x, containerWidth - x) ** 2 + Math.max(y, containerHeight -y)**2)
+				const radius = Math.sqrt(Math.max(x, containerWidth - x) ** 2 + Math.max(y, containerHeight - y) ** 2)
 				ripple.style.setProperty('--bunt-ripple-radius', `${radius}`)
 				ripple.style.setProperty('--bunt-ripple-x', `${x}px`)
 				ripple.style.setProperty('--bunt-ripple-y', `${y}px`)

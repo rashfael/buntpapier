@@ -15,7 +15,6 @@ const INPUT_SHAPE_RADII = {
 
 const {
 	type,
-	name,
 	label,
 	placeholder,
 	modelValue,

@@ -56,11 +56,11 @@ class Scrollbars {
 				for (const record of records) {
 					for (const addedNode of record.addedNodes) {
 						if (addedNode.nodeType !== Node.ELEMENT_NODE) continue
-						this.resizeObserver.observe(addedNode)
+						this.resizeObserver.observe(addedNode as Element)
 					}
 					for (const removedNode of record.removedNodes) {
 						if (removedNode.nodeType !== Node.ELEMENT_NODE) continue
-						this.resizeObserver.unobserve(removedNode)
+						this.resizeObserver.unobserve(removedNode as Element)
 					}
 				}
 				this.onResize()
