@@ -6,8 +6,6 @@
 // `v-scrollbar.x` | `v-scrollbar.y' : scrolling one axis`
 // CAUTION: in pug, you need to use `v-scrollbar.x=''` (empty value)
 
-// import ResizeObserver from 'resize-observer-polyfill'
-
 // TODO throttling
 
 class Scrollbars {

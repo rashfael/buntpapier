@@ -1,5 +1,3 @@
-import ResizeObserver from 'resize-observer-polyfill'
-
 export const hooks = {
 	beforeMount (el, binding) {
 		const observer = new ResizeObserver(entries => {
