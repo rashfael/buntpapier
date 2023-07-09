@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
 export default {
 	name: 'BuntProgressCircular'
 }
 </script>
-<script setup>
-import { ref, toRefs, reactive, computed, onMounted, useSlots } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { useComputedStyle } from '../computedStyle.js'
 
 const el = ref()
@@ -12,7 +12,7 @@ const el = ref()
 useComputedStyle(el, {
 	'--progress-size': 'size',
 	'--progress-layout': 'layout',
-}, ({size, layout}) => {
+}, ({ size, layout }) => {
 	const style = {}
 	const classes = []
 	if (size) {
@@ -21,9 +21,8 @@ useComputedStyle(el, {
 	if (layout) {
 		classes.push(`bunt-progess-circular--layout-${layout}`)
 	}
-	
 
-	return {style, classes}
+	return { style, classes }
 })
 
 </script>

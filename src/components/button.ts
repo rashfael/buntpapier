@@ -1,4 +1,4 @@
-import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps } from 'vue'
+import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent } from 'vue'
 import Color from 'color'
 import tooltipDirective from '../directives/tooltip.js'
 import { useComputedStyle } from '../computedStyle.js'
@@ -152,7 +152,7 @@ export default {
 		})
 
 		function onClick (event) {
-			if (disabled || loading || showSuccess.value) return
+			if (disabled || loading || showSuccess) return
 			emit('click', event)
 		}
 
@@ -208,13 +208,13 @@ export default {
 				}))
 			}
 
-			const tooltip = [[
+			const tooltip: DirectiveArguments = [[
 				tooltipDirective,
 				tooltipOptions || { text: tooltipText, show: !!errorMessage, fixed: tooltipFixed }
 			]]
 
 			if (to) {
-				return createElement(resolveComponent('router-link'), {
+				return createElement(resolveComponent('router-link') as ConcreteComponent, {
 					custom: true,
 					to,
 				}, {

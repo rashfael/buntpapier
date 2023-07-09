@@ -1,7 +1,7 @@
 <script setup>
 // TODO link to API docs?
 import { onMounted, onUnmounted } from 'vue'
-import { registerHandler, unregisterHandler } from '../../../src/requestAnimationFrameMuxxer.js'
+import { registerHandler, unregisterHandler } from '../../../src/requestAnimationFrameMuxxer.ts'
 
 const {
 	componentName,

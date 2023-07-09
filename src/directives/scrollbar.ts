@@ -6,11 +6,22 @@
 // `v-scrollbar.x` | `v-scrollbar.y' : scrolling one axis`
 // CAUTION: in pug, you need to use `v-scrollbar.x=''` (empty value)
 
-import ResizeObserver from 'resize-observer-polyfill'
+// import ResizeObserver from 'resize-observer-polyfill'
 
 // TODO throttling
 
 class Scrollbars {
+	options: any
+	onThumbMousedownX: any
+	onThumbMousedownY: any
+	el: any
+	railsParent: any
+	resizeObserver: ResizeObserver
+	mutationObserver: MutationObserver
+	x: any
+	y: any
+	dragging: any
+	draggingOffset: any
 	constructor (el, options) {
 		this.options = options
 		// bind all the event handlers
@@ -81,7 +92,7 @@ class Scrollbars {
 		this.resizeObserver?.disconnect()
 		this.mutationObserver?.disconnect()
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
-		document.removeEventListener('mouseup', this.onDocumentMouseup, {capture: true})
+		document.removeEventListener('mouseup', this.onDocumentMouseup, { capture: true })
 		this.el.removeEventListener('scroll', this.onScroll)
 		this.x?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownX)
 		this.y?.thumbEl.removeEventListener('mousedown', this.onThumbMousedownY)
@@ -116,7 +127,7 @@ class Scrollbars {
 		document.body.style['-moz-user-select'] = 'none'
 		this[dimension].railEl.classList.add('active')
 		document.addEventListener('mousemove', this.onDocumentMousemove)
-		document.addEventListener('mouseup', this.onDocumentMouseup, {capture: true})
+		document.addEventListener('mouseup', this.onDocumentMouseup, { capture: true })
 	}
 
 	onDocumentMousemove (event) {
@@ -142,10 +153,10 @@ class Scrollbars {
 		this.el.style.userSelect = ''
 		document.body.style['-moz-user-select'] = ''
 		document.removeEventListener('mousemove', this.onDocumentMousemove)
-		document.removeEventListener('mouseup', this.onDocumentMouseup, {capture: true})
+		document.removeEventListener('mouseup', this.onDocumentMouseup, { capture: true })
 	}
 
-	onResize (entries) {
+	onResize () {
 		// TODO for performance, use values reported by the observer?
 		this.computeDimensions()
 		this.computeThumbPositions()

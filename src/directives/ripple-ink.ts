@@ -5,8 +5,8 @@
 // - update/unmount hooks?
 
 export default function (Vue) {
-	Vue.directive('rippleInk',  {
-		created(el, binding, vnode, prevVnode) {
+	Vue.directive('rippleInk', {
+		created (el, binding, vnode, prevVnode) {
 			const rippleContainer = document.createElement('div')
 			rippleContainer.className = 'bunt-ripple-container'
 			el.appendChild(rippleContainer)
@@ -26,8 +26,8 @@ export default function (Vue) {
 				} = el.getBoundingClientRect()
 				const x = clientX - containerX
 				const y = clientY - containerY
-				const radius = Math.sqrt(Math.max(x, containerWidth - x)**2 + Math.max(y, containerHeight -y)**2)
-				ripple.style.setProperty('--bunt-ripple-radius', radius)
+				const radius = Math.sqrt(Math.max(x, containerWidth - x) ** 2 + Math.max(y, containerHeight -y)**2)
+				ripple.style.setProperty('--bunt-ripple-radius', `${radius}`)
 				ripple.style.setProperty('--bunt-ripple-x', `${x}px`)
 				ripple.style.setProperty('--bunt-ripple-y', `${y}px`)
 				ripple.classList.add('bunt-ripple--active')

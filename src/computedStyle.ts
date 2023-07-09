@@ -1,7 +1,7 @@
 import { onMounted, onUnmounted } from 'vue'
 import { registerHandler, unregisterHandler } from './requestAnimationFrameMuxxer.js'
 
-export function useComputedStyle (el, customPropNames, computeStyle) {
+export function useComputedStyle (el, customPropNames: {[key: string]: string}, computeStyle) {
 	const customProps = {}
 	// TODO duplicate data structure?
 	let prevComputedStyle = {}

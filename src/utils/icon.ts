@@ -3,7 +3,7 @@ const alias = {
 	done: 'check',
 	remove: 'minus',
 	search: 'magnify',
-	'help_outline': 'help-circle-outline'
+	help_outline: 'help-circle-outline'
 }
 
 export function getIconClass (name) {

@@ -1,0 +1,10 @@
+{
+	"compilerOptions": {
+		"strict": false,
+		"allowJs": true,
+		"checkJs": true,
+		"target": "esnext",
+		"module": "nodenext"
+		// "lib": ["ESNext", "DOM"]
+	}
+}

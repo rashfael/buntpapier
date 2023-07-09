@@ -1,11 +1,11 @@
 import Color from 'color'
 import { normal as normalBlend } from 'color-blend'
 
-export const CLR_PRIMARY_TEXT = {LIGHT: Color('rgba(0, 0, 0, .87)'), DARK: Color('rgba(255, 255, 255, 1)')}
-export const CLR_SECONDARY_TEXT = {LIGHT: Color('rgba(0, 0, 0, .54)'), DARK: Color('rgba(255, 255, 255, .7)')}
-export const CLR_SECONDARY_TEXT_FALLBACK = {LIGHT: Color('rgba(0, 0, 0, .74)'), DARK: Color('rgba(255, 255, 255, .9)')}
-export const CLR_DISABLED_TEXT = {LIGHT: Color('rgba(0, 0, 0, .38)'), DARK: Color('rgba(255, 255, 255, .5)')}
-export const CLR_DIVIDERS = {LIGHT: Color('rgba(255, 255, 255, .63)'), DARK: Color('rgba(255, 255, 255, .63)')}
+export const CLR_PRIMARY_TEXT = { LIGHT: Color('rgba(0, 0, 0, .87)'), DARK: Color('rgba(255, 255, 255, 1)') }
+export const CLR_SECONDARY_TEXT = { LIGHT: Color('rgba(0, 0, 0, .54)'), DARK: Color('rgba(255, 255, 255, .7)') }
+export const CLR_SECONDARY_TEXT_FALLBACK = { LIGHT: Color('rgba(0, 0, 0, .74)'), DARK: Color('rgba(255, 255, 255, .9)') }
+export const CLR_DISABLED_TEXT = { LIGHT: Color('rgba(0, 0, 0, .38)'), DARK: Color('rgba(255, 255, 255, .5)') }
+export const CLR_DIVIDERS = { LIGHT: Color('rgba(255, 255, 255, .63)'), DARK: Color('rgba(255, 255, 255, .63)') }
 
 export function blend (background, foreground) {
 	const { r, g, b, a } = normalBlend({
@@ -24,7 +24,7 @@ export function blend (background, foreground) {
 
 // returns first color with enough (>=4.5) contrast or failing that, the color with the highest contrast
 // on background, alpha gets blended
-export function firstReadable (colors, background = '#FFF', threshold = 4.5) {
+export function firstReadable (colors, background: Color = '#FFF', threshold = 4.5) {
 	try {
 		background = Color(background)
 	} catch (e) {

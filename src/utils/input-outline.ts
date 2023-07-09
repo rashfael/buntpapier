@@ -1,7 +1,8 @@
-import { h as createElement, withDirectives, resolveDirective, onMounted, nextTick } from 'vue'
+import { h as createElement, onMounted, nextTick } from 'vue'
+import type { Ref } from 'vue'
 import { getTextMetrics } from './text-metrics'
 
-export function useInputOutline (labelRef, radiusRef) {
+export function useInputOutline (labelRef: Ref<string>, radiusRef: Ref<number>) {
 	const label = $(labelRef)
 	const radius = $(radiusRef)
 	let outlineStroke = $ref(null)

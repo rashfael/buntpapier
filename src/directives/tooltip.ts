@@ -9,6 +9,16 @@ import { createPopper } from '@popperjs/core'
 const ANIMATION_OFFSET = 32
 
 class Tooltip {
+	el: any
+	options: any
+	tooltipEl: any
+	text: any
+	popper: any
+	positions: any
+	forceDisplay: any
+	displaying: boolean
+	animation: any
+
 	constructor (el, options) {
 		this.el = el
 		this.options = options
