@@ -32,9 +32,7 @@ export default {
 </ul>
 <h4>active tab via index</h4>
 <bunt-tabs class="tabs-default" :active-tab="1">
-	<bunt-tab header="Tab 1" />
-	<bunt-tab header="Tab 2" />
-	<bunt-tab header="A longer Tab Heading" />
+	<bunt-tab v-for="tab of ['Tab 1', 'Tab 2', 'A longer Tab Heading']" :header="tab" />
 </bunt-tabs>
 <h4>tab bodies</h4>
 <bunt-tabs class="tabs-default" :active-tab="'one'">

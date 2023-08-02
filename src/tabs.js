@@ -1,8 +1,9 @@
-import { h as createElement, ref, reactive, toRef, computed, onMounted, onBeforeUpdate, onBeforeUnmount, nextTick, watch, provide} from 'vue'
+import { h as createElement, ref, reactive, toRef, computed, onMounted, onBeforeUpdate, onBeforeUnmount, nextTick, watch, provide, Fragment } from 'vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import BuntTabHeaderItem from './tab-header.vue'
 
 const filterTabs = function (vnodes) {
+	if (vnodes.length === 1 && vnodes[0].type === Fragment) return filterTabs(vnodes[0].children)
 	return vnodes.filter(tab => tab.type.name === 'bunt-tab')
 }
 
@@ -41,7 +42,6 @@ export default {
 		})
 
 		const getTabValue = (tab) => tab ? tab.props.id || state.tabs.indexOf(tab) : null
-
 		watch(
 			() => slots.default(),
 			(els) => {
