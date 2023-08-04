@@ -60,6 +60,9 @@ export default {
 		<div class="id" :style="{'background-color': option.color}">{{ option.id }}</div>
 	</template>
 </bunt-select>
+
+<!-- add a div for all dropdowns to teleport to somewhere at the end of your html, preferably directly in <body> -->
+<div id="bunt-teleport-target"></div>
 ```
 
 ### style
