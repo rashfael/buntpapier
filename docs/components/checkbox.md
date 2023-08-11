@@ -18,8 +18,7 @@ const events = {
 	'update:modelValue': {}
 }
 const style = {
-	// '--input-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
-	// '--input-size': {type: 'enum', values: ['normal', 'large', 'compact'], default: 'normal'},
+	'--checkbox-shape': {type: 'enum', values: ['checkbox', 'switch'], default: 'checkbox'},
 }
 </script>
 

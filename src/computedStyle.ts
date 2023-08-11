@@ -1,8 +1,8 @@
-import { onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 import { registerHandler, unregisterHandler } from './requestAnimationFrameMuxxer.js'
 
 export function useComputedStyle (el, customPropNames: {[key: string]: string}, computeStyle) {
-	const customProps = {}
+	const customProps: any = reactive({})
 	// TODO duplicate data structure?
 	let prevComputedStyle = {}
 	let prevComputedClasses = []
@@ -70,6 +70,7 @@ export function useComputedStyle (el, customPropNames: {[key: string]: string}, 
 	// use this to preserve classes and style so they don't get nuked by vue
 	return {
 		classes,
-		style
+		style,
+		customProps
 	}
 }

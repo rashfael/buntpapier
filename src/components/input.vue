@@ -113,7 +113,7 @@ const { classes, style } = useComputedStyle(el, {
 
 </script>
 <template lang="pug">
-.bunt-input(ref="el", :class!="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled: disabled, 'with-icon': icon}]", :style="style", v-resize-observer="updateOutline")
+.bunt-input(ref="el", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled: disabled, 'with-icon': icon}]", :style="style", v-resize-observer="updateOutline")
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label

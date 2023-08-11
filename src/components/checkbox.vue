@@ -5,6 +5,7 @@
 // - validation
 // - indeterminate
 // - disabled + readonly styling
+// - icon
 import { useComputedStyle } from '../computedStyle'
 
 const {
@@ -43,12 +44,23 @@ const onBlur = () => {
 	focused = false
 }
 
-// const { classes, style}
+const el = $ref()
+const { classes, style, customProps } = useComputedStyle($$(el), {
+	'--checkbox-shape': 'shape'
+}, ({ shape }) => {
+	const style = {}
+	const classes = []
+
+	return { style, classes }
+})
+const { shape } = $(customProps)
 </script>
 <template lang="pug">
-.bunt-checkbox(:class="{checked: modelValue}")
+.bunt-checkbox(ref="el", :class="[...classes, {checked: modelValue}]", :style="style")
 	input(type="checkbox", :name="name", :checked="modelValue", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
-	.bunt-checkbox-box
+	.bunt-switch-track(v-if="shape === 'switch'")
+		.bunt-switch-thumb
+	.bunt-checkbox-box(v-else)
 	label(v-if="label") {{ label }}
 	label(v-else)
 		slot
