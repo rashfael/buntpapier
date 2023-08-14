@@ -66,6 +66,7 @@ export default {
 | icon | string | false | | mdi icon name to display |
 | value | string\|number | false | '' | value (or use v-model) |
 | disabled | boolean | false | false | disables input |
+| readonly | boolean | false | false | sets native readonly, does not change visuals |
 | validation | object | false | | vuelidate object (see validation) |
 
 ## slots

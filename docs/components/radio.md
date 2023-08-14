@@ -34,6 +34,7 @@ export default {
 | checked | any | false | false | checked value (or use v-model) |
 | value | any | false | false | value to emit |
 | disabled | boolean | false | false | disables input |
+| readonly | boolean | false | false | sets native readonly, does not change visuals |
 
 ## slots
 

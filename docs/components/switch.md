@@ -29,9 +29,9 @@ export default {
 |:-----|:-----|:---------|:--------|:------------|
 | name | string | true | | native input name |
 | label | string | false | | floating label |
-| placeholder | string | false | | native placeholder text |
 | value | boolean | false | false | value (or use v-model) |
 | disabled | boolean | false | false | disables input |
+| readonly | boolean | false | false | sets native readonly, does not change visuals |
 
 ## slots
 
