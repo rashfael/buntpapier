@@ -3,6 +3,7 @@ checkbox()
 		cursor pointer
 		position relative
 		display flex
+		align-items center
 		flex-shrink 0
 		input
 			position absolute
@@ -52,3 +53,16 @@ checkbox()
 					opacity 1
 					transform rotate(45deg) scale3D(1, 1, 1)
 					transition $swift-ease-out
+
+
+checkbox-style(size = normal)
+	if size is small
+		.bunt-checkbox-box
+			height: 14px
+			width: @height
+			&:after
+				width: 4px
+				height: 9px
+				left: 4px
+		label
+			line-height: 18px

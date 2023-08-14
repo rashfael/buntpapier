@@ -14,14 +14,18 @@ export default {
 </script>
 
 <bunt-checkbox id="chbox-none" name="check-none" label="turn me ooooon" v-model="check" />
+<bunt-checkbox id="chbox-small" name="check-small" label="I'm small!" v-model="check" />
 
 ### template
 ```html
 <bunt-checkbox id="chbox-none" name="check-none" label="turn me ooooon" v-model="check" />
+<bunt-checkbox id="chbox-small" name="check-small" label="I'm small!" v-model="check" />
 ```
 
 ### style
 ```
+#chbox-small
+	checkbox-style(size: small)
 ```
 
 ## props
@@ -45,4 +49,6 @@ export default {
 | input | value | emitted on every keypress or input (or use v-model) |
 
 ## style mixin parameters
-has no mixin
+| parameter | type | default | description |
+|:----------|:-----|:--------|:------------|
+| size | normal, small | normal | checkbox size |
