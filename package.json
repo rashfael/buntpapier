@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "vue-cli-service lint",
     "build:docs": "vitepress build docs",
-    "deploy": "npm run build:docs -s && gh-pages -d dist",
+    "deploy": "npm run build:docs -s && gh-pages -d docs/.vitepress/dist",
     "start": "vitepress dev docs",
     "build": "vue-cli-service build --target lib --formats commonjs src/index.js",
     "prepublishOnly": "npm run build"
