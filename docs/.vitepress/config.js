@@ -73,5 +73,10 @@ module.exports = {
 			message: 'Released under the MIT License.',
 			copyright: 'Copyright © 2016-present rash.codes'
 		}
+	},
+	vite: {
+		build: {
+			ssr: false
+		}
 	}
 }
