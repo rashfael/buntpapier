@@ -5,7 +5,7 @@
   "author": "rash <rash@rash.codes>",
   "scripts": {
     "lint": "vue-cli-service lint",
-    "build:docs": "vuepress build docs",
+    "build:docs": "vitepress build docs",
     "deploy": "npm run build:docs -s && gh-pages -d dist",
     "start": "vitepress dev docs",
     "build": "vue-cli-service build --target lib --formats commonjs src/index.js",
@@ -48,7 +48,7 @@
     "stylus-loader": "^4.3.3",
     "tether-tooltip": "^1.2.0",
     "typeface-roboto-mono": "0.0.54",
-    "vitepress": "^0.20.1",
+    "vitepress": "^1.0.0-rc.4",
     "vue": "^3.0.5",
     "vue-router": "^3.5.1",
     "vuelidate": "git://github.com/vuelidate/vuelidate.git#next",

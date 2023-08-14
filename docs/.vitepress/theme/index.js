@@ -1,4 +1,4 @@
-import DefaultTheme from 'vitepress/dist/client/theme-default'
+import DefaultTheme from 'vitepress/theme'
 import 'roboto-fontface'
 import 'typeface-roboto-mono'
 import '@mdi/font/css/materialdesignicons.css'

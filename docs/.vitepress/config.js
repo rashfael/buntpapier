@@ -3,19 +3,24 @@ module.exports = {
 	description: 'yet another component library',
 	dest: 'dist',
 	themeConfig: {
+		search: {
+			provider: 'local'
+		},
 		nav: [
 			{ text: 'Home', link: '/' },
 			{ text: 'Installation', link: '/installation' },
 			{ text: 'Components', link: '/components/' },
 			{ text: 'Directives', link: '/directives/' },
 			{ text: 'Stylus Mixins', link: '/mixins' },
-			{ text: 'Validation', link: '/validation' },
-			{ text: 'Github', link: 'https://github.com/rashfael/buntpapier' },
+			// { text: 'Validation', link: '/validation' }
+		],
+		socialLinks: [
+			{ icon: 'github', link: 'https://github.com/rashfael/buntpapier' },
 		],
 		sidebar: {
 			'/components/': [{
 				text: 'Components',
-				children: [{
+				items: [{
 					text: 'button',
 					link: '/components/button'
 				}, {
@@ -52,7 +57,7 @@ module.exports = {
 			}],
 			'/directives/': [{
 				text: 'Directives',
-				children: [{
+				items: [{
 					text: 'scrollbar',
 					link: '/directives/scrollbar'
 				}, {
@@ -63,6 +68,10 @@ module.exports = {
 					link: '/directives/resize-observer'
 				}]
 			}]
+		},
+		footer: {
+			message: 'Released under the MIT License.',
+			copyright: 'Copyright © 2016-present rash.codes'
 		}
 	}
 }

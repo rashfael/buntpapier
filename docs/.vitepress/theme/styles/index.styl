@@ -15,21 +15,11 @@ stripe(colors, angle, width)
 	return $grad
 $gradclrs = $clr-red $clr-pink $clr-purple $clr-deep-purple $clr-indigo $clr-blue $clr-light-blue $clr-cyan $clr-teal $clr-green $clr-light-green $clr-lime $clr-yellow $clr-amber $clr-orange $clr-deep-orange //$clr-brown $clr-grey $clr-blue-grey
 
-.content:not(.custom)
-	max-width: 1200px
-
-	a.bunt-link-button:hover
-		text-decoration: none
-table
-	th:last-child, td:last-child
-		width: 100%
-
 .dark-background
 	background-color: $clr-blue-grey
 	padding: 8px 16px
 
-
-.home-hero::before, .home-hero::after, header.nav-bar::before, header.nav-bar::after
+.VPNavBar .container::before, .VPNavBar .container::after
 	content: ''
 	display: block
 	position: absolute
@@ -41,39 +31,100 @@ table
 	background-size: 100% 102%
 	background-repeat: no-repeat
 
-.home-hero
+.VPHero .main
+	// &::before, &:after
+	// 	width: calc(100% - 48px * 2)
+	// 	margin: 0 48px
+
+.VPHero .main
 	position: relative
 	h1
-		color: $clr-white
-		font-family 'Roboto Mono'
+		font-family: 'Roboto Mono'
 		position: relative
-		line-height 60px
-		font-weight 400
-		font-size 36px
-		letter-spacing 2.25px
-		margin 0 0 0 2px
-		z-index 100
+		line-height: 100px
+		font-weight: 400
+		font-size: @css{min(80px, 12vw)}
+		letter-spacing: 2.25px
+		margin: 0 auto
+		text-align: center
+		white-space: nowrap
+	.text
+		font-size: 32px
+		max-width: 1060px
+		margin: 16px auto
+		text-align: center
+	.tagline
+		text-align: center
+	.actions
+		justify-content: center
+
 	&::before
 		height: 64px
 		opacity 0.7
 
-header.nav-bar
-	.nav-bar-title
-		font-family 'Roboto Mono'
-		letter-spacing 2.25px
+.VPNavBar
+	padding: 0 !important
+	.container
 		position: relative
-		z-index 100
-		color: $clr-white
+		max-width: var(--vp-layout-max-width)
+		margin: 0 32px 0 0
+		background: rgba(255, 255, 255, 0.7)
+		.VPNavBarTitle
+			background: none !important
+			font-family: 'Roboto Mono'
+			letter-spacing: 2.25px
+			position: relative
+			backdrop-filter: saturate(50%) blur(8px)
+			margin-right: 0
+			a
+				margin: 0 0 0 16px
+				color: $clr-white
+				font-size: 24px
+		.content
+			background: none !important
+			backdrop-filter: saturate(50%) blur(8px)
 
-	&::before, &::after
-		width: 500px
-		background-image: linear-gradient(to right, transparent, transparent 55%, white 95%), unquote(stripe($gradclrs, 90deg, 24px))
+		&::before, &::after
+			// width: 500px
+			background-image: unquote(stripe($gradclrs, 90deg, 24px))
+			-webkit-mask-image: linear-gradient(to right, black, black 55%, transparent 95%)
+			mask-image: linear-gradient(to right, black, black 55%, transparent 95%)
 
-	&::before
-		height: 100%
-		opacity 0.7
-	&::after
-		height 21px
+		&::before
+			height: 100%
+			opacity 0.7
+		&::after
+			height 8px
+
+.dark
+	.VPNavBar
+		.container
+			background: rgba(36, 36, 36, 0.7)
+
+// content pages
+
+:root
+	--bunt-will-change: all
+	--vp-c-brand: $clr-purple
+	--vp-c-brand-light: $clr-purple-a400
+	--vp-layout-max-width: 100vw
+	--vp-home-hero-name-color: transparent
+	--vp-home-hero-name-background: unquote(stripe($gradclrs, 90deg, 24px))
+
+.layout-component
+	.VPDoc
+		.content-container
+			max-width: none !important
+
+		.container
+			max-width: var(--vp-layout-max-width) !important
+
+.vp-doc table
+	display: table
+	width: 100%
+
+.content *, .content *::before, .content *::after
+	box-sizing: content-box
 
 // content pages
 
@@ -129,3 +180,9 @@ header.nav-bar
 
 .tabs-default
 	tabs-style()
+
+.bunt-checkbox
+	margin-bottom: 8px
+
+#chbox-small
+	checkbox-style(size: small)

@@ -1,10 +1,13 @@
 ---
-home: true
-<!-- heroImage: /hero.png -->
-heroText: buntpapier
-tagline: mixin-based component library
-actionText: Get Started
-actionLink: /installation
+layout: home
+hero:
+  name: buntpapier
+  <!-- heroImage: /hero.png -->
+  text: mixin-based component library
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /installation
 features:
 - title: Mixin Based Component Styling
   details: Style components with stylus mixins (no styling props).
