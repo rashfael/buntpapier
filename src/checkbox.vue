@@ -1,10 +1,10 @@
 <template lang="pug">
 .bunt-checkbox(:class="{checked: modelValue}")
-	input(type="checkbox", :name="name", :checked="modelValue", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
-	.bunt-checkbox-box
-	label(v-if="label") {{ label }}
-	label(v-else)
-		slot
+	label
+		input(type="checkbox", :name="name", :checked="modelValue", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
+		.bunt-checkbox-box
+		span(v-if="label") {{ label }}
+		slot(v-else)
 </template>
 <script>
 
