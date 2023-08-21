@@ -29,8 +29,9 @@ icon-button()
 		body[modality="keyboard"] &:focus
 			outline-style solid
 
-		&.disabled .bunt-icon
-			opacity 0.6
+		&.disabled
+			.bunt-icon, svg
+				opacity 0.6
 
 		&:not(.disabled)
 			cursor pointer
