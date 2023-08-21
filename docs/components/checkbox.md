@@ -18,11 +18,14 @@ export default {
 
 <bunt-checkbox id="chbox-slot" name="check-slot" v-model="check"> <b title="hello there">with any content!</b></bunt-checkbox>
 
+<bunt-checkbox id="chbox-disabled" name="check-disabled" label="I'm disabled" v-model="check" :disabled="true"/>
+
 ### template
 ```html
 <bunt-checkbox id="chbox-none" name="check-none" label="turn me ooooon" v-model="check" />
 <bunt-checkbox id="chbox-small" name="check-small" label="I'm small!" v-model="check" />
 <bunt-checkbox id="chbox-slot" name="check-slot" v-model="check"> <b title="hello there">with any content!</b></bunt-checkbox>
+<bunt-checkbox id="chbox-disabled" name="check-disabled" label="I'm disabled" v-model="check" :disabled="true"/>
 ```
 
 ### style

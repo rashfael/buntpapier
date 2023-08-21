@@ -45,7 +45,14 @@ checkbox()
 					opacity 1
 					transform rotate(45deg) scale3D(1, 1, 1)
 					transition $swift-ease-out
-
+		&.disabled
+			label
+				cursor not-allowed
+				color $clr-secondary-text-light
+			.bunt-checkbox-box
+				border-color $clr-grey-400
+			&.checked .bunt-checkbox-box
+				background-color $clr-grey-400
 
 checkbox-style(size = normal)
 	if size is small
