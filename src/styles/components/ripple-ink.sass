@@ -1,0 +1,44 @@
+// TODO unused?
+	
+.bunt-ripple-container
+	display: block
+	overflow: hidden
+	border-radius: inherit
+
+	position: absolute
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+
+	pointer-events: none
+	user-select: none
+
+.bunt-ripple
+	position: absolute
+	border-radius: 50%
+	background-color: currentColor
+	background-clip: padding-box
+
+	transition: opacity .4s ease-out
+
+	opacity: 0
+	transform: scale(0)
+
+	width: calc(var(--bunt-ripple-radius, 0) * 2px)
+	height: calc(var(--bunt-ripple-radius, 0) * 2px)
+	top: calc(var(--bunt-ripple-y, 0) - var(--bunt-ripple-radius, 0) * 1px)
+	left: calc(var(--bunt-ripple-x, 0) - var(--bunt-ripple-radius, 0) * 1px)
+
+.bunt-ripple--active
+	opacity: .16 // may be 16%, 32% or 48%, depending on background https://material.io/design/interaction/states.html#pressed
+	transform: scale(1)
+	transition: transform 0.15s ease-out, opacity 0.1s ease-out
+	// transition: transform calc(var(--bunt-ripple-radius, 0) * 1ms) ease-out, opacity calc(var(--bunt-ripple-radius, 0) * 1ms) ease-out
+
+.bunt-ripple--leave
+	transform: scale(1)
+	transition: transform 0.15s ease-out, opacity .4s ease-out
+
+.ripple-ink-leave-active
+	opacity: 0

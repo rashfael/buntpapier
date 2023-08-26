@@ -1,0 +1,57 @@
+.bunt-checkbox
+	position: relative
+	display: flex
+	align-items: center
+	flex-shrink: 0
+	input
+		position: absolute
+		cursor: pointer
+		top: 0
+		left: 0
+		height: 1px
+		width: 1px
+		opacity: 0
+	label
+		font-size: 14px
+		line-height: 24px
+		cursor: pointer
+		display: flex
+		align-items: center
+	.bunt-checkbox-box
+		height: 24px
+		width: 24px
+		border-radius: 2px
+		border: 2px solid var(--clr-secondary-text-light)
+		margin-right: 8px
+		position: relative
+		transition: all .2s ease-out
+
+		&:after
+			width: 8px
+			height: 15px
+			position: absolute
+			top: 0
+			left: 6px
+			border: 2px solid var(--clr-white)
+			border-top: 0
+			border-left: 0
+			opacity: 0
+			transform: rotate(45deg) scale3D(.15, .15, 1)
+			transition: var(--swift-ease-in)
+			content: ' '
+	&.checked
+		.bunt-checkbox-box
+			background-color: var(--clr-primary)
+			border-color: var(--clr-primary)
+			&:after
+				opacity: 1
+				transform: rotate(45deg) scale3D(1, 1, 1)
+				transition: var(--swift-ease-out)
+	&.disabled
+		label
+			cursor: not-allowed
+			color: var(--clr-secondary-text-light)
+		.bunt-checkbox-box
+			border-color: var(--clr-grey-400)
+		&.checked .bunt-checkbox-box
+			background-color: var(--clr-grey-400)
