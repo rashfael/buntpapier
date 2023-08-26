@@ -111,14 +111,15 @@ const { classes, style } = useComputedStyle(el, {
 	return { style, classes }
 })
 
+defineExpose({ el: $$(el) })
 </script>
 <template lang="pug">
-.bunt-input(ref="el", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled: disabled, 'with-icon': icon}]", :style="style", v-resize-observer="updateOutline")
+.bunt-input(ref="el", v-resize-observer="updateOutline", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled: disabled, 'with-icon': icon}]", :style="style")
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label
 			span {{ label }}
-			input(:type="type", :value="modelValue", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
+			input(:type="type", :value="modelValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="onInput($event)", @focus="focused = true", @blur="onBlur")
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		Outline
 	//- .hint(v-if="hintIsHtml", v-html="hintText")

@@ -19,6 +19,9 @@ const events = {
 }
 const style = {
 	'--checkbox-size': {type: 'enum', values: ['normal', 'small'], default: 'normal'},
+	'--checkbox-weight': {type: 'enum', values: [/* 'elevated', */ 'filled', 'outlined', 'text'], default: 'filled'},
+	'--checkbox-icon': {type: 'enum', values: ['check', 'check-bold', 'close', 'plus', 'minus'], default: 'check'},
+	'--checkbox-color': {type: 'color', default: 'var(--clr-primary)', computed: '--_checkbox-color'},
 }
 </script>
 

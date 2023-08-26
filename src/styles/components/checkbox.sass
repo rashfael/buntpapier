@@ -1,3 +1,9 @@
+@layer derived
+	.bunt-checkbox
+		--_checkbox-color: var(--checkbox-color, var(--clr-primary))
+		// --_button-color-error: var(--button-color-error, var(--clr-danger))
+		// --_button-color-success: var(--button-color-success, var(--clr-success))
+	
 .bunt-checkbox
 	position: relative
 	display: flex
@@ -26,26 +32,20 @@
 		position: relative
 		transition: all .2s ease-out
 
-		&:after
-			width: 8px
-			height: 15px
-			position: absolute
-			top: 0
-			left: 6px
-			border: 2px solid var(--clr-white)
-			border-top: 0
-			border-left: 0
+		.mdi
+			color: var(--_checkbox-check-color)
+			font-size: 20px
+			line-height: 20px
 			opacity: 0
-			transform: rotate(45deg) scale3D(.15, .15, 1)
+			transform:  scale3D(.15, .15, 1)
 			transition: var(--swift-ease-in)
-			content: ' '
 	&.checked
 		.bunt-checkbox-box
-			background-color: var(--clr-primary)
-			border-color: var(--clr-primary)
-			&:after
+			background-color: var(--_checkbox-color)
+			border-color: var(--_checkbox-color)
+			&:after, .mdi
 				opacity: 1
-				transform: rotate(45deg) scale3D(1, 1, 1)
+				transform: scale3D(1, 1, 1)
 				transition: var(--swift-ease-out)
 	&.disabled
 		label
@@ -58,11 +58,16 @@
 
 	&.bunt-checkbox--size-small
 		.bunt-checkbox-box
-			height: 16px
-			width: 16px
-			&:after
-				width: 4px
-				height: 10px
-				left: 4px
+			height: 18px
+			width: 18px
+			.mdi
+				font-size: 14px
+				line-height: 14px
 		label
 			line-height: 18px
+
+	&.bunt-checkbox--weight-outlined
+		.bunt-checkbox-box
+			background-color: transparent
+			.mdi
+				color: var(--_checkbox-color)
