@@ -18,7 +18,7 @@ const events = {
 	'update:modelValue': {}
 }
 const style = {
-	'--checkbox-shape': {type: 'enum', values: ['checkbox', 'switch'], default: 'checkbox'},
+	'--checkbox-size': {type: 'enum', values: ['normal', 'small'], default: 'normal'},
 }
 </script>
 

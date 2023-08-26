@@ -6,6 +6,7 @@
 // - indeterminate
 // - disabled + readonly styling
 // - icon
+// - use icon instead of ::after hack
 import { useComputedStyle } from '../computedStyle'
 
 const {
@@ -45,25 +46,25 @@ const onBlur = () => {
 }
 
 const el = $ref()
-const { classes, style, customProps } = useComputedStyle($$(el), {
-	'--checkbox-shape': 'shape'
-}, ({ shape }) => {
+const { classes, style } = useComputedStyle($$(el), {
+	'--checkbox-size': 'size'
+}, ({ size }) => {
 	const style = {}
 	const classes = []
 
+	if (size) classes.push(`bunt-checkbox--size-${size}`)
+
 	return { style, classes }
 })
-const { shape } = $(customProps)
 </script>
 <template lang="pug">
-.bunt-checkbox(ref="el", :class="[...classes, {checked: modelValue}]", :style="style")
-	input(type="checkbox", :name="name", :checked="modelValue", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
-	.bunt-switch-track(v-if="shape === 'switch'")
-		.bunt-switch-thumb
-	.bunt-checkbox-box(v-else)
-	label(v-if="label") {{ label }}
-	label(v-else)
-		slot
+.bunt-checkbox(ref="el", :class="[...classes, {checked: modelValue, disabled}]", :style="style")
+
+	label
+		.bunt-checkbox-box
+		span(v-if="label") {{ label }}
+		slot(v-else)
+		input(type="checkbox", :name="name", :checked="modelValue", :disabled="disabled", :readonly="readonly", @change="onChange($event)", @focus="focused = true", @blur="onBlur")
 </template>
 <style lang="stylus">
 </style>
