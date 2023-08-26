@@ -35,3 +35,21 @@ const style = {
 ## API
 
 <ApiDocs :slots="slots" :props="props" :events="events" :style="style"/>
+
+## Examples
+
+### Size
+
+<Showcase
+	componentName="bunt-checkbox"
+	:slots="{default: 'small'}"
+	:props="{}"
+	:style="{'--checkbox-size': {type: 'enum', value: 'small'}}"
+></Showcase>
+
+<Showcase
+	componentName="bunt-checkbox"
+	:slots="{default: 'normal'}"
+	:props="{}"
+	:style="{'--checkbox-size': {type: 'enum', value: 'normal'}}"
+></Showcase>
