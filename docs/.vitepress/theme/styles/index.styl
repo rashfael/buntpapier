@@ -126,6 +126,9 @@ $gradclrs = $clr-red $clr-pink $clr-purple $clr-deep-purple $clr-indigo $clr-blu
 .content *, .content *::before, .content *::after
 	box-sizing: content-box
 
+.bunt-select-dropdown-menu ul li + li
+	margin: 0
+
 // content pages
 
 #btn-none, #btn-tooltip, #btn-icon
@@ -168,15 +171,14 @@ $gradclrs = $clr-red $clr-pink $clr-purple $clr-deep-purple $clr-indigo $clr-blu
 
 #select-none, #select-complex
 	select-style()
-#select-complex
-	ul li
-		display: flex
-		justify-content: space-between
-		.id
-			width: 120px
-			text-align: right
-			padding: 0 8px
-			color: $clr-secondary-text-dark
+.select-complex-item
+	display: flex
+	justify-content: space-between
+	.id
+		width: 120px
+		text-align: right
+		padding: 0 8px
+		color: $clr-secondary-text-dark
 
 .tabs-default
 	tabs-style()

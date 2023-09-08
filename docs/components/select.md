@@ -26,8 +26,10 @@ export default {
 <p>{{ selection }}</p>
 <bunt-select id="select-complex" name="complex-select" label="complex select" icon="palette" v-model="activeComplexOption" :options="complexOptions" option-label="name">
 	<template v-slot="{ option }">
-		<div class="name">{{ option.name }}</div>
-		<div class="id" :style="{'background-color': option.color}">{{ option.id }}</div>
+		<div class="select-complex-item">
+			<div class="name">{{ option.name }}</div>
+			<div class="id" :style="{'background-color': option.color}">{{ option.id }}</div>
+		</div>
 	</template>
 </bunt-select>
 
@@ -56,8 +58,10 @@ export default {
 <p>{{ selection }}</p>
 <bunt-select id="select-complex" name="complex-select" label="complex select" icon="palette" v-model="activeComplexOption" :options="complexOptions" option-label="name">
 	<template slot-scope="{ option }">
-		<div class="name">{{ option.name }}</div>
-		<div class="id" :style="{'background-color': option.color}">{{ option.id }}</div>
+		<div class="select-complex-item">
+			<div class="name">{{ option.name }}</div>
+			<div class="id" :style="{'background-color': option.color}">{{ option.id }}</div>
+		</div>
 	</template>
 </bunt-select>
 
