@@ -232,6 +232,12 @@ export default {
 		},
 		filteredOptions () {
 			this._popper?.scheduleUpdate()
+		},
+		options: {
+			handler () {
+				this.selectValue(this.value)
+			},
+			deep: true
 		}
 	},
 	mounted () {
