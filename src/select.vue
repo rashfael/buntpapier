@@ -235,7 +235,8 @@ export default {
 		},
 		options: {
 			handler () {
-				this.selectValue(this.value)
+				if(this.open) return
+				this.selectValue(this.modelValue)
 			},
 			deep: true
 		}
