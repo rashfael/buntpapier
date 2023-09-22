@@ -98,9 +98,7 @@ export default {
 			if (this.validation) this.validation.$touch()
 		},
 		onEscape ($event) {
-			if (!this.clearOnEsc) return
-
-			if (!this.modelValue.length) {
+			if (!this.clearOnEsc || !this.modelValue.length) {
 				$event.target.blur()
 			} else {
 				$event.target.value = ''
