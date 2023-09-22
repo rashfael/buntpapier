@@ -6,7 +6,12 @@
 	.label-input-container
 		label(:for="name") {{label}}
 		.icon.mdi(v-if="icon", :class="[iconClass]")
-		input(ref="input", :type="type", :name="name", :value="modelValue", :disabled="disabled", :readonly="readonly", @input="onInput($event)", @focus="focused = true", @blur="onBlur", :placeholder="placeholder")
+		input(ref="input", :type="type", :name="name", :value="modelValue", :disabled="disabled", :readonly="readonly",
+			@input="onInput($event)",
+			@focus="focused = true",
+			@blur="onBlur",
+			@keyup.esc="onEscape($event)",
+			:placeholder="placeholder")
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		svg.outline(ref="outline")
 			path(:d="outlineStroke")
@@ -53,7 +58,11 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		validation: Object // vuelidate result
+		validation: Object, // vuelidate result
+		clearOnEsc: {
+			type: Boolean,
+			default: false
+		}
 	},
 	emits: ['update:modelValue'],
 	data: function () {
@@ -87,6 +96,16 @@ export default {
 		onBlur () {
 			this.focused = false
 			if (this.validation) this.validation.$touch()
+		},
+		onEscape ($event) {
+			if (!this.clearOnEsc) return
+
+			if (!this.modelValue.length) {
+				$event.target.blur()
+			} else {
+				$event.target.value = ''
+				this.onInput($event)
+			}
 		}
 	}
 }
