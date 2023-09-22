@@ -276,6 +276,7 @@ export default {
 			this.open = false
 			this.$nextTick(() => this._popper?.destroy())
 			if (this.validation) this.validation.$touch()
+			if (!event) this.$refs.search.blur()
 			this.$emit('blur')
 		},
 		selectValue (value) {
