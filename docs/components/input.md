@@ -9,7 +9,7 @@ const slots = {
 }
 const props = {
 	type: {type: 'string', default: 'text', description: 'native input element type attribute'},
-	label: {type: 'string', default: 'label'},
+	label: {type: 'string', value: 'label'},
 	placeholder: {type: 'string'},
 	hint: {type: 'string'},
 	icon: {type: 'string', description: 'MDI iconset name.'},
