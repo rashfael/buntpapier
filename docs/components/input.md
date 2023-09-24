@@ -1,6 +1,6 @@
 ---
 title: input
-layout: 'component'
+layoutClass: 'component'
 ---
 
 <script setup>

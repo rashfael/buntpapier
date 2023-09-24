@@ -1,6 +1,6 @@
 ---
 title: checkbox
-layout: 'component'
+layoutClass: 'component'
 ---
 
 <script setup>

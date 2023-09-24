@@ -1,6 +1,6 @@
 ---
 title: button
-layout: 'component'
+layoutClass: 'component'
 ---
 
 <script setup>

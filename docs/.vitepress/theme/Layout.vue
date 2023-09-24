@@ -6,7 +6,7 @@ import ThemePicker from './ThemePicker.vue'
 const { Layout: DefaultLayout } = DefaultTheme
 
 const { frontmatter } = $(useData())
-let layout = $computed(() => frontmatter?.layout)
+let layout = $computed(() => frontmatter?.layoutClass)
 </script>
 <template lang="pug">
 DefaultLayout(:class="[layout ? `layout-${layout}` : '']")
