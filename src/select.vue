@@ -11,8 +11,8 @@
 				@keydown.up.prevent="typeAheadUp",
 				@keydown.down.prevent="typeAheadDown",
 				@keyup.enter.prevent="typeAheadSelect",
-				@blur="blur",
-				@focus="focus",
+				@blur="onBlur",
+				@focus="onFocus",
 				:placeholder="searchPlaceholder",
 				autocomplete="off")
 			i.open-indicator.mdi.mdi-menu-down(ref="openIndicator", role="presentation", @mousedown.prevent.stop="", @click.prevent.stop="toggleDropdown")
@@ -150,7 +150,7 @@ export default {
 			}
 		}
 	},
-	emits: ['update:modelValue', 'blur'],
+	emits: ['update:modelValue', 'focus', 'blur'],
 	data () {
 		return {
 			search: '',
@@ -249,34 +249,11 @@ export default {
 	},
 
 	methods: {
-		async focus () {
-			this.open = true
-			this.search = ''
-			this.$refs.search.select()
-			this.width = this.$refs.searchContainer.getBoundingClientRect().width
-			await this.$nextTick()
-			const options = {
-				placement: 'bottom',
-				positionFixed: true,
-				modifiers: {}
-			}
-			if (this.icon) {
-				options.modifiers.offset = {
-					offset: '-15, 0'
-				}
-			}
-			if (this.dropdownOverflowElement) {
-				options.modifiers.preventOverflow = {
-					boundariesElement: this.dropdownOverflowElement
-				}
-			}
-			this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
+		focus () {
+			this.$refs.search.focus()
 		},
-		blur (event) {
-			this.open = false
-			this.$nextTick(() => this._popper?.destroy())
-			if (this.validation) this.validation.$touch()
-			this.$emit('blur')
+		blur () {
+			this.$refs.search.blur()
 		},
 		selectValue (value) {
 			const option = this.findOptionByValue(value)
@@ -324,9 +301,9 @@ export default {
 		toggleDropdown (e) {
 			if (e.target === this.$refs.openIndicator || e.target === this.$refs.search || e.target === this.$refs.toggle || e.target === this.$el) {
 				if (!this.open) {
-					this.$refs.search.focus()
+					this.focus()
 				} else {
-					this.$refs.search.blur()
+					this.blur()
 				}
 			}
 		},
@@ -338,6 +315,38 @@ export default {
 		 */
 		isOptionSelected (option) {
 			return this.modelValue === option
+		},
+
+		async onFocus () {
+			this.open = true
+			this.search = ''
+			this.$refs.search.select()
+			this.width = this.$refs.searchContainer.getBoundingClientRect().width
+			await this.$nextTick()
+			const options = {
+				placement: 'bottom',
+				positionFixed: true,
+				modifiers: {}
+			}
+			if (this.icon) {
+				options.modifiers.offset = {
+					offset: '-15, 0'
+				}
+			}
+			if (this.dropdownOverflowElement) {
+				options.modifiers.preventOverflow = {
+					boundariesElement: this.dropdownOverflowElement
+				}
+			}
+			this._popper = new Popper(this.$refs.search, this.$refs.dropdownMenu, options)
+			this.$emit('focus')
+		},
+
+		onBlur () {
+			this.open = false
+			this.$nextTick(() => this._popper?.destroy())
+			if (this.validation) this.validation.$touch()
+			this.$emit('blur')
 		},
 
 		/**

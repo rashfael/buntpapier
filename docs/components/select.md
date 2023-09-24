@@ -115,10 +115,14 @@ export default {
 | event | args | description |
 |:------|:-----|:------------|
 | input | value | emitted on every keypress or input (or use v-model) |
+| focus | | after dropdown opens |
 | blur | | after dropdown closes |
 
-## functions
-TODO
+## methods
+| method | args | description |
+|:------|:-----|:------------|
+| focus | | focus input, open dropdown |
+| blur | | blur input, close dropdown |
 
 ## style mixin parameters
 | parameter | type | default | description |
