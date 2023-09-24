@@ -165,6 +165,7 @@ onUnmounted(() => {
 			.prop + .tag
 				display: block
 			.prop
+				white-space: nowrap
 				> *
 					display: inline
 				.name
@@ -191,6 +192,8 @@ onUnmounted(() => {
 			.property
 				display: flex
 				color: #0095a8
+			.name
+				white-space: nowrap
 			.punctuation
 				color: #004d57
 			.value
