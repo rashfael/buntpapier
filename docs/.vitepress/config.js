@@ -57,6 +57,9 @@ export default {
 				}, {
 					text: 'progress',
 					link: '/components/progress'
+				}, {
+					text: 'scrollbars',
+					link: '/components/scrollbars'
 				}]
 			}],
 			// '/directives/': [{
