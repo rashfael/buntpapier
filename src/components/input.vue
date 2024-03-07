@@ -2,6 +2,7 @@
 // TODO
 // - label animation WITH icon should go sideways, hint with icon should be on same height as input
 // - apply name and other attrs to input el
+// - rethink padding-top
 import { ref, watch } from 'vue'
 import { useComputedStyle } from '../computedStyle'
 import { getIconClass } from '../utils/icon'
@@ -114,7 +115,7 @@ const { classes, style } = useComputedStyle(el, {
 defineExpose({ el: $$(el) })
 </script>
 <template lang="pug">
-.bunt-input(ref="el", v-resize-observer="updateOutline", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled: disabled, 'with-icon': icon}]", :style="style")
+.bunt-input(ref="el", v-resize-observer="updateOutline", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled, 'with-icon': icon}]", :style="style")
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label

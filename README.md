@@ -4,3 +4,5 @@ https://v3.buntpapier.rash.codes/
 
 # TODO
 - redo typography css
+- more radii
+- button icon placement

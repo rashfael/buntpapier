@@ -5,6 +5,7 @@ import Checkbox from './components/checkbox.vue'
 import Input from './components/input.vue'
 import ProgressCircular from './components/progress-circular.vue'
 import Scrollbars from './components/scrollbars.vue'
+import Select from './components/select.vue'
 
 import './styles/colors.sass'
 import './styles/index.sass'
@@ -17,6 +18,7 @@ const lib = {
 		app.component('BuntInput', Input)
 		app.component('BuntProgressCircular', ProgressCircular)
 		app.component('BuntScrollbars', Scrollbars)
+		app.component('BuntSelect', Select)
 	}
 }
 

@@ -1,3 +1,6 @@
+// TODOs
+// - better disabled styling
+
 import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent } from 'vue'
 import Color from 'color'
 import tooltipDirective from '../directives/tooltip'
