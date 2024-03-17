@@ -1,6 +1,6 @@
 <template lang="pug">
-router-link(:to="to", custom, v-slot="{ href, navigate }")
-	a.bunt-link-button(v-bind="$attrs", :href="href", @click="navigate($event); $emit('click', $event)")
+router-link(:to="to", custom, v-slot="{ href, navigate, isActive, isExactActive }")
+	a.bunt-link-button(v-bind="$attrs", :class="{'router-link-active': isActive, 'router-link-exact-active': isExactActive}", :href="href", @click="navigate($event); $emit('click', $event)")
 		slot
 		ripple-ink
 </template>
