@@ -160,6 +160,7 @@ let open = $ref(false)
 let width = $ref(0)
 let dropdownReady = $ref(false)
 const el = $ref<ReferenceElement>(null)
+const inputEl: HTMLElement = $ref(null)
 const dropdownRef = $ref<FloatingElement>(null)
 const dropdownInputTarget = $ref(null)
 
@@ -190,6 +191,12 @@ const filteredOptions = $computed(() => {
 
 function isOptionSelected (option) {
 	return getOptionValue(option, customizerArgs) === modelValue
+}
+
+function handleDropdownSelect (option) {
+	emit('update:modelValue', getOptionValue(option, customizerArgs))
+	open = false
+	updateOutline()
 }
 
 const { floatingStyles: dropdownFloatingStyles, placement: dropdownPlacement, isPositioned } = useFloating($$(el), $$(dropdownRef), {
@@ -265,7 +272,7 @@ defineExpose({ el: $$(el) })
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label
 			span(v-show="!open") {{ label }}
-			input(:type="type", :value="modelValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="onInput($event)", @focus="handleFocus", @blur="handleBlur")
+			input(ref="inputEl", :type="type", :value="modelValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="onInput($event)", @focus="handleFocus", @blur="handleBlur")
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		Outline(v-show="!open || dropdownPlacement === 'bottom'")
 	//- .hint(v-if="hintIsHtml", v-html="hintText")
@@ -282,7 +289,7 @@ teleport(v-if="open", to="#bunt-teleport-target")
 		slot(name="result-header")
 		Scrollbars.scrollable-menu
 			ul
-				li(v-for="option, index of filteredOptions", :key="index", :class="{ active: isOptionSelected(option),}", @click.prevent.stop="select(option)")
+				li(v-for="option, index of filteredOptions", :key="index", :class="{ active: isOptionSelected(option),}", @click.prevent.stop="handleDropdownSelect(option)")
 					slot(:option="option")
 						| {{ getOptionLabel(option, customizerArgs) }}
 				li.divider(v-if="!filteredOptions.length", transition="fade")

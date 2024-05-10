@@ -2,6 +2,8 @@ import { h as createElement, onMounted, nextTick } from 'vue'
 import type { Ref } from 'vue'
 import { getTextMetrics } from './text-metrics'
 
+// TODO negate openSides
+
 export function useInputOutline (labelRef: Ref<string>, radiusRef: Ref<number>, openSides: { top?: Ref<boolean>, bottom?: Ref<boolean>, left?: Ref<boolean>, right?: Ref<boolean> } = {}) {
 	const label = $(labelRef)
 	const radius = $(radiusRef)

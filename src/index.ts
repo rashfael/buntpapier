@@ -23,3 +23,4 @@ const lib = {
 }
 
 export default lib
+export { useInputOutline } from './utils/input-outline'
