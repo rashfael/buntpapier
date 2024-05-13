@@ -3,7 +3,7 @@
 // - maxHeight?
 // - better hitbox
 import { computed, nextTick, ref, watch } from 'vue'
-import { useFloating, offset, flip } from '@floating-ui/vue'
+import { useFloating, offset, flip, size } from '@floating-ui/vue'
 import type { ReferenceElement, FloatingElement } from '@floating-ui/vue'
 import { useComputedStyle } from '../computedStyle'
 import { getIconClass } from '../utils/icon'
@@ -206,12 +206,27 @@ function handleDropdownSelect (option) {
 	updateOutline()
 }
 
+let floatingMaxHeight = $ref(512)
+const scrollableStyle = $computed(() => {
+	return {
+		maxHeight: floatingMaxHeight - 52 + 'px'
+	}
+})
+
 const { floatingStyles: dropdownFloatingStyles, placement: dropdownPlacement, isPositioned } = useFloating($$(el), $$(dropdownRef), {
 	open: $$(open),
 	placement: 'bottom',
-	middleware: [offset(({ placement }) => {
-		return placement === 'bottom' ? -40 : -52
-	}), flip()]
+	middleware: [
+		offset(({ placement }) => {
+			return placement === 'bottom' ? -40 : -52
+		}),
+		flip(),
+		size({
+			apply ({ availableHeight }) {
+				floatingMaxHeight = availableHeight
+			}
+		})
+	]
 })
 
 let radius = $ref(4)
@@ -294,7 +309,7 @@ teleport(v-if="open", to="#bunt-teleport-target")
 			svg.dropdown-outline(:style="{'--label-gap': floatingLabelWidth}")
 				path(:d="`M 0 1 h ${width}`")
 		slot(name="result-header")
-		Scrollbars.scrollable-menu
+		Scrollbars.scrollable-menu(:style="scrollableStyle")
 			ul
 				li(v-for="option, index of filteredOptions", :key="index", :class="{ active: isOptionSelected(option),}", @click.prevent.stop="handleDropdownSelect(option)")
 					slot(:option="option")
