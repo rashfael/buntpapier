@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // TODOs
 // - maxHeight?
+// - better hitbox
 import { computed, nextTick, ref, watch } from 'vue'
 import { useFloating, offset, flip } from '@floating-ui/vue'
 import type { ReferenceElement, FloatingElement } from '@floating-ui/vue'
@@ -180,6 +181,12 @@ async function handleBlur () {
 	updateOutline()
 }
 
+async function handleClick () {
+	if (open || !focused) return
+	open = true
+	updateOutline()
+}
+
 const search = $ref('')
 
 const filteredOptions = $computed(() => {
@@ -266,7 +273,7 @@ const style = $computed(() => {
 defineExpose({ el: $$(el) })
 </script>
 <template lang="pug">
-.bunt-select.bunt-input(ref="el", v-resize-observer="updateOutline", :class="classes", :style="style")
+.bunt-select.bunt-input(ref="el", v-resize-observer="updateOutline", :class="classes", :style="style", @click="handleClick")
 	//- teleport(:to="dropdownInputTarget", :disabled="!dropdownInputTarget")
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
