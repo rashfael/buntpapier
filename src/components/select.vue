@@ -124,9 +124,13 @@ const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
 const customizerArgs = {
 	options,
 	optionLabel,
-	getOptionLabel,
+	getOptionLabel (option) {
+		return getOptionLabel(option, customizerArgs)
+	},
 	optionValue,
-	getOptionValue,
+	getOptionValue (option) {
+		return getOptionValue(option, customizerArgs)
+	},
 	filter
 }
 
@@ -152,22 +156,18 @@ const floatingLabel = $computed(() => {
 	return Boolean(placeholder || modelValue || modelValue === 0)
 })
 
-function onInput ($event) {
-	emit('update:modelValue', $event.target.value)
-	if (validation) validation.$touch()
-}
-
 let open = $ref(false)
 let width = $ref(0)
 let dropdownReady = $ref(false)
 const el = $ref<ReferenceElement>(null)
-const inputEl: HTMLElement = $ref(null)
+const inputEl: HTMLInputElement = $ref(null)
 const dropdownRef = $ref<FloatingElement>(null)
 const dropdownInputTarget = $ref(null)
 
 async function handleFocus () {
 	open = true
 	width = el.getBoundingClientRect().width
+	inputEl.select()
 	await nextTick()
 	focused = true
 }
@@ -187,13 +187,21 @@ async function handleClick () {
 	updateOutline()
 }
 
-const search = $ref('')
+let inputValue = $ref(modelValue as string)
+let search = $ref('')
+
+function handleInput ($event) {
+	inputValue = $event.target.value
+	search = inputValue
+	// emit('update:modelValue', $event.target.value)
+	// if (validation) validation.$touch()
+}
 
 const filteredOptions = $computed(() => {
 	if (!search) return options
 	const lowercasedSearch = search.toLowerCase()
 	const fuzzyFn = (a, b) => b.indexOf(a) !== -1
-	return options.filter(option => filter(lowercasedSearch, option, fuzzyFn))
+	return options.filter(option => filter(lowercasedSearch, option, fuzzyFn, customizerArgs))
 })
 
 function isOptionSelected (option) {
@@ -201,15 +209,17 @@ function isOptionSelected (option) {
 }
 
 function handleDropdownSelect (option) {
-	emit('update:modelValue', getOptionValue(option, customizerArgs))
+	const value = getOptionLabel(option, customizerArgs)
+	inputValue = value
+	emit('update:modelValue', value)
 	open = false
 	updateOutline()
 }
 
-let floatingMaxHeight = $ref(512)
+let dropdownMaxHeight = $ref(512)
 const scrollableStyle = $computed(() => {
 	return {
-		maxHeight: floatingMaxHeight - 52 + 'px'
+		maxHeight: dropdownMaxHeight - 52 + 'px'
 	}
 })
 
@@ -223,7 +233,7 @@ const { floatingStyles: dropdownFloatingStyles, placement: dropdownPlacement, is
 		flip(),
 		size({
 			apply ({ availableHeight }) {
-				floatingMaxHeight = availableHeight
+				dropdownMaxHeight = availableHeight
 			}
 		})
 	]
@@ -294,14 +304,14 @@ defineExpose({ el: $$(el) })
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label
 			span(v-show="!open") {{ label }}
-			input(ref="inputEl", :type="type", :value="modelValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="onInput($event)", @focus="handleFocus", @blur="handleBlur")
+			input(ref="inputEl", :type="type", :value="inputValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="handleInput($event)", @focus="handleFocus", @blur="handleBlur")
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		Outline(v-show="!open || dropdownPlacement === 'bottom'")
 	//- .hint(v-if="hintIsHtml", v-html="hintText")
 	.hint {{ hintText }}
 
 teleport(v-if="open", to="#bunt-teleport-target")
-	.bunt-select-dropdown-menu(ref="dropdownRef", :class="[dropdownClass, `dropdown-placement-${dropdownPlacement}`]", :style="{ width: width+'px', ...dropdownFloatingStyles, ...style }", @mousedown.prevent.stop="")
+	.bunt-select-dropdown-menu(ref="dropdownRef", :class="[dropdownClass, `dropdown-placement-${dropdownPlacement}`, ...classes]", :style="{ width: width+'px', ...dropdownFloatingStyles, ...style }", @mousedown.prevent.stop="")
 		.bunt-select.bunt-input(ref="dropdownInputTarget", :class="classes", :style="style")
 			.label-input-container
 				label
@@ -309,7 +319,7 @@ teleport(v-if="open", to="#bunt-teleport-target")
 			svg.dropdown-outline(:style="{'--label-gap': floatingLabelWidth}")
 				path(:d="`M 0 1 h ${width}`")
 		slot(name="result-header")
-		Scrollbars.scrollable-menu(:style="scrollableStyle")
+		Scrollbars.scrollable-menu(y="", :style="scrollableStyle")
 			ul
 				li(v-for="option, index of filteredOptions", :key="index", :class="{ active: isOptionSelected(option),}", @click.prevent.stop="handleDropdownSelect(option)")
 					slot(:option="option")
@@ -360,15 +370,21 @@ teleport(v-if="open", to="#bunt-teleport-target")
 		margin: 0
 		padding: 0
 	li
+		font-family: var(--font-stack)
 		list-style-type: none
 		height: 32px
-		padding: 0 8px
+		padding: 0 8px 0 0
+		margin: 0
 		line-height: 32px
 		text-overflow: ellipsis
 		overflow: hidden
 		white-space: nowrap
-		// &.highlight
-		// 	background-color: $highlight-color
+		cursor: pointer
+		& + li
+			margin-top: 0 // override vitepress
+		&:hover
+			background-color: var(--clr-primary)
+		// TODO define proper select colors
 	&.dropdown-placement-bottom
 		// padding-top: 37px
 		.scrollable-menu
@@ -388,4 +404,6 @@ teleport(v-if="open", to="#bunt-teleport-target")
 		.scrollable-menu
 			border-bottom: none
 			border-radius: var(--bunt-input--radius-px) var(--bunt-input--radius-px) 0 0
+	&.bunt-input--shape-pill .bunt-scroll-content li
+		padding-left: 24px
 </style>
