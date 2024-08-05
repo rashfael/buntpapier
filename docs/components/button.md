@@ -28,6 +28,7 @@ const style = {
 	'--button-color-success': {type: 'color', default: 'var(--clr-success)', computed: '--_button-color-success'},
 	'--button-text-color': {type: 'color', default: 'computed', computed: '--_button-text-color', description: 'Either --clr-primary-text-light or --clr-primary-text-dark, whichever has better contrast with --button-color'},
 	'--button-size': {type: 'enum', values: ['small', 'normal', 'large', 'huge'], default: 'normal'},
+	'--icon-placement': {type: 'enum', values: ['left', 'right', 'top'], default: 'left'},
 	'--tooltip-placement': {type: 'enum', values: ['auto', 'top', 'right', 'bottom', 'left'], default: 'auto', description: 'Supports `-start` and `-end` suffix.'}
 }
 </script>

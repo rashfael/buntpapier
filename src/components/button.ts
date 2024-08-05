@@ -64,7 +64,7 @@ export default {
 		} = $(props)
 		const el = ref()
 
-		const { classes, style } = useComputedStyle(el, {
+		const { classes, style, customProps: { iconPlacement } } = useComputedStyle(el, {
 			'--button-shape': 'shape',
 			'--button-weight': 'weight',
 			'--button-size': 'size',
@@ -72,7 +72,8 @@ export default {
 			'--_button-color-error': 'errorColor',
 			'--_button-color-success': 'successColor',
 			'--button-text-color': 'textColor',
-		}, ({ shape, weight, size, color, errorColor, successColor, textColor }) => {
+			'--icon-placement': 'iconPlacement'
+		}, ({ shape, weight, size, color, errorColor, successColor, textColor, iconPlacement }) => {
 			const style = {}
 			const classes = []
 
@@ -119,6 +120,8 @@ export default {
 				style['--_button-bg-success-s'] = bgColor.saturationl() + '%'
 				style['--_button-bg-success-l'] = bgColor.lightness() + '%'
 			}
+
+			if (iconPlacement) classes.push(`bunt-button--icon-placement-${iconPlacement}`)
 
 			return { style, classes }
 		})
@@ -221,12 +224,18 @@ export default {
 					custom: true,
 					to,
 				}, {
-					default ({ href, navigate }) {
+					default ({ href, navigate, isActive, isExactActive }) {
 						return withDirectives(
 							createElement('a', mergeProps({
 								ref: el,
 								href,
-								class: rootClasses,
+								class: [
+									...rootClasses,
+									{
+										'router-link-active': isActive,
+										'router-link-exact-active': isExactActive
+									}
+								],
 								style,
 								ariaDisabled: disabled,
 								onClick (event) {
