@@ -54,7 +54,9 @@
       "require": "./dist/style.css"
     }
   },
-  "repository": "rashfael/buntpapier",
+  "repository": {
+    "url": "git+https://github.com/rashfael/buntpapier.git"
+  },
   "dependencies": {
     "@floating-ui/vue": "^1.0.2",
     "@popperjs/core": "^2.11.2",
