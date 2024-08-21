@@ -33,6 +33,7 @@ const {
 	getOptionLabel,
 	optionValue,
 	getOptionValue,
+	findOptionByValue,
 	filter
 } = defineProps({
 	type: {
@@ -119,8 +120,6 @@ const {
 	}
 })
 
-console.log(options)
-
 const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
 
 // customizers can't access other non-raw props so we need to pass them explicitly
@@ -190,7 +189,7 @@ async function handleClick () {
 	updateOutline()
 }
 
-let inputValue = $ref(modelValue as string)
+let inputValue = $ref('')
 let search = $ref('')
 
 function handleInput ($event) {
@@ -247,6 +246,12 @@ let radius = $ref(4)
 const { Outline, updateOutline, floatingLabelWidth } = useInputOutline($$(label), $$(radius), {
 	bottom: computed(() => dropdownPlacement.value === 'bottom' && open)
 })
+
+watch($$(modelValue), (newVal, oldVal) => {
+	if (newVal === oldVal) return
+	const option = findOptionByValue(newVal, customizerArgs)
+	inputValue = getOptionLabel(option, customizerArgs)
+}, { immediate: true })
 
 watch($$(radius), (newVal, oldVal) => {
 	if (newVal === oldVal) return
