@@ -84,7 +84,7 @@ const {
 	},
 	optionValue: {
 		type: String,
-		default: 'id'
+		default: 'value'
 	},
 	getOptionValue: {
 		type: Function,
@@ -118,6 +118,9 @@ const {
 		}
 	}
 })
+
+console.log(options)
+
 const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
 
 // customizers can't access other non-raw props so we need to pass them explicitly
@@ -209,8 +212,8 @@ function isOptionSelected (option) {
 }
 
 function handleDropdownSelect (option) {
-	const value = getOptionLabel(option, customizerArgs)
-	inputValue = value
+	const value = getOptionValue(option, customizerArgs)
+	inputValue = getOptionLabel(option, customizerArgs)
 	emit('update:modelValue', value)
 	open = false
 	updateOutline()
