@@ -20,8 +20,7 @@
 				path(:d="outlineStroke")
 		.hint(v-if="hintIsHtml", v-html="hintText")
 		.hint(v-else) {{ hintText }}
-
-	teleport(v-if="open", to="#bunt-teleport-target")
+	teleport(v-if="open", :to="buntTeleportTarget")
 		.bunt-select-dropdown-menu(ref="dropdownMenu", :class="[dropdownClass]", :style="{ 'max-height': maxHeight, 'width': width+'px' }", @mousedown.prevent.stop="")
 			slot(name="result-header")
 			.scrollable-menu(v-scrollbar.y="{_preventMousedown: true}")
@@ -151,6 +150,11 @@ export default {
 		}
 	},
 	emits: ['update:modelValue', 'focus', 'blur'],
+	inject: {
+		buntTeleportTarget: {
+			default: '#bunt-teleport-target'
+		}
+	},
 	data () {
 		return {
 			search: '',
