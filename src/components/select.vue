@@ -2,6 +2,7 @@
 // TODOs
 // - maxHeight?
 // - better hitbox
+// - render selected option on options reactive change
 import { computed, nextTick, ref, watch } from 'vue'
 import { useFloating, offset, flip, size } from '@floating-ui/vue'
 import type { ReferenceElement, FloatingElement } from '@floating-ui/vue'
