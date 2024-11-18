@@ -177,18 +177,20 @@ export default {
 					class: ['bunt-icon', 'mdi', iconClass]
 				})
 			)
-			const rootClasses = [
-				'bunt-button',
-				...classes,
-				{
-					disabled,
-					loading,
-					error: errorMessage || error,
-					success: showSuccess,
-					'with-icon': !!iconNode,
-					'icon-only': !hasContent && !!iconNode,
-				}
-			]
+			function getRootClasses () {
+				return [
+					'bunt-button',
+					...classes,
+					{
+						disabled,
+						loading,
+						error: errorMessage || error,
+						success: showSuccess,
+						'with-icon': !!iconNode,
+						'icon-only': !hasContent && !!iconNode,
+					}
+				]
+			}
 			const content = [
 				createElement('div', {
 					class: 'bunt-button-content'
@@ -230,7 +232,7 @@ export default {
 								ref: el,
 								href,
 								class: [
-									...rootClasses,
+									...getRootClasses(),
 									{
 										'router-link-active': isActive,
 										'router-link-exact-active': isExactActive
@@ -251,7 +253,7 @@ export default {
 			return withDirectives(
 				createElement('button', {
 					ref: el,
-					class: rootClasses,
+					class: getRootClasses(),
 					style,
 					ariaDisabled: disabled,
 					type,
