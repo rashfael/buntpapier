@@ -1,7 +1,7 @@
 // TODOs
 // - better disabled styling
 
-import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent } from 'vue'
+import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent, watchEffect } from 'vue'
 import Color from 'color'
 import tooltipDirective from '../directives/tooltip'
 import { useComputedStyle } from '../computedStyle'
@@ -16,7 +16,7 @@ export default {
 		icon: String,
 		loading: {
 			type: Boolean,
-			default: false
+			default: undefined
 		},
 		disabled: {
 			type: Boolean,
@@ -42,18 +42,17 @@ export default {
 			default: false
 		},
 		tooltipOptions: Object,
-		to: [String, Object]
+		to: [String, Object],
+		onClick: Function,
 	},
-	emits: ['click'],
-	setup (props, { attrs, slots, expose, emit }) {
+	// emits: ['click'],
+	setup (props, { attrs, slots, expose }) {
 		const {
 			text,
 			icon,
-			loading,
 			disabled,
 			type,
 			error,
-			errorMessage,
 			successAfterLoading,
 			tooltip,
 			tooltipPlacement,
@@ -134,6 +133,14 @@ export default {
 			return getIconClass(icon)
 		})
 
+		let loading = $ref(props.loading)
+		watchEffect(() => {
+			if (props.loading !== undefined) loading = props.loading
+		})
+		let errorMessage = $ref(props.errorMessage)
+		watchEffect(() => {
+			if (props.errorMessage !== undefined) errorMessage = props.errorMessage
+		})
 		let showSuccess = $ref(false)
 		let successTimeout
 
@@ -159,7 +166,17 @@ export default {
 
 		function onClick (event) {
 			if (disabled || loading || showSuccess) return
-			emit('click', event)
+			const ret = props.onClick?.(event)
+			// if onClick is a promise, set loading and error
+			// but only if the loading prop isn't set at all
+			if (props.loading === undefined && ret && typeof ret.then === 'function') {
+				loading = true
+				ret.catch((err) => {
+					errorMessage = err.message || err
+				}).finally(() => {
+					loading = false
+				})
+			}
 		}
 
 		// TODO make this conditial for docs?

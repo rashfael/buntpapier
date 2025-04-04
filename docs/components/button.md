@@ -31,6 +31,11 @@ const style = {
 	'--icon-placement': {type: 'enum', values: ['left', 'right', 'top'], default: 'left'},
 	'--tooltip-placement': {type: 'enum', values: ['auto', 'top', 'right', 'bottom', 'left'], default: 'auto', description: 'Supports `-start` and `-end` suffix.'}
 }
+
+async function asyncOnClick() {
+	await new Promise(resolve => setTimeout(resolve, 3000))
+	throw new Error('Async error')
+}
 </script>
 
 # Button
@@ -252,4 +257,11 @@ All in one button component. Configurable as a text button, icon button or link 
 	componentName="bunt-button"
 	:slots="{default: 'router-link'}"
 	:props="{to: {type: 'string', value: '/some-path'}}"
+></Showcase>
+
+### Async click handler
+<Showcase
+	componentName="bunt-button"
+	:slots="{default: 'async click'}"
+	:props="{onClick: {type: 'function', value: asyncOnClick}}"
 ></Showcase>
