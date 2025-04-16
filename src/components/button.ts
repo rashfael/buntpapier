@@ -15,7 +15,7 @@ export default {
 		text: String,
 		icon: String,
 		loading: {
-			type: Boolean,
+			type: [Boolean, String], // true | false | 'auto'
 			default: undefined
 		},
 		disabled: {
@@ -133,11 +133,11 @@ export default {
 			return getIconClass(icon)
 		})
 
-		let loading = $ref(props.loading)
+		let loading = $ref()
 		watchEffect(() => {
-			if (props.loading !== undefined) loading = props.loading
+			if (props.loading !== undefined && props.loading !== 'auto') loading = props.loading
 		})
-		let errorMessage = $ref(props.errorMessage)
+		let errorMessage = $ref()
 		watchEffect(() => {
 			if (props.errorMessage !== undefined) errorMessage = props.errorMessage
 		})
@@ -167,9 +167,8 @@ export default {
 		function onClick (event) {
 			if (disabled || loading || showSuccess) return
 			const ret = props.onClick?.(event)
-			// if onClick is a promise, set loading and error
-			// but only if the loading prop isn't set at all
-			if (props.loading === undefined && ret && typeof ret.then === 'function') {
+			// if loading mode is 'auto' and onClick is a promise, set loading and error
+			if (props.loading === 'auto' && ret && typeof ret.then === 'function') {
 				loading = true
 				ret.catch((err) => {
 					errorMessage = err.message || err
@@ -218,7 +217,6 @@ export default {
 					}, textContent)
 				])
 			]
-
 			if (loading) {
 				content.push(createElement(ProgressCircular, {
 					size: 'small'
