@@ -4,6 +4,7 @@ layoutClass: 'component'
 ---
 
 <script setup>
+import { ref } from 'vue'
 const slots = {
 	default: {description: 'Button text. Leave empty to render icon button.'},
 	icon: {description: 'Use this slot if you want to display a custom icon. For MDI icons, use the `icon` prop instead.'}
@@ -32,9 +33,12 @@ const style = {
 	'--tooltip-placement': {type: 'enum', values: ['auto', 'top', 'right', 'bottom', 'left'], default: 'auto', description: 'Supports `-start` and `-end` suffix.'}
 }
 
-async function asyncOnClick() {
-	await new Promise(resolve => setTimeout(resolve, 3000))
-	throw new Error('Async error')
+let error = ref(null)
+
+async function asyncOnClick () {
+	error.value = null
+	await new Promise((resolve) => setTimeout(resolve, 200))
+	// error.value = new Error('Error: This is a test error')
 }
 </script>
 
@@ -263,5 +267,10 @@ All in one button component. Configurable as a text button, icon button or link 
 <Showcase
 	componentName="bunt-button"
 	:slots="{default: 'async click'}"
-	:props="{onClick: {type: 'function', value: asyncOnClick}}"
+	:props="{onClick: {type: 'function', value: asyncOnClick}, error: {type: 'boolean', value: !!error}}"
 ></Showcase>
+<bunt-button @click="asyncOnClick" loading="auto" :error="!!error">
+	Async Click
+</bunt-button>
+<bunt-button @click="error = null">Reset</bunt-button>
+<div> {{ error }} </div>

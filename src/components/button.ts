@@ -170,6 +170,7 @@ export default {
 			// if loading mode is 'auto' and onClick is a promise, set loading and error
 			if (props.loading === 'auto' && ret && typeof ret.then === 'function') {
 				loading = true
+				errorMessage = null
 				ret.catch((err) => {
 					errorMessage = err.message || err
 				}).finally(() => {
