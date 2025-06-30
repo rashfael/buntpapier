@@ -248,11 +248,18 @@ const { Outline, updateOutline, floatingLabelWidth } = useInputOutline($$(label)
 	bottom: computed(() => dropdownPlacement.value === 'bottom' && open)
 })
 
+// TODO watchEffect instead?
 watch($$(modelValue), (newVal, oldVal) => {
 	if (newVal === oldVal) return
 	const option = findOptionByValue(newVal, customizerArgs)
 	inputValue = getOptionLabel(option, customizerArgs)
 }, { immediate: true })
+
+watch($$(options), () => {
+	customizerArgs.options = options
+	const option = findOptionByValue(modelValue, customizerArgs)
+	inputValue = getOptionLabel(option, customizerArgs)
+}, { deep: true })
 
 watch($$(radius), (newVal, oldVal) => {
 	if (newVal === oldVal) return
