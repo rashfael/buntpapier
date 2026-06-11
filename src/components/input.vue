@@ -98,8 +98,9 @@ watch($$(radius), (newVal, oldVal) => {
 const el = ref()
 const { classes, style } = useComputedStyle(el, {
 	'--input-shape': 'shape',
-	'--input-size': 'size'
-}, ({ shape, size }) => {
+	'--input-size': 'size',
+	'--input-layout': 'layout'
+}, ({ shape, size, layout }) => {
 	const style = {}
 	const classes = []
 
@@ -108,6 +109,7 @@ const { classes, style } = useComputedStyle(el, {
 		radius = INPUT_SHAPE_RADII[shape] || 0
 	}
 	if (size) classes.push(`bunt-input--size-${size}`)
+	if (layout) classes.push(`bunt-input--layout-${layout}`)
 
 	return { style, classes }
 })

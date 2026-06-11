@@ -247,6 +247,6 @@ onUnmounted(() => {
 				flex-direction: column
 			.style
 				border-top: 2px solid var(--clr-dividers-light)
-	button
+	button, input, select
 		all: revert-layer // get rid of vitepress styles
 </style>

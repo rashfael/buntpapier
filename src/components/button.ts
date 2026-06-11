@@ -1,5 +1,6 @@
 // TODOs
 // - better disabled styling
+// - aria-label on icon buttons
 
 import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent, watchEffect } from 'vue'
 import Color from 'color'
