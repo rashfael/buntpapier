@@ -1,6 +1,7 @@
 <script setup>
 // TODO link to API docs?
 import { onMounted, onUnmounted } from 'vue'
+import Color from 'color'
 import { registerHandler, unregisterHandler } from '../../../src/requestAnimationFrameMuxxer.ts'
 
 const {
@@ -61,6 +62,23 @@ for (const prop of propsDefinition) {
 let compEl = $ref(null)
 let value = $ref('')
 
+// per-showcase surface override for the demo pane
+// 'auto' follows the page theme; 'custom' sets --clr-surface directly
+let surface = $ref('auto')
+let customSurface = $ref('#263238')
+
+const surfaceStyle = $computed(() => {
+	if (surface === 'light' || surface === 'dark') return { colorScheme: surface }
+	if (surface === 'custom') {
+		return {
+			'--clr-surface': customSurface,
+			// accents are light-dark() pairs — pin the scheme to the matching side
+			colorScheme: Color(customSurface).isDark() ? 'dark' : 'light'
+		}
+	}
+	return {}
+})
+
 const computedStyles = $ref({})
 
 function fetchStyle () {
@@ -81,7 +99,16 @@ onUnmounted(() => {
 </script>
 <template lang="pug">
 .c-showcase(:class="{'editable': editable}")
-	.component(:style="style")
+	.component(:style="[style, surfaceStyle]")
+		.surface-control
+			button(
+				v-for="option of ['auto', 'light', 'dark']",
+				:key="option",
+				:class="{active: surface === option}",
+				@click="surface = option"
+			) {{ option }}
+			label.custom(:class="{active: surface === 'custom'}", :style="{'--value-color': customSurface}")
+				input(type="color", v-model="customSurface", @input="surface = 'custom'")
 		component(:is="componentName", ref="compEl", v-bind="props", v-model="value")
 			template(v-for="slot of slots", #[slot.name])
 				slot(:name="slot.name") {{ slot.content }}
@@ -132,24 +159,84 @@ onUnmounted(() => {
 						select(v-model="style[property.name]")
 							option(v-for="value of property.values") {{ value }}
 					template(v-else) {{ property.value }}
+			.property(v-if="surface === 'custom'")
+				.name --clr-surface
+				.punctuation :
+				.value {{ customSurface }}
 </template>
 <style lang="stylus">
 .c-showcase
-	border: 2px solid var(--clr-dividers-light)
+	// syntax highlight tokens, dark variants tuned against --vp-c-bg-alt
+	--showcase-tok-tag: #fa8900
+	--showcase-tok-name: #a88c00
+	--showcase-tok-string: #00b368
+	--showcase-tok-html: #8ca6a6
+	--showcase-tok-prop: #0095a8
+	--showcase-tok-punct: #004d57
+
+	border: 2px solid var(--vp-c-divider)
 	border-radius: 6px
 	display: flex
+	overflow: hidden // clip the demo pane surface to the rounded border
 	& + .c-showcase
 		border-top: none
 		border-radius: 0
 	> *
 		flex: 1
 	.component
+		position: relative
 		display: flex
 		justify-content: center
 		align-items: center
+		background: var(--clr-surface, transparent)
+	.surface-control
+		position: absolute
+		top: 4px
+		left: 8px
+		right: 8px
+		display: flex
+		flex-wrap: wrap // narrow demo panes
+		align-items: center
+		gap: 4px
+		opacity: .4
+		font-family: 'Roboto Mono'
+		font-size: 11px
+		&:hover
+			opacity: 1
+		button
+			cursor: pointer
+			border: 1px solid var(--vp-c-divider)
+			background: var(--vp-c-bg)
+			color: var(--vp-c-text-2)
+			padding: 0 6px
+			border-radius: 4px
+			font: inherit // the revert-layer rule below nukes inherited font
+			&.active
+				color: var(--vp-c-text-1)
+				border-color: var(--vp-c-text-2)
+		label.custom
+			position: relative
+			display: block
+			height: 14px
+			width: 14px
+			border-radius: 50%
+			border: 1px solid var(--vp-c-divider)
+			background-color: var(--value-color)
+			cursor: pointer
+			&.active
+				border-color: var(--vp-c-text-2)
+			input
+				// invisibly cover the swatch so the native color dialog
+				// anchors here instead of the viewport corner
+				position: absolute
+				inset: 0
+				width: 100%
+				height: 100%
+				opacity: 0
+				cursor: pointer
 	.settings
-		border-left: 2px solid var(--clr-dividers-light)
-		background-color: var(--clr-grey-50)
+		border-left: 2px solid var(--vp-c-divider)
+		background-color: var(--vp-c-bg-alt)
 		display: flex
 		> *
 			flex: 1
@@ -159,7 +246,7 @@ onUnmounted(() => {
 				position: absolute
 				top: 4px
 				right: 8px
-				color: var(--clr-secondary-text-light)
+				color: var(--vp-c-text-2)
 		.template
 			padding: 8px
 			// display: flex
@@ -169,7 +256,7 @@ onUnmounted(() => {
 				content: 'template'
 			.tag
 				display: inline
-				color: #fa8900
+				color: var(--showcase-tok-tag)
 			.prop + .tag
 				display: block
 			.prop
@@ -177,15 +264,15 @@ onUnmounted(() => {
 				> *
 					display: inline
 				.name
-					color: #a88c00
+					color: var(--showcase-tok-name)
 				.value
-					color: #00b368
+					color: var(--showcase-tok-string)
 				label > *
 					display: inline
 				input[type="checkbox"]
 					margin: 0 4px 0 2px
 			.html
-				color: #8ca6a6
+				color: var(--showcase-tok-html)
 			.slot
 				display: flex
 				flex-direction: column
@@ -199,21 +286,21 @@ onUnmounted(() => {
 				content: 'style'
 			.property
 				display: flex
-				color: #0095a8
+				color: var(--showcase-tok-prop)
 			.name
 				white-space: nowrap
 			.punctuation
-				color: #004d57
+				color: var(--showcase-tok-punct)
 			.value
 				margin-left: 4px
-				color: #00b368
-	
+				color: var(--showcase-tok-string)
+
 		input:not([type="color"]), select
-			color: var(--clr-primary-text-light)
+			color: var(--vp-c-text-1)
 			font-family: 'Roboto Mono'
 			font-size: 16px
-			background-color: var(--clr-white)
-			border: 1px solid var(--clr-dividers-light)
+			background-color: var(--vp-c-bg)
+			border: 1px solid var(--vp-c-divider)
 			padding: 0 4px
 		select
 			margin-left: 8px
@@ -222,31 +309,42 @@ onUnmounted(() => {
 			display: flex
 			align-items: center
 			label
+				position: relative
 				display: block
 				height: 16px
 				width: @height
 				background-color: var(--value-color)
-				border: 1px solid var(--clr-grey-400)
+				border: 1px solid var(--vp-c-divider)
 				border-radius: 50%
 				margin: 0 8px
-			input[type="color"]
-				visibility: hidden
-				width: 64px
-				height: 36px
+				cursor: pointer
+				input[type="color"]
+					// invisibly cover the swatch so the native color dialog
+					// anchors here instead of the viewport corner
+					position: absolute
+					inset: 0
+					width: 100%
+					height: 100%
+					opacity: 0
+					cursor: pointer
 
+	&:not(.editable)
+		.settings
+			flex: 2
+		.style
+			border-left: 2px solid var(--vp-c-divider)
 
-		&:not(.editable)
-			.settings
-				flex: 2
-			.style
-				border-left: 2px solid var(--clr-dividers-light)
-
-		&.editable
-			min-height: 360px
-			.settings
-				flex-direction: column
-			.style
-				border-top: 2px solid var(--clr-dividers-light)
+	&.editable
+		min-height: 360px
+		.settings
+			flex-direction: column
+		.style
+			border-top: 2px solid var(--vp-c-divider)
 	button, input, select
 		all: revert-layer // get rid of vitepress styles
+
+.dark .c-showcase
+	--showcase-tok-name: #d8bc2a
+	--showcase-tok-html: #9fb8b8
+	--showcase-tok-punct: #4fb6c4
 </style>

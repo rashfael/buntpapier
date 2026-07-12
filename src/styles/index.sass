@@ -1,8 +1,12 @@
 // @use 'typography'
 @use 'reset'
+@use 'derived'
 // @use 'shadows'
 @use 'components'
 @use 'scrollbars'
+
+// explicit layer order
+@layer buntpapier.reset, buntpapier.colors, buntpapier.derived, buntpapier.components
 
 :root
 	--font-stack: 'Roboto', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif

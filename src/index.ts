@@ -24,3 +24,5 @@ const lib = {
 
 export default lib
 export { useInputOutline } from './utils/input-outline'
+export { refreshComputedStyles } from './themeWatcher'
+export { deriveDarkVariant } from './utils/colors'

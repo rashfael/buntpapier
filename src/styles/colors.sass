@@ -295,18 +295,32 @@
 		--clr-black: #000
 		--clr-white: #fff
 
+		// deprecated, kept for back-compat — use the surface-derived tokens
+		// (--clr-text, --clr-text-secondary, --clr-text-disabled, --clr-divider) instead
 		--clr-primary-text-light: rgba(0, 0, 0, .87)
 		--clr-secondary-text-light: rgba(0, 0, 0, .54)
 		--clr-disabled-text-light: rgba(0, 0, 0, .38)
 		--clr-dividers-light: rgba(0, 0, 0, .12)
-		
+
 		--clr-primary-text-dark: rgba(255, 255, 255, 1)
 		--clr-secondary-text-dark: rgba(255, 255, 255, .7)
 		--clr-disabled-text-dark: rgba(255, 255, 255, .5)
 		--clr-dividers-dark: rgba(255, 255, 255, .63)
 
-		--clr-primary: var(--clr-blue)
-		--clr-success: var(--clr-green)
-		--clr-warning: var(--clr-orange)
-		--clr-danger: var(--clr-red)
+		// deterministic baseline; apps opt into dark via
+		// `color-scheme: dark` (forced) or `color-scheme: light dark` (OS-driven)
+		color-scheme: light
+
+		--clr-surface: light-dark(#fff, #121212)
+
+		// accents are light-dark pairs; dark side follows Material's
+		// "lightened accent on dark" guidance (300 tones)
+		--clr-primary: light-dark(var(--clr-blue), var(--clr-blue-300))
+		--clr-success: light-dark(var(--clr-green), var(--clr-green-300))
+		--clr-warning: light-dark(var(--clr-orange), var(--clr-orange-300))
+		--clr-danger: light-dark(var(--clr-red), var(--clr-red-300))
+
+	@media print
+		:root
+			color-scheme: light
 

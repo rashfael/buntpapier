@@ -1,5 +1,6 @@
 import { reactive, onMounted, onUnmounted } from 'vue'
 import { registerHandler, unregisterHandler } from './requestAnimationFrameMuxxer.js'
+import { onThemeChange } from './themeWatcher'
 
 export function useComputedStyle (el, customPropNames: {[key: string]: string}, computeStyle) {
 	const customProps: any = reactive({})
@@ -57,12 +58,17 @@ export function useComputedStyle (el, customPropNames: {[key: string]: string}, 
 		prevComputedClasses = computedClasses
 		classes.splice(0, classes.length, ...computedClasses)
 	}
+	let unregisterThemeChange
 	onMounted(() => {
 		generateStyle()
+		// re-resolve when the theme context flips (generateStyle is dirty-checked,
+		// so notifications that resolve to the same values are cheap no-ops)
+		unregisterThemeChange = onThemeChange(generateStyle)
 		const willChange = getComputedStyle(el.value).getPropertyValue('--bunt-will-change').trim() === 'all'
 		if (willChange) registerHandler(generateStyle)
 	})
 	onUnmounted(() => {
+		unregisterThemeChange?.()
 		unregisterHandler(generateStyle)
 	})
 

@@ -29,7 +29,8 @@ $thumb-width-hovered: 12px
 
 	.bunt-scrollbar-thumb
 		position: absolute
-		background-color: var(--clr-blue-grey-600)
+		// ink + the opacity states below ≈ the old mid-grey, but adapts to dark
+		background-color: var(--_clr-ink)
 		opacity: .2
 		border-radius: $thumb-width
 		transition: height .3s var(--material-easing), width .3s var(--material-easing), opacity .3s var(--material-easing)

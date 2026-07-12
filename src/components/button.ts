@@ -3,10 +3,9 @@
 // - aria-label on icon buttons
 
 import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent, watchEffect } from 'vue'
-import Color from 'color'
 import tooltipDirective from '../directives/tooltip'
 import { useComputedStyle } from '../computedStyle'
-import { firstReadable, CLR_PRIMARY_TEXT } from '../utils/colors'
+import { ensureReadable } from '../utils/colors'
 import { getIconClass } from '../utils/icon'
 import ProgressCircular from './progress-circular.vue'
 
@@ -72,53 +71,32 @@ export default {
 			'--_button-color-error': 'errorColor',
 			'--_button-color-success': 'successColor',
 			'--button-text-color': 'textColor',
+			'--_clr-surface': 'surface',
 			'--icon-placement': 'iconPlacement'
-		}, ({ shape, weight, size, color, errorColor, successColor, textColor, iconPlacement }) => {
+		}, ({ shape, weight, size, color, errorColor, successColor, textColor, surface, iconPlacement }) => {
 			const style = {}
 			const classes = []
 
 			if (shape) classes.push(`bunt-button--shape-${shape}`)
 			if (weight) classes.push(`bunt-button--weight-${weight}`)
 			if (size) classes.push(`bunt-button--size-${size}`)
-			if (color) {
-				style['--_button-text-color'] = textColor || firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], color, 3)
-				let bgColor
+
+			// Contrast-guard accents used as ink against the surface they sit on.
+			// Filled weights need no JS — their text color comes from
+			// contrast-color() in the derived layer.
+			function guardInk (accent, prop) {
+				if (!accent) return
 				try {
-					bgColor = Color(color).hsl()
+					const guarded = ensureReadable(accent, surface, 3)
+					if (guarded) style[prop] = guarded.string()
 				} catch (e) {
 					console.error('Could not parse color', e)
-					bgColor = Color('#FFF').hsl()
 				}
-				style['--_button-bg-h'] = bgColor.hue()
-				style['--_button-bg-s'] = bgColor.saturationl() + '%'
-				style['--_button-bg-l'] = bgColor.lightness() + '%'
 			}
-			// TODO might be overkill to compute the defaults all the time
-			if (errorColor) {
-				style['--_button-text-color-error'] = firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], errorColor, 3)
-				let bgColor
-				try {
-					bgColor = Color(errorColor).hsl()
-				} catch (e) {
-					console.error('Could not parse color', e)
-					bgColor = Color('#FFF').hsl()
-				}
-				style['--_button-bg-error-h'] = bgColor.hue()
-				style['--_button-bg-error-s'] = bgColor.saturationl() + '%'
-				style['--_button-bg-error-l'] = bgColor.lightness() + '%'
-			}
-			if (successColor) {
-				style['--_button-text-color-success'] = firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], successColor, 3)
-				let bgColor
-				try {
-					bgColor = Color(successColor).hsl()
-				} catch (e) {
-					console.error('Could not parse color', e)
-					bgColor = Color('#FFF').hsl()
-				}
-				style['--_button-bg-success-h'] = bgColor.hue()
-				style['--_button-bg-success-s'] = bgColor.saturationl() + '%'
-				style['--_button-bg-success-l'] = bgColor.lightness() + '%'
+			if ((weight === 'outlined' || weight === 'text') && surface && !textColor) {
+				guardInk(color, '--_button-ink-color')
+				guardInk(errorColor, '--_button-ink-color-error')
+				guardInk(successColor, '--_button-ink-color-success')
 			}
 
 			if (iconPlacement) classes.push(`bunt-button--icon-placement-${iconPlacement}`)

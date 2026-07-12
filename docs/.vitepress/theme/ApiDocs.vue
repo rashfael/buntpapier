@@ -97,5 +97,5 @@ const style = $ref(Object.entries(styleObj).map(([name, content]) => ({ name, ..
 		font-style: italic
 	td.computed
 		font-style: italic
-		color: var(--clr-secondary-text-light)
+		color: var(--vp-c-text-2)
 </style>

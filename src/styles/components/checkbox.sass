@@ -1,9 +1,10 @@
-@layer derived
+@layer buntpapier.derived
 	.bunt-checkbox
 		--_checkbox-color: var(--checkbox-color, var(--clr-primary))
+		--_checkbox-check-color: contrast-color(var(--_checkbox-color))
 		// --_button-color-error: var(--button-color-error, var(--clr-danger))
 		// --_button-color-success: var(--button-color-success, var(--clr-success))
-	
+
 .bunt-checkbox
 	position: relative
 	display: flex
@@ -23,11 +24,12 @@
 		cursor: pointer
 		display: flex
 		align-items: center
+		color: var(--clr-text)
 	.bunt-checkbox-box
 		height: 24px
 		width: 24px
 		border-radius: 2px
-		border: 2px solid var(--clr-secondary-text-light)
+		border: 2px solid var(--clr-text-secondary)
 		margin-right: 8px
 		position: relative
 		transition: all .2s ease-out
@@ -50,11 +52,11 @@
 	&.disabled
 		label
 			cursor: not-allowed
-			color: var(--clr-secondary-text-light)
+			color: var(--clr-text-disabled)
 		.bunt-checkbox-box
-			border-color: var(--clr-grey-400)
+			border-color: var(--clr-text-disabled)
 		&.checked .bunt-checkbox-box
-			background-color: var(--clr-grey-400)
+			background-color: var(--clr-text-disabled)
 
 	&.bunt-checkbox--size-small
 		.bunt-checkbox-box
@@ -70,4 +72,5 @@
 		.bunt-checkbox-box
 			background-color: transparent
 			.mdi
-				color: var(--_checkbox-color)
+				// accent as ink: JS contrast guard > raw accent
+				color: var(--_checkbox-ink-color, var(--_checkbox-color))

@@ -8,20 +8,27 @@
 		--_button-color: var(--button-color, var(--clr-primary))
 		--_button-color-error: var(--button-color-error, var(--clr-danger))
 		--_button-color-success: var(--button-color-success, var(--clr-success))
+		--_button-text-color: var(--button-text-color, contrast-color(var(--_button-color)))
+		--_button-text-color-error: var(--button-text-color, contrast-color(var(--_button-color-error)))
+		--_button-text-color-success: var(--button-text-color, contrast-color(var(--_button-color-success)))
 
 $button-height: 36px
 
 $hover-lightness: 0.786
 $pressed-lightness: 0.607
 
-$hover-alpha: 0.08
-$pressed-alpha: 0.12
+// hover/active washes for outlined/text weights mix from currentcolor, so they
+// track the rendered ink — including JS contrast-guard adjustments
+$hover-wash: 8%
+$pressed-wash: 12%
 
 @function bunt-lightness($color, $amount)
-	@return hsl(var(#{$color}-h), var(#{$color}-s), calc(var(#{$color}-l) * #{$amount}))
+	@return hsl(from var(#{$color}) h s calc(l * #{$amount}))
 
-@function bunt-alpha($color, $alpha)
-	@return hsla(var(#{$color}-h), var(#{$color}-s), var(#{$color}-l), #{$alpha})
+// ink (text/border) for outlined/text weights: explicit override > JS contrast
+// guard > raw accent
+@function bunt-ink($suffix: '')
+	@return var(--button-text-color, var(--_button-ink-color#{$suffix}, var(--_button-color#{$suffix})))
 
 @layer buntpapier.components
 	.bunt-button, a.bunt-button
@@ -73,16 +80,16 @@ $pressed-alpha: 0.12
 				padding-right: 0
 
 		&:hover
-			background-color: bunt-lightness(--_button-bg, $hover-lightness)
+			background-color: bunt-lightness(--_button-color, $hover-lightness)
 			color: var(--_button-text-color) // guard against rogue vitepress css
 
 		&:active
-			background-color: bunt-lightness(--_button-bg, $pressed-lightness)
+			background-color: bunt-lightness(--_button-color, $pressed-lightness)
 
 		&:focus-visible
 			outline-style: solid
-			background-color: bunt-lightness(--_button-bg, $hover-lightness)
-			outline-color: bunt-lightness(--_button-bg, 0.75)
+			background-color: bunt-lightness(--_button-color, $hover-lightness)
+			outline-color: bunt-lightness(--_button-color, 0.75)
 			outline-width: 2px
 			outline-offset: 2px
 
@@ -114,19 +121,21 @@ $pressed-alpha: 0.12
 
 		&.success
 			background-color: var(--_button-color-success)
+			color: var(--_button-text-color-success)
 			&:hover
-				background-color: bunt-lightness(--_button-bg-success, $hover-lightness)
+				background-color: bunt-lightness(--_button-color-success, $hover-lightness)
 			&:focus-visible
-				background-color: bunt-lightness(--_button-bg-success, $hover-lightness)
-				outline-color: bunt-lightness(--_button-bg-success, 0.75)
+				background-color: bunt-lightness(--_button-color-success, $hover-lightness)
+				outline-color: bunt-lightness(--_button-color-success, 0.75)
 
 		&.error
 			background-color: var(--_button-color-error)
+			color: var(--_button-text-color-error)
 			&:hover
-				background-color: bunt-lightness(--_button-bg-error, $hover-lightness)
+				background-color: bunt-lightness(--_button-color-error, $hover-lightness)
 			&:focus-visible
-				background-color: bunt-lightness(--_button-bg-error, $hover-lightness)
-				outline-color: bunt-lightness(--_button-bg-error, 0.75)
+				background-color: bunt-lightness(--_button-color-error, $hover-lightness)
+				outline-color: bunt-lightness(--_button-color-error, 0.75)
 			.bunt-tooltip
 				background-color: var(--_button-color-error)
 
@@ -138,31 +147,27 @@ $pressed-alpha: 0.12
 
 		&.bunt-button--weight-outlined, &.bunt-button--weight-text
 			background-color: transparent
-			color: var(--_button-color)
+			color: bunt-ink()
 			&:hover
-				background-color: bunt-alpha(--_button-bg, $hover-alpha)
-				color: var(--_button-color) // guard against rogue vitepress css
+				background-color: color-mix(in srgb, currentcolor $hover-wash, transparent)
+				color: bunt-ink() // guard against rogue vitepress css
 			&:active, &:focus-visible
-				background-color: bunt-alpha(--_button-bg, $pressed-alpha)
+				background-color: color-mix(in srgb, currentcolor $pressed-wash, transparent)
+			&.success, &.error
+				background-color: transparent
+				&:hover
+					background-color: color-mix(in srgb, currentcolor $hover-wash, transparent)
+				&:active, &:focus-visible
+					background-color: color-mix(in srgb, currentcolor $pressed-wash, transparent)
 			&.success
-				background-color: transparent
-				border-color: var(--_button-color-success)
-				color: var(--_button-color-success)
-				&:hover
-					background-color: bunt-alpha(--_button-bg-success, $hover-alpha)
-				&:active, &:focus-visible
-					background-color: bunt-alpha(--_button-bg-success, $pressed-alpha)
+				border-color: bunt-ink('-success')
+				color: bunt-ink('-success')
 			&.error
-				background-color: transparent
-				border-color: var(--_button-color-error)
-				color: var(--_button-color-error)
-				&:hover
-					background-color: bunt-alpha(--_button-bg-error, $hover-alpha)
-				&:active, &:focus-visible
-					background-color: bunt-alpha(--_button-bg-error, $pressed-alpha)
+				border-color: bunt-ink('-error')
+				color: bunt-ink('-error')
 
 		&.bunt-button--weight-outlined
-			border: 1px solid var(--_button-color)
+			border: 1px solid bunt-ink()
 
 		// TODO grey text for disabled?
 

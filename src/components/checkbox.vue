@@ -7,9 +7,8 @@
 // - disabled + readonly styling
 // - icon
 // - use icon for the whole checkbox?
-import Color from 'color'
 import { useComputedStyle } from '../computedStyle'
-import { firstReadable, CLR_PRIMARY_TEXT } from '../utils/colors'
+import { ensureReadable } from '../utils/colors'
 
 const {
 	modelValue,
@@ -53,14 +52,22 @@ const { classes, style, customProps } = useComputedStyle($$(el), {
 	'--checkbox-icon': 'icon',
 	'--checkbox-weight': 'weight',
 	'--_checkbox-color': 'color',
-}, ({ size, weight, color }) => {
+	'--_clr-surface': 'surface',
+}, ({ size, weight, color, surface }) => {
 	const style = {}
 	const classes = []
 
 	if (size) classes.push(`bunt-checkbox--size-${size}`)
 	if (weight) classes.push(`bunt-checkbox--weight-${weight}`)
-	if (color) {
-		style['--_checkbox-check-color'] = firstReadable([CLR_PRIMARY_TEXT.DARK, CLR_PRIMARY_TEXT.LIGHT], color, 3)
+	// outlined weight uses the accent as ink — contrast-guard it against the
+	// surface (the filled check color comes from contrast-color() in CSS)
+	if (weight === 'outlined' && color && surface) {
+		try {
+			const guarded = ensureReadable(color, surface, 3)
+			if (guarded) style['--_checkbox-ink-color'] = guarded.string()
+		} catch (e) {
+			console.error('Could not parse color', e)
+		}
 	}
 	return { style, classes }
 })

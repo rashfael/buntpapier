@@ -27,6 +27,9 @@ export default {
 					text: 'Why buntpapier?',
 					link: '/guide/why'
 				}, {
+					text: 'Theming & Dark Mode',
+					link: '/guide/theming'
+				}, {
 					text: 'Migrating from v2',
 					link: '/guide/migrating-from-v2'
 				}]

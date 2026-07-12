@@ -1,0 +1,59 @@
+// surface → ink → text/divider/fill derivation
+//
+// Token roles:
+// - set-knobs (user-settable): --clr-surface, --clr-surface-raised, --clr-ink
+// - derived, public-to-read: --clr-text, --clr-text-secondary, --clr-text-disabled,
+//   --clr-divider, --clr-fill-hover, --clr-fill-disabled, --clr-on-primary
+//   (re-declared on every element — setting them only affects that element;
+//   to change them, set --clr-surface or --clr-ink)
+// - internal (--_ prefix): fallback-chain second names + registered mirrors for JS
+
+// Register ONLY the custom properties the JS bridge reads via getComputedStyle().
+// Registered `<color>` properties compute to absolute resolved colors per element
+// (light-dark() resolved against the element's color-scheme) instead of raw token
+// streams. Public tokens stay unregistered on purpose: they must inherit as token
+// streams so light-dark()/contrast-color() stay live down the tree.
+@property --_clr-surface
+	syntax: '<color>'
+	inherits: true
+	initial-value: #fff
+
+@property --_button-color
+	syntax: '<color>'
+	inherits: true
+	initial-value: transparent
+
+@property --_button-color-error
+	syntax: '<color>'
+	inherits: true
+	initial-value: transparent
+
+@property --_button-color-success
+	syntax: '<color>'
+	inherits: true
+	initial-value: transparent
+
+@property --_checkbox-color
+	syntax: '<color>'
+	inherits: true
+	initial-value: transparent
+
+@layer buntpapier.derived
+	// Declared on * because var() inside a custom property value resolves at the
+	// DECLARING element and the result inherits — a chain declared only on :root
+	// would freeze root's surface forever. Re-declaring per element makes
+	// --clr-surface / color-scheme set on any wrapper re-derive everything inside.
+	*
+		--_clr-surface: var(--clr-surface, light-dark(#fff, #121212))
+		--_clr-ink: var(--clr-ink, contrast-color(var(--_clr-surface)))
+		// raised surface: mixing toward white works for both schemes
+		// (white stays white, dark lightens, brand mid-tones lighten)
+		--_clr-surface-raised: var(--clr-surface-raised, color-mix(in oklab, var(--_clr-surface) 88%, white))
+		--clr-text: color-mix(in srgb, var(--_clr-ink) 87%, transparent)
+		--clr-text-secondary: color-mix(in srgb, var(--_clr-ink) 60%, transparent)
+		--clr-text-disabled: color-mix(in srgb, var(--_clr-ink) 38%, transparent)
+		--clr-divider: color-mix(in srgb, var(--_clr-ink) 12%, transparent)
+		--clr-fill-hover: color-mix(in srgb, var(--_clr-ink) 8%, transparent)
+		--clr-fill-disabled: color-mix(in srgb, var(--_clr-ink) 8%, transparent)
+		// "text on accent" (select highlight, date-picker selected day)
+		--clr-on-primary: contrast-color(var(--clr-primary))
