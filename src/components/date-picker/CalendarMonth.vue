@@ -21,7 +21,8 @@ const {
 	isDayRangeStart,
 	isDayRangeEnd,
 	isSelected,
-	getDisabledReason
+	getDisabledReason,
+	autoFocus = false
 } = defineProps<{
 	month: Temporal.PlainDate
 	weekStartsOn: WeekStart
@@ -34,6 +35,7 @@ const {
 	isDayRangeEnd?: (d: Temporal.PlainDate) => boolean
 	isSelected?: (d: Temporal.PlainDate) => boolean
 	getDisabledReason?: (d: Temporal.PlainDate) => string | undefined
+	autoFocus?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -166,18 +168,17 @@ function handleKeydown (event: KeyboardEvent, currentDay: Temporal.PlainDate | n
 	}
 }
 
-// Focus the cell that matches focusedDay when it changes
-// Works both for initial focus (from dialog open) and subsequent arrow-key navigation
+// Focus the cell that matches focusedDay when it changes, but only when the parent opts in via autoFocus.
+// Used for arrow-key navigation within the grid when keyboard users have explicitly entered it.
 watch(
 	() => focusedDay,
 	async () => {
-		if (!focusedDay || !el) return
+		if (!autoFocus || !focusedDay || !el) return
 		await nextTick()
 		const focused = el.querySelector<HTMLElement>('[tabindex="0"]')
 		if (!focused) return
-		// Only steal focus if we already have it, or if nothing inside the dialog is focused yet
 		const activeEl = document.activeElement
-		if (el.contains(activeEl) || activeEl === document.body || activeEl?.closest('dialog')?.contains(el)) {
+		if (el.contains(activeEl)) {
 			focused.focus()
 		}
 	}
@@ -210,7 +211,7 @@ watch(
 				button(
 					v-tooltip="isDayDisabled(day) && getDisabledReason ? getDisabledReason(day) : ''",
 					:class="getDayClasses(day)",
-					:tabindex="isFocused(day) ? 0 : -1",
+					:tabindex="autoFocus && isFocused(day) ? 0 : -1",
 					:disabled="isDayDisabled(day)",
 					:aria-label="dayAriaLabel(day)",
 					:aria-selected="(isSelected ? isSelected(day) : false) || (isDayInRange ? isDayInRange(day) : false) || undefined",

@@ -1,9 +1,17 @@
 <script setup lang="ts">
-// TODOs
-// - decouple input focus from open to be more native
-import { nextTick, watch } from 'vue'
+import { nextTick, useId, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
 import { useInputOutline } from '../../utils/input-outline'
+import {
+	type Segment,
+	type SegmentName,
+	parseSegments,
+	isCanonicalISO,
+	getSegmentAt,
+	adjacentSegment,
+	incrementDate,
+	segmentMax
+} from '../../utils/segmented-date-input'
 import CalendarMonth from './CalendarMonth.vue'
 import {
 	Temporal,
@@ -13,7 +21,6 @@ import {
 	endOfMonth,
 	sameMonth,
 	formatMY,
-	formatDMY,
 	getLocaleWeekStart,
 	parseDate
 } from './temporal'
@@ -41,7 +48,6 @@ const {
 	inline = false,
 	navigateOnOutsideDayClick = true,
 	presets,
-	formatValue,
 	parseInput
 } = defineProps<{
 	modelValue?: Temporal.PlainDate | null
@@ -60,7 +66,6 @@ const {
 	inline?: boolean
 	navigateOnOutsideDayClick?: boolean
 	presets?: DatePreset<Temporal.PlainDate>[]
-	formatValue?: (d: Temporal.PlainDate) => string
 	parseInput?: (text: string) => Temporal.PlainDate | null
 }>()
 
@@ -76,18 +81,17 @@ let currentMonth = $ref<Temporal.PlainDate>(
 let focusedDay = $ref<Temporal.PlainDate | null>(null)
 let draftText = $ref<string | null>(null)
 let open = $ref(false)
+let focused = $ref(false)
+
+// Type-over-segment buffer state
+let segmentBuffer = $ref('')
+let segmentBufferFor = $ref<SegmentName | null>(null)
 
 const el = $ref<HTMLElement>(null)
 
 // ── Input ──────────────────────────────────────────────
 
 const inputEl = $ref<HTMLInputElement>(null)
-
-function handleInputFocus (event) {
-	// don't open dialog if re-focus origininated from dialog or from anywhere inside it (e.g. calendar buttons)
-	if (event.relatedTarget === dialogEl || dialogEl?.contains(event.relatedTarget as Node)) return
-	openDialog()
-}
 
 function handleInputInput (event: Event) {
 	const value = (event.target as HTMLInputElement).value
@@ -99,72 +103,292 @@ function handleInputInput (event: Event) {
 	}
 }
 
+function handleInputPaste (event: ClipboardEvent) {
+	const pasted = event.clipboardData?.getData('text') ?? ''
+	if (!pasted) return
+	const parsed = parseInputFn(pasted)
+	if (parsed && !isDayDisabled(parsed)) {
+		event.preventDefault()
+		// Clear any in-progress state and commit the parsed value.
+		segmentBuffer = ''
+		segmentBufferFor = null
+		draftText = null
+		emit('update:modelValue', parsed)
+		currentMonth = startOfMonth(parsed)
+		focusedDay = parsed
+	}
+	// Parse failed — fall through to native paste; handleInputInput will capture the raw draft
+	// and commitDraft (on Enter / blur) will re-attempt parsing.
+}
+
 function commitDraft () {
 	if (draftText === null) return
 	const parsed = parseInputFn(draftText)
 	if (parsed && !isDayDisabled(parsed)) {
 		emit('update:modelValue', parsed)
-		closeDialog()
+		closePopover()
 	}
 	draftText = null
 }
 
+// ── Segmented editing ─────────────────────────────────────
+
+function canSegment (): boolean {
+	// Segmented nav only works against a canonical ISO string (no mid-typing drafts).
+	// Works when modelValue is committed OR when focused (empty fallback shows today).
+	return draftText === null && isCanonicalISO(displayValue)
+}
+
+function getCurrentSegment (): Segment | null {
+	if (!inputEl) return null
+	const segments = parseSegments(displayValue, locale)
+	const caret = inputEl.selectionStart ?? 0
+	return getSegmentAt(segments, caret)
+}
+
+function selectSegment (segment: Segment) {
+	inputEl?.setSelectionRange(segment.start, segment.end)
+}
+
+function handleInputFocus () {
+	focused = true
+	// If there's no committed value yet, commit today immediately. The fallback display of today
+	// would otherwise vanish on blur, which is confusing.
+	if (!modelValue) {
+		const today = Temporal.Now.plainDateISO()
+		emit('update:modelValue', today)
+		currentMonth = startOfMonth(today)
+		focusedDay = today
+	}
+	if (!canSegment()) return
+	// On Tab-focus, select the first segment. Clicks are handled separately (handleInputClick)
+	// so the clicked segment wins when the two events fire together.
+	nextTick(() => {
+		if (!inputEl) return
+		const segments = parseSegments(displayValue, locale)
+		if (segments.length) selectSegment(segments[0])
+	})
+}
+
+function handleInputClick () {
+	if (!canSegment()) return
+	nextTick(() => {
+		const seg = getCurrentSegment()
+		if (seg) selectSegment(seg)
+	})
+}
+
 function handleInputBlur () {
+	focused = false
+	// Discard any in-progress segment buffer on blur; don't commit partial typing.
+	if (segmentBufferFor !== null) {
+		segmentBuffer = ''
+		segmentBufferFor = null
+		draftText = null
+		return
+	}
 	commitDraft()
+}
+
+// ── Type-over-segment ──────────────────────────────────────
+
+function previewSegmentBuffer (segment: Segment, buf: string) {
+	const padded = buf.padStart(segment.length, '0')
+	const current = displayValue
+	draftText = current.substring(0, segment.start) + padded + current.substring(segment.end)
+	nextTick(() => selectSegment(segment))
+}
+
+function commitSegmentBuffer (segment: Segment) {
+	const basis = getBasisDate()
+	const value = Number(segmentBuffer)
+	let newDate: Temporal.PlainDate
+	try {
+		if (segment.name === 'day') newDate = basis.with({ day: value })
+		else if (segment.name === 'month') newDate = basis.with({ month: value })
+		else newDate = basis.with({ year: value })
+	} catch {
+		// Invalid (e.g. Feb 30) — clear preview, stay on segment.
+		segmentBuffer = ''
+		segmentBufferFor = null
+		draftText = null
+		nextTick(() => selectSegment(segment))
+		return
+	}
+
+	if (isDayDisabled(newDate)) {
+		segmentBuffer = ''
+		segmentBufferFor = null
+		draftText = null
+		nextTick(() => selectSegment(segment))
+		return
+	}
+
+	segmentBuffer = ''
+	segmentBufferFor = null
+	draftText = null
+	emit('update:modelValue', newDate)
+	currentMonth = startOfMonth(newDate)
+	focusedDay = newDate
+
+	const segments = parseSegments(displayValue, locale)
+	const next = adjacentSegment(segments, segment, 1)
+	nextTick(() => selectSegment(next ?? segment))
+}
+
+function handleSegmentDigit (digit: string) {
+	const current = getCurrentSegment()
+	if (!current) return
+
+	// Reset buffer if it was for a different segment
+	if (segmentBufferFor !== current.name) {
+		segmentBuffer = ''
+	}
+	segmentBufferFor = current.name
+
+	let buf = segmentBuffer + digit
+	const max = segmentMax(current.name)
+
+	// If buffer numeric value overflows max, treat this digit as a fresh start.
+	if (Number(buf) > max) buf = digit
+
+	segmentBuffer = buf
+
+	// Commit when:
+	//  - segment is full, or
+	//  - an additional digit would necessarily overflow max (e.g. month "2" then "9" → max 29 > 12)
+	const shouldCommit = buf.length === current.length || Number(buf + '0') > max
+	if (shouldCommit) commitSegmentBuffer(current)
+	else previewSegmentBuffer(current, buf)
 }
 
 function handleInputKeydown (event: KeyboardEvent) {
 	if (event.key === 'Enter') {
 		event.preventDefault()
 		commitDraft()
+		return
 	}
-	// Escape is handled by the dialog's cancel event
+	if (event.key === 'Escape' && open) {
+		event.preventDefault()
+		draftText = null
+		closePopover()
+		return
+	}
+	if (event.key === 'ArrowDown' && event.altKey && !open) {
+		event.preventDefault()
+		openPopover()
+		return
+	}
+
+	// Segmented nav (only when value is canonical ISO)
+	if (!canSegment() && segmentBufferFor === null) return
+	const segments = parseSegments(displayValue, locale)
+	const current = getCurrentSegment()
+	if (!current) return
+
+	if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+		const dir = event.key === 'ArrowLeft' ? -1 : 1
+		const next = adjacentSegment(segments, current, dir)
+		if (next) {
+			event.preventDefault()
+			// If a buffer was in progress, commit it before moving.
+			if (segmentBufferFor !== null) {
+				commitSegmentBuffer(current)
+				nextTick(() => selectSegment(next))
+			} else {
+				selectSegment(next)
+			}
+		}
+		return
+	}
+	if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+		event.preventDefault()
+		const delta = event.key === 'ArrowUp' ? 1 : -1
+		const newDate = incrementDate(getBasisDate(), current.name, delta)
+		if (isDayDisabled(newDate)) return
+		emit('update:modelValue', newDate)
+		currentMonth = startOfMonth(newDate)
+		focusedDay = newDate
+		nextTick(() => selectSegment(current))
+		return
+	}
+
+	// Type-over-segment: digit keys without modifiers replace segment value.
+	if (/^\d$/.test(event.key) && !event.ctrlKey && !event.metaKey && !event.altKey) {
+		event.preventDefault()
+		handleSegmentDigit(event.key)
+		return
+	}
+
+	// Separator keys commit in-progress buffer and advance.
+	if (['-', '.', '/', ' '].includes(event.key) && segmentBufferFor !== null) {
+		event.preventDefault()
+		commitSegmentBuffer(current)
+	}
 }
 
-// ── Dialog ─────────────────────────────────────────────
+// ── Popover ─────────────────────────────────────────────
 
-const dialogEl = $ref<HTMLDialogElement>(null)
+const popoverEl = $ref<HTMLElement>(null)
+const popoverId = `bunt-date-picker-popover-${useId()}`
 
 watch($$(open), (isOpen) => {
+	if (!popoverEl) return
 	if (isOpen) {
-		dialogEl?.showModal()
+		popoverEl.showPopover()
+		document.addEventListener('mousedown', handleOutsideMousedown, true)
+		document.addEventListener('focusin', handleOutsideFocus, true)
 	} else {
-		dialogEl?.close()
+		popoverEl.hidePopover()
+		document.removeEventListener('mousedown', handleOutsideMousedown, true)
+		document.removeEventListener('focusin', handleOutsideFocus, true)
 	}
 })
 
-async function openDialog () {
+function handleOutsideMousedown (event: MouseEvent) {
+	const target = event.target as Node | null
+	if (!target) return
+	if (el?.contains(target) || popoverEl?.contains(target)) return
+	closePopover()
+}
+
+function handleOutsideFocus (event: FocusEvent) {
+	const target = event.target as Node | null
+	if (!target) return
+	if (el?.contains(target) || popoverEl?.contains(target)) return
+	closePopover()
+}
+
+function openPopover () {
 	if (open || disabled) return
 	const initialDay = modelValue || Temporal.Now.plainDateISO()
 	focusedDay = initialDay
 	currentMonth = startOfMonth(initialDay)
 	open = true
-	// After the dialog opens and CalendarMonth renders, focus the active day cell
-	await nextTick()
-	await nextTick() // second tick: CalendarMonth has rendered with the new focusedDay
-	const cell = dialogEl?.querySelector<HTMLElement>('[tabindex="0"]')
-	cell?.focus()
 }
 
-function closeDialog () {
+function closePopover () {
+	if (!open) return
 	open = false
-	nextTick(() => inputEl?.focus())
 }
 
-function handleDialogCancel (event: Event) {
-	event.preventDefault()
-	draftText = null
-	open = false
-	nextTick(() => inputEl?.focus())
+function handlePopoverToggle (event: ToggleEvent) {
+	// Sync Vue state if the browser changes popover state (e.g. programmatic hidePopover, or future popovertarget wiring)
+	if (event.newState === 'closed' && open) open = false
 }
 
 const parseInputFn = parseInput ?? parseDate
 
 const displayValue = $computed(() => {
 	if (draftText !== null) return draftText
-	if (!modelValue) return ''
-	return formatValue ? formatValue(modelValue) : formatDMY(modelValue)
+	if (modelValue) return modelValue.toString() // canonical YYYY-MM-DD
+	return ''
 })
+
+function getBasisDate (): Temporal.PlainDate {
+	// Use `||` (not `??`) so empty-string/coerced defaults from parents fall back to today too.
+	return (modelValue as Temporal.PlainDate | null | undefined) || Temporal.Now.plainDateISO()
+}
 
 const draftInvalid = $computed(() => draftText !== null && !parseInputFn(draftText))
 
@@ -209,7 +433,7 @@ function handleDayClick (day: Temporal.PlainDate) {
 	}
 	draftText = null
 	emit('update:modelValue', day)
-	if (!inline) closeDialog()
+	if (!inline) closePopover()
 }
 
 function handleKeyNavigate (day: Temporal.PlainDate) {
@@ -225,12 +449,12 @@ function handleKeyNavigate (day: Temporal.PlainDate) {
 function applyPreset (preset: DatePreset<Temporal.PlainDate>) {
 	const value = preset.getValue()
 	emit('update:modelValue', value)
-	if (!inline) closeDialog()
+	if (!inline) closePopover()
 }
 
 function handleClear () {
 	emit('update:modelValue', null)
-	if (!inline) closeDialog()
+	if (!inline) closePopover()
 }
 
 // ── Presentation ─────────────────────────────────────────────
@@ -263,15 +487,14 @@ const floatingLabel = $computed(() => Boolean(placeholder || modelValue))
 const inputClasses = $computed(() => [
 	...computedClasses,
 	{
-		focused: open,
-		'floating-label': floatingLabel,
+		focused: focused || open,
+		'floating-label': focused || floatingLabel,
 		disabled
 	}
 ])
 </script>
 <template lang="pug">
-//- Input mode: trigger + dialog
-.bunt-date-picker.bunt-input(ref="el", v-resize-observer="updateOutline", :style="computedStyle",:class="inputClasses", @click="openDialog")
+.bunt-date-picker.bunt-input(ref="el", v-resize-observer="updateOutline", :style="computedStyle", :class="inputClasses", @click="openPopover")
 	.label-input-container
 		label
 			span {{ label }}
@@ -281,25 +504,40 @@ const inputClasses = $computed(() => [
 				:value="displayValue",
 				:placeholder="placeholder",
 				:disabled="disabled",
+				:aria-expanded="open",
+				:aria-controls="popoverId",
+				role="combobox",
+				aria-haspopup="dialog",
+				aria-autocomplete="none",
 				autocomplete="off",
 				@focus="handleInputFocus",
+				@click="handleInputClick",
 				@input="handleInputInput",
+				@paste="handleInputPaste",
 				@blur="handleInputBlur",
 				@keydown="handleInputKeydown"
 			)
+		button.open-calendar-btn.mdi.mdi-calendar-month(
+			type="button",
+			tabindex="-1",
+			aria-label="Open calendar",
+			:disabled="disabled"
+		)
 		Outline
 
-	dialog(
-		ref="dialogEl",
+	div(
+		:id="popoverId",
+		ref="popoverEl",
+		popover="manual",
+		role="dialog",
 		aria-label="Choose date",
-		@click.stop.self="closeDialog",
-		@cancel="handleDialogCancel"
+		@toggle="handlePopoverToggle"
 	)
-		.dialog-inner
+		.popover-inner
 			.calendar-nav
-				bunt-button(icon="chevron-left", aria-label="Previous month", @click="goToPrevMonth")
+				bunt-button(icon="chevron-left", aria-label="Previous month", tabindex="-1", @click="goToPrevMonth")
 				.month-label(id="dp-month-label", aria-live="polite", aria-atomic="true") {{ formatMY(currentMonth, locale) }}
-				bunt-button(icon="chevron-right", aria-label="Next month", :disabled="isNextDisabled", @click="goToNextMonth")
+				bunt-button(icon="chevron-right", aria-label="Next month", tabindex="-1", :disabled="isNextDisabled", @click="goToNextMonth")
 			.calendar-area
 				CalendarMonth(
 					v-for="i in monthsToShow",
@@ -317,5 +555,5 @@ const inputClasses = $computed(() => [
 					@key-navigate="handleKeyNavigate"
 				)
 			.presets(v-if="presets")
-				button.preset-btn(v-for="p in presets", :key="p.label", @click="applyPreset(p)") {{ p.label }}
+				button.preset-btn(v-for="p in presets", :key="p.label", tabindex="-1", @click="applyPreset(p)") {{ p.label }}
 </template>

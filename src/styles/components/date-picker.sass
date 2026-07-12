@@ -16,6 +16,19 @@
 			cursor: pointer
 			input
 				cursor: pointer
+			.open-calendar-btn
+				display: flex
+				align-items: center
+				justify-content: center
+				background: none
+				border: none
+				padding: 4px
+				font-size: 20px
+				cursor: pointer
+				color: var(--clr-text-secondary)
+				pointer-events: none
+				&:hover
+					color: var(--clr-text)
 			.clear-trigger
 				display: flex
 				align-items: center
@@ -24,30 +37,33 @@
 				border: none
 				padding: 4px
 				cursor: pointer
-				color: var(--clr-secondary-text-light)
+				color: var(--clr-text-secondary)
 				&:hover
-					color: var(--clr-primary-text-light)
+					color: var(--clr-text)
 
-	// ─── Dialog (popover) ───────────────────────────────────────────────────────
+	// ─── Popover ────────────────────────────────────────────────────────────────
 
-	.bunt-date-picker dialog,
-	.bunt-date-range-picker dialog
+	.bunt-date-picker [popover],
+	.bunt-date-range-picker [popover]
 		position: fixed
 		position-anchor: --buntpapier-datepicker-anchor
+		inset: auto
 		top: anchor(bottom)
 		left: anchor(left)
 		margin: 0
+		width: max-content
+		height: max-content
+		max-width: none
+		max-height: none
 		border: none
 		padding: 0
 		border-radius: 4px
 		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16)
-		background: var(--clr-white, #fff)
+		background: var(--_clr-surface-raised)
 		outline: none
+		overflow: visible
 
-		&::backdrop
-			background: transparent
-
-		.dialog-inner
+		.popover-inner
 			display: flex
 			flex-direction: column
 
@@ -70,7 +86,7 @@
 				text-align: center
 				font-size: 14px
 				font-weight: 600
-				color: var(--clr-secondary-text-light)
+				color: var(--clr-text-secondary)
 			.nav-btn
 				display: flex
 				align-items: center
@@ -82,11 +98,11 @@
 				border-radius: 50%
 				cursor: pointer
 				font-size: 20px
-				color: var(--clr-primary-text-light)
+				color: var(--clr-text)
 				&:hover
-					background: var(--clr-grey-100, rgba(0, 0, 0, 0.08))
+					background: var(--clr-fill-hover)
 				&[disabled], &[aria-disabled="true"]
-					color: var(--clr-disabled-text-light)
+					color: var(--clr-text-disabled)
 					cursor: default
 					pointer-events: none
 
@@ -130,7 +146,7 @@
 			height: 28px
 			font-weight: 500
 			font-size: 11px
-			color: var(--clr-secondary-text-light)
+			color: var(--clr-text-secondary)
 
 		.day-cell
 			padding: 0
@@ -148,14 +164,14 @@
 			cursor: pointer
 			font-size: 13px
 			font-family: var(--font-stack)
-			color: var(--clr-primary-text-light)
+			color: var(--clr-text)
 			transition: background 0.15s var(--material-easing)
 
 			&:hover:not(:disabled)
-				background: var(--clr-grey-100, rgba(0, 0, 0, 0.08))
+				background: var(--clr-fill-hover)
 
 			&.other-month
-				color: var(--clr-secondary-text-light)
+				color: var(--clr-text-secondary)
 
 			&.today
 				font-weight: 700
@@ -163,7 +179,7 @@
 
 			&.selected, &.range-start, &.range-end
 				background: var(--clr-primary)
-				color: var(--clr-primary-text-dark, #fff)
+				color: var(--clr-on-primary)
 				font-weight: 500
 
 				&:hover
@@ -172,7 +188,7 @@
 			&.in-range
 				background: color-mix(in srgb, var(--clr-primary) 15%, transparent)
 				border-radius: 0
-				color: var(--clr-primary-text-light)
+				color: var(--clr-text)
 
 			&.range-start
 				border-radius: 50% 0 0 50%
@@ -184,7 +200,7 @@
 				border-radius: 50%
 
 			&.disabled, &:disabled
-				color: var(--clr-disabled-text-light, rgba(0, 0, 0, 0.38))
+				color: var(--clr-text-disabled)
 				cursor: default
 				background: none
 
@@ -194,7 +210,7 @@
 		.presets
 			display: flex
 			flex-direction: column
-			border-left: 1px solid var(--clr-grey-200, rgba(0, 0, 0, 0.12))
+			border-left: 1px solid var(--clr-divider)
 			padding: 8px
 			min-width: 140px
 
@@ -207,12 +223,12 @@
 			cursor: pointer
 			font-size: 13px
 			font-family: var(--font-stack)
-			color: var(--clr-primary-text-light)
+			color: var(--clr-text)
 			white-space: nowrap
 
 			&:hover
 				background: var(--clr-primary)
-				color: var(--clr-primary-text-dark, #fff)
+				color: var(--clr-on-primary)
 
 	// ─── Inline footer (clear + presets) ────────────────────────────────────────
 
@@ -222,17 +238,17 @@
 			flex-wrap: wrap
 			gap: 4px
 			padding: 8px
-			border-top: 1px solid var(--clr-grey-200, rgba(0, 0, 0, 0.12))
+			border-top: 1px solid var(--clr-divider)
 
 		.clear-btn
 			background: none
-			border: 1px solid var(--clr-grey-300, rgba(0, 0, 0, 0.2))
+			border: 1px solid var(--clr-divider)
 			border-radius: 4px
 			padding: 6px 12px
 			cursor: pointer
 			font-size: 13px
 			font-family: var(--font-stack)
-			color: var(--clr-secondary-text-light)
+			color: var(--clr-text-secondary)
 			margin-left: auto
 
 			&:hover

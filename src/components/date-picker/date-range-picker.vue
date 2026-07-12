@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, watch } from 'vue'
+import { useId, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
 import { useInputOutline } from '../../utils/input-outline'
 import CalendarMonth from './CalendarMonth.vue'
@@ -75,6 +75,7 @@ let currentMonth = $ref<Temporal.PlainDate>(
 )
 let focusedDay = $ref<Temporal.PlainDate | null>(null)
 let open = $ref(false)
+let focused = $ref(false)
 
 // Selection state machine
 let anchor = $ref<Temporal.PlainDate | null>(null)
@@ -83,7 +84,8 @@ let selecting = $ref(false)
 
 const el = $ref<HTMLElement>(null)
 const inputEl = $ref<HTMLInputElement>(null)
-const dialogEl = $ref<HTMLDialogElement>(null)
+const popoverEl = $ref<HTMLElement>(null)
+const popoverId = `bunt-date-range-picker-popover-${useId()}`
 
 // ── Day classification ──────────────────────────────────────────────────────
 
@@ -169,41 +171,59 @@ const isNextDisabled = $computed(() => {
 	return sameMonth(maxDate, lastVisible) || Temporal.PlainDate.compare(maxDate, endOfMonth(lastVisible)) <= 0
 })
 
-// ── Dialog ──────────────────────────────────────────────────────────────────
+// ── Popover ─────────────────────────────────────────────────────────────────
 
 watch($$(open), (isOpen) => {
+	if (!popoverEl) return
 	if (isOpen) {
-		dialogEl?.showModal()
+		popoverEl.showPopover()
+		document.addEventListener('mousedown', handleOutsideMousedown, true)
 	} else {
-		dialogEl?.close()
+		popoverEl.hidePopover()
+		document.removeEventListener('mousedown', handleOutsideMousedown, true)
 	}
 }, { flush: 'post' })
 
-async function openDialog () {
+function handleOutsideMousedown (event: MouseEvent) {
+	const target = event.target as Node | null
+	if (!target) return
+	if (el?.contains(target) || popoverEl?.contains(target)) return
+	closePopover()
+}
+
+function openPopover () {
 	if (open || disabled) return
 	const startDay = modelValue?.start ?? Temporal.Now.plainDateISO()
 	focusedDay = startDay
 	currentMonth = startOfMonth(startDay)
 	open = true
-	await nextTick()
-	await nextTick()
-	const cell = dialogEl?.querySelector<HTMLElement>('[tabindex="0"]')
-	cell?.focus()
 }
 
-function closeDialog () {
+function closePopover () {
+	if (!open) return
 	open = false
-	nextTick(() => inputEl?.focus())
 }
 
-function handleDialogCancel (event: Event) {
-	event.preventDefault()
-	// Cancel any in-progress selection
-	anchor = null
-	hoverDay = null
-	selecting = false
-	open = false
-	nextTick(() => inputEl?.focus())
+function handlePopoverToggle (event: ToggleEvent) {
+	if (event.newState === 'closed' && open) {
+		anchor = null
+		hoverDay = null
+		selecting = false
+		open = false
+	}
+}
+
+function handleInputKeydown (event: KeyboardEvent) {
+	if (event.key === 'Escape' && open) {
+		event.preventDefault()
+		anchor = null
+		hoverDay = null
+		selecting = false
+		closePopover()
+	} else if (event.key === 'ArrowDown' && event.altKey && !open) {
+		event.preventDefault()
+		openPopover()
+	}
 }
 
 // ── Day click state machine ─────────────────────────────────────────────────
@@ -224,7 +244,7 @@ function handleDayClick (day: Temporal.PlainDate) {
 		anchor = null
 		hoverDay = null
 		selecting = false
-		if (!inline) closeDialog()
+		if (!inline) closePopover()
 	}
 
 	if (!inline && navigateOnOutsideDayClick && !sameMonth(day, currentMonth)) {
@@ -252,7 +272,7 @@ function applyPreset (preset: DatePreset<DateRange>) {
 	hoverDay = null
 	selecting = false
 	emit('update:modelValue', value)
-	if (!inline) closeDialog()
+	if (!inline) closePopover()
 }
 
 function handleClear () {
@@ -260,7 +280,7 @@ function handleClear () {
 	hoverDay = null
 	selecting = false
 	emit('update:modelValue', { start: null, end: null })
-	if (!inline) closeDialog()
+	if (!inline) closePopover()
 }
 
 // ── Outline (input mode only) ─────────────────────────────────────────────
@@ -294,8 +314,8 @@ const inputClasses = $computed(() => [
 	'bunt-input',
 	...computedClasses,
 	{
-		focused: open,
-		'floating-label': floatingLabel,
+		focused: focused || open,
+		'floating-label': focused || floatingLabel,
 		disabled,
 		selecting
 	}
@@ -347,7 +367,7 @@ const inputClasses = $computed(() => [
 
 	//- Input mode
 	template(v-else)
-		.label-input-container(:class="inputClasses", v-resize-observer="updateOutline", @click="openDialog")
+		.label-input-container(:class="inputClasses", v-resize-observer="updateOutline", @click="openPopover")
 			label
 				span {{ label }}
 				input(
@@ -356,10 +376,24 @@ const inputClasses = $computed(() => [
 					:value="displayValue",
 					:placeholder="placeholder",
 					:disabled="disabled",
+					:aria-expanded="open",
+					:aria-controls="popoverId",
+					role="combobox",
+					aria-haspopup="dialog",
+					aria-autocomplete="none",
 					readonly,
 					autocomplete="off",
-					@focus="openDialog"
+					@focus="focused = true",
+					@blur="focused = false",
+					@keydown="handleInputKeydown"
 				)
+			button.open-calendar-btn.mdi.mdi-calendar-month(
+				v-if="!clearable || !(modelValue?.start || modelValue?.end)",
+				type="button",
+				tabindex="-1",
+				aria-label="Open calendar",
+				:disabled="disabled"
+			)
 			button.clear-trigger(
 				v-if="clearable && (modelValue?.start || modelValue?.end) && !open",
 				@click.stop="handleClear",
@@ -368,12 +402,15 @@ const inputClasses = $computed(() => [
 				.mdi.mdi-close
 			Outline
 
-		dialog(
-			ref="dialogEl",
+		div(
+			:id="popoverId",
+			ref="popoverEl",
+			popover="manual",
+			role="dialog",
 			aria-label="Choose date range",
-			@cancel="handleDialogCancel"
+			@toggle="handlePopoverToggle"
 		)
-			.dialog-inner
+			.popover-inner
 				.calendar-nav
 					button.nav-btn.mdi.mdi-chevron-left(
 						@click="goToPrevMonth",

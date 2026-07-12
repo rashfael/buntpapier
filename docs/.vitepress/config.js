@@ -52,6 +52,12 @@ export default {
 					text: 'switch',
 					link: '/components/switch'
 				}, {
+					text: 'date-picker',
+					link: '/components/date-picker'
+				}, {
+					text: 'date-range-picker',
+					link: '/components/date-range-picker'
+				}, {
 					text: 'select',
 					link: '/components/select'
 				}, {
