@@ -115,6 +115,28 @@
 			height: 37px
 			padding-top: 0px
 
+		// compact: a dense, flat 28px control with no label/hint headroom.
+		// designed to be used without a label or hint (e.g. dense tables, toolbars).
+		&.bunt-input--size-compact
+			height: 28px
+			padding-top: 0
+			.icon
+				font-size: 18px
+			input
+				height: 28px
+				font-size: 14px
+				padding-top: 0
+				padding-bottom: 0
+			label span
+				top: 5px
+				font-size: 14px
+				line-height: 18px
+			.error-icon
+				font-size: 18px
+			// no room (or need) for the hint at this height
+			.hint
+				display: none
+
 	.bunt-input--shape-pill
 		label span
 			left: 24px

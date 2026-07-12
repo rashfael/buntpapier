@@ -8,10 +8,10 @@ import { useComputedStyle } from '../computedStyle'
 import { getIconClass } from '../utils/icon'
 import { useInputOutline } from '../utils/input-outline'
 
+// pill radius must track the control height (≈ half), so it's keyed by size
 const INPUT_SHAPE_RADII = {
-	squared: 0,
-	rounded: 4,
-	pill: 17.5
+	normal: { squared: 0, rounded: 4, pill: 17.5 },
+	compact: { squared: 0, rounded: 4, pill: 14 }
 }
 
 const {
@@ -106,7 +106,7 @@ const { classes, style } = useComputedStyle(el, {
 
 	if (shape) {
 		classes.push(`bunt-input--shape-${shape}`)
-		radius = INPUT_SHAPE_RADII[shape] || 0
+		radius = (INPUT_SHAPE_RADII[size] || INPUT_SHAPE_RADII.normal)[shape] ?? 0
 	}
 	if (size) classes.push(`bunt-input--size-${size}`)
 	if (layout) classes.push(`bunt-input--layout-${layout}`)
