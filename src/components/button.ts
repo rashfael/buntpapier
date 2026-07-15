@@ -86,12 +86,8 @@ export default {
 			// contrast-color() in the derived layer.
 			function guardInk (accent, prop) {
 				if (!accent) return
-				try {
-					const guarded = ensureReadable(accent, surface, 3)
-					if (guarded) style[prop] = guarded.string()
-				} catch (e) {
-					console.error('Could not parse color', e)
-				}
+				const guarded = ensureReadable(accent, surface, 3, el.value)
+				if (guarded) style[prop] = guarded.string()
 			}
 			if ((weight === 'outlined' || weight === 'text') && surface && !textColor) {
 				guardInk(color, '--_button-ink-color')

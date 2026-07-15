@@ -63,31 +63,69 @@ export function fromOklch (l, c, h, alpha = 1) {
 
 // ── parsing ──────────────────────────────────────────────────────────────────
 
-// the `color` package can't parse the modern serializations that registered
-// `@property` custom properties may produce (oklch()/oklab()/color(srgb ...))
-export function parseColor (value) {
-	if (value instanceof Color) return value
-	const str = String(value).trim()
+function tryColor (str) {
 	try {
 		return Color(str)
-	} catch (e) {
-		const match = str.match(/^(oklch|oklab|color)\(\s*([^)]+)\)$/i)
-		if (!match) throw e
-		const fn = match[1].toLowerCase()
-		const [channelPart, alphaPart] = match[2].split('/')
-		const channels = channelPart.trim().split(/\s+/).map(parseChannel)
-		const alpha = alphaPart === undefined ? 1 : parseChannel(alphaPart)
-		if (fn === 'oklch') return fromOklch(channels[0], channels[1], channels[2] || 0, alpha)
-		if (fn === 'oklab') {
-			const c = Math.sqrt(channels[1] ** 2 + channels[2] ** 2)
-			const h = (Math.atan2(channels[2], channels[1]) * 180 / Math.PI + 360) % 360
-			return fromOklch(channels[0], c, h, alpha)
-		}
-		// color(srgb r g b)
-		const [space, r, g, b] = channelPart.trim().split(/\s+/)
-		if (space !== 'srgb') throw e
-		return Color({ r: parseChannel(r) * 255, g: parseChannel(g) * 255, b: parseChannel(b) * 255, alpha })
+	} catch {
+		return null
 	}
+}
+
+// The `color` package can't read the modern serializations that registered
+// `@property` custom properties may produce (oklch()/oklab()/color(srgb ...)).
+// Returns null when `str` isn't one of them.
+function parseModernColorFunction (str) {
+	const match = str.match(/^(oklch|oklab|color)\(\s*([^)]+)\)$/i)
+	if (!match) return null
+	const fn = match[1].toLowerCase()
+	const [channelPart, alphaPart] = match[2].split('/')
+	const channels = channelPart.trim().split(/\s+/).map(parseChannel)
+	const alpha = alphaPart === undefined ? 1 : parseChannel(alphaPart)
+	if (fn === 'oklch') return fromOklch(channels[0], channels[1], channels[2] || 0, alpha)
+	if (fn === 'oklab') {
+		const c = Math.sqrt(channels[1] ** 2 + channels[2] ** 2)
+		const h = (Math.atan2(channels[2], channels[1]) * 180 / Math.PI + 360) % 360
+		return fromOklch(channels[0], c, h, alpha)
+	}
+	// color(srgb r g b)
+	const [space, r, g, b] = channelPart.trim().split(/\s+/)
+	if (space !== 'srgb') return null
+	return Color({ r: parseChannel(r) * 255, g: parseChannel(g) * 255, b: parseChannel(b) * 255, alpha })
+}
+
+// Last resort: let the UA compute a token the parser can't read directly —
+// light-dark(), color-mix(), var() chains, wide-gamut color(), or named colors
+// the `color` package lacks. Applying it to a real element's `color` and reading
+// it back yields a resolved rgb(...). Resolves relative to `contextEl` (default
+// :root) so a per-subtree color-scheme / overridden token picks the active side.
+// This is only reached in browsers that don't resolve registered `<color>`
+// custom properties (see styles/derived.sass) — modern engines hand the JS
+// bridge an already-resolved rgb() and never get here.
+function resolveThroughUA (value, contextEl) {
+	if (typeof document === 'undefined') return null
+	const probe = document.createElement('span')
+	probe.style.color = value
+	// an invalid color is silently dropped by the style setter, leaving it empty
+	if (!probe.style.color) return null
+	probe.style.display = 'none'
+	const host = contextEl ?? document.documentElement
+	host.appendChild(probe)
+	const resolved = getComputedStyle(probe).color
+	probe.remove()
+	return resolved
+}
+
+export function parseColor (value, contextEl?) {
+	if (value instanceof Color) return value
+	const str = String(value).trim()
+	const direct = tryColor(str) ?? parseModernColorFunction(str)
+	if (direct) return direct
+	const resolved = resolveThroughUA(str, contextEl)
+	const viaUA = resolved && resolved !== str
+		? tryColor(resolved) ?? parseModernColorFunction(resolved)
+		: null
+	if (viaUA) return viaUA
+	throw new Error(`Unable to parse color: ${str}`)
 }
 
 function parseChannel (raw) {
@@ -110,9 +148,16 @@ function contrastOn (surface, foreground) {
 // This emulates the candidate-list/target-contrast contrast-color() deferred
 // to css-color-6 (and csswg-drafts#5153, continuous lightness adjustment) —
 // delete it when that ships.
-export function ensureReadable (accent, surface, threshold = 3) {
-	const accentColor = parseColor(accent)
-	const surfaceColor = parseColor(surface)
+export function ensureReadable (accent, surface, threshold = 3, contextEl?) {
+	let accentColor, surfaceColor
+	try {
+		accentColor = parseColor(accent, contextEl)
+		surfaceColor = parseColor(surface, contextEl)
+	} catch {
+		// unparseable accent/surface: skip the guard so the caller falls back to
+		// the CSS default ink (the fallback chain already renders a sane color)
+		return null
+	}
 	if (contrastOn(surfaceColor, accentColor) >= threshold) return null
 	// darken on light surfaces, lighten on dark ones
 	const direction = toOklch(surfaceColor).l > 0.72 ? -1 : 1

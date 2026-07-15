@@ -62,12 +62,8 @@ const { classes, style, customProps } = useComputedStyle($$(el), {
 	// outlined weight uses the accent as ink — contrast-guard it against the
 	// surface (the filled check color comes from contrast-color() in CSS)
 	if (weight === 'outlined' && color && surface) {
-		try {
-			const guarded = ensureReadable(color, surface, 3)
-			if (guarded) style['--_checkbox-ink-color'] = guarded.string()
-		} catch (e) {
-			console.error('Could not parse color', e)
-		}
+		const guarded = ensureReadable(color, surface, 3, el)
+		if (guarded) style['--_checkbox-ink-color'] = guarded.string()
 	}
 	return { style, classes }
 })
