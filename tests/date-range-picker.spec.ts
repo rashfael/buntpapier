@@ -24,7 +24,7 @@ test.describe('DateRangePicker', () => {
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
 		await expect(dialog).toBeVisible()
 
-		const days = dialog.locator('td button:not(.disabled):not(.other-month)')
+		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
 		await days.nth(0).click()
 		// Dialog still open after first click
 		await expect(dialog).toBeVisible()
@@ -41,9 +41,9 @@ test.describe('DateRangePicker', () => {
 		await picker.locator('input').click()
 
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await dialog.locator('td button:not(.disabled):not(.other-month)').first().click()
+		await dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)').first().click()
 
-		await expect(dialog.locator('td button.range-start')).toBeVisible()
+		await expect(dialog.locator('[role="gridcell"] button.range-start')).toBeVisible()
 	})
 
 	test('hover preview shows in-range class', async ({ page }) => {
@@ -51,12 +51,12 @@ test.describe('DateRangePicker', () => {
 		await picker.locator('input').click()
 
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		const days = dialog.locator('td button:not(.disabled):not(.other-month)')
+		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
 
 		await days.nth(0).click()
 		await days.nth(5).hover()
 
-		await expect(dialog.locator('td button.in-range').first()).toBeVisible()
+		await expect(dialog.locator('[role="gridcell"] button.in-range').first()).toBeVisible()
 	})
 
 	test('clicking in reverse order produces correct sorted range', async ({ page }) => {
@@ -64,7 +64,7 @@ test.describe('DateRangePicker', () => {
 		await picker.locator('input').click()
 
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		const days = dialog.locator('td button:not(.disabled):not(.other-month)')
+		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
 
 		// Click later day first, then earlier day
 		await days.nth(5).click()
@@ -81,7 +81,7 @@ test.describe('DateRangePicker', () => {
 		await picker.locator('input').click()
 
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await dialog.locator('td button:not(.disabled):not(.other-month)').first().click()
+		await dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)').first().click()
 		await expect(dialog).toBeVisible()
 
 		await page.keyboard.press('Escape')
@@ -93,7 +93,7 @@ test.describe('DateRangePicker', () => {
 		await picker.locator('input').click()
 
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		const days = dialog.locator('td button:not(.disabled):not(.other-month)')
+		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
 		await days.nth(0).click()
 		await days.nth(4).click()
 		await expect(dialog).not.toBeVisible()
@@ -109,13 +109,13 @@ test.describe('DateRangePicker', () => {
 		await expect(inlinePicker).toBeVisible()
 
 		// Should show 2 months by default
-		await expect(inlinePicker.locator('table[role="grid"]')).toHaveCount(2)
+		await expect(inlinePicker.getByRole('grid')).toHaveCount(2)
 
-		const days = inlinePicker.locator('td button:not(.disabled):not(.other-month)')
+		const days = inlinePicker.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
 		await days.nth(0).click()
 		await days.nth(4).click()
 
-		await expect(inlinePicker.locator('td button.range-start, td button.range-end').first()).toBeVisible()
+		await expect(inlinePicker.locator('[role="gridcell"] button.range-start, [role="gridcell"] button.range-end').first()).toBeVisible()
 	})
 
 	test('ARIA: grid has role=grid', async ({ page }) => {
@@ -123,6 +123,6 @@ test.describe('DateRangePicker', () => {
 		await picker.locator('input').click()
 
 		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await expect(dialog.locator('table[role="grid"]').first()).toBeVisible()
+		await expect(dialog.getByRole('grid').first()).toBeVisible()
 	})
 })

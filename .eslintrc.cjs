@@ -32,7 +32,10 @@ module.exports = {
 		'vue/max-attributes-per-line': 0,
 		'import/first': 0, // does not work with multiple script tags
 		// 'no-unused-vars': 0 // does not with setup + pug
-		'@typescript-eslint/ban-ts-comment': 0
+		'@typescript-eslint/ban-ts-comment': 0,
+		// the base rule misreads TS function-type annotations (`x?: (d) => void`) as calls
+		'func-call-spacing': 'off',
+		'@typescript-eslint/func-call-spacing': ['error', 'never']
 	},
 	globals: {
 		localStorage: false,
