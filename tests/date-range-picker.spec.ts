@@ -1,128 +1,163 @@
-import { test, expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test, day, loadDatePickers, navigationCases } from './date-picker-helpers'
 
-test.describe('DateRangePicker', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('/components/date-range-picker')
-		await page.waitForLoadState('networkidle')
-	})
+test.use({ locale: 'en-US', timezoneId: 'UTC' })
+test.beforeEach(async ({ page }) => loadDatePickers(page))
 
-	test('renders the trigger input', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await expect(picker.locator('input')).toBeVisible()
-	})
-
-	test('opens dialog on input click', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-		await expect(page.getByRole('dialog', { name: 'Choose date range' }).first()).toBeVisible()
-	})
-
-	test('two-click selection produces a range', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await expect(dialog).toBeVisible()
-
-		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
-		await days.nth(0).click()
-		// Dialog still open after first click
-		await expect(dialog).toBeVisible()
-		await days.nth(4).click()
-		await expect(dialog).not.toBeVisible()
-
-		const value = await picker.locator('input').inputValue()
-		expect(value).toBeTruthy()
-		expect(value.length).toBeGreaterThan(5)
-	})
-
-	test('first click shows range-start class', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)').first().click()
-
-		await expect(dialog.locator('[role="gridcell"] button.range-start')).toBeVisible()
-	})
-
-	test('hover preview shows in-range class', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
-
-		await days.nth(0).click()
-		await days.nth(5).hover()
-
-		await expect(dialog.locator('[role="gridcell"] button.in-range').first()).toBeVisible()
-	})
-
-	test('clicking in reverse order produces correct sorted range', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
-
-		// Click later day first, then earlier day
-		await days.nth(5).click()
-		await days.nth(0).click()
-
-		await expect(dialog).not.toBeVisible()
-		const value = await picker.locator('input').inputValue()
-		expect(value).toBeTruthy()
-		expect(value.length).toBeGreaterThan(5)
-	})
-
-	test('Escape cancels in-progress selection', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)').first().click()
-		await expect(dialog).toBeVisible()
-
-		await page.keyboard.press('Escape')
-		await expect(dialog).not.toBeVisible()
-	})
-
-	test('clearable: × button clears value', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').nth(1)
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		const days = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
-		await days.nth(0).click()
-		await days.nth(4).click()
-		await expect(dialog).not.toBeVisible()
-
-		await expect(picker.locator('.clear-trigger')).toBeVisible()
-		await picker.locator('.clear-trigger').click()
-
-		expect(await picker.locator('input').inputValue()).toBe('')
-	})
-
-	test('inline mode: two months visible, range selection works', async ({ page }) => {
-		const inlinePicker = page.locator('.bunt-date-range-picker__inline').last()
-		await expect(inlinePicker).toBeVisible()
-
-		// Should show 2 months by default
-		await expect(inlinePicker.getByRole('grid')).toHaveCount(2)
-
-		const days = inlinePicker.locator('[role="gridcell"] button:not(.disabled):not(.other-month)')
-		await days.nth(0).click()
-		await days.nth(4).click()
-
-		await expect(inlinePicker.locator('[role="gridcell"] button.range-start, [role="gridcell"] button.range-end').first()).toBeVisible()
-	})
-
-	test('ARIA: grid has role=grid', async ({ page }) => {
-		const picker = page.locator('.bunt-date-range-picker').first()
-		await picker.locator('input').click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date range' }).first()
-		await expect(dialog.getByRole('grid').first()).toBeVisible()
-	})
+test('pointer opening keeps input focus and two clicks commit a sorted range', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Date range', exact: true })
+	await input.click()
+	await expect(input).toBeFocused()
+	const dialog = page.getByRole('dialog', { name: 'Choose date range' })
+	await expect(dialog.getByRole('grid')).toHaveCount(2)
+	await day(dialog, '2026-09-20').click()
+	await expect(dialog).toBeVisible()
+	await expect(input).toHaveValue('')
+	await expect(dialog.getByRole('status')).toMatchAriaSnapshot('- status: Start selected, choose end date.')
+	await day(dialog, '2026-09-16').hover()
+	await expect(dialog.getByRole('gridcell', { selected: true })).toHaveCount(5)
+	await day(dialog, '2026-09-16').click()
+	await expect(dialog).toBeHidden()
+	await expect(input).toBeFocused()
+	await expect(input).toHaveValue('16. - 20. 09. 2026')
+	await expect(page.getByTestId('range-value')).toHaveText('2026-09-16 / 2026-09-20')
+	await expect(page.getByTestId('submissions')).toHaveText('0')
 })
+
+for (const [key, expected] of navigationCases) {
+	test(`range grid ${key} moves to ${expected} and completes with the keyboard`, async ({ page }) => {
+		const input = page.getByRole('combobox', { name: 'Date range', exact: true })
+		await input.press('Alt+ArrowDown')
+		const dialog = page.getByRole('dialog', { name: 'Choose date range' })
+		await expect(day(dialog, '2026-09-16')).toBeFocused()
+		await page.keyboard.press('Enter')
+		await page.keyboard.press(key)
+		await expect(day(dialog, expected)).toBeFocused()
+		await expect(input).toHaveValue('')
+		await page.keyboard.press('Space')
+		await expect(dialog).toBeHidden()
+		await expect(input).toBeFocused()
+		const [start, end] = ['2026-09-16', expected].sort()
+		await expect(page.getByTestId('range-value')).toHaveText(`${start} / ${end}`)
+	})
+}
+
+test('Escape and leaving the popover cancel a partial range', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Date range', exact: true })
+	const dialog = page.getByRole('dialog', { name: 'Choose date range' })
+	await input.press('Alt+ArrowDown')
+	await page.keyboard.press('Enter')
+	await page.keyboard.press('Escape')
+	await expect(input).toBeFocused()
+	await expect(dialog).toBeHidden()
+	await expect(page.getByTestId('range-value')).toHaveText('empty / empty')
+	await input.press('Alt+ArrowDown')
+	await expect(dialog.getByRole('gridcell', { selected: true })).toHaveCount(0)
+	await page.keyboard.press('Enter')
+	await page.getByRole('button', { name: 'After range', exact: true }).focus()
+	await expect(dialog).toBeHidden()
+	await input.press('Alt+ArrowDown')
+	await expect(dialog.getByRole('gridcell', { selected: true })).toHaveCount(0)
+	await expect(dialog.getByRole('status')).toBeEmpty()
+})
+
+test('Tab reaches both month grids, presets, and the following field', async ({ page }) => {
+	await page.getByRole('button', { name: 'Before range', exact: true }).focus()
+	await page.keyboard.press('Tab')
+	const input = page.getByRole('combobox', { name: 'Date range', exact: true })
+	await expect(input).toBeFocused()
+	await expect(input).toHaveAttribute('aria-expanded', 'false')
+	await input.click()
+	const dialog = page.getByRole('dialog', { name: 'Choose date range' })
+	await page.keyboard.press('Tab')
+	await expect(dialog.getByRole('button', { name: 'Previous month' })).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(dialog.getByRole('button', { name: 'Next month' })).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(day(dialog, '2026-09-16')).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(day(dialog, '2026-10-01')).toBeFocused()
+	await page.keyboard.press('Shift+Tab')
+	await expect(day(dialog, '2026-09-16')).toBeFocused()
+	await page.keyboard.press('Tab')
+	await page.keyboard.press('Tab')
+	await expect(dialog.getByRole('button', { name: 'Reference range' })).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(page.getByRole('button', { name: 'After range', exact: true })).toBeFocused()
+	await expect(dialog).toBeHidden()
+})
+
+test('presets and clear are keyboard accessible', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Date range', exact: true })
+	await input.press('Alt+ArrowDown')
+	const dialog = page.getByRole('dialog', { name: 'Choose date range' })
+	await dialog.getByRole('button', { name: 'Reference range' }).focus()
+	await page.keyboard.press('Enter')
+	await expect(input).toBeFocused()
+	await expect(page.getByTestId('range-value')).toHaveText('2026-09-16 / 2026-09-20')
+	await page.keyboard.press('Tab')
+	await expect(page.getByRole('group', { name: 'Range', exact: true }).getByRole('button', { name: 'Clear', exact: true })).toBeFocused()
+	await page.keyboard.press('Enter')
+	await expect(input).toHaveValue('')
+	await expect(page.getByTestId('range-value')).toHaveText('empty / empty')
+})
+
+test('inline range renders without errors and supports selection across months', async ({ page }) => {
+	const group = page.getByRole('group', { name: 'Inline range', exact: true })
+	await expect(group.getByRole('combobox')).toHaveCount(0)
+	await expect(group.getByRole('grid')).toHaveCount(2)
+	await day(group, '2026-09-30').focus()
+	await page.keyboard.press('Enter')
+	await page.keyboard.press('ArrowRight')
+	await expect(day(group, '2026-10-01')).toBeFocused()
+	await page.keyboard.press('Enter')
+	await expect(page.getByTestId('inline-range-value')).toHaveText('2026-09-30 / 2026-10-01')
+	await group.getByRole('button', { name: 'Clear', exact: true }).click()
+	await expect(page.getByTestId('inline-range-value')).toHaveText('empty / empty')
+})
+
+test('selecting an adjacent-month day preserves focus so Escape can cancel', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Date range', exact: true })
+	await input.click()
+	const dialog = page.getByRole('dialog', { name: 'Choose date range' })
+	await dialog.getByRole('grid', { name: 'September 2026', exact: true }).getByRole('button', { name: 'Monday, August 31, 2026', exact: true }).click()
+	await expect(day(dialog, '2026-08-31')).toBeFocused()
+	await page.keyboard.press('Escape')
+	await expect(dialog).toBeHidden()
+	await expect(input).toBeFocused()
+	await expect(page.getByTestId('range-value')).toHaveText('empty / empty')
+})
+
+for (const component of ['date-picker', 'date-range-picker']) {
+	test(`${component} docs mount without runtime errors and have editable examples`, async ({ page }) => {
+		const errors = []
+		page.on('pageerror', error => errors.push(error.message))
+		page.on('console', message => {
+			if (message.type() === 'warning' && message.text().includes('[Vue warn]')) errors.push(message.text())
+		})
+		await page.goto(`/components/${component}`)
+		const showcases = page.locator('.c-showcase')
+		await expect(showcases.first().getByRole('combobox')).toBeVisible()
+		await expect(showcases.last().getByRole('grid').first()).toBeVisible()
+		const inputBox = await showcases.first().getByRole('combobox').boundingBox()
+		const iconBox = await showcases.first().getByRole('button', { name: 'Open calendar' }).boundingBox()
+		expect(Math.abs(inputBox.y + inputBox.height / 2 - iconBox.y - iconBox.height / 2)).toBeLessThan(2)
+		for (const showcase of [showcases.first(), showcases.last()]) {
+			const pane = await showcase.locator('.component').boundingBox()
+			const picker = await showcase.locator(`.bunt-${component}`).boundingBox()
+			const surface = await showcase.locator('.surface-control').boundingBox()
+			expect(picker.x).toBeGreaterThanOrEqual(pane.x)
+			expect(picker.x + picker.width).toBeLessThanOrEqual(pane.x + pane.width)
+			expect(picker.y).toBeGreaterThanOrEqual(surface.y + surface.height)
+		}
+		await showcases.first().getByRole('combobox').click()
+		await expect(page.getByRole('dialog')).toBeVisible()
+		await page.keyboard.press('Escape')
+		if (component === 'date-range-picker') {
+			await showcases.first().getByRole('spinbutton').fill('1')
+			await showcases.first().getByRole('combobox').click()
+			await expect(page.getByRole('dialog').getByRole('grid')).toHaveCount(1)
+		}
+		expect(errors).toEqual([])
+	})
+}

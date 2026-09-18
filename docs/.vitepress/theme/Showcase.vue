@@ -19,6 +19,7 @@ const {
 		default: false
 	},
 	componentName: String,
+	wide: Boolean,
 	props: {
 		type: Object,
 		default: () => ({})
@@ -54,13 +55,14 @@ for (const prop of propsDefinition) {
 	if (prop.default !== undefined) {
 		props[prop.name] = prop.default
 	}
-	if (prop.value) {
+	if (prop.value !== undefined) {
 		props[prop.name] = prop.value
 	}
 }
 
 let compEl = $ref(null)
-let value = $ref('')
+const modelDefinition = { default: '', ...propsObj.modelValue }
+let value = $ref('value' in modelDefinition ? modelDefinition.value : modelDefinition.default)
 
 // per-showcase surface override for the demo pane
 // 'auto' follows the page theme; 'custom' sets --clr-surface directly
@@ -98,7 +100,7 @@ onUnmounted(() => {
 })
 </script>
 <template lang="pug">
-.c-showcase(:class="{'editable': editable}")
+.c-showcase(:class="{editable, wide}")
 	.component(:style="[style, surfaceStyle]")
 		.surface-control
 			button(
@@ -125,6 +127,7 @@ onUnmounted(() => {
 						label(v-if="prop.type === 'boolean'")
 							input(type="checkbox", v-model="props[prop.name]")
 							.value {{ props[prop.name] }}
+						input(v-else-if="prop.type === 'number'", type="number", :min="prop.min", v-model.number="props[prop.name]")
 						input(v-else, type="text", v-model="props[prop.name]")
 					.value(v-else) {{ prop.value }}
 					span.html "
@@ -144,7 +147,7 @@ onUnmounted(() => {
 					.value(v-else) {{ slot.content }}
 					.tag #[span.html &lt;/]template#[span.html &gt;]
 			.tag #[span.html &lt;/]{{ componentName }}#[span.html &gt;]
-		.style
+		.style(v-if="styleProperties.length || surface === 'custom'")
 			.property(v-for="property of styleProperties")
 				.name {{ property.name }}
 				.punctuation :
@@ -186,6 +189,8 @@ onUnmounted(() => {
 	.component
 		position: relative
 		display: flex
+		min-width: max-content
+		padding: 40px 16px 16px
 		justify-content: center
 		align-items: center
 		background: var(--clr-surface, transparent)
@@ -235,6 +240,8 @@ onUnmounted(() => {
 				opacity: 0
 				cursor: pointer
 	.settings
+		min-width: 0
+		overflow-x: auto
 		border-left: 2px solid var(--vp-c-divider)
 		background-color: var(--vp-c-bg-alt)
 		display: flex
@@ -248,7 +255,7 @@ onUnmounted(() => {
 				right: 8px
 				color: var(--vp-c-text-2)
 		.template
-			padding: 8px
+			padding: 28px 8px 8px
 			// display: flex
 			// flex-direction: column
 			position: relative
@@ -340,6 +347,17 @@ onUnmounted(() => {
 			flex-direction: column
 		.style
 			border-top: 2px solid var(--vp-c-divider)
+	&.wide
+		flex-direction: column
+		.component
+			padding: 48px 16px 24px
+			min-width: 0
+			overflow-x: auto
+			justify-content: safe center
+		.settings
+			border-left: none
+			border-top: 2px solid var(--vp-c-divider)
+			overflow-x: auto
 	button, input, select
 		all: revert-layer // get rid of vitepress styles
 

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { useId, watch } from 'vue'
+import { nextTick, onBeforeUnmount, useId, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
 import { useInputOutline } from '../../utils/input-outline'
-import CalendarMonth from './CalendarMonth.vue'
+import CalendarPanel from './CalendarPanel.vue'
 import {
 	Temporal,
 	type WeekStart,
 	type DateRange,
 	type DatePreset,
 	startOfMonth,
-	endOfMonth,
 	sameDay,
 	sameMonth,
 	sameYear,
@@ -73,23 +72,26 @@ let currentMonth = $ref<Temporal.PlainDate>(
 	(modelValue?.start ? startOfMonth(modelValue.start) : null) ??
 	Temporal.Now.plainDateISO().with({ day: 1 })
 )
-let focusedDay = $ref<Temporal.PlainDate | null>(null)
+let focusedDay = $ref<Temporal.PlainDate | null>(modelValue?.start ?? Temporal.Now.plainDateISO())
 let open = $ref(false)
+// eslint-disable-next-line prefer-const -- assigned from the template (@focus / @blur)
 let focused = $ref(false)
 
 // Selection state machine
 let anchor = $ref<Temporal.PlainDate | null>(null)
 let hoverDay = $ref<Temporal.PlainDate | null>(null)
-let selecting = $ref(false)
+const selecting = $computed(() => anchor !== null)
 
 const el = $ref<HTMLElement>(null)
 const inputEl = $ref<HTMLInputElement>(null)
 const popoverEl = $ref<HTMLElement>(null)
+const calendar = $ref<InstanceType<typeof CalendarPanel>>(null)
 const popoverId = `bunt-date-range-picker-popover-${useId()}`
 
 // ── Day classification ──────────────────────────────────────────────────────
 
 function isDayDisabled (d: Temporal.PlainDate): boolean {
+	if (disabled) return true
 	if (minDate && Temporal.PlainDate.compare(d, minDate) < 0) return true
 	if (maxDate && Temporal.PlainDate.compare(d, maxDate) > 0) return true
 	const result = disabledDates?.(d)
@@ -142,33 +144,11 @@ function isDayRangeEnd (d: Temporal.PlainDate): boolean {
 const displayValue = $computed(() => {
 	if (formatRange) return formatRange(modelValue ?? { start: null, end: null })
 	const { start, end } = modelValue ?? {}
-	if (!start && !end) return ''
-	if (start && !end) return formatDMY(start)
-	if (!start && end) return `Until ${formatDMY(end)}`
-	if (sameDay(start!, end!)) return formatDMY(start!)
-	if (sameMonth(start!, end!)) return `${formatD(start!)} - ${formatDMY(end!)}`
-	if (sameYear(start!, end!)) return `${formatDM(start!)} - ${formatDMY(end!)}`
-	return `${formatDMY(start!)} - ${formatDMY(end!)}`
-})
-
-// ── Navigation ──────────────────────────────────────────────────────────────
-
-function currentMonthAt (offset: number): Temporal.PlainDate {
-	return currentMonth.add({ months: offset })
-}
-
-function goToPrevMonth () {
-	currentMonth = currentMonth.subtract({ months: 1 })
-}
-
-function goToNextMonth () {
-	currentMonth = currentMonth.add({ months: 1 })
-}
-
-const isNextDisabled = $computed(() => {
-	if (!maxDate) return false
-	const lastVisible = currentMonthAt(monthsToShow - 1)
-	return sameMonth(maxDate, lastVisible) || Temporal.PlainDate.compare(maxDate, endOfMonth(lastVisible)) <= 0
+	if (!start) return end ? `Until ${formatDMY(end)}` : ''
+	if (!end || sameDay(start, end)) return formatDMY(start)
+	if (sameMonth(start, end)) return `${formatD(start)} - ${formatDMY(end)}`
+	if (sameYear(start, end)) return `${formatDM(start)} - ${formatDMY(end)}`
+	return `${formatDMY(start)} - ${formatDMY(end)}`
 })
 
 // ── Popover ─────────────────────────────────────────────────────────────────
@@ -178,9 +158,11 @@ watch($$(open), (isOpen) => {
 	if (isOpen) {
 		popoverEl.showPopover()
 		document.addEventListener('mousedown', handleOutsideMousedown, true)
+		document.addEventListener('focusin', handleOutsideFocus, true)
 	} else {
 		popoverEl.hidePopover()
 		document.removeEventListener('mousedown', handleOutsideMousedown, true)
+		document.removeEventListener('focusin', handleOutsideFocus, true)
 	}
 }, { flush: 'post' })
 
@@ -191,24 +173,46 @@ function handleOutsideMousedown (event: MouseEvent) {
 	closePopover()
 }
 
-function openPopover () {
-	if (open || disabled) return
-	const startDay = modelValue?.start ?? Temporal.Now.plainDateISO()
-	focusedDay = startDay
-	currentMonth = startOfMonth(startDay)
-	open = true
+function handleOutsideFocus (event: FocusEvent) {
+	const target = event.target as Node | null
+	if (!target || el?.contains(target)) return
+	closePopover()
 }
 
-function closePopover () {
-	if (!open) return
+onBeforeUnmount(() => {
+	document.removeEventListener('mousedown', handleOutsideMousedown, true)
+	document.removeEventListener('focusin', handleOutsideFocus, true)
+})
+
+async function openPopover (keyboard = false) {
+	if (disabled || inline) return
+	if (!open) {
+		let startDay = modelValue?.start ?? Temporal.Now.plainDateISO()
+		if (minDate && Temporal.PlainDate.compare(startDay, minDate) < 0) startDay = minDate
+		if (maxDate && Temporal.PlainDate.compare(startDay, maxDate) > 0) startDay = maxDate
+		focusedDay = startDay
+		currentMonth = startOfMonth(startDay)
+		open = true
+	}
+	await nextTick()
+	if (keyboard) calendar?.focusDay()
+	else inputEl?.focus()
+}
+
+function closePopover (returnFocus = false) {
+	cancelSelection()
 	open = false
+	if (returnFocus) inputEl?.focus()
+}
+
+function cancelSelection () {
+	anchor = null
+	hoverDay = null
 }
 
 function handlePopoverToggle (event: ToggleEvent) {
 	if (event.newState === 'closed' && open) {
-		anchor = null
-		hoverDay = null
-		selecting = false
+		cancelSelection()
 		open = false
 	}
 }
@@ -216,39 +220,37 @@ function handlePopoverToggle (event: ToggleEvent) {
 function handleInputKeydown (event: KeyboardEvent) {
 	if (event.key === 'Escape' && open) {
 		event.preventDefault()
-		anchor = null
-		hoverDay = null
-		selecting = false
 		closePopover()
-	} else if (event.key === 'ArrowDown' && event.altKey && !open) {
+	} else if (event.key === 'ArrowDown' && event.altKey) {
 		event.preventDefault()
-		openPopover()
+		openPopover(true)
 	}
+}
+
+// Escape from anywhere inside the popover (day, nav or preset buttons) cancels and hands focus back to the input.
+function handlePopoverKeydown (event: KeyboardEvent) {
+	if (event.key !== 'Escape' || inline) return
+	event.preventDefault()
+	closePopover(true)
 }
 
 // ── Day click state machine ─────────────────────────────────────────────────
 
 function handleDayClick (day: Temporal.PlainDate) {
 	if (isDayDisabled(day)) return
+	focusedDay = day
 
-	if (!selecting) {
+	if (!anchor) {
 		anchor = day
 		hoverDay = day
-		selecting = true
 	} else {
-		const cmp = Temporal.PlainDate.compare(anchor!, day)
+		const cmp = Temporal.PlainDate.compare(anchor, day)
 		const sorted: DateRange = cmp <= 0
 			? { start: anchor, end: day }
 			: { start: day, end: anchor }
 		emit('update:modelValue', sorted)
-		anchor = null
-		hoverDay = null
-		selecting = false
-		if (!inline) closePopover()
-	}
-
-	if (!inline && navigateOnOutsideDayClick && !sameMonth(day, currentMonth)) {
-		currentMonth = startOfMonth(day)
+		cancelSelection()
+		if (!inline) closePopover(true)
 	}
 }
 
@@ -256,31 +258,27 @@ function handleDayHover (day: Temporal.PlainDate) {
 	if (selecting) hoverDay = day
 }
 
-function handleKeyNavigate (day: Temporal.PlainDate) {
-	focusedDay = day
-	if (Temporal.PlainDate.compare(day, currentMonth) < 0) {
-		currentMonth = currentMonth.subtract({ months: 1 })
-	} else if (Temporal.PlainDate.compare(day, endOfMonth(currentMonthAt(monthsToShow - 1))) > 0) {
-		currentMonth = currentMonth.add({ months: 1 })
-	}
+function isPresetDisabled (value: DateRange) {
+	return disabled || Boolean((value.start && isDayDisabled(value.start)) || (value.end && isDayDisabled(value.end)))
 }
 
 function applyPreset (preset: DatePreset<DateRange>) {
 	const value = preset.getValue()
-	// Cancel any in-progress selection
-	anchor = null
-	hoverDay = null
-	selecting = false
+	if (isPresetDisabled(value)) return
+	if (value.start) {
+		currentMonth = startOfMonth(value.start)
+		focusedDay = value.start
+	}
+	cancelSelection()
 	emit('update:modelValue', value)
-	if (!inline) closePopover()
+	if (!inline) closePopover(true)
 }
 
 function handleClear () {
-	anchor = null
-	hoverDay = null
-	selecting = false
+	if (disabled) return
+	cancelSelection()
 	emit('update:modelValue', { start: null, end: null })
-	if (!inline) closePopover()
+	if (!inline) closePopover(true)
 }
 
 // ── Outline (input mode only) ─────────────────────────────────────────────
@@ -293,7 +291,7 @@ watch($$(radius), (newVal, oldVal) => {
 	updateOutline()
 })
 
-const { classes: computedClasses, style: computedStyle } = useComputedStyle($$(el), {
+const { classes: computedClasses } = useComputedStyle($$(el), {
 	'--input-shape': 'shape',
 	'--input-size': 'size'
 }, ({ shape, size }) => {
@@ -311,9 +309,9 @@ const { classes: computedClasses, style: computedStyle } = useComputedStyle($$(e
 const floatingLabel = $computed(() => Boolean(placeholder || modelValue?.start || modelValue?.end))
 
 const inputClasses = $computed(() => [
-	'bunt-input',
 	...computedClasses,
 	{
+		'bunt-input': !inline,
 		focused: focused || open,
 		'floating-label': focused || floatingLabel,
 		disabled,
@@ -322,126 +320,65 @@ const inputClasses = $computed(() => [
 ])
 </script>
 <template lang="pug">
-.bunt-date-range-picker(ref="el", :style="computedStyle")
-	//- Inline mode
-	template(v-if="inline")
-		.bunt-date-range-picker__inline
-			.calendar-nav
-				button.nav-btn.mdi.mdi-chevron-left(
-					@click="goToPrevMonth",
-					aria-label="Previous month"
-				)
-				.spacer
-				button.nav-btn.mdi.mdi-chevron-right(
-					@click="goToNextMonth",
-					:aria-disabled="isNextDisabled || undefined",
-					:disabled="isNextDisabled",
-					aria-label="Next month"
-				)
-			.calendar-area
-				CalendarMonth(
-					v-for="i in monthsToShow",
-					:key="i",
-					:month="currentMonthAt(i - 1)",
-					:weekStartsOn="weekStartsOn",
-					:showWeekNumbers="showWeekNumbers",
-					:locale="locale",
-					:focusedDay="focusedDay",
-					:isDayDisabled="isDayDisabled",
-					:getDisabledReason="getDisabledReason",
-					:isDayInRange="isDayInRange",
-					:isDayRangeStart="isDayRangeStart",
-					:isDayRangeEnd="isDayRangeEnd",
-					:isSelected="isDaySelected",
-					@day-click="handleDayClick",
-					@day-hover="handleDayHover",
-					@key-navigate="handleKeyNavigate"
-				)
-			.inline-footer
-				template(v-if="presets")
-					button.preset-btn(v-for="p in presets", :key="p.label", @click="applyPreset(p)") {{ p.label }}
-				button.clear-btn(
-					v-if="clearable && (modelValue?.start || modelValue?.end)",
-					@click="handleClear"
-				) Clear
-
-	//- Input mode
-	template(v-else)
-		.label-input-container(:class="inputClasses", v-resize-observer="updateOutline", @click="openPopover")
-			label
-				span {{ label }}
-				input(
-					ref="inputEl",
-					:name="name",
-					:value="displayValue",
-					:placeholder="placeholder",
-					:disabled="disabled",
-					:aria-expanded="open",
-					:aria-controls="popoverId",
-					role="combobox",
-					aria-haspopup="dialog",
-					aria-autocomplete="none",
-					readonly,
-					autocomplete="off",
-					@focus="focused = true",
-					@blur="focused = false",
-					@keydown="handleInputKeydown"
-				)
-			button.open-calendar-btn.mdi.mdi-calendar-month(
-				v-if="!clearable || !(modelValue?.start || modelValue?.end)",
-				type="button",
-				tabindex="-1",
-				aria-label="Open calendar",
-				:disabled="disabled"
+.bunt-date-range-picker(ref="el", :class="inputClasses")
+	.label-input-container(v-if="!inline", v-resize-observer="updateOutline", @click="openPopover()")
+		label
+			span {{ label }}
+			input(
+				ref="inputEl",
+				:name="name",
+				:value="displayValue",
+				:placeholder="placeholder",
+				:disabled="disabled",
+				:aria-expanded="open",
+				:aria-controls="popoverId",
+				role="combobox",
+				aria-haspopup="dialog",
+				aria-autocomplete="none",
+				readonly,
+				autocomplete="off",
+				@focus="focused = true",
+				@blur="focused = false",
+				@keydown="handleInputKeydown"
 			)
-			button.clear-trigger(
-				v-if="clearable && (modelValue?.start || modelValue?.end) && !open",
-				@click.stop="handleClear",
-				aria-label="Clear"
-			)
-				.mdi.mdi-close
-			Outline
-
-		div(
-			:id="popoverId",
-			ref="popoverEl",
-			popover="manual",
-			role="dialog",
-			aria-label="Choose date range",
-			@toggle="handlePopoverToggle"
+		button.open-calendar-btn.mdi.mdi-calendar-month(type="button", tabindex="-1", aria-label="Open calendar", :disabled="disabled")
+		button.clear-trigger(v-if="clearable && (modelValue?.start || modelValue?.end)", type="button", aria-label="Clear", :disabled="disabled", @click.stop="handleClear")
+			.mdi.mdi-close(aria-hidden="true")
+		Outline
+	div(
+		:id="popoverId",
+		ref="popoverEl",
+		:popover="inline ? undefined : 'manual'",
+		:role="inline ? undefined : 'dialog'",
+		:aria-label="inline ? undefined : 'Choose date range'",
+		:class="{ 'bunt-date-range-picker__inline': inline }",
+		@toggle="handlePopoverToggle",
+		@keydown="handlePopoverKeydown"
+	)
+		CalendarPanel(
+			ref="calendar",
+			v-model:month="currentMonth",
+			v-model:focusedDay="focusedDay",
+			:monthsToShow="monthsToShow",
+			:weekStartsOn="weekStartsOn",
+			:showWeekNumbers="showWeekNumbers",
+			:locale="locale",
+			:minDate="minDate",
+			:maxDate="maxDate",
+			:disabled="disabled",
+			:navigateOnOutsideDayClick="navigateOnOutsideDayClick",
+			:isDayDisabled="isDayDisabled",
+			:getDisabledReason="getDisabledReason",
+			:isDayInRange="isDayInRange",
+			:isDayRangeStart="isDayRangeStart",
+			:isDayRangeEnd="isDayRangeEnd",
+			:isSelected="isDaySelected",
+			multiple,
+			@day-click="handleDayClick",
+			@day-hover="handleDayHover"
 		)
-			.popover-inner
-				.calendar-nav
-					button.nav-btn.mdi.mdi-chevron-left(
-						@click="goToPrevMonth",
-						aria-label="Previous month"
-					)
-					.spacer
-					button.nav-btn.mdi.mdi-chevron-right(
-						@click="goToNextMonth",
-						:aria-disabled="isNextDisabled || undefined",
-						:disabled="isNextDisabled",
-						aria-label="Next month"
-					)
-				.calendar-area
-					CalendarMonth(
-						v-for="i in monthsToShow",
-						:key="i",
-						:month="currentMonthAt(i - 1)",
-						:weekStartsOn="weekStartsOn",
-						:showWeekNumbers="showWeekNumbers",
-						:locale="locale",
-						:focusedDay="focusedDay",
-						:isDayDisabled="isDayDisabled",
-						:getDisabledReason="getDisabledReason",
-						:isDayInRange="isDayInRange",
-						:isDayRangeStart="isDayRangeStart",
-						:isDayRangeEnd="isDayRangeEnd",
-						:isSelected="isDaySelected",
-						@day-click="handleDayClick",
-						@day-hover="handleDayHover",
-						@key-navigate="handleKeyNavigate"
-					)
-				.presets(v-if="presets")
-					button.preset-btn(v-for="p in presets", :key="p.label", @click="applyPreset(p)") {{ p.label }}
+			.sr-only(role="status", aria-atomic="true") {{ selecting ? 'Start selected, choose end date.' : '' }}
+			.presets(v-if="presets || (inline && clearable && (modelValue?.start || modelValue?.end))", :class="{ 'inline-footer': inline }")
+				button.preset-btn(v-for="p in presets", :key="p.label", type="button", :disabled="isPresetDisabled(p.getValue())", @click="applyPreset(p)") {{ p.label }}
+				button.clear-btn(v-if="inline && clearable && (modelValue?.start || modelValue?.end)", type="button", :disabled="disabled", @click="handleClear") Clear
 </template>

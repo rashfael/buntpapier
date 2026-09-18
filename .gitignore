@@ -12,6 +12,7 @@ dist
 build-stats.json
 
 docs/.vitepress/cache
+docs/.vitepress/.temp
 
 test-results
 

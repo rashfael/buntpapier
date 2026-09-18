@@ -1,130 +1,172 @@
-import { test, expect } from '@playwright/test'
+import { expect } from '@playwright/test'
+import { test, day, loadDatePickers, navigationCases } from './date-picker-helpers'
 
-test.describe('DatePicker', () => {
-	test.beforeEach(async ({ page }) => {
-		await page.goto('/components/date-picker')
-		await page.waitForLoadState('networkidle')
-	})
+test.use({ locale: 'en-US', timezoneId: 'UTC' })
+test.beforeEach(async ({ page }) => loadDatePickers(page))
 
-	test('renders the trigger input', async ({ page }) => {
-		const picker = page.locator('.bunt-date-picker').first()
-		await expect(picker.locator('input')).toBeVisible()
-	})
+test('focus and pointer opening preserve an empty value; Escape restores focus', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Empty date' })
+	await input.focus()
+	await expect(input).toHaveValue('')
+	await expect(input).toMatchAriaSnapshot('- combobox "Empty date"')
+	await expect(page.getByRole('dialog')).toHaveCount(0)
+	await input.click()
+	const dialog = page.getByRole('dialog', { name: 'Choose date', exact: true })
+	await expect(dialog).toBeVisible()
+	await expect(input).toBeFocused()
+	await expect(input).toHaveValue('')
+	await input.press('Alt+ArrowDown')
+	await expect(day(dialog, '2026-09-16')).toBeFocused()
+	await page.keyboard.press('Escape')
+	await expect(dialog).toBeHidden()
+	await expect(input).toBeFocused()
+	await expect(page.getByTestId('empty-value')).toHaveText('empty')
+})
 
-	test('opens dialog on input click', async ({ page }) => {
-		const picker = page.locator('.bunt-date-picker').first()
-		await picker.locator('input').click()
-		await expect(page.getByRole('dialog', { name: 'Choose date' }).first()).toBeVisible()
-	})
+test('Tab enters the input without opening and pointer selection commits without reopening', async ({ page }) => {
+	await page.getByRole('button', { name: 'Before single', exact: true }).focus()
+	await page.keyboard.press('Tab')
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	await expect(input).toBeFocused()
+	await expect(input).toHaveAttribute('aria-expanded', 'false')
+	await input.click()
+	const dialog = page.getByRole('dialog', { name: 'Choose date', exact: true })
+	await day(dialog, '2026-09-18').click()
+	await expect(dialog).toBeHidden()
+	await expect(input).toBeFocused()
+	await expect(input).toHaveValue('2026-09-18')
+	await expect(page.getByTestId('submissions')).toHaveText('0')
+})
 
-	test('clicking a day closes dialog and updates value', async ({ page }) => {
-		const picker = page.locator('.bunt-date-picker').first()
-		const input = picker.locator('input')
-		await input.click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date' }).first()
-		await expect(dialog).toBeVisible()
-
-		const dayBtn = dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)').first()
-		await dayBtn.click()
-
-		// Dialog should close
-		await expect(dialog).not.toBeVisible()
-
-		// The input shows the canonical ISO date; segmented editing is built on that layout
-		// (src/utils/segmented-date-input.ts). Locale display is a later enhancement.
-		const value = await input.inputValue()
-		expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/)
-	})
-
-	test('Escape closes dialog without changing value', async ({ page }) => {
-		const picker = page.locator('.bunt-date-picker').first()
-		const input = picker.locator('input')
-		await input.click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date' }).first()
-		await expect(dialog).toBeVisible()
-
-		const initialValue = await input.inputValue()
-		await page.keyboard.press('Escape')
-		await expect(dialog).not.toBeVisible()
-
-		const afterValue = await input.inputValue()
-		expect(afterValue).toBe(initialValue)
-	})
-
-	// FIXME(date-picker session): bunt-date-picker declares `clearable` but its template has no clear
-	// button (handleClear is dead code), and the docs page currently renders a single showcase.
-	test.fixme('clearable: × button clears value', async ({ page }) => {
-		// "Clearable" section — second date picker on the page
-		const picker = page.locator('.bunt-date-picker').nth(1)
-		const input = picker.locator('input')
-
-		// Open and select a day
-		await input.click()
-		const dialog = page.getByRole('dialog', { name: 'Choose date' }).first()
-		await expect(dialog).toBeVisible()
-		await dialog.locator('[role="gridcell"] button:not(.disabled):not(.other-month)').first().click()
-		await expect(dialog).not.toBeVisible()
-
-		// Now value is set, clear button should appear
-		await expect(picker.locator('.clear-trigger')).toBeVisible()
-		await picker.locator('.clear-trigger').click()
-
-		expect(await input.inputValue()).toBe('')
-	})
-
-	// FIXME(date-picker session): the calendar is unreachable from the keyboard. Every control inside the
-	// popover has tabindex=-1 (CalendarMonth never receives autoFocus), so Tab leaves the component and the
-	// popover closes. The old version of this test passed vacuously for exactly that reason. next-plan.md §7.3.
-	test.fixme('keyboard: arrow keys navigate, Enter selects', async ({ page }) => {
-		const picker = page.locator('.bunt-date-picker').first()
-		const input = picker.locator('input')
-		await input.click()
-
-		const dialog = page.getByRole('dialog', { name: 'Choose date' }).first()
-		await expect(dialog).toBeVisible()
-		const initialValue = await input.inputValue()
-
-		// Tab into the calendar grid: focus must land on a day cell inside the dialog
-		await page.keyboard.press('Tab')
-		await expect(dialog.locator('[role="gridcell"] button:focus')).toHaveCount(1)
-		await page.keyboard.press('ArrowRight')
-		await page.keyboard.press('ArrowRight')
+for (const [key, expected] of navigationCases) {
+	test(`calendar ${key} moves focus to ${expected} without committing`, async ({ page }) => {
+		const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+		await input.press('Alt+ArrowDown')
+		const dialog = page.getByRole('dialog', { name: 'Choose date', exact: true })
+		await expect(day(dialog, '2026-09-16')).toBeFocused()
+		await page.keyboard.press(key)
+		await expect(day(dialog, expected)).toBeFocused()
+		await expect(input).toHaveValue('2026-09-16')
 		await page.keyboard.press('Enter')
-
-		await expect(dialog).not.toBeVisible()
-		const value = await input.inputValue()
-		expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/)
-		expect(value).not.toBe(initialValue)
+		await expect(dialog).toBeHidden()
+		await expect(input).toBeFocused()
+		await expect(input).toHaveValue(expected)
 	})
+}
 
-	// FIXME(date-picker session): bunt-date-picker declares `inline` but its template has no inline branch
-	// (the range picker has one). The docs section for it is commented out.
-	test.fixme('inline mode: renders without input', async ({ page }) => {
-		const inlinePicker = page.locator('.bunt-date-picker__inline').last()
-		await expect(inlinePicker).toBeVisible()
-		await expect(inlinePicker.getByRole('grid')).toBeVisible()
-	})
+test('Space selects a calendar date', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	await input.press('Alt+ArrowDown')
+	await page.keyboard.press('ArrowRight')
+	await page.keyboard.press('Space')
+	await expect(input).toHaveValue('2026-09-17')
+	await expect(input).toBeFocused()
+})
 
-	// FIXME(date-picker session): the "Show week numbers" docs section is commented out, so this fixture
-	// does not exist. Re-enable together with the docs page restructuring.
-	test.fixme('week numbers column is visible when showWeekNumbers=true', async ({ page }) => {
-		// "Show week numbers" picker — find by nearby heading text
-		const picker = page.locator('.bunt-date-picker').filter({ hasText: 'Pick a date' }).nth(5)
-		await picker.locator('input').click()
+test('Tab visits navigation, one day, and presets, then closes on leaving', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	await input.click()
+	const group = page.getByRole('group', { name: 'Single date', exact: true })
+	const dialog = group.getByRole('dialog')
+	await page.keyboard.press('Tab')
+	await expect(group.getByRole('button', { name: 'Clear', exact: true })).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(dialog.getByRole('button', { name: 'Previous month' })).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(dialog.getByRole('button', { name: 'Next month' })).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(day(dialog, '2026-09-16')).toBeFocused()
+	await page.keyboard.press('Tab')
+	await expect(dialog.getByRole('button', { name: 'Reference date' })).toBeFocused()
+	await page.keyboard.press('Shift+Tab')
+	await expect(day(dialog, '2026-09-16')).toBeFocused()
+	await page.keyboard.press('Tab')
+	await page.keyboard.press('Tab')
+	await expect(page.getByRole('button', { name: 'After single', exact: true })).toBeFocused()
+	await expect(dialog).toBeHidden()
+})
 
-		const dialog = page.getByRole('dialog', { name: 'Choose date' }).first()
-		await expect(dialog).toBeVisible()
-		await expect(dialog.getByRole('columnheader', { name: 'Week' })).toBeVisible()
-	})
+test('month buttons keep the grid reachable; presets commit and return focus', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	await input.press('Alt+ArrowDown')
+	const dialog = page.getByRole('dialog', { name: 'Choose date', exact: true })
+	await dialog.getByRole('button', { name: 'Next month' }).click()
+	await page.keyboard.press('Tab')
+	await expect(day(dialog, '2026-10-16')).toBeFocused()
+	await page.keyboard.press('Tab')
+	await page.keyboard.press('Enter')
+	await expect(input).toBeFocused()
+	await expect(input).toHaveValue('2026-09-16')
+	await expect(dialog).toBeHidden()
+})
 
-	test('ARIA: day cells have aria-label with weekday name', async ({ page }) => {
-		const picker = page.locator('.bunt-date-picker').first()
-		await picker.locator('input').click()
+test('segment editing, select-all replacement, invalid input, and clearing', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	await input.focus()
+	await input.press('ArrowRight')
+	await input.press('ArrowUp')
+	await expect(input).toHaveValue('2026-10-16')
+	await expect(page.getByRole('dialog')).toHaveCount(0)
+	await input.press('ControlOrMeta+A')
+	await input.pressSequentially('2026-02-28')
+	await input.press('Enter')
+	await expect(input).toHaveValue('2026-02-28')
+	await input.fill('2026-02-30')
+	await input.press('Enter')
+	await expect(input).toHaveValue('2026-02-28')
+	await input.fill('23.04.2026')
+	await input.press('Enter')
+	await expect(input).toHaveValue('2026-04-23')
+	await page.getByRole('group', { name: 'Single date', exact: true }).getByRole('button', { name: 'Clear', exact: true }).click()
+	await expect(input).toHaveValue('')
+	await input.focus()
+	await expect(input).toHaveValue('')
+})
 
-		const dialog = page.getByRole('dialog', { name: 'Choose date' }).first()
-		const firstCell = dialog.getByRole('gridcell').first()
-		await expect(firstCell).toHaveAccessibleName(/Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday/)
-	})
+test('disabled dates are inspectable but cannot be selected; min/max limit navigation', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Weekday', exact: true })
+	await input.press('Alt+ArrowDown')
+	const dialog = page.getByRole('dialog', { name: 'Choose date', exact: true })
+	await page.keyboard.press('End')
+	await expect(day(dialog, '2026-09-20')).toBeFocused()
+	await expect(day(dialog, '2026-09-20')).toBeDisabled()
+	await page.keyboard.press('Enter')
+	await expect(dialog).toBeVisible()
+	await expect(input).toHaveValue('2026-09-16')
+	await page.keyboard.press('Escape')
+	const restricted = page.getByRole('combobox', { name: 'Restricted date', exact: true })
+	await restricted.press('Alt+ArrowDown')
+	await expect(dialog.getByRole('button', { name: 'Previous month' })).toBeDisabled()
+	await expect(dialog.getByRole('button', { name: 'Next month' })).toBeDisabled()
+	await expect(day(dialog, '2026-09-09')).toBeDisabled()
+	await expect(day(dialog, '2026-09-21')).toBeDisabled()
+	await page.keyboard.press('Escape')
+	await restricted.fill('2026-09-21')
+	await restricted.press('Enter')
+	await expect(restricted).toHaveValue('2026-09-16')
+})
+
+test('inline calendar renders week numbers and selected gridcell semantics', async ({ page }) => {
+	const group = page.getByRole('group', { name: 'Inline date', exact: true })
+	await expect(group.getByRole('combobox')).toHaveCount(0)
+	await expect(group.getByRole('grid')).toHaveAccessibleName('September 2026')
+	await expect(group.getByRole('columnheader', { name: 'Week', exact: true })).toBeVisible()
+	await expect(group.getByRole('gridcell', { selected: true })).toMatchAriaSnapshot(`
+		- gridcell "Wednesday, September 16, 2026" [selected]:
+		  - button "Wednesday, September 16, 2026": "16"
+	`)
+	await expect(day(group, '2026-09-16')).toHaveAttribute('aria-current', 'date')
+	await day(group, '2026-09-18').click()
+	await expect(page.getByTestId('inline-value')).toHaveText('2026-09-18')
+	await group.getByRole('button', { name: 'Clear', exact: true }).click()
+	await expect(page.getByTestId('inline-value')).toHaveText('empty')
+	await expect(group.getByRole('gridcell', { selected: true })).toHaveCount(0)
+})
+
+test('multiple pickers have unique ids and disabled input cannot open', async ({ page }) => {
+	const ids = await page.locator('[id]').evaluateAll(elements => elements.map(el => el.id))
+	expect(new Set(ids).size).toBe(ids.length)
+	const input = page.getByRole('combobox', { name: 'Disabled date', exact: true })
+	await expect(input).toBeDisabled()
+	await expect(input).toHaveAttribute('aria-expanded', 'false')
 })

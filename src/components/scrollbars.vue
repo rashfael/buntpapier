@@ -93,8 +93,10 @@ function handleResize () {
 	emit('resize')
 }
 
-const resizeObserver = new ResizeObserver(handleResize)
-const mutationObserver = new MutationObserver((records) => {
+let resizeObserver: ResizeObserver
+let mutationObserver: MutationObserver
+
+function handleMutation (records: MutationRecord[]) {
 	for (const record of records) {
 		for (const addedNode of record.addedNodes) {
 			if (addedNode.nodeType !== Node.ELEMENT_NODE) continue
@@ -106,9 +108,11 @@ const mutationObserver = new MutationObserver((records) => {
 		}
 	}
 	handleResize()
-})
+}
 
 onMounted(async () => {
+	resizeObserver = new ResizeObserver(handleResize)
+	mutationObserver = new MutationObserver(handleMutation)
 	await nextTick()
 	// setting direction once should be good enough
 	if (dimensions.y) {
@@ -130,8 +134,8 @@ onMounted(async () => {
 })
 
 onBeforeUnmount(() => {
-	resizeObserver.disconnect()
-	mutationObserver.disconnect()
+	resizeObserver?.disconnect()
+	mutationObserver?.disconnect()
 })
 
 function handleScroll (event) {

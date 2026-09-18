@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, watch } from 'vue'
+import { useId, watch } from 'vue'
 import {
 	Temporal,
 	type WeekStart,
@@ -22,29 +22,30 @@ const {
 	isDayRangeEnd,
 	isSelected,
 	getDisabledReason,
-	autoFocus = false
+	disabled = false,
+	multiple = false
 } = defineProps<{
 	month: Temporal.PlainDate
 	weekStartsOn: WeekStart
 	showWeekNumbers: boolean
 	locale?: string
 	focusedDay?: Temporal.PlainDate | null
-	isDayDisabled:(d: Temporal.PlainDate) => boolean
+	isDayDisabled: (d: Temporal.PlainDate) => boolean
 	isDayInRange?: (d: Temporal.PlainDate) => boolean
 	isDayRangeStart?: (d: Temporal.PlainDate) => boolean
 	isDayRangeEnd?: (d: Temporal.PlainDate) => boolean
 	isSelected?: (d: Temporal.PlainDate) => boolean
 	getDisabledReason?: (d: Temporal.PlainDate) => string | undefined
-	autoFocus?: boolean
+	disabled?: boolean
+	multiple?: boolean
 }>()
 
 const emit = defineEmits<{
 	'day-click': [day: Temporal.PlainDate]
 	'day-hover': [day: Temporal.PlainDate]
 	'key-navigate': [day: Temporal.PlainDate]
+	'day-focus': [day: Temporal.PlainDate]
 }>()
-
-const el = $ref<HTMLElement>(null)
 
 const MONDAY_HEADERS = [
 	{ short: 'M', full: 'Monday' },
@@ -68,7 +69,7 @@ const SUNDAY_HEADERS = [
 
 const today = Temporal.Now.plainDateISO()
 
-const gridLabelId = $computed(() => `calendar-label-${month.toString()}`)
+const gridLabelId = `calendar-label-${useId()}`
 
 const headers = $computed(() => weekStartsOn === 'monday' ? MONDAY_HEADERS : SUNDAY_HEADERS)
 
@@ -87,7 +88,7 @@ const weeks = $computed(() => {
 })
 
 function dayAriaLabel (d: Temporal.PlainDate): string {
-	return new Intl.DateTimeFormat(locale ?? navigator.language, {
+	return new Intl.DateTimeFormat(locale ?? globalThis.navigator?.language ?? 'en-US', {
 		weekday: 'long',
 		year: 'numeric',
 		month: 'long',
@@ -108,16 +109,20 @@ function getDayClasses (d: Temporal.PlainDate): Record<string, boolean> {
 	}
 }
 
-function isFocused (d: Temporal.PlainDate): boolean {
-	return focusedDay != null && sameDay(d, focusedDay)
-}
+let tabDay = $ref(focusedDay && sameMonth(focusedDay, month) ? focusedDay : month)
+
+watch(() => [month, focusedDay], () => {
+	if (focusedDay && sameMonth(focusedDay, month)) tabDay = focusedDay
+	else if (!sameMonth(tabDay, month)) tabDay = month
+})
 
 function handleDayClick (d: Temporal.PlainDate) {
-	if (isDayDisabled(d)) return
+	if (disabled || isDayDisabled(d)) return
 	emit('day-click', d)
 }
 
 function handleKeydown (event: KeyboardEvent, currentDay: Temporal.PlainDate | null | undefined) {
+	if (disabled) return
 	const base = currentDay ?? month.with({ day: 1 })
 
 	let next: Temporal.PlainDate | null = null
@@ -168,26 +173,11 @@ function handleKeydown (event: KeyboardEvent, currentDay: Temporal.PlainDate | n
 	}
 }
 
-// Focus the cell that matches focusedDay when it changes, but only when the parent opts in via autoFocus.
-// Used for arrow-key navigation within the grid when keyboard users have explicitly entered it.
-watch(
-	() => focusedDay,
-	async () => {
-		if (!autoFocus || !focusedDay || !el) return
-		await nextTick()
-		const focused = el.querySelector<HTMLElement>('[tabindex="0"]')
-		if (!focused) return
-		const activeEl = document.activeElement
-		if (el.contains(activeEl)) {
-			focused.focus()
-		}
-	}
-)
 </script>
 <template lang="pug">
-.c-calendar-month(ref="el")
-	.sr-only(:id="gridLabelId", aria-live="polite", aria-atomic="true") {{ formatMY(month, locale) }}
-	.calendar-grid(role="grid", :aria-labelledby="gridLabelId", :class="{ 'has-week-numbers': showWeekNumbers }")
+.c-calendar-month
+	.month-label(:id="gridLabelId") {{ formatMY(month, locale) }}
+	.calendar-grid(role="grid", :aria-labelledby="gridLabelId", :aria-multiselectable="multiple || undefined", :class="{ 'has-week-numbers': showWeekNumbers }")
 		.calendar-row(role="row")
 			.col-header(v-if="showWeekNumbers", role="columnheader", aria-label="Week") Wk
 			.col-header(
@@ -206,18 +196,24 @@ watch(
 			.day-cell(
 				v-for="day in week.days",
 				:key="day.toString()",
-				role="gridcell"
+				role="gridcell",
+				:aria-selected="Boolean(isSelected?.(day) || isDayInRange?.(day))",
+				:aria-disabled="isDayDisabled(day) || undefined"
 			)
 				button(
-					v-tooltip="isDayDisabled(day) && getDisabledReason ? getDisabledReason(day) : ''",
+					v-tooltip="isDayDisabled(day) ? getDisabledReason?.(day) ?? '' : ''",
 					:class="getDayClasses(day)",
-					:tabindex="autoFocus && isFocused(day) ? 0 : -1",
-					:disabled="isDayDisabled(day)",
+					type="button",
+					:data-date="day.toString()",
+					:data-month="month.toString()",
+					:tabindex="!disabled && sameDay(day, tabDay) ? 0 : -1",
+					:disabled="disabled",
 					:aria-label="dayAriaLabel(day)",
-					:aria-selected="(isSelected ? isSelected(day) : false) || (isDayInRange ? isDayInRange(day) : false) || undefined",
 					:aria-disabled="isDayDisabled(day) || undefined",
+					:aria-current="sameDay(day, today) ? 'date' : undefined",
 					@click="handleDayClick(day)",
+					@focus="emit('day-focus', day)",
 					@mouseover="emit('day-hover', day)",
-					@keydown="handleKeydown($event, focusedDay)"
+					@keydown="handleKeydown($event, day)"
 				) {{ day.day }}
 </template>

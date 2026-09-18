@@ -38,7 +38,8 @@ export function endOfMonth (d: Temporal.PlainDate): Temporal.PlainDate {
 
 export function getLocaleWeekStart (locale?: string): WeekStart {
 	try {
-		const firstDay = new Intl.Locale(locale ?? navigator.language).weekInfo?.firstDay
+		const localeInfo = new Intl.Locale(locale ?? globalThis.navigator?.language ?? 'en-US')
+		const firstDay = (localeInfo.getWeekInfo?.() ?? localeInfo.weekInfo)?.firstDay
 		// Some locales return 7 for Sunday
 		if (firstDay === 7 || firstDay === 0) return 'sunday'
 		if (firstDay === 1) return 'monday'
@@ -78,7 +79,7 @@ export function formatDMY (d: Temporal.PlainDate): string {
 }
 
 export function formatMY (d: Temporal.PlainDate, locale?: string): string {
-	return new Intl.DateTimeFormat(locale ?? navigator.language, { month: 'long', year: 'numeric' })
+	return new Intl.DateTimeFormat(locale ?? globalThis.navigator?.language ?? 'en-US', { month: 'long', year: 'numeric' })
 		.format(new Date(d.year, d.month - 1))
 }
 
@@ -109,13 +110,13 @@ export function parseDate (text: string): Temporal.PlainDate | null {
 		// ISO format: yyyy-MM-dd
 		const isoMatch = text.match(/^(\d{4})-(\d{2})-(\d{2})$/)
 		if (isoMatch) {
-			return Temporal.PlainDate.from({ year: Number(isoMatch[1]), month: Number(isoMatch[2]), day: Number(isoMatch[3]) })
+			return Temporal.PlainDate.from({ year: Number(isoMatch[1]), month: Number(isoMatch[2]), day: Number(isoMatch[3]) }, { overflow: 'reject' })
 		}
 
-		// Display format: dd. MM. yyyy (flexible spacing/separators)
+		// Also accept dotted day-month-year input, including pasted dates.
 		const displayMatch = text.match(/^(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})$/)
 		if (displayMatch) {
-			return Temporal.PlainDate.from({ year: Number(displayMatch[3]), month: Number(displayMatch[2]), day: Number(displayMatch[1]) })
+			return Temporal.PlainDate.from({ year: Number(displayMatch[3]), month: Number(displayMatch[2]), day: Number(displayMatch[1]) }, { overflow: 'reject' })
 		}
 	} catch {
 		// invalid date

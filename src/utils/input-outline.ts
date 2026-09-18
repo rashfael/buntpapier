@@ -16,6 +16,7 @@ export function useInputOutline (labelRef: Ref<string>, radiusRef: Ref<number>, 
 	})
 
 	function updateOutline () {
+		if (!outline) return
 		const { width, height } = outline.getBoundingClientRect()
 		// the path is drawn inset by 1px (cornerWidth = r + 1), so the corner arcs
 		// must fit within half the inset box. clamp the radius accordingly — without

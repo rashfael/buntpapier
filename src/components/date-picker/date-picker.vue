@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, useId, watch } from 'vue'
+import { nextTick, onBeforeUnmount, useId, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
 import { useInputOutline } from '../../utils/input-outline'
 import {
@@ -12,15 +12,12 @@ import {
 	incrementDate,
 	segmentMax
 } from '../../utils/segmented-date-input'
-import CalendarMonth from './CalendarMonth.vue'
+import CalendarPanel from './CalendarPanel.vue'
 import {
 	Temporal,
 	type WeekStart,
 	type DatePreset,
 	startOfMonth,
-	endOfMonth,
-	sameMonth,
-	formatMY,
 	getLocaleWeekStart,
 	parseDate
 } from './temporal'
@@ -57,7 +54,7 @@ const {
 	name?: string
 	minDate?: Temporal.PlainDate
 	maxDate?: Temporal.PlainDate
-	disabledDates?:(d: Temporal.PlainDate) => boolean | { disabled: boolean; reason?: string }
+	disabledDates?: (d: Temporal.PlainDate) => boolean | { disabled: boolean; reason?: string }
 	monthsToShow?: number
 	weekStartsOn?: WeekStart
 	locale?: string
@@ -78,7 +75,7 @@ const weekStartsOn = $computed(() => weekStartsOnProp ?? getLocaleWeekStart(loca
 let currentMonth = $ref<Temporal.PlainDate>(
 	modelValue ? startOfMonth(modelValue) : Temporal.Now.plainDateISO().with({ day: 1 })
 )
-let focusedDay = $ref<Temporal.PlainDate | null>(null)
+let focusedDay = $ref<Temporal.PlainDate | null>(modelValue ?? Temporal.Now.plainDateISO())
 let draftText = $ref<string | null>(null)
 let open = $ref(false)
 let focused = $ref(false)
@@ -126,7 +123,8 @@ function commitDraft () {
 	const parsed = parseInputFn(draftText)
 	if (parsed && !isDayDisabled(parsed)) {
 		emit('update:modelValue', parsed)
-		closePopover()
+	} else if (!draftText.trim()) {
+		emit('update:modelValue', null)
 	}
 	draftText = null
 }
@@ -135,7 +133,6 @@ function commitDraft () {
 
 function canSegment (): boolean {
 	// Segmented nav only works against a canonical ISO string (no mid-typing drafts).
-	// Works when modelValue is committed OR when focused (empty fallback shows today).
 	return draftText === null && isCanonicalISO(displayValue)
 }
 
@@ -152,14 +149,6 @@ function selectSegment (segment: Segment) {
 
 function handleInputFocus () {
 	focused = true
-	// If there's no committed value yet, commit today immediately. The fallback display of today
-	// would otherwise vanish on blur, which is confusing.
-	if (!modelValue) {
-		const today = Temporal.Now.plainDateISO()
-		emit('update:modelValue', today)
-		currentMonth = startOfMonth(today)
-		focusedDay = today
-	}
 	if (!canSegment()) return
 	// On Tab-focus, select the first segment. Clicks are handled separately (handleInputClick)
 	// so the clicked segment wins when the two events fire together.
@@ -204,7 +193,7 @@ function commitSegmentBuffer (segment: Segment) {
 	const value = Number(segmentBuffer)
 	let newDate: Temporal.PlainDate
 	try {
-		if (segment.name === 'day') newDate = basis.with({ day: value })
+		if (segment.name === 'day') newDate = basis.with({ day: value }, { overflow: 'reject' })
 		else if (segment.name === 'month') newDate = basis.with({ month: value })
 		else newDate = basis.with({ year: value })
 	} catch {
@@ -266,19 +255,26 @@ function handleInputKeydown (event: KeyboardEvent) {
 	if (event.key === 'Enter') {
 		event.preventDefault()
 		commitDraft()
-		return
-	}
-	if (event.key === 'Escape' && open) {
-		event.preventDefault()
-		draftText = null
 		closePopover()
 		return
 	}
-	if (event.key === 'ArrowDown' && event.altKey && !open) {
+	if (event.key === 'Escape') {
 		event.preventDefault()
-		openPopover()
+		draftText = null
+		segmentBuffer = ''
+		segmentBufferFor = null
+		closePopover()
 		return
 	}
+	if (event.key === 'ArrowDown' && event.altKey) {
+		event.preventDefault()
+		openPopover(true)
+		return
+	}
+
+	if (event.ctrlKey || event.metaKey || event.altKey) return
+	const selection = inputEl ? displayValue.slice(inputEl.selectionStart ?? 0, inputEl.selectionEnd ?? 0) : ''
+	if (selection === displayValue && displayValue) return
 
 	// Segmented nav (only when value is canonical ISO)
 	if (!canSegment() && segmentBufferFor === null) return
@@ -330,6 +326,7 @@ function handleInputKeydown (event: KeyboardEvent) {
 // ── Popover ─────────────────────────────────────────────
 
 const popoverEl = $ref<HTMLElement>(null)
+const calendar = $ref<InstanceType<typeof CalendarPanel>>(null)
 const popoverId = `bunt-date-picker-popover-${useId()}`
 
 watch($$(open), (isOpen) => {
@@ -343,6 +340,11 @@ watch($$(open), (isOpen) => {
 		document.removeEventListener('mousedown', handleOutsideMousedown, true)
 		document.removeEventListener('focusin', handleOutsideFocus, true)
 	}
+}, { flush: 'post' })
+
+onBeforeUnmount(() => {
+	document.removeEventListener('mousedown', handleOutsideMousedown, true)
+	document.removeEventListener('focusin', handleOutsideFocus, true)
 })
 
 function handleOutsideMousedown (event: MouseEvent) {
@@ -359,17 +361,31 @@ function handleOutsideFocus (event: FocusEvent) {
 	closePopover()
 }
 
-function openPopover () {
-	if (open || disabled) return
-	const initialDay = modelValue || Temporal.Now.plainDateISO()
-	focusedDay = initialDay
-	currentMonth = startOfMonth(initialDay)
-	open = true
+async function openPopover (keyboard = false) {
+	if (disabled || inline) return
+	if (!open) {
+		let initialDay = modelValue ?? Temporal.Now.plainDateISO()
+		if (minDate && Temporal.PlainDate.compare(initialDay, minDate) < 0) initialDay = minDate
+		if (maxDate && Temporal.PlainDate.compare(initialDay, maxDate) > 0) initialDay = maxDate
+		focusedDay = initialDay
+		currentMonth = startOfMonth(initialDay)
+		open = true
+	}
+	await nextTick()
+	if (keyboard) calendar?.focusDay()
+	else inputEl?.focus()
 }
 
-function closePopover () {
-	if (!open) return
+function closePopover (returnFocus = false) {
 	open = false
+	if (returnFocus) inputEl?.focus()
+}
+
+function handlePopoverKeydown (event: KeyboardEvent) {
+	if (event.key !== 'Escape' || inline) return
+	event.preventDefault()
+	draftText = null
+	closePopover(true)
 }
 
 function handlePopoverToggle (event: ToggleEvent) {
@@ -377,7 +393,9 @@ function handlePopoverToggle (event: ToggleEvent) {
 	if (event.newState === 'closed' && open) open = false
 }
 
-const parseInputFn = parseInput ?? parseDate
+function parseInputFn (text: string) {
+	return (parseInput ?? parseDate)(text)
+}
 
 const displayValue = $computed(() => {
 	if (draftText !== null) return draftText
@@ -386,8 +404,7 @@ const displayValue = $computed(() => {
 })
 
 function getBasisDate (): Temporal.PlainDate {
-	// Use `||` (not `??`) so empty-string/coerced defaults from parents fall back to today too.
-	return (modelValue as Temporal.PlainDate | null | undefined) || Temporal.Now.plainDateISO()
+	return modelValue ?? Temporal.Now.plainDateISO()
 }
 
 const draftInvalid = $computed(() => draftText !== null && !parseInputFn(draftText))
@@ -395,6 +412,7 @@ const draftInvalid = $computed(() => draftText !== null && !parseInputFn(draftTe
 // ── Calendar ─────────────────────────────────────────────
 
 function isDayDisabled (d: Temporal.PlainDate): boolean {
+	if (disabled) return true
 	if (minDate && Temporal.PlainDate.compare(d, minDate) < 0) return true
 	if (maxDate && Temporal.PlainDate.compare(d, maxDate) > 0) return true
 	const result = disabledDates?.(d)
@@ -408,53 +426,31 @@ function getDisabledReason (d: Temporal.PlainDate): string | undefined {
 	if (typeof result === 'object') return result.reason
 }
 
-function currentMonthAt (offset: number): Temporal.PlainDate {
-	return currentMonth.add({ months: offset })
-}
-
-function goToPrevMonth () {
-	currentMonth = currentMonth.subtract({ months: 1 })
-}
-
-function goToNextMonth () {
-	currentMonth = currentMonth.add({ months: 1 })
-}
-
-const isNextDisabled = $computed(() => {
-	if (!maxDate) return false
-	const lastVisible = currentMonthAt(monthsToShow - 1)
-	return sameMonth(maxDate, lastVisible) || Temporal.PlainDate.compare(maxDate, endOfMonth(lastVisible)) <= 0
-})
-
 function handleDayClick (day: Temporal.PlainDate) {
 	if (isDayDisabled(day)) return
-	if (!inline && navigateOnOutsideDayClick && !sameMonth(day, currentMonth)) {
-		currentMonth = startOfMonth(day)
-	}
+	focusedDay = day
 	draftText = null
 	emit('update:modelValue', day)
-	if (!inline) closePopover()
-}
-
-function handleKeyNavigate (day: Temporal.PlainDate) {
-	focusedDay = day
-	// advance view if needed
-	if (Temporal.PlainDate.compare(day, currentMonth) < 0) {
-		currentMonth = currentMonth.subtract({ months: 1 })
-	} else if (Temporal.PlainDate.compare(day, endOfMonth(currentMonthAt(monthsToShow - 1))) > 0) {
-		currentMonth = currentMonth.add({ months: 1 })
-	}
+	if (!inline) closePopover(true)
 }
 
 function applyPreset (preset: DatePreset<Temporal.PlainDate>) {
 	const value = preset.getValue()
+	if (isDayDisabled(value)) return
+	draftText = null
+	currentMonth = startOfMonth(value)
+	focusedDay = value
 	emit('update:modelValue', value)
-	if (!inline) closePopover()
+	if (!inline) closePopover(true)
 }
 
 function handleClear () {
+	if (disabled) return
+	draftText = null
+	segmentBuffer = ''
+	segmentBufferFor = null
 	emit('update:modelValue', null)
-	if (!inline) closePopover()
+	if (!inline) closePopover(true)
 }
 
 // ── Presentation ─────────────────────────────────────────────
@@ -467,7 +463,7 @@ watch($$(radius), (newVal, oldVal) => {
 	updateOutline()
 })
 
-const { classes: computedClasses, style: computedStyle } = useComputedStyle($$(el), {
+const { classes: computedClasses } = useComputedStyle($$(el), {
 	'--input-shape': 'shape',
 	'--input-size': 'size'
 }, ({ shape, size }) => {
@@ -487,6 +483,7 @@ const floatingLabel = $computed(() => Boolean(placeholder || modelValue))
 const inputClasses = $computed(() => [
 	...computedClasses,
 	{
+		'bunt-input': !inline,
 		focused: focused || open,
 		'floating-label': focused || floatingLabel,
 		disabled
@@ -494,8 +491,8 @@ const inputClasses = $computed(() => [
 ])
 </script>
 <template lang="pug">
-.bunt-date-picker.bunt-input(ref="el", v-resize-observer="updateOutline", :style="computedStyle", :class="inputClasses", @click="openPopover")
-	.label-input-container
+.bunt-date-picker(ref="el", :class="inputClasses")
+	.label-input-container(v-if="!inline", v-resize-observer="updateOutline", @click="openPopover()")
 		label
 			span {{ label }}
 			input(
@@ -504,8 +501,10 @@ const inputClasses = $computed(() => [
 				:value="displayValue",
 				:placeholder="placeholder",
 				:disabled="disabled",
+				:aria-invalid="draftInvalid || undefined",
 				:aria-expanded="open",
 				:aria-controls="popoverId",
+				:aria-describedby="`${popoverId}-help`",
 				role="combobox",
 				aria-haspopup="dialog",
 				aria-autocomplete="none",
@@ -517,43 +516,39 @@ const inputClasses = $computed(() => [
 				@blur="handleInputBlur",
 				@keydown="handleInputKeydown"
 			)
-		button.open-calendar-btn.mdi.mdi-calendar-month(
-			type="button",
-			tabindex="-1",
-			aria-label="Open calendar",
-			:disabled="disabled"
-		)
+		button.open-calendar-btn.mdi.mdi-calendar-month(type="button", tabindex="-1", aria-label="Open calendar", :disabled="disabled")
+		button.clear-trigger(v-if="clearable && modelValue", type="button", aria-label="Clear", :disabled="disabled", @click.stop="handleClear")
+			.mdi.mdi-close(aria-hidden="true")
 		Outline
-
+	.sr-only(v-if="!inline", :id="`${popoverId}-help`") Date format: YYYY-MM-DD. Alt+Down opens the calendar.
 	div(
 		:id="popoverId",
 		ref="popoverEl",
-		popover="manual",
-		role="dialog",
-		aria-label="Choose date",
-		@toggle="handlePopoverToggle"
+		:popover="inline ? undefined : 'manual'",
+		:role="inline ? undefined : 'dialog'",
+		:aria-label="inline ? undefined : 'Choose date'",
+		:class="{ 'bunt-date-picker__inline': inline }",
+		@toggle="handlePopoverToggle",
+		@keydown="handlePopoverKeydown"
 	)
-		.popover-inner
-			.calendar-nav
-				bunt-button(icon="chevron-left", aria-label="Previous month", tabindex="-1", @click="goToPrevMonth")
-				.month-label(id="dp-month-label", aria-live="polite", aria-atomic="true") {{ formatMY(currentMonth, locale) }}
-				bunt-button(icon="chevron-right", aria-label="Next month", tabindex="-1", :disabled="isNextDisabled", @click="goToNextMonth")
-			.calendar-area
-				CalendarMonth(
-					v-for="i in monthsToShow",
-					:key="i",
-					:month="currentMonthAt(i - 1)",
-					:week-starts-on="weekStartsOn",
-					:show-week-numbers="showWeekNumbers",
-					:locale="locale",
-					:focused-day="focusedDay",
-					:is-day-disabled="isDayDisabled",
-					:get-disabled-reason="getDisabledReason",
-					:is-selected="modelValue ? (d) => d.equals(modelValue) : undefined",
-					@day-click="handleDayClick",
-					@day-hover="focusedDay = $event",
-					@key-navigate="handleKeyNavigate"
-				)
-			.presets(v-if="presets")
-				button.preset-btn(v-for="p in presets", :key="p.label", tabindex="-1", @click="applyPreset(p)") {{ p.label }}
+		CalendarPanel(
+			ref="calendar",
+			v-model:month="currentMonth",
+			v-model:focusedDay="focusedDay",
+			:monthsToShow="monthsToShow",
+			:weekStartsOn="weekStartsOn",
+			:showWeekNumbers="showWeekNumbers",
+			:locale="locale",
+			:minDate="minDate",
+			:maxDate="maxDate",
+			:disabled="disabled",
+			:navigateOnOutsideDayClick="navigateOnOutsideDayClick",
+			:isDayDisabled="isDayDisabled",
+			:getDisabledReason="getDisabledReason",
+			:isSelected="modelValue ? (d) => d.equals(modelValue) : undefined",
+			@day-click="handleDayClick"
+		)
+			.presets(v-if="presets || (inline && clearable && modelValue)", :class="{ 'inline-footer': inline }")
+				button.preset-btn(v-for="p in presets", :key="p.label", type="button", :disabled="isDayDisabled(p.getValue())", @click="applyPreset(p)") {{ p.label }}
+				button.clear-btn(v-if="inline && clearable && modelValue", type="button", :disabled="disabled", @click="handleClear") Clear
 </template>
