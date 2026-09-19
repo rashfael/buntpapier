@@ -1,0 +1,101 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>inherited custom property transition test</title></head>
+<body>
+<script>
+const wait = ms => new Promise(r => setTimeout(r, ms))
+const frames = async n => { for (let i = 0; i < n; i++) await new Promise(r => requestAnimationFrame(r)) }
+
+function addCss (css) {
+	const s = document.createElement('style')
+	s.textContent = css
+	document.head.append(s)
+}
+
+function registerProp (name, syntax, initial) {
+	addCss(`@property ${name} { syntax: "${syntax}"; inherits: true; ${initial !== undefined ? `initial-value: ${initial};` : ''} }`)
+}
+
+// Builds a fresh tree html > body > div.sidebar > div > button per case.
+// The button carries the observer transition; the mutation happens on :root, the .sidebar ancestor, or the button.
+async function runCase ({ name, prop, register, where = 'root', from, to, inlineTransition = true, extraCss = '', prepare }) {
+	const wrapper = document.createElement('div'); wrapper.className = 'sidebar'
+	const mid = document.createElement('div'); wrapper.append(mid)
+	const btn = document.createElement('button'); btn.textContent = name; mid.append(btn)
+	document.body.append(wrapper)
+	if (register) registerProp(prop, register.syntax, register.initial)
+	if (extraCss) addCss(extraCss)
+	if (inlineTransition) btn.style.setProperty('transition', `${prop} 1ms step-start allow-discrete`)
+	const root = document.documentElement
+	const target = where === 'root' ? root : where === 'ancestor' ? wrapper : btn
+	if (from !== undefined) target.style.setProperty(prop, from)
+	await frames(2)
+	const before = getComputedStyle(btn).getPropertyValue(prop)
+
+	const events = []
+	let ticks = 0, ticking = true
+	const tick = () => { if (!ticking) return; ticks++; requestAnimationFrame(tick) }
+	const t0 = performance.now()
+	const onEvt = e => {
+		if (e.propertyName !== prop) return
+		events.push({ type: e.type, ticks, ms: +(performance.now() - t0).toFixed(1), value: getComputedStyle(btn).getPropertyValue(prop) })
+	}
+	for (const t of ['transitionrun', 'transitionstart', 'transitionend']) btn.addEventListener(t, onEvt)
+	requestAnimationFrame(tick)
+
+	if (prepare) prepare({ root, wrapper, btn, prop, to })
+	else target.style.setProperty(prop, to)
+	const afterSync = getComputedStyle(btn).getPropertyValue(prop)
+
+	await wait(300)
+	ticking = false
+	const after = getComputedStyle(btn).getPropertyValue(prop)
+	wrapper.remove()
+	root.style.removeProperty(prop)
+	root.style.removeProperty('color-scheme')
+	const starts = events.filter(e => e.type === 'transitionstart')
+	return {
+		name,
+		fired: starts.length > 0,
+		starts: starts.length,
+		firstStart: starts[0] ? `tick ${starts[0].ticks}, ${starts[0].ms}ms, value=${starts[0].value}` : '-',
+		before, afterSync, after,
+		eventTypes: events.map(e => e.type).join(',')
+	}
+}
+
+async function runAll () {
+	const supports = CSS.supports('transition-behavior', 'allow-discrete')
+	const cases = [
+		{ name: 'A root change, unregistered', prop: '--a-shape', from: 'rounded', to: 'pill' },
+		{ name: 'B root change, registered *', prop: '--b-shape', register: { syntax: '*' }, from: 'rounded', to: 'pill' },
+		{ name: 'C root change, registered <custom-ident>', prop: '--c-shape', register: { syntax: '<custom-ident>', initial: 'none' }, from: 'rounded', to: 'pill' },
+		{ name: 'D root unset->set, unregistered', prop: '--d-shape', to: 'pill' },
+		{ name: 'E root unset->set, registered *', prop: '--e-shape', register: { syntax: '*' }, to: 'pill' },
+		{ name: 'F root unset->set, registered <custom-ident>', prop: '--f-shape', register: { syntax: '<custom-ident>', initial: 'none' }, to: 'pill' },
+		{ name: 'G ancestor class toggle, unregistered', prop: '--g-shape', from: 'rounded', extraCss: '.sidebar.alt-g { --g-shape: pill }', prepare: ({ wrapper }) => wrapper.classList.add('alt-g') },
+		{ name: 'G2 ancestor class toggle, registered *', prop: '--g2-shape', register: { syntax: '*' }, from: 'rounded', extraCss: '.sidebar.alt-g2 { --g2-shape: pill }', prepare: ({ wrapper }) => wrapper.classList.add('alt-g2') },
+		{ name: 'H <color> light-dark mirror, root color-scheme flip', prop: '--h-surface', register: { syntax: '<color>', initial: '#fff' }, from: 'light-dark(#fff, #000)', prepare: ({ root }) => { root.style.colorScheme = 'dark' }, setup: ({ root }) => { root.style.colorScheme = 'light' } },
+		{ name: 'I <color> light-dark mirror, ancestor color-scheme flip', prop: '--i-surface', register: { syntax: '<color>', initial: '#fff' }, from: 'light-dark(#fff, #000)', extraCss: '.sidebar { color-scheme: light } .sidebar.dark-i { color-scheme: dark }', prepare: ({ wrapper }) => wrapper.classList.add('dark-i') },
+		{ name: 'J <color> direct root change', prop: '--j-surface', register: { syntax: '<color>', initial: '#fff' }, from: '#fff', to: '#000' },
+		{ name: 'K change on the button itself, unregistered', prop: '--k-shape', where: 'self', from: 'rounded', to: 'pill' },
+		{ name: 'L transition from stylesheet class, root change, unregistered', prop: '--l-shape', from: 'rounded', to: 'pill', inlineTransition: false, extraCss: '.sidebar button { transition: --l-shape 1ms step-start allow-discrete }' },
+		{ name: 'M stylesheet transition with another property, root change, unregistered', prop: '--m-shape', from: 'rounded', to: 'pill', inlineTransition: false, extraCss: '.sidebar button { transition: background-color .2s, --m-shape 1ms step-start allow-discrete }' },
+		{ name: 'N unset->set, transition from stylesheet, unregistered', prop: '--n-shape', to: 'pill', inlineTransition: false, extraCss: '.sidebar button { transition: --n-shape 1ms step-start allow-discrete }' },
+		{ name: 'O change while ancestor display:none, then shown', prop: '--o-shape', from: 'rounded', prepare: ({ root, wrapper, prop, to }) => { wrapper.style.display = 'none'; root.style.setProperty(prop, 'pill'); setTimeout(() => { wrapper.style.display = '' }, 80) } },
+		{ name: 'E2 root unset->set, registered * with initial-value', prop: '--e2-shape', register: { syntax: '*', initial: 'rounded' }, to: 'pill' },
+		{ name: 'T root set->unset (removeProperty), unregistered', prop: '--t-shape', from: 'pill', prepare: ({ root, prop }) => root.style.removeProperty(prop) },
+		{ name: 'T2 root set->unset, registered * with initial-value', prop: '--t2-shape', register: { syntax: '*', initial: 'rounded' }, from: 'pill', prepare: ({ root, prop }) => root.style.removeProperty(prop) },
+		{ name: 'I2 buntpapier model: mirror on *, token on root, ancestor color-scheme flip', prop: '--i2-surface', register: { syntax: '<color>', initial: '#fff' }, extraCss: 'html { --i2-token: light-dark(#fff, #000) } * { --i2-surface: var(--i2-token, light-dark(#fff, #000)) } .sidebar { color-scheme: light } .sidebar.dark-i2 { color-scheme: dark }', prepare: ({ wrapper }) => wrapper.classList.add('dark-i2') },
+		{ name: 'I3 buntpapier model: mirror on *, token changed on root', prop: '--i3-surface', register: { syntax: '<color>', initial: '#fff' }, extraCss: 'html { --i3-token: #fff } * { --i3-surface: var(--i3-token, #fff) }', prepare: ({ root }) => root.style.setProperty('--i3-token', '#f00') },
+		{ name: 'I4 buntpapier model: mirror on *, token set on ancestor via class', prop: '--i4-surface', register: { syntax: '<color>', initial: '#fff' }, extraCss: 'html { --i4-token: #fff } * { --i4-surface: var(--i4-token, #fff) } .sidebar.alt-i4 { --i4-token: #00f }', prepare: ({ wrapper }) => wrapper.classList.add('alt-i4') },
+		{ name: 'P quoted string value, root change, unregistered', prop: '--p-icon', from: "'check'", to: "'close'" },
+	]
+	const results = []
+	for (const c of cases) {
+		if (c.setup) c.setup({ root: document.documentElement })
+		try { results.push(await runCase(c)) } catch (e) { results.push({ name: c.name, error: String(e) }) }
+	}
+	return { supports, results }
+}
+</script>
+</body></html>

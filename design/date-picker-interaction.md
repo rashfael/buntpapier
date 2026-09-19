@@ -1,5 +1,16 @@
 # Date Picker — Interaction Design
 
+## Current behavior, 2026-09-17
+
+The implemented keyboard model supersedes the earlier input-only decision below. Focus and opening preserve an empty value. Pointer opening keeps input focus; Alt+Down enters the calendar, while bare Up/Down edit the active segment. Tab follows input, optional clear, navigation, one remembered day per visible month and presets. Leaving closes the popup; Escape cancels an uncommitted range and returns input focus. Both pickers support inline rendering and clear actions. The single-date display stays ISO; dotted input and `parseInput` remain supported.
+
+`CalendarPanel.vue` shares navigation and focus movement. Grid labels use unique IDs, selection belongs on gridcells, and disabled dates remain focusable for inspection without being selectable. A month live region and a separate range-status region avoid duplicate month announcements. The pickers call `showPopover()` without `source`: Firefox 148 repeated the popup in its Tab sequence when the input was passed as source, so entry and return remain explicit.
+
+The [single-picker tests](../tests/date-picker.spec.ts), [range tests](../tests/date-range-picker.spec.ts) and [fixture](../tests/fixtures/DatePickers.vue) cover these behaviors. Keep the fixed-date test clock running: freezing `Date.now()` breaks Vue's bubbling-event timestamp guard. Historical verification reported 37 tests passing in Chromium and Firefox; this does not establish WebKit or manual screen-reader conformance. Current public keyboard tables are in the [single-picker](../docs/components/date-picker.md) and [range-picker](../docs/components/date-range-picker.md) references.
+
+The research and alternatives below remain dated design evidence. Locale-aware segment order, editable range inputs, mobile modality, shared strings and full accessibility verification remain future work.
+
+
 ## 1. Problem
 
 `bunt-date-picker` opens its calendar dialog when the input receives focus. Because the dialog is a native `<dialog>` opened with `showModal()`, this moves focus into the dialog and the backdrop intercepts clicks. Typing is effectively blocked.
@@ -184,7 +195,7 @@ Input is a normal text field; typed freely; calendar is an assistive popup. Two 
 - **C1 — Focus auto-opens (Tab or click).** Carbon, PrimeVue. Breaks typing for Tab-in-and-type users.
 - **C2 — Click-only opens; Tab-focus preserves typing.** Google Calendar, Ant Design.
 
-## 6. Per-component decisions
+## 6. Interaction design and alternatives
 
 ### 6.1 date-picker
 
@@ -229,7 +240,7 @@ If B-faux-segmented proves too gnarly during implementation (particularly paste 
 
 Ant Design's range pattern: two logical inputs ("from" / "to") inside one visual input outline, sharing one picker dropdown that stays open as focus moves between them. Avoids two-separate-input awkwardness while keeping each half typeable.
 
-**Decision:** adopt the same shape. Two typeable halves, one shared picker that stays open while focus moves between them. Each half is a B-faux-segmented date-picker per §6.1.
+**Future direction, unimplemented:** two typeable halves with one shared picker that stays open as focus moves between them. Each half would use segmented editing as in §6.1. The current range textbox remains readonly; the detailed editing contract and its verification are still open.
 
 ### 6.3 bunt-select
 
@@ -275,7 +286,7 @@ Rationale:
    - Month/year navigation buttons inside the calendar are useful for pointer users but redundant for keyboard users.
    - Preset buttons (if `presets` prop supplied) would need Tab-reach somehow, or be accepted as pointer-only.
 
-   **Decision for v1:** leave the calendar grid non-tab-reachable. Keyboard users operate entirely through the input. Revisit if user feedback reveals a concrete need.
+   **Superseded decision:** the original v1 proposal left the calendar grid outside Tab order. The implemented behavior now gives keyboard users Alt+Down entry and a Tab route through calendar controls; see the current behavior above.
 
 ## 9. Implementation-time knowledge gaps
 

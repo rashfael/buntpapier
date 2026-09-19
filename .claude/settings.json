@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node tests/_probe-empty.mjs)",
+      "WebFetch(domain:web.dev)",
+      "WebFetch(domain:lea.verou.me)",
+      "WebFetch(domain:css-tricks.com)",
+      "WebFetch(domain:lisilinhart.info)",
+      "WebFetch(domain:nolanlawson.com)",
+      "WebFetch(domain:drafts.csswg.org)",
+      "Bash(npx sass *)"
+    ]
+  }
+}

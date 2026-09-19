@@ -20,7 +20,7 @@ buntpapier aims to provide an API that might become possible with vanilla CSS in
 
 ## CSS custom properties
 
-Using custom properties to influence presentation of components gives us all features of CSS for free. While they seem powerful at first, custom properties are (currently) quite limited. Even simple things like setting a color on a button are more complex than you might expect. This:
+Custom properties let appearance follow the cascade. One property can also control several derived values. This:
 
 ```css
 .my-button {
@@ -43,13 +43,12 @@ More complex properties like
 
 set multiple css properties like height, padding and font size.
 
-Sadly, offering an API like this is currently not possible with CSS, but the csswg is working hard to add new features like [color-contrast()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-contrast).
+Colour derivation now runs in CSS: relative colours derive hover and pressed states, and [contrast-color()](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/color_value/contrast-color) chooses black or white text on filled controls. JavaScript still adjusts accents used as text or outlined ink against the surrounding surface, where preserving the accent needs more than a black-or-white choice.
 
-Until CSS add features to implement the buntpapier API natively, buntpapier relies on a few bits of javascript to make the magic happen.
+Keyword properties such as `--button-size: huge` still use a JavaScript bridge that reads computed styles and applies modifier classes. CSS [`if()`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/if) can express those choices directly, but does not yet work across our supported browsers. As native features cover each use case, we can remove the corresponding bridge while keeping the custom-property API.
 
 
 ## Bring Your Own Class System
 
 buntpapier does not dictate how you use its custom properties. While I personally recommend using semantic classes for your components and styling them in SFCs, buntpapier does not stop you from creating a global `.btn-primary-huge` class and using it on multiple components.
-
 
