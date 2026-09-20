@@ -1,5 +1,5 @@
-import { expect } from '@playwright/test'
-import { test, day, loadDatePickers, navigationCases } from './date-picker-helpers'
+import { test, expect } from '../support/fixtures'
+import { day, loadDatePickers, navigationCases } from './date-picker-helpers'
 
 test.use({ locale: 'en-US', timezoneId: 'UTC' })
 test.beforeEach(async ({ page }) => loadDatePickers(page))

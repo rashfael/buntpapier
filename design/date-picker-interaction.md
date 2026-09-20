@@ -83,7 +83,7 @@ The component docs carry the public keyboard tables. This record owns the intera
 
 ## Verification
 
-The [single-picker suite](../tests/date-picker.spec.ts), [range-picker suite](../tests/date-range-picker.spec.ts) and [fixture](../tests/fixtures/DatePickers.vue) cover the current regression scenarios:
+The [single-picker suite](../tests/components/date-picker.test.ts), [range-picker suite](../tests/components/date-range-picker.test.ts) and [fixture](../tests/fixtures/DatePickers.vue) cover the current regression scenarios:
 
 - Empty focus and opening, pointer and Alt+Down entry, focus return, outside-focus dismissal and Escape cancellation.
 - Single-date free text, ISO segment movement and replacement, invalid drafts, clearing and model values.

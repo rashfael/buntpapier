@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../support/fixtures'
 
 // Regression for the bug where bunt-* components threw "Could not parse color"
 // when the semantic tokens are defined with light-dark() (the single-source
@@ -9,29 +9,27 @@ import { test, expect } from '@playwright/test'
 //     tokens on its own — the safety net for engines that don't resolve
 //     registered <color> custom properties.
 test.describe('light-dark() token theming', () => {
-	test('mounting a button with light-dark() tokens logs no color-parse errors', async ({ page }) => {
-		const errors: string[] = []
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') errors.push(msg.text())
-		})
-		page.on('pageerror', (err) => errors.push('pageerror: ' + err.message))
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/theming')
+		await expect(page.locator('.bunt-button').first()).toBeVisible()
+	})
 
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
+	test('mounting a button with light-dark() tokens logs no color-parse errors', async ({ page, pageLog }) => {
 		await page.evaluate(() => {
+			// make the button text-weight so the JS ink guard actually parses the accent
+			const el = document.querySelector('.bunt-button') as HTMLElement
+			el.style.setProperty('--button-weight', 'text')
+
 			const r = document.documentElement
-			r.style.colorScheme = 'dark'
 			r.style.setProperty('--clr-primary', 'light-dark(#A02C55, #C73A66)')
 			r.style.setProperty('--clr-danger', 'light-dark(#C13A2A, #F27059)')
 			r.style.setProperty('--clr-success', 'light-dark(#1B7A42, #66C388)')
-		})
-
-		// make the button text-weight so the JS ink guard actually parses the accent
-		await page.evaluate(() => {
-			const el = document.querySelector('.bunt-button') as HTMLElement
-			el.style.setProperty('--button-weight', 'text')
-			document.documentElement.style.colorScheme = 'dark'
+			// the scheme flip is the last write on purpose: it is the one style
+			// change on <html> that notifies the theme watcher, which then
+			// re-reads both the weight and the new accents. The docs opt into
+			// `--bunt-will-change: all` (per-frame polling), so order did not
+			// matter there; an ordinary consumer gets one notification per change.
+			r.style.colorScheme = 'dark'
 		})
 		await expect(page.locator('.bunt-button').first()).toHaveClass(/bunt-button--weight-text/)
 
@@ -42,14 +40,13 @@ test.describe('light-dark() token theming', () => {
 		// modern engine hands the bridge a resolved rgb(), never a raw token stream
 		expect(resolved).toMatch(/^rgba?\(|^color\(|^okl(ab|ch)\(/)
 
-		const colorErrors = errors.filter((e) => /parse color/i.test(e))
+		// page errors are asserted by the shared fixture; this suite owns the
+		// colour-parse check, which can also surface as a console error
+		const colorErrors = [...pageLog.consoleErrors, ...pageLog.pageErrors].filter((e) => /parse color/i.test(e))
 		expect(colorErrors, `unexpected color-parse errors:\n${colorErrors.join('\n')}`).toEqual([])
 	})
 
 	test('UA fallback resolves light-dark() and color-mix() to concrete colors', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
 		// mirrors resolveThroughUA(): apply the token to a probe and read it back.
 		const resolve = (value: string, scheme: string) => page.evaluate(({ value, scheme }) => {
 			const host = document.createElement('div')

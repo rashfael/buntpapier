@@ -1,25 +1,21 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
+import { CI, engines, sharedUse } from './tests/support/playwright-shared'
 
-const CI = !!process.env.CI
-
+// Component behavior against owned fixtures. Starts the fixture server only and
+// passes with the docs server stopped. Docs smoke lives in
+// playwright.docs.config.ts and CI runs it as a second step.
 export default defineConfig({
-	testDir: './tests',
+	testDir: './tests/components',
+	testMatch: '**/*.test.ts',
 	forbidOnly: CI,
-	reporter: CI ? [['github'], ['html', { open: 'never' }]] : 'list',
-	use: {
-		baseURL: 'http://localhost:5173',
-	},
-	projects: [
-		{ name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-		{ name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-		{ name: 'webkit', use: { ...devices['Desktop Safari'] } }
+	reporter: [
+		...(CI ? [['github', {}] as const] : []),
+		['list', {}] as const,
+		['html', { open: 'never' }] as const
 	],
+	use: { ...sharedUse, baseURL: 'http://localhost:5174' },
+	projects: engines,
 	webServer: [{
-		command: 'npm run start',
-		url: 'http://localhost:5173',
-		reuseExistingServer: !CI,
-		timeout: 60000
-	}, {
 		command: 'npx vite --config tests/fixtures/vite.config.ts',
 		url: 'http://localhost:5174',
 		reuseExistingServer: !CI,

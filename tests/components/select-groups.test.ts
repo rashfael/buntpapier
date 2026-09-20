@@ -1,13 +1,13 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../support/fixtures'
 
 test.describe('Select — grouped options', () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/components/select')
-		await page.waitForLoadState('networkidle')
+		await page.goto('/selects')
+		await expect(page.locator('.bunt-select').first()).toBeVisible()
 	})
 
 	function groupedSelect (page) {
-		return page.locator('.bunt-select').filter({ hasText: 'Group demo' }).first()
+		return page.locator('.bunt-select').filter({ hasText: 'Grouped options' }).first()
 	}
 
 	const dropdown = '#bunt-teleport-target'
@@ -37,6 +37,7 @@ test.describe('Select — grouped options', () => {
 		// clicking an option selects it and closes
 		await page.locator(`${dropdown} li.bunt-select-option`, { hasText: 'Banana' }).click()
 		await expect(input).toHaveValue('Banana')
+		await expect(page.getByTestId('grouped-value')).toHaveText('Banana')
 	})
 
 	test('filtering drops empty groups; matching a header keeps its group', async ({ page }) => {
@@ -81,23 +82,24 @@ test.describe('Select — grouped options', () => {
 		await expect(input).toHaveValue('Carrot')
 	})
 
-	test('inline style is applied (no fragment attr-inheritance warning)', async ({ page }) => {
-		const warnings = []
-		page.on('console', msg => warnings.push(msg.text()))
-		await page.reload({ waitUntil: 'networkidle' })
+	test('inline style is applied (no fragment attr-inheritance warning)', async ({ page, pageLog }) => {
+		await page.reload()
+		await expect(page.locator('.bunt-select').first()).toBeVisible()
 
 		// the style attr passed directly to <bunt-select> must reach the root element
 		await expect(groupedSelect(page)).toHaveClass(/bunt-input--shape-rounded/)
 
-		expect(warnings.filter(w => w.includes('Extraneous non-props attributes'))).toEqual([])
+		const warnings = pageLog.matching(/Extraneous non-props attributes/)
+		expect(warnings).toEqual([])
 	})
 
 	test('group slot wraps options without a manual loop', async ({ page }) => {
-		const slotted = page.locator('.bunt-select').filter({ hasText: 'Group slot demo' }).first()
+		const slotted = page.locator('.bunt-select').filter({ hasText: 'Grouped slot' }).first()
 		const input = slotted.locator('input')
 		await input.click()
 
 		// custom wrapper markup from the #group slot is present, options still render and select
+		await expect(page.locator(`${dropdown} .c-custom-group-header`).first()).toBeVisible()
 		await expect(page.locator(`${dropdown} li.bunt-select-option`, { hasText: 'Coffee' })).toBeVisible()
 		await page.locator(`${dropdown} li.bunt-select-option`, { hasText: 'Coffee' }).click()
 		await expect(input).toHaveValue('Coffee')

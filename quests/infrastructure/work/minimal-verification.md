@@ -1,9 +1,10 @@
 ---
-status: planned
-activity: design
-next: assign the approved fixture migration and verification groundwork to a separate executor
-waiting_on: implementation-executor-assignment
-profile: implementation executor unassigned
+status: waiting
+activity: verify
+next: present the verified delivery for owner acceptance and decide how three-engine evidence is obtained
+waiting_on: owner-acceptance-and-ci-engine-evidence
+profile: Claude Code Opus 5 design partner; implementation executor is a separate Opus agent
+review_base: d50ae6a79df1c5d7eec78a2fa9d3afe1d885f3f6
 ---
 
 # M1: minimal verification groundwork
@@ -60,4 +61,43 @@ Stop and return the affected choice if this requires a new runner, public behavi
 
 ## Evidence
 
-Design approved with fixture-migration amendment on 2026-09-20; delivery evidence pending. No new fixture, helper, dependency or CI configuration has been implemented or tested. The historical green run is linked from the parent; it does not verify this proposal.
+Design approved with fixture-migration amendment on 2026-09-20. Delivered uncommitted in the working tree on 2026-09-20 from `review_base` `d50ae6a79df1c5d7eec78a2fa9d3afe1d885f3f6`, by a separate implementation executor, with one independent review in fresh context, one fix round and one owner-revision round.
+
+### Owner revisions during execution
+
+| Revision | Effect on this brief |
+|---|---|
+| Test files use `.test.ts`, not `.spec.ts` | Naming only; `testMatch` is pinned to `**/*.test.ts` so a stray file cannot be picked up or missed silently. |
+| Fixture pages are generated from the component | Supersedes “add a page rather than a switchable fixture registry”. A fixture is now one `.vue` file; a Vite dev-server plugin generates the page and entry module. Per-page `.html` and `.ts` entries are gone. |
+| No unified run | Supersedes “a combined CI invocation must run both groups on all three engines”. The two suites are two configurations, two commands and two steps of the existing e2e matrix job. The group-coverage reporter, `playwright.all.config.ts` and `PLAYWRIGHT_ENGINES` were removed. |
+
+The last revision trades a runtime guard for a structural one: dropping a suite now means deleting a CI step, which is a visible diff in [the workflow](../../.github/workflows/ci.yml). The removed reporter also had a `--reporter=` hole by construction. The accepted residual risk is that a checked-in skip emptying a suite reports `5 skipped` and exits 0 rather than failing.
+
+| Criterion | Evidence | State checked |
+|---|---|---|
+| Existing behavior exercised through dedicated fixtures | Case-by-case migration mapping; the reviewer diffed each pre-migration suite against its replacement and found no dropped, weakened or vacuous assertion. Picker suites are byte-identical apart from imports and their `goto` URL. | Working tree, chromium |
+| Component runs need no docs server | `npx playwright test --project=chromium` → 59 passed; only the fixture server is configured, and port sampling through the run observed `:5174` alone, never `:5173`. | Working tree, chromium |
+| Docs smoke separately selectable | `npm run test:docs -- --project=chromium` → 5 passed, written to `playwright-report-docs/` and `test-results-docs/` so it cannot overwrite the component run's artifacts. | Working tree, chromium |
+| Both suites run on every engine in CI | Two steps of the e2e matrix job, the docs step guarded by `if: ${{ !cancelled() }}` so a component failure cannot hide it, while a cancelled workflow still stops. Failure upload covers all four result directories at 14 days. | Workflow file; not yet executed |
+| Native button keyboard, activation and semantics | `tests/components/button-a11y.test.ts`: Tab focus and `:focus-visible`, Space/Enter/pointer activation, disabled does not activate, compact ARIA snapshot of enabled/disabled. | Working tree, chromium |
+| Scoped axe scan with the required tags | Zero violations, so no expected fingerprint was recorded. A reviewer probe confirmed the scan is genuinely scoped — an injected violation outside the consumer is not reported, inside it is — and that it evaluates 12 rules including `target-size`, proving `wcag22aa` applies. Nothing disabled or excluded. | Working tree, chromium |
+| Failure diagnostics | A deliberate page error and a deliberate assertion failure each failed the run and left `test-failed-1.png`, a valid `trace.zip` and `error-context.md`, reachable from the HTML report. Both faults removed; no probe file remains. | Working tree, chromium on Node 24 |
+| Project gates | `npm run lint`, `npm run build`, `npm run build:docs` all pass. | Working tree |
+
+Commands and fixture usage are published in [the internal testing guide](../../design/testing.md). Environment: Playwright 1.63.0, Node 26.8.2.
+
+**Runner bumped.** On 2026-09-20 the owner chose to move `@playwright/test` from `^1.59.1` to `^1.63.0` rather than install the older browser builds, after an out-of-project `npx playwright install` had fetched 1.63's browsers and pruned 1.59's firefox. Chromium `1243`, firefox `1543` and webkit `2359` are the matching builds. No suite, helper or configuration needed changing for the bump; the version-specific notes in the testing guide were re-verified against 1.63.0.
+
+**Engine availability.** Chromium and firefox both run locally and are verified. WebKit is not runnable on this host and that is settled, not an open gap: the Ubuntu 24.04 build fails to load with `error while loading shared libraries: libicudata.so.74`, and Playwright asks for `libicu74`, `libxml2` and `libflite1` against Arch's much newer ICU. WebKit evidence comes from CI only.
+
+| Engine | Components | Docs smoke | Source |
+|---|---|---|---|
+| chromium | 59 passed | 5 passed | local, Playwright 1.63.0 |
+| firefox | 59 passed | 5 passed | local, Playwright 1.63.0 |
+| webkit | not run | not run | unavailable on Arch; CI only |
+
+**Unmet: WebKit evidence.** CI triggers on a push or pull request and the delivery is uncommitted, so no CI run exists for it. This is the only remaining engine gap and it stays open until the owner decides how to obtain it.
+
+**Outside the brief's allowed areas.** `.gitignore` gained `test-results-docs` and `playwright-report-docs`; without it the docs run's generated artifacts would show as untracked. `design/date-picker-interaction.md` and `quests/beta/work/date-pickers.md` had stale `tests/*.spec.ts` paths repaired, with their evidence claims untouched.
+
+**Recorded, not fixed.** `bunt-button`'s `disabled` is `aria-disabled` only, so the control stays focusable and clickable with activation blocked by an internal guard; whether that is the intended contract belongs to the button and accessibility scope. `src/` has no `prefers-reduced-motion` handling, so the reduced-motion case asserts applicable behavior and [accessibility](../../design/accessibility.md) item 8 is explicitly unmet for the button, with remediation owned by M4. Playwright trace writing stalls on Node 26.8.2 and works on Node 24, which CI pins. `tests/` sits outside the `npm run lint` gate; extending it would require touching deliberately byte-identical migrated assertions, so it is left as an owner decision.

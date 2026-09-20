@@ -1,17 +1,9 @@
-import { test as base, expect, type Locator, type Page } from '@playwright/test'
-
-export const test = base.extend({
-	page: async ({ page }, use) => {
-		const errors = []
-		page.on('pageerror', error => errors.push(error.message))
-		await use(page)
-		expect(errors).toEqual([])
-	}
-})
+import { type Locator, type Page } from '@playwright/test'
+import { expect } from '../support/fixtures'
 
 export async function loadDatePickers (page: Page) {
 	await page.clock.install({ time: new Date('2026-09-16T12:00:00Z') })
-	await page.goto('http://localhost:5174')
+	await page.goto('/date-pickers')
 	await expect(page.getByRole('combobox', { name: 'Single date', exact: true })).toHaveValue('2026-09-16')
 }
 

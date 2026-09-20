@@ -1,5 +1,5 @@
-import { expect } from '@playwright/test'
-import { test, day, loadDatePickers, navigationCases } from './date-picker-helpers'
+import { test, expect } from '../support/fixtures'
+import { day, loadDatePickers, navigationCases } from './date-picker-helpers'
 
 test.use({ locale: 'en-US', timezoneId: 'UTC' })
 test.beforeEach(async ({ page }) => loadDatePickers(page))
@@ -127,37 +127,3 @@ test('selecting an adjacent-month day preserves focus so Escape can cancel', asy
 	await expect(input).toBeFocused()
 	await expect(page.getByTestId('range-value')).toHaveText('empty / empty')
 })
-
-for (const component of ['date-picker', 'date-range-picker']) {
-	test(`${component} docs mount without runtime errors and have editable examples`, async ({ page }) => {
-		const errors = []
-		page.on('pageerror', error => errors.push(error.message))
-		page.on('console', message => {
-			if (message.type() === 'warning' && message.text().includes('[Vue warn]')) errors.push(message.text())
-		})
-		await page.goto(`/components/${component}`)
-		const showcases = page.locator('.c-showcase')
-		await expect(showcases.first().getByRole('combobox')).toBeVisible()
-		await expect(showcases.last().getByRole('grid').first()).toBeVisible()
-		const inputBox = await showcases.first().getByRole('combobox').boundingBox()
-		const iconBox = await showcases.first().getByRole('button', { name: 'Open calendar' }).boundingBox()
-		expect(Math.abs(inputBox.y + inputBox.height / 2 - iconBox.y - iconBox.height / 2)).toBeLessThan(2)
-		for (const showcase of [showcases.first(), showcases.last()]) {
-			const pane = await showcase.locator('.component').boundingBox()
-			const picker = await showcase.locator(`.bunt-${component}`).boundingBox()
-			const surface = await showcase.locator('.surface-control').boundingBox()
-			expect(picker.x).toBeGreaterThanOrEqual(pane.x)
-			expect(picker.x + picker.width).toBeLessThanOrEqual(pane.x + pane.width)
-			expect(picker.y).toBeGreaterThanOrEqual(surface.y + surface.height)
-		}
-		await showcases.first().getByRole('combobox').click()
-		await expect(page.getByRole('dialog')).toBeVisible()
-		await page.keyboard.press('Escape')
-		if (component === 'date-range-picker') {
-			await showcases.first().getByRole('spinbutton').fill('1')
-			await showcases.first().getByRole('combobox').click()
-			await expect(page.getByRole('dialog').getByRole('grid')).toHaveCount(1)
-		}
-		expect(errors).toEqual([])
-	})
-}

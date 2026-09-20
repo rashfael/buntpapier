@@ -38,10 +38,10 @@ WebKit could not run in the local Arch environment because the Playwright build 
 
 | criterion | evidence | state |
 |---|---|---|
-| Empty input, pointer opening, Alt+Down entry, dismissal and focus return preserve the model | `tests/date-picker.spec.ts` opening, Tab and Escape cases | Chromium and Firefox passed 2026-09-17 |
-| Single-date text, segment changes, invalid drafts and clearing preserve committed/draft separation | `tests/date-picker.spec.ts` segment-editing case and exact fixture model output | Chromium and Firefox passed 2026-09-17 |
+| Empty input, pointer opening, Alt+Down entry, dismissal and focus return preserve the model | `tests/components/date-picker.test.ts` opening, Tab and Escape cases | Chromium and Firefox passed 2026-09-17 |
+| Single-date text, segment changes, invalid drafts and clearing preserve committed/draft separation | `tests/components/date-picker.test.ts` segment-editing case and exact fixture model output | Chromium and Firefox passed 2026-09-17 |
 | Calendar movement and selection work by keyboard across month and year boundaries | Both picker suites' Arrow, Home/End, Page and Shift+Page cases | Chromium and Firefox passed 2026-09-17 |
-| Range selection orders endpoints, previews selection and cancels unfinished work | `tests/date-range-picker.spec.ts` pointer, keyboard and cancellation cases | Chromium and Firefox passed 2026-09-17 |
+| Range selection orders endpoints, previews selection and cancels unfinished work | `tests/components/date-range-picker.test.ts` pointer, keyboard and cancellation cases | Chromium and Firefox passed 2026-09-17 |
 | A disabled date cannot be committed as a single value or range endpoint | Single-picker restriction case plus source guards in both day-selection handlers | Single-date case passed in Chromium and Firefox; dedicated range-endpoint boundary case remains open |
 | Presets reject a disabled single value or disabled range endpoint | Source guards in both preset handlers | Valid preset activation is covered; disabled-preset rejection needs a dedicated regression case |
 | Popup and inline renderings support clearing, multiple months, week numbers and adjacent-month dates | Both suites' inline, clear, Tab and adjacent-month cases | Chromium and Firefox passed 2026-09-17 |

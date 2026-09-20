@@ -15,5 +15,7 @@ docs/.vitepress/cache
 docs/.vitepress/.temp
 
 test-results
+test-results-docs
 
 playwright-report
+playwright-report-docs

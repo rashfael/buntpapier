@@ -1,0 +1,13 @@
+// The fixture pages are the host application: they declare the layer order
+// before the library styles load, exactly as a consumer does
+// (see AGENTS.md, "CSS Layers"). Imported from mount.ts ahead of ../../src.
+@layer typography, buntpapier
+
+// Unlayered host styling, shared by every fixture page. The surface value is the
+// library default, read through the public token so a test can override it.
+body
+	margin: 0
+	padding: 16px
+	font-family: Roboto, sans-serif
+	background: var(--clr-surface, light-dark(#fff, #121212))
+	color: var(--clr-text)

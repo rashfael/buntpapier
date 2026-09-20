@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../support/fixtures'
 
 // WCAG relative luminance + contrast, for asserting the ink guard
 function parseColor (str: string) {
@@ -40,11 +40,13 @@ function contrast (foreground: string, background: string) {
 	return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05)
 }
 
+test.beforeEach(async ({ page }) => {
+	await page.goto('/theming')
+	await expect(page.locator('.bunt-button').first()).toBeVisible()
+})
+
 test.describe('dark mode', () => {
 	test('derived surface and text tokens flip with color-scheme', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
 		const read = () => page.evaluate(() => {
 			const el = document.querySelector('.bunt-button')!
 			const computed = getComputedStyle(el)
@@ -65,9 +67,6 @@ test.describe('dark mode', () => {
 	})
 
 	test('filled button text color follows contrast-color() of its fill (pure CSS)', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
 		const textOn = (fill: string) => page.evaluate((fillColor) => {
 			const el = document.querySelector('.bunt-button') as HTMLElement
 			el.style.setProperty('--button-color', fillColor)
@@ -81,12 +80,10 @@ test.describe('dark mode', () => {
 	})
 
 	test('per-subtree theming: checkbox in a dark wrapper gets white-based border', async ({ page }) => {
-		await page.goto('/components/checkbox')
-		await page.waitForLoadState('networkidle')
-
-		// uncheck the first checkbox — checked boxes show the solid accent fill
+		// uncheck the checkbox — checked boxes show the solid accent fill
 		await page.locator('.bunt-checkbox label').first().click()
 		await expect(page.locator('.bunt-checkbox').first()).not.toHaveClass(/checked/)
+		await expect(page.getByTestId('checkbox-value')).toHaveText('unchecked')
 
 		await page.evaluate(() => {
 			const checkbox = document.querySelector('.bunt-checkbox:not(.checked):not(.disabled)')!
@@ -104,10 +101,7 @@ test.describe('dark mode', () => {
 	})
 
 	test('theme watcher: text-weight button ink updates after a theme flip', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
-		// make the first button text-weight; the style-attribute change on <html>
+		// make the button text-weight; the style-attribute change on <html>
 		// below triggers the theme watcher, which re-reads the weight too
 		await page.evaluate(() => {
 			const el = document.querySelector('.bunt-button') as HTMLElement
@@ -131,9 +125,6 @@ test.describe('dark mode', () => {
 	})
 
 	test('contrast guard: yellow text-weight button stays readable on light surface', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
 		await page.evaluate(() => {
 			const el = document.querySelector('.bunt-button') as HTMLElement
 			el.style.setProperty('--button-weight', 'text')
@@ -150,9 +141,6 @@ test.describe('dark mode', () => {
 	})
 
 	test('outlined hover wash derives from currentcolor', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
 		await page.evaluate(() => {
 			const el = document.querySelector('.bunt-button') as HTMLElement
 			el.style.setProperty('--button-weight', 'outlined')
@@ -177,10 +165,7 @@ test.describe('dark mode', () => {
 	})
 
 	test('teleported select dropdown follows a dark trigger subtree', async ({ page }) => {
-		await page.goto('/components/select')
-		await page.waitForLoadState('networkidle')
-
-		// wrap the first select in a dark subtree
+		// wrap the select in a dark subtree
 		await page.evaluate(() => {
 			const select = document.querySelector('.bunt-select')!
 			const wrapper = document.createElement('div')
@@ -197,9 +182,6 @@ test.describe('dark mode', () => {
 	})
 
 	test('date-picker popover renders on the raised surface and flips', async ({ page }) => {
-		await page.goto('/components/date-picker')
-		await page.waitForLoadState('networkidle')
-
 		await page.evaluate(() => {
 			document.documentElement.style.colorScheme = 'dark'
 		})
@@ -213,9 +195,6 @@ test.describe('dark mode', () => {
 
 test.describe('performance', () => {
 	test('theme flip style-recalc on a 10k-node page stays sane', async ({ page }) => {
-		await page.goto('/components/button')
-		await page.waitForLoadState('networkidle')
-
 		const duration = await page.evaluate(() => {
 			const host = document.createElement('div')
 			for (let i = 0; i < 10000; i++) {
