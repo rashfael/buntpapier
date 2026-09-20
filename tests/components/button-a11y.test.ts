@@ -1,4 +1,4 @@
-import { test, expect, WCAG_TAGS, axeScan, violationFingerprints } from '../support/fixtures'
+import { test, expect, WCAG_TAGS, axeScan } from '../support/fixtures'
 
 const CONSUMER = '.c-button-fixture'
 
@@ -22,7 +22,7 @@ test.describe('native button consumer', () => {
 		await page.keyboard.press('Tab')
 		await expect(page.getByRole('button', { name: 'Disabled action' })).toBeFocused()
 		await page.keyboard.press('Tab')
-		await expect(page.getByRole('button', { name: 'Async action' })).toBeFocused()
+		await expect(page.getByRole('button', { name: 'Async action', exact: true })).toBeFocused()
 	})
 
 	test('Space and Enter activate; pointer activation agrees', async ({ page }) => {
@@ -65,21 +65,14 @@ test.describe('native button consumer', () => {
 		const results = await axeScan(page, CONSUMER)
 		// guard against a scan that silently inspected nothing
 		expect(results.passes.length).toBeGreaterThan(0)
-		// Known alpha findings would be listed here as { rule, targets } with their
-		// owning work and removal condition; the scoped scan is clean today, so an
-		// unexpected violation fails outright.
-		expect(violationFingerprints(results.violations)).toEqual([])
+		expect(results.violations).toEqual([])
 	})
 })
 
 test.describe('reduced motion', () => {
 	test.use({ reducedMotion: 'reduce' })
 
-	// UNMET CRITERION: accessibility acceptance item 8 wants prefers-reduced-motion
-	// handled, and the library has none — no `prefers-reduced-motion` rule exists in
-	// src/. So this case asserts only what the default context already asserts, under
-	// an emulation that currently changes nothing. It is a placeholder until there is
-	// behavior to assert; M4 owns the remediation. See design/testing.md.
+	// UNMET CRITERION: accessibility acceptance item 8 requires reduced-motion handling, which the library lacks. This checks operation under emulation; M4 still owns motion suppression. See design/testing.md.
 	test('activation and async lifecycle still complete', async ({ page }) => {
 		expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true) // setup evidence only
 
@@ -87,9 +80,25 @@ test.describe('reduced motion', () => {
 		await page.keyboard.press('Enter')
 		await expect(page.getByTestId('activations')).toHaveText('1')
 
-		// the async button's loading lifecycle must still finish with motion suppressed
-		await page.getByRole('button', { name: 'Async action' }).click()
-		await expect(page.getByTestId('async-completions')).toHaveText('1')
+		// The label is hidden during loading and success feedback, so retain the button through its test ID.
+		const asyncAction = page.getByTestId('async-action')
+		const starts = page.getByTestId('async-starts')
+		const completions = page.getByTestId('async-completions')
+		const complete = page.getByRole('button', { name: 'Complete async action' })
+		await asyncAction.click()
+		await expect(starts).toHaveText('1')
+		await expect(completions).toHaveText('0')
+		// Reach the component's own guard even if loading gains disabled semantics.
+		await asyncAction.click({ force: true })
+		await expect(starts).toHaveText('1')
+
+		await complete.click()
+		await expect(completions).toHaveText('1')
+		await expect(asyncAction).toHaveAccessibleName('Async action')
+		await asyncAction.click()
+		await expect(starts).toHaveText('2')
+		await complete.click()
+		await expect(completions).toHaveText('2')
 	})
 })
 

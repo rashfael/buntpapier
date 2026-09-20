@@ -45,12 +45,3 @@ export { expect }
 export function axeScan (page: Page, selector: string) {
 	return new AxeBuilder({ page }).withTags(WCAG_TAGS).include(selector).analyze()
 }
-
-// A violation is recorded as `rule` plus the exact targets it fired on, so an
-// accepted alpha finding cannot hide an unrelated regression of the same rule.
-export function violationFingerprints (violations: { id: string, nodes: { target: unknown[] }[] }[]) {
-	return violations.map(violation => ({
-		rule: violation.id,
-		targets: violation.nodes.map(node => node.target.flat().join(' ')).sort()
-	})).sort((a, b) => a.rule.localeCompare(b.rule))
-}

@@ -6,13 +6,10 @@ import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
 
 const root = fileURLToPath(new URL('.', import.meta.url))
 
-// Public URL of the generated entry module; the resolved id is the usual
-// null-byte-prefixed virtual one.
-const ENTRY_URL = '/@fixture-entry/'
-const ENTRY_ID = '\0' + ENTRY_URL
-
 // `/date-pickers`, `/DatePickers` and `/datepickers` all mean DatePickers.vue.
-const normalize = (name: string) => name.toLowerCase().replaceAll('-', '')
+function normalize (name: string) {
+	return name.toLowerCase().replaceAll('-', '')
+}
 
 function fixtureNames () {
 	return readdirSync(root).filter(entry => entry.endsWith('.vue')).map(entry => entry.slice(0, -'.vue'.length)).sort()
@@ -28,7 +25,11 @@ function page (name: string) {
 	</head>
 	<body>
 		<div id="app"></div>
-		<script type="module" src="${ENTRY_URL}${name}.js"></script>
+		<script type="module">
+			import { mountFixture } from '/mount.ts'
+			import Fixture from '/${name}.vue'
+			mountFixture(Fixture)
+		</script>
 	</body>
 </html>
 `
@@ -58,23 +59,14 @@ function index (names: string[]) {
 function fixturePages (): Plugin {
 	return {
 		name: 'buntpapier-fixture-pages',
-		resolveId (id) {
-			if (id.startsWith(ENTRY_URL)) return ENTRY_ID + id.slice(ENTRY_URL.length)
-		},
-		load (id) {
-			if (!id.startsWith(ENTRY_ID)) return
-			const name = id.slice(ENTRY_ID.length).replace(/\.js$/, '')
-			return [
-				"import { mountFixture } from '/mount.ts'",
-				`import Fixture from '/${name}.vue'`,
-				'mountFixture(Fixture)',
-				''
-			].join('\n')
-		},
 		configureServer (server) {
 			server.middlewares.use(async (req, res, next) => {
 				if (req.method !== 'GET' && req.method !== 'HEAD') return next()
 				const url = (req.url ?? '/').split('?')[0]
+				// Only the index and bare single-segment paths are pages; modules and assets belong to Vite.
+				const requested = /^\/([A-Za-z0-9-]+)(?:\.html)?$/.exec(url)?.[1]
+				if (url !== '/' && !requested) return next()
+
 				const names = fixtureNames()
 
 				const respond = async (body: string, status = 200) => {
@@ -86,11 +78,6 @@ function fixturePages (): Plugin {
 				}
 
 				if (url === '/') return respond(index(names))
-
-				// Only bare single-segment paths are pages; everything else (modules,
-				// assets, /@vite/…) belongs to Vite.
-				const requested = /^\/([A-Za-z0-9-]+)(?:\.html)?$/.exec(url)?.[1]
-				if (!requested) return next()
 
 				const name = names.find(candidate => normalize(candidate) === normalize(requested))
 				if (name) return respond(page(name))
