@@ -120,6 +120,14 @@ Consider native i18n support in buntpapier. Scope is undecided; it may add too m
 
 Consider a CSS custom property that supplies a button icon when no Vue `icon` prop is defined. Keep the icon prop and slot as the primary content API, with the same reactive behavior as the label. The fallback's token name, treatment of an explicitly empty icon and interaction with the icon slot remain undecided. Parked during Phase 1.3; no implementation planned yet. Checkbox icons continue to use cascading CSS through `--checkbox-icon`.
 
+### E. `bunt-button` disabled is `aria-disabled` only (question, 2026-09-20)
+
+`src/components/button.ts` renders a `<button>` with `ariaDisabled` and no native `disabled` attribute, so a disabled button stays focusable and receives real clicks; only the component's internal `onClick` guard prevents activation. That is a defensible pattern — it keeps the control discoverable by keyboard — but it is currently implicit. Decide whether it is the intended contract, then document it. `tests/components/button-a11y.test.ts` asserts the observable behaviour either way. Surfaced by [M1 verification groundwork](quests/infrastructure/work/minimal-verification.md); belongs to the button and accessibility scope.
+
+### F. `tests/` is outside the lint gate (decision, 2026-09-20)
+
+`npm run lint` is `eslint --ext .js,.ts,.vue src`, so the browser suites, fixtures and helpers have no automated convention enforcement. Extending the gate would surface pre-existing findings in assertions that were migrated byte-identical on purpose, so it was deliberately left alone during M1. Decide whether to widen the gate and fix what it reports, or to leave tests to review.
+
 ### Notes / non-issues
 - **Closed** `bunt-input` / `bunt-select` fields themselves are fine on dark:
   `.bunt-input input { background-color: transparent }` + the SVG outline, so they

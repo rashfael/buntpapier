@@ -1,8 +1,8 @@
 ---
-status: waiting
-activity: verify
-next: present the verified delivery for owner acceptance and decide how three-engine evidence is obtained
-waiting_on: owner-acceptance-and-ci-engine-evidence
+status: done
+activity: close
+next: none; M2 is the next unit and is selected separately
+waiting_on: null
 profile: Claude Code Opus 5 design partner; implementation executor is a separate Opus agent
 review_base: d50ae6a79df1c5d7eec78a2fa9d3afe1d885f3f6
 ---
@@ -71,7 +71,7 @@ Design approved with fixture-migration amendment on 2026-09-20. Delivered uncomm
 | Fixture pages are generated from the component | Supersedes “add a page rather than a switchable fixture registry”. A fixture is now one `.vue` file; a Vite dev-server plugin generates the page and entry module. Per-page `.html` and `.ts` entries are gone. |
 | No unified run | Supersedes “a combined CI invocation must run both groups on all three engines”. The two suites are two configurations, two commands and two steps of the existing e2e matrix job. The group-coverage reporter, `playwright.all.config.ts` and `PLAYWRIGHT_ENGINES` were removed. |
 
-The last revision trades a runtime guard for a structural one: dropping a suite now means deleting a CI step, which is a visible diff in [the workflow](../../.github/workflows/ci.yml). The removed reporter also had a `--reporter=` hole by construction. The accepted residual risk is that a checked-in skip emptying a suite reports `5 skipped` and exits 0 rather than failing.
+The last revision trades a runtime guard for a structural one: dropping a suite now means deleting a CI step, which is a visible diff in [the workflow](../../../.github/workflows/ci.yml). The removed reporter also had a `--reporter=` hole by construction. The accepted residual risk is that a checked-in skip emptying a suite reports `5 skipped` and exits 0 rather than failing.
 
 | Criterion | Evidence | State checked |
 |---|---|---|
@@ -84,7 +84,7 @@ The last revision trades a runtime guard for a structural one: dropping a suite 
 | Failure diagnostics | A deliberate page error and a deliberate assertion failure each failed the run and left `test-failed-1.png`, a valid `trace.zip` and `error-context.md`, reachable from the HTML report. Both faults removed; no probe file remains. | Working tree, chromium on Node 24 |
 | Project gates | `npm run lint`, `npm run build`, `npm run build:docs` all pass. | Working tree |
 
-Commands and fixture usage are published in [the internal testing guide](../../design/testing.md). Environment: Playwright 1.63.0, Node 26.8.2.
+Commands and fixture usage are published in [the internal testing guide](../../../design/testing.md). Environment: Playwright 1.63.0, Node 26.8.2.
 
 **Runner bumped.** On 2026-09-20 the owner chose to move `@playwright/test` from `^1.59.1` to `^1.63.0` rather than install the older browser builds, after an out-of-project `npx playwright install` had fetched 1.63's browsers and pruned 1.59's firefox. Chromium `1243`, firefox `1543` and webkit `2359` are the matching builds. No suite, helper or configuration needed changing for the bump; the version-specific notes in the testing guide were re-verified against 1.63.0.
 
@@ -92,14 +92,22 @@ Commands and fixture usage are published in [the internal testing guide](../../d
 
 | Engine | Components | Docs smoke | Source |
 |---|---|---|---|
-| chromium | 59 passed | 5 passed | local and [CI run 35520838988](https://github.com/rashfael/buntpapier/actions/runs/35520838988) |
+| chromium | 59 passed | 5 passed | local and [CI run 35521385395](https://github.com/rashfael/buntpapier/actions/runs/35521385395) |
 | firefox | 59 passed | 5 passed | local and the same CI run |
-| webkit | 58 passed, 1 failed | 4 passed, 1 failed | that CI run at `46766e7`; unavailable on Arch |
+| webkit | 59 passed | 5 passed | that CI run at `dc586ed`; not runnable on Arch, so CI is its only source |
 
 **WebKit findings from that run, both test defects.** `forced-color-adjust` was read through the `forcedColorAdjust` IDL alias, which WebKit does not expose, so the read was `undefined` before the assertion could say anything about the page; it now reads the property and asserts the guard's intent, that the value must not be `none`. The date-picker docs smoke case installed a frozen clock it did not need — nothing in either docs case asserts a date — and that call is removed. The forced-colours fix is near-certain: chromium and firefox both return `auto` from the property, and `getPropertyValue` returns `''` for a property an engine does not implement, so the case cannot fail again for that reason. The clock removal is a hypothesis, not a verified cause: the same case passed on WebKit at `e1e0d4b` with a clock installed, so the trigger may instead be the move from Playwright 1.59.1 and webkit-2272 to 1.63.0 and webkit-2359, whose clock implementation differs. One migration difference is that the docs page is now the first navigation under the frozen clock rather than the second. If WebKit still fails, the next step is waiting on a hydration signal, not a longer timeout and not an engine skip.
 
-**Unmet: WebKit evidence.** Chromium and firefox pass on CI. WebKit has no passing run; the two fixes above are verified on chromium and firefox only and need another CI run to confirm. This is the only remaining engine gap.
+Both fixes were confirmed by [CI run 35521385395](https://github.com/rashfael/buntpapier/actions/runs/35521385395) at `dc586ed`, where all three engines and the lint/build job passed. That closes the three-engine criterion.
+
+## Outcome
+
+Accepted by the owner on 2026-09-20 with the instruction to mark the work done, after they added `23f3ec8` simplifying the test code and making the button fixture's async case deterministic — a promise resolved by an explicit control instead of a 50 ms timeout, the generated page's entry module inlined in place of the virtual-module plumbing, and the unused `violationFingerprints` helper removed. That commit passes both suites on chromium and firefox locally and has not itself been through CI; the engine evidence above is from `dc586ed`.
+
+Delivered in `46766e7`, `dc586ed` and `23f3ec8` on `v3`. Durable output is [the internal testing guide](../../../design/testing.md), which carries the retention policy, the suites and commands, the fixture arrangement, the shared helpers and the failure diagnostics. Accepted follow-ups are in [the backlog](../../../TODOs.md).
+
+One acceptance criterion remains explicitly unmet by agreement rather than by omission: [accessibility](../../../design/accessibility.md) item 8 asks for `prefers-reduced-motion` handling, and the library has none, so the reduced-motion case is a placeholder. The brief scoped this delivery as a demonstration of the accessibility helper rather than completion of the button's beta checklist, and M4 owns the remediation.
 
 **Outside the brief's allowed areas.** `.gitignore` gained `test-results-docs` and `playwright-report-docs`; without it the docs run's generated artifacts would show as untracked. `design/date-picker-interaction.md` and `quests/beta/work/date-pickers.md` had stale `tests/*.spec.ts` paths repaired, with their evidence claims untouched.
 
-**Recorded, not fixed.** `bunt-button`'s `disabled` is `aria-disabled` only, so the control stays focusable and clickable with activation blocked by an internal guard; whether that is the intended contract belongs to the button and accessibility scope. `src/` has no `prefers-reduced-motion` handling, so the reduced-motion case asserts applicable behavior and [accessibility](../../design/accessibility.md) item 8 is explicitly unmet for the button, with remediation owned by M4. `tests/` sits outside the `npm run lint` gate; extending it would require touching deliberately byte-identical migrated assertions, so it is left as an owner decision.
+**Recorded, not fixed.** `bunt-button`'s `disabled` is `aria-disabled` only, so the control stays focusable and clickable with activation blocked by an internal guard; whether that is the intended contract belongs to the button and accessibility scope. `src/` has no `prefers-reduced-motion` handling, so the reduced-motion case asserts applicable behavior and [accessibility](../../../design/accessibility.md) item 8 is explicitly unmet for the button, with remediation owned by M4. `tests/` sits outside the `npm run lint` gate; extending it would require touching deliberately byte-identical migrated assertions, so it is left as an owner decision.
