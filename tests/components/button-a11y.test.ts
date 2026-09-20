@@ -104,8 +104,11 @@ test.describe('forced colours', () => {
 		await page.keyboard.press('Tab')
 		await expect(enabled).toBeFocused()
 		expect(await enabled.evaluate(el => el.matches(':focus-visible'))).toBe(true)
-		// forced-color-adjust: none would suppress the UA's high-contrast override
-		expect(await enabled.evaluate(el => getComputedStyle(el).forcedColorAdjust)).toBe('auto')
+		// Not-opted-out guard: `forced-color-adjust: none` would suppress the UA's
+		// high-contrast override. Read the property rather than the camelCase IDL
+		// alias, which WebKit does not expose; an engine that does not implement the
+		// property returns '', which leaves the guard vacuous there rather than wrong.
+		expect(await enabled.evaluate(el => getComputedStyle(el).getPropertyValue('forced-color-adjust'))).not.toBe('none')
 
 		await page.keyboard.press('Enter')
 		await expect(page.getByTestId('activations')).toHaveText('1')

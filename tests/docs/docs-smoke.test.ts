@@ -12,9 +12,6 @@ function noVueWarnings (pageLog: PageLog) {
 test.describe('docs smoke', () => {
 	for (const component of ['date-picker', 'date-range-picker']) {
 		test(`${component} docs mount without runtime errors and have editable examples`, async ({ page, pageLog }) => {
-			// the same frozen clock the picker fixture uses, so the docs examples
-			// render a stable month
-			await page.clock.install({ time: new Date('2026-09-16T12:00:00Z') })
 			await page.goto(`/components/${component}`)
 			const showcases = page.locator('.c-showcase')
 			await expect(showcases.first().getByRole('combobox')).toBeVisible()
