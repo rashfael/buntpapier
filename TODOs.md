@@ -1,6 +1,6 @@
 # buntpapier issues to fix separately
 
-> **Status 2026-09-16:** Items **1–3** were fixed by the surface-token dark-mode rework (`--clr-surface` → `contrast-color()` ink → derived text/divider/fill tokens; accents as `light-dark()` pairs + JS contrast guard for accent-as-ink, see `docs/guide/theming.md`). Item **6** shipped with the compact input size. Item **7** is resolved: `bunt-select` declares `inheritAttrs: false` and binds `$attrs` on its root, so fallthrough classes reach the DOM. Follow-up **A** is now Phase 3 of [the beta quest](quests/beta/spec.md) (overlay primitive on the Popover API and anchor positioning). Still open: **4**, **5**, **B**.
+> **Status 2026-09-19:** Items **1–3**, **6** and **7** are recorded resolved. Item **4** and follow-up **A** belong to [selection delivery](quests/selection/spec.md#delivery-brief); item **5** belongs to the [component delivery brief](quests/beta/work/components.md). Open work outside beta remains **B**, **C**, **D** and the later candidates below. These entries are a backlog, not implementation authorization.
 
 Issues found in `buntpapier@^3.0.0-alpha.17` while building the **Control Room**
 (dark) variant (`/f`) of this mock. The mock re-skins the shared components by
@@ -99,7 +99,7 @@ scoping styles/custom-property overrides to the wrapping element instead.
 
 ### A. Select overlay migration
 
-Owned by [the beta quest, Phase 3](quests/beta/spec.md#phase-3-overlay-primitive). The quest carries scope, dependencies and acceptance; this backlog entry is a pointer.
+Owned by [selection delivery](quests/selection/spec.md#delivery-brief), consuming [overlay lifecycle](quests/overlay-lifecycle/spec.md#delivery-brief). Those records carry scope, dependencies and acceptance; this backlog entry is a pointer.
 
 ### B. Sub-emphasis from `currentcolor` (experiment)
 
@@ -133,7 +133,7 @@ Candidates with a recipe-versus-component assessment; none is a delivery commitm
 
 | capability | scope | call |
 |---|---|---|
-| Tabs | tablist/tab/panel, roving focus, orientation, manual activation default | component, first in Phase 5 |
+| Tabs | tablist/tab/panel, roving focus, orientation, manual activation default | component, first after beta |
 | Disclosure, Accordion | `<details name>` recipe first; component for grouped expansion with heading structure | recipe, then component |
 | Breadcrumbs | navigation landmark, ordered links, current page | component |
 | Pagination | named navigation, current page, previous/next, optional page size | component |
@@ -155,3 +155,14 @@ Candidates with a recipe-versus-component assessment; none is a delivery commitm
 | FileInput / Upload | native file selection, list, removal, progress; app owns transport | component |
 | Drawer, ContextMenu, HoverCard, CommandPalette | dialog and menu derivatives | component, on demand |
 | Tree, Splitter, ColorPicker, OTP, Rating, month/year pickers, virtualised lists | need a real workflow, bounded scope and an AT plan before entering the roadmap | demand-driven |
+
+## Further date-picker candidates
+
+These remain later candidates, with no delivery commitment. Locale-sensitive editing, editable ranges and responsive presentation belong to [beta's date-input work](quests/beta/work/date-inputs.md) and are excluded from this list. Existing calendar/time and month/year entries above remain the owners of those broader products.
+
+- Multiple independent dates: a `Temporal.PlainDate[]` value and its own selection model.
+- Day-content customization: event or availability indicators through a slot or another stable extension point.
+- Time and datetime: preserve the choice between a separate time field, local `Temporal.PlainDateTime` and a distinct timezone-aware `Temporal.ZonedDateTime` picker when selecting the existing calendar/time candidate.
+- Month/year selection views: revisit with the existing month/year picker candidate, without assuming a public `view` prop.
+- Deeper component customization: stable navigation/day-wrapper override points, justified by an actual integration.
+- A dedicated Today action: decide whether it only navigates or also selects, and how it differs from the existing preset.

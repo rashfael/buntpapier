@@ -1,7 +1,7 @@
 ---
 status: waiting
 activity: close
-next: present the verified documentation organization for owner acceptance
+next: present the reconciled beta plan and documentation checks for owner acceptance
 waiting_on: owner-acceptance
 profile: current owner-selected Codex session; model and effort not exposed
 ---
@@ -29,3 +29,30 @@ Acceptance criteria: every planning topic has a discoverable home; decisions and
 - The two precursor drafts were removed at the owner's request. Retained planning evidence uses the combined assessment and subsequent subject records.
 
 Project instructions now route durable design, quest state and backlog work to their respective homes. Their links were checked statically; behavior in fresh client sessions was not tested. Product builds and suites were not rerun because product code and rendered documentation are unchanged. The beta's browser and assistive-technology evidence remains with its product work records.
+
+## Readiness reconciliation, 2026-09-19
+
+The owner accepted the [readiness review](../research/2026-09-19-readiness-review.md), requested integration and deletion of the root picker plan, and explicitly discarded the README TODOs. Scope: apply the ownership/dependency and working-format changes, preserve useful date-picker requirements and alternatives, add delivery/release records, repair references and verify the documentation. Infrastructure remains a planned separate quest; no infrastructure implementation or product investigation is authorized by this consolidation. Forms and observation remain deferred.
+
+The starting tree already contained the preceding review, infrastructure quest and navigation edits. A verified before-state of 32 relevant files, content hashes, HEAD, staged/working diffs and untracked inventory is at `/tmp/buntpapier-beta-reconcile-a8134sa_/`, based on `31d3b3675ca81a5aef5342559f024fcc7448ce0a`. This distinguishes the authorized consolidation from those pre-existing edits without changing the index. The capture is local verification material; current knowledge does not depend on its retention.
+
+Required results:
+
+- Beta owns the milestone inventory and actual prerequisites; detailed proposals and implementation candidates have one subject or delivery-brief owner.
+- Forms owns logical field semantics; field wiring owns the mounted-control attachment signature. The independent ordinary-field path remains available.
+- Infrastructure is planned and unassigned; its shared-style, announcer and verification scope is defined without implementation. Package/type design has its own early outcome and consumer evidence.
+- Picker current behavior and rationale stand in `design/`; remaining editing has a focused work record; every substantive root-plan section is accounted for before deletion. Later candidates have one backlog home.
+- Release evidence has a component matrix, shared/integrated scenarios, explicit manual/human-doc contributor gaps and artifact/migration requirements.
+- All local links and state/parent pointers resolve. Accepted API decisions remain distinct from acceptance of the completed work record. Public docs, product code, tests, configuration and the existing index state remain unchanged.
+
+Documentation was divided into independent edit scopes: picker consolidation and component briefs, with parent ownership/dependency and release work in the main session. A fresh reviewer checked the complete documentation delta against the captured before-state.
+
+Verification results:
+
+- Static checks passed for 302 local Markdown links across 32 documents, heading fragments, parent/active pointers, evergreen independence, root-plan deletion, README TODO removal and preserved deferred/planned states.
+- Product code, tests, public docs, package/build/CI configuration and the staged index remain unchanged. No product suites, browser probes, builds or remote CI checks ran during this consolidation.
+- `git diff --check` passed. Prose lint ran on the revised parent, subject records, delivery briefs and durable picker guide; flags were reviewed, including literal keyboard/navigation terminology and release-matrix placeholders.
+- Independent review by a fresh Sol agent at high effort covered the full 23-file delta from the captured starting tree. It found ambiguous blanket infrastructure wording and an inaccurate description of end-only range initialization. Both were corrected. The final six-file correction review also confirmed the form/field async boundary, single accessibility-checklist authority, decorative-icon requirement and preserved deprecated-token retirement; it reported no remaining substantive findings.
+- Before, reviewed and corrected snapshots are fingerprinted under `/tmp/buntpapier-beta-reconcile-a8134sa_/`. The final snapshot has 34 files including unchanged prototype resources. This verification-result append is a subsequent bookkeeping update; it makes no additional product or acceptance claim.
+
+The owner adopted the organization and working format; acceptance of this resulting documentation work remains separate. Product scope selection, infrastructure executor assignment, deferred forms/observer decisions, manual contributors and release evidence remain with their owning records.

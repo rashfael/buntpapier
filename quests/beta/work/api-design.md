@@ -1,13 +1,15 @@
 ---
 status: waiting
 activity: close
-next: confirm acceptance of the recorded API design when this scope is selected
+next: confirm acceptance of the completed documentation outcome; preserve the already adopted API decisions
 waiting_on: owner-acceptance
 profile: current owner-selected Codex session; model and effort not exposed
 ---
 # API design continuation
 
 Updated 2026-09-18 after the owner closed and deferred the validation/forms discussion. Phase 1.3's vocabulary and design record are complete under the corrected documentation scope. [Phase 1.4 validation/forms](../../validation-forms/spec.md) is deferred, with proposals, evidence and resume questions preserved.
+
+The adopted decisions in `design/api-design.md` remain binding. The waiting state concerns acceptance of this completed documentation work, not permission to use or reapprove those decisions. The owner accepted this distinction during the beta review on 2026-09-19.
 
 ## Completed work
 

@@ -9,6 +9,7 @@
 | Changing platform or dependency responsibilities | [Architecture direction](architecture.md) |
 | Moving a JavaScript calculation into CSS | [Bridge inventory](js-bridge-inventory.md) |
 | Defining component acceptance evidence | [Accessibility acceptance](accessibility.md) |
+| Choosing temporary probes, permanent tests or docs smoke coverage | [Testing policy](testing.md) |
 | Changing date input, calendar focus or popup behavior | [Date-picker interaction](date-picker-interaction.md) |
 
 These pages stand on their own. Execution state, unresolved investigations, prototypes and handoff evidence belong in the repository's quest records. Future ideas belong in the single project backlog, `TODOs.md`.

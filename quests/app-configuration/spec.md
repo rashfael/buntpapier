@@ -33,4 +33,10 @@ Done when callers have a concrete initialization/update example, local overrides
 
 The general mechanism and built-in component messages can be designed while forms remain deferred. Validation message keys are a later dependency, not a reason to invent an error model here. Packaging owns exported entry points; this quest owns runtime configuration semantics.
 
+## Dictionary delivery and service boundary
+
+Beta requires English defaults and a complete German dictionary for built-in strings. Preserve the candidate keys `close`, `clear`, `open`, `loading`, `success`, `error`, `nothingFound`, `resultsAvailable(n)`, `selected`, `previousMonth`, `nextMonth`, `openCalendar`, `chooseDate`, `chooseDateRange`, `week`, `weekNumber(n)`, `required`, `optional`, `increment`, `decrement`, `showPassword`, `hidePassword` and `dismiss`; validate the exact key/argument contract against component consumers. Functions for plurals, `app.use(Buntpapier, { strings })`, `useStrings()` and a partial component `strings` override remain API candidates until this quest decides their precedence and reactivity. Validation keys follow the forms error model.
+
+The owner accepted the beta review's boundary on 2026-09-19: [infrastructure](../infrastructure/spec.md) owns announcement host creation, installation, isolation, repeated messages and disposal. This quest supplies app-scoped configuration and dictionary lookup; consumers own announcement policy. Coordinate individual-import behavior and multiple-app/SSR cases with infrastructure and packaging. Picker delivery owns locale-sensitive parsing and how an in-progress edit responds to changed configuration.
+
 Future durable output: initialization/update examples and the dictionary contract in `design/`, with evidence for reactivity, two-app isolation, local overrides, disposal and SSR/hydration.

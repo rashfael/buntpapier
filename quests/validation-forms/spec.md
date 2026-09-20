@@ -11,7 +11,7 @@ profile: current owner-selected Codex session; model and effort not exposed
 
 Own validation behavior, schema/definition boundaries and form authoring. Inherit the parent API decisions. The owner deferred this discussion on 2026-09-18; this migration preserves that gate. No implementation is authorized. Acceptance requires decided public behavior and authoring APIs, with the scenarios below verified to the depth needed for contract design. Durable accepted outcomes belong in `design/api-design.md` and the API guide.
 
-Status: deferred by the owner, 2026-09-18. This discussion is closed for now; Phase 1.4 is not a completed contract. Buntpapier will own its validation stack, use `useForm` and remove Vuelidate support without a migration phase. Exact signatures, schema integration, template authoring and remaining behavior below are proposals. This page continues [roadmap section 6](../beta/spec.md#6-validation-kill-vuelidate-own-the-model) and Phase 1.3's [shared field vocabulary](../../design/api-design.md). Component implementation has not been requested.
+Status: deferred by the owner, 2026-09-18. This discussion is closed for now; the forms contract is incomplete. Buntpapier will own its validation stack, use `useForm` and remove Vuelidate support without a migration phase. Exact signatures, schema integration, template authoring and remaining behavior below are proposals. This page owns [beta's form outcome](../beta/spec.md#milestone-scope-and-delivery-ownership) under the [shared field vocabulary](../../design/api-design.md). Component implementation has not been requested.
 
 When resumed: consider TypeScript-oriented schemas such as Valibot or Zod together with the form definition and template API. Preserve the handwritten-form and JSON Schema builder use cases. Until then, the [dependency assessment](#what-can-proceed-without-the-template-api) identifies independent work; it is not a request to continue the deferred form design. The [field-wiring quest](../field-wiring/spec.md) owns internal signatures, registration and DOM wiring.
 
@@ -31,7 +31,9 @@ On resumption, compare a native definition, schema-backed definitions and an int
 
 ## What can proceed without the template API
 
-This is a dependency assessment and proposed work order. It does not mark Phase 1.4 complete or change the roadmap's release criteria.
+This is a dependency assessment and proposed local work order. It does not complete the forms contract or change beta's release criteria.
+
+The owner accepted the ownership clarification on 2026-09-19: this quest owns logical field identity, committed values and draft semantics, validation lifecycle, participation and reset meaning. [Field wiring](../field-wiring/spec.md#handoff-from-forms) owns the single mounted-control attachment signature, DOM ids, interaction reporting, focus and ARIA projection. Supply the semantics needed by that adapter; consume its signature instead of maintaining a second internal connection API. This clarification does not resume the deferred behavior discussion.
 
 | work | decision needed before it proceeds | template dependency |
 |---|---|---|
@@ -89,7 +91,7 @@ Keep validation pending distinct from the save request's pending state. Submissi
 | [date-range-picker.vue](../../src/components/date-picker/date-range-picker.vue) | Its textbox is always readonly, while calendar interaction changes `DateRange`; embedded mode has no textbox | DOM text-input validity cannot represent the logical field in every presentation |
 | [input.sass](../../src/styles/components/input.sass) | Compact layout hides the hint element, which also contains errors | New feedback must remain available in compact layouts |
 | [src/index.ts](../../src/index.ts), [package.json](../../package.json) | No form component, form composable or validator exports; no Vuelidate dependency | This is new public behavior, not documentation of an existing form API |
-| [current validation page](../../docs/validation.md) | Says Vuelidate is required and imports a nonexistent v3 path | Rewrite with the implementation in Phase 2; keep future examples clearly marked meanwhile |
+| [current validation page](../../docs/validation.md) | Says Vuelidate is required and imports a nonexistent v3 path | Rewrite when the validation replacement ships; keep future examples clearly marked meanwhile |
 
 Source inspection: current working tree, 2026-09-18. The [v2 validators](../../../buntpapier/src/validators/vuelidate) are useful edge-case references, not a selected runtime dependency.
 
@@ -142,7 +144,7 @@ Retain the candidate rule shape `(value) => true | string | Promise<true | strin
 
 Recommend retaining invalid date drafts for correction and preventing a successful submit of the previous model while that draft remains. This changes the current picker behavior and requires an owner decision. The alternative is to keep reverting failed drafts, with explicit feedback explaining that the edit was not accepted.
 
-An async result must apply only to the value and dependencies it checked. A late result cannot replace a newer result or revive a removed field's error. Reset or disposal invalidates outstanding results. Submission must never succeed for an outdated value; whether a changed value restarts a pending submit check or cancels that submit attempt remains a choice below. Phase 1.5 owns how this guarantee is implemented.
+An async result must apply only to the value and dependencies it checked. A late result cannot replace a newer result or revive a removed field's error. Reset or disposal invalidates outstanding results. Submission must never succeed for an outdated value; whether a changed value restarts a pending submit check or cancels that submit attempt remains a choice below. This quest owns async execution and stale-result handling; the field adapter reports interaction and attaches feedback under that policy.
 
 A rejected promise or thrown exception means the check could not complete. Recommend blocking submission with retry feedback rather than treating it as a valid value or displaying an arbitrary exception as a validation message. Rules should return strings for expected invalid values. External server errors remain application-owned; typing or resetting local validation does not silently mutate those props.
 
@@ -150,7 +152,7 @@ Cross-field checks need explicit dependency behavior. A `sameAs` rule can read a
 
 ## Form participation and reset
 
-Recommend aggregating logical fields once, with messages linked to a usable focus target. Composite controls and groups must not register both their shell and each internal input as separate copies of the same value. Summary order follows the visible form order. Field registration and duplicate-name handling belong to Phase 1.5 once public participation is decided.
+Recommend aggregating logical fields once, with messages linked to a usable focus target. Composite controls and groups must not register both their shell and each internal input as separate copies of the same value. Summary order follows the visible form order. This quest owns logical registration, identity and duplicate-name semantics; field wiring attaches mounted views and their focus targets under that policy.
 
 Disabled fields should be excluded from active form validation. The earlier recommendation to unregister unmounted fields by default is under review: a script-defined form or schema builder may need declared fields to retain validation while their views are absent. Compare those lifetimes using a wizard and conditional fields. CSS hiding alone does not mean unmounting. Whether user-facing readonly fields participate still needs a choice; the range picker's internal readonly textbox must never exclude its editable logical field.
 
@@ -162,7 +164,7 @@ Recommend `resetValidation()` for clearing local results, interaction history an
 |---|---|---|---|
 | Schema and type source | investigate, then decide | Native definitions, Valibot/Zod-style schemas or schema interoperability; retain the JSON Schema builder use case | Definition API, inferred types, validator boundary and transformations |
 | Template authoring | decide, then prototype | `useForm` direction accepted; compare direct field binding, slots and a definition-driven `Field`, including a JSON Schema builder | Published template API and preferred examples |
-| Internal control connection | decide | Typed value access, draft/parse state, whole-field interaction, feedback and focus attachment; keep logical state independent of view lifetime | Form integration in controls |
+| Logical-field handoff | decide | Define identity, value/draft state, participation and reset semantics; [field wiring](../field-wiring/spec.md#handoff-from-forms) owns the attachment signature | Finalizing the control adapter and form integration |
 | Error composition and timing | decide | Additive invalidity, hints alongside all errors, blur then correction checks; alternatives: controlled override, first error only, submit-only default | Field display and validation state |
 | Accessible feedback | decide, then verify | [ARIA feedback proposal](#accessibility); compare error relationships, announcements and failed-submit focus; native synchronization optional | Field accessibility wiring |
 | Invalid date draft | decide | Retain and block submit; alternative: revert with explicit feedback | Picker validation correctness |
@@ -171,7 +173,7 @@ Recommend `resetValidation()` for clearing local results, interaction history an
 | Readonly/hidden field participation | decide | Distinguish logical readonly, CSS-hidden, unmounted and internally readonly controls; choose exclusions and focus behavior | Form aggregation and summaries |
 | Reset scope | decide | `resetValidation()` preserves values and external errors; alternative: separately named model reset with a supplied baseline | Form methods |
 
-Template authoring can remain open while independent contract work proceeds. The remaining proposals can change without reopening the own-stack decision, `useForm` direction, direct Vuelidate removal or Phase 1.3's field names and CSS/props decisions.
+Template authoring can remain open while independent contract work proceeds. The remaining proposals can change without reopening the own-stack decision, `useForm` direction, direct Vuelidate removal or the adopted field names and CSS/props decisions.
 
 ## Verification scenarios for the eventual contract
 
@@ -182,5 +184,6 @@ Template authoring can remain open while independent contract work proceeds. The
 - An older uniqueness response cannot override a newer value; changing a value during submit follows the selected cancel/retry policy; a rejected check cannot count as success.
 - Disabled, readonly, hidden and unmounted fields follow their stated participation policy, including error-summary focus behavior.
 - Reset clears only its documented state, and a late promise cannot restore a cleared error.
+- Error feedback remains usable inside a native modal; changing locale during an invalid draft, switching presentation and requesting submission preserves the chosen value/draft and focus policy.
 
-These are design scenarios, not passing tests. No validation implementation or browser prototype was produced in this session. Phase 1.4 completes when its public API and behavior choices are accepted. Phase 1.5 can develop independent contracts now and finalize form wiring against the behavior decisions it actually consumes.
+These are design scenarios, not passing tests. No validation implementation or browser prototype was produced in this session. The forms design completes when its public API and behavior choices are accepted. Independent subject contracts can proceed when selected; field wiring finalizes form integration against the behavior decisions it actually consumes.

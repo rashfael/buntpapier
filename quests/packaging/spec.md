@@ -26,8 +26,10 @@ At `e1e0d4b09f59ac4baf3850f29425c2fe4c7ae82b`, [package.json](../../package.json
 | declarations | How should declarations expose props, models, events, slots and global components? | research, prototype, decide | Current Vue/Pug/toolchain behavior; primed API types follow a selected workflow |
 | ssr-imports | What must importing and rendering the package support without browser globals? | decide, prototype | Existing SSR guards; app configuration owns locale defaults and hydration behavior |
 | consumer-evidence | Which consumer cases prove the packed artifact contains working JS, styles and declarations? | prototype | Chosen export contract and declaration approach |
+| vue-compatibility | Which Vue versions and runtime/peer dependencies does the package require? | decide, prototype | The current build externalizes Vue while the package lists it only as a development dependency |
+| migration-surface | Which alpha-to-beta exports, props and CSS policies change, and what migration evidence accompanies them? | research, decide | Accepted subject contracts; retain direct Vuelidate removal without a compatibility period |
 
-Preserve `buntpapier/style` and the shared CSS architecture unless the owner adopts a compatibility change. A build-tool replacement, reactivity-transform migration and release publication are separate decisions. Beta's reactivity-transform question remains visible before expanding composables.
+Preserve `buntpapier/style` and the shared CSS architecture unless the owner adopts a compatibility change. A build-tool replacement, reactivity-transform migration and release publication are separate decisions. The owner decided on 2026-09-20 to keep reactivity-transform for beta. Preserve `$ref`/`$computed`; declaration/source/Pug feasibility must support that choice. The policy is settled, while tooling compatibility still needs evidence.
 
 ## Evidence and completion
 
@@ -35,4 +37,4 @@ The design outcome is an explicit export map and declaration/SSR contract, with 
 
 For later delivery, verify the packed artifact from a consumer fixture: plugin registration, chosen individual imports, styles, representative props/events/slots and a Node import without browser globals. Coordinate Pug/editor checks for a selected primed view and SSR/hydration checks for application configuration. A source build alone does not establish that the published declarations resolve.
 
-Phase 1 still requires a `types` entry in the next alpha. This planned quest supplies no build, publication or acceptance claim. Future durable output: the package contract and repeatable consumer verification in `design/`, plus mechanical API references where needed.
+The owner accepted starting package/type feasibility early on 2026-09-19. The next-alpha declaration/`types` deliverable belongs here; it does not block unrelated contract design. [Infrastructure](../infrastructure/spec.md) runs the chosen checks in CI without taking ownership of the export or declaration design. [Beta release evidence](../beta/work/release.md) owns the final artifact/migration checklist and publication coordination. This planned quest supplies no build, publication or acceptance claim. Future durable output: the package contract and repeatable consumer verification in `design/`, plus mechanical API references where needed.

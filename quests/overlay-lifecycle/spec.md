@@ -29,7 +29,7 @@ Done when a state-transition table and probes cover live mode changes, focus pre
 
 Use a calendar that is open with a keyboard-focused day when responsive CSS changes its presentation. Preserve the selected value and workflow under the accepted API; decide the resulting open state, focus target and treatment of an unfinished interaction. Cover nested overlays and missing restoration targets as part of the same contract.
 
-The selection quest owns active-item and selected-value semantics. Field wiring owns logical-field naming, drafts and focus attachment. This quest owns how their state and usable targets survive native transitions. Primed-view mount rules apply only when a selected overlay workflow uses a primed view.
+The selection quest owns active-item and selected-value semantics. Field wiring owns logical-field naming and control/focus attachment; forms owns logical draft semantics and picker delivery owns editing behavior. This quest owns how their state and usable targets survive native transitions. Primed-view mount rules apply only when a selected overlay workflow uses a primed view.
 
 ## Questions and dependencies
 
@@ -40,6 +40,19 @@ The selection quest owns active-item and selected-value semantics. Field wiring 
 | overlay-tokens | Which overlay tokens, defaults and invalid-value rules express those policies? | decide | Shared props/CSS boundary; token spellings remain proposals |
 | live-detection | Does detection plus the native transition preserve the live-update guarantee? | prototype, unblock | Observer scope resumed and sufficient detection evidence on the browser target |
 
-Transition design can proceed while observation remains deferred. A probe supplied with resolved policy changes could isolate native behavior; it would leave end-to-end CSS detection unverified. Production positioning, clipping and component migrations remain in beta's delivery phases until separately selected.
+Transition design can proceed while observation remains deferred. A probe supplied with resolved policy changes could isolate native behavior; it would leave end-to-end CSS detection unverified. Production positioning, clipping and the component migrations below remain planned until separately selected.
+
+## Delivery brief
+
+This quest owns the native overlay foundation and its tooltip, dialog and popover consumers. Selection owns select/combobox migration; [component briefs](../beta/work/components.md) own menu and toast. The owner accepted this delivery routing on 2026-09-19; it does not settle local signatures or start implementation.
+
+- Retire Floating UI, Popper, the host `#bunt-teleport-target` requirement, copied dropdown theme styles and the duplicated select input strip only after their consumers migrate. Verify inherited theme context, trigger width, available-height clipping, nested scrollers, viewport edges, placement fallback and the joined outline on the supported browser target. The bridge inventory owns each retirement condition.
+- Candidate internal responsibilities are `useOverlay` for native popover state/anchors, `useDialog` for modal lifecycle, and `useDismiss` for dismissal the platform does not supply. Reconcile native `toggle`, `cancel`, `close` and close requests with logical state, including topmost Escape ordering and interrupted transitions. Exact helper boundaries follow the contract rather than an estimated line count.
+- Candidate presentation properties include `--popover-placement`, `--popover-offset`, `--dialog-size` and `--dialog-placement`, with size/placement/modality/dismissal updating live. Define grammar and invalid values here. Compare native anchor positioning, `position-area`, fallback placement, scroll locking and starting/closing transitions through probes. A drawer-specific API waits for an actual drawer workflow.
+- Tooltip delivery retains `v-tooltip` as sugar. Cover hover delay/warm-up, keyboard focus, pointer travel over the tooltip, Escape, blur/leave and touch behavior, with a noninteractive tooltip and a stable trigger description. The proposal to derive an otherwise missing icon-button name from tooltip content needs an explicit naming decision and AT evidence.
+- Dialog delivery covers title association, initial focus, modal versus nonmodal behavior, dismissal, scroll locking, restoration and alert-dialog use. Popover delivery covers rich anchored content and keyboard entry/return. Earlier role/ARIA workarounds are hypotheses to verify on the supported combinations, not blanket rules.
+- Coordinate the announcement service with native modal/nested overlays. Verify that messages and error feedback remain available to the intended user while the modal is active.
+
+Do not add a generic focus trap without a real contained-focus consumer; the architecture retains a small dependency as an option if such a case appears. Native lifecycle observations, three-engine regression tests, applicable manual AT evidence and migration notes are required before claiming the positioning dependencies removable.
 
 Future durable output: an overlay lifecycle contract in `design/`, with its state-transition table, browser observations, focus scenarios and remaining integration dependencies.
