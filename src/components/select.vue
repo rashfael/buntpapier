@@ -7,9 +7,9 @@
 // - option background color contrast
 // - selected option sticks when scrolling
 // - open indicator broken
-import { computed, defineComponent, h, nextTick, onMounted, onUnmounted, useSlots, watch, withModifiers } from 'vue'
+import { computed, defineComponent, h, nextTick, onMounted, onUnmounted, useSlots, watch, useTemplateRef, withModifiers } from 'vue'
 import { useFloating, offset, flip, size } from '@floating-ui/vue'
-import type { ReferenceElement, FloatingElement } from '@floating-ui/vue'
+import { useFieldRouting, useFieldFocus, preventFieldEdit } from '../utils/field'
 import { useComputedStyle } from '../computedStyle'
 import { onThemeChange } from '../themeWatcher'
 import { getIconClass } from '../utils/icon'
@@ -154,10 +154,22 @@ const {
 	}
 })
 
-const emit = defineEmits(['update:modelValue', 'focus', 'blur'])
+const emit = defineEmits<{
+	'update:modelValue': [value: string | number | object]
+	input: [event: Event]
+	change: [event: Event]
+	focus: []
+	blur: []
+}>()
+defineSlots<{
+	hint?(): unknown
+	default?(props: { option: any, index: number, selected: boolean, active: boolean, group: any, isFirstOfGroup: boolean }): unknown
+	group?(props: { group: any, Options: any, options: any[] }): unknown
+	'group-header'?(props: { group: any }): unknown
+	'result-header'?(): unknown
+	'no-options'?(): unknown
+}>()
 
-// the component renders a fragment (root element + teleported dropdown), so attributes
-// like style/class can't auto-inherit — forward them onto the main element explicitly
 defineOptions({ inheritAttrs: false })
 
 const slots = useSlots()
@@ -181,7 +193,10 @@ const customizerArgs = {
 	filter
 }
 
-let focused = $ref(false)
+const { id, rootAttrs, inputAttrs, popupAttrs, nameAttrs } = useFieldRouting()
+function hasHint () {
+	return Boolean(invalid ? hintText : slots.hint || hint)
+}
 
 const iconClass = $computed(() => {
 	return getIconClass(icon)
@@ -205,40 +220,50 @@ const floatingLabel = $computed(() => {
 
 let open = $ref(false)
 let width = $ref(0)
-let dropdownReady = $ref(false)
-const el = $ref<ReferenceElement>(null)
-const inputEl: HTMLInputElement = $ref(null)
-const dropdownRef = $ref<FloatingElement>(null)
+const el = $ref<HTMLElement>(null)
+const inputEl = useTemplateRef<HTMLInputElement>('inputEl')
+const dropdownRef = $ref<HTMLElement>(null)
 const dropdownInputTarget = $ref(null)
 
-async function handleFocus () {
-	open = true
+const { focused, focus, isProgrammatic } = useFieldFocus($$(el), inputEl, event => {
+	if (event === 'focus') emit('focus')
+	else emit('blur')
+	if (event === 'blur') {
+		open = false
+		if (validation) validation.$touch()
+		updateOutline()
+	}
+}, $$(dropdownRef))
+
+function openDropdown () {
+	if (disabled || open) return
 	width = el.getBoundingClientRect().width
-	inputEl.select()
-	await nextTick()
-	focused = true
-}
-
-async function handleBlur () {
-	open = false
-	if (validation) validation.$touch()
-	dropdownReady = false
-	await nextTick()
-	focused = false
-	updateOutline()
-}
-
-async function handleClick () {
-	if (open || !focused) return
 	open = true
 	updateOutline()
+}
+
+function handleFocus () {
+	if (isProgrammatic() || disabled) return
+	openDropdown()
+	inputEl.value.select()
+}
+
+function handleClick () {
+	openDropdown()
 }
 
 let inputValue = $ref('')
 let search = $ref('')
 
-function handleInput ($event) {
-	inputValue = $event.target.value
+function handleInput ($event: Event) {
+	emit('input', $event)
+	const entry = $event.target as HTMLInputElement
+	if (disabled || readonly) {
+		entry.value = inputValue ?? ''
+		return
+	}
+	openDropdown()
+	inputValue = entry.value
 	search = inputValue
 	// emit('update:modelValue', $event.target.value)
 	// if (validation) validation.$touch()
@@ -278,6 +303,7 @@ function isOptionSelected (option) {
 }
 
 function handleDropdownSelect (option) {
+	if (disabled || readonly) return
 	const value = getOptionValue(option, customizerArgs)
 	inputValue = getOptionLabel(option, customizerArgs)
 	emit('update:modelValue', value)
@@ -312,8 +338,9 @@ function setOptionRef (el, index) {
 }
 
 function onArrow (dir) {
+	if (disabled) return
 	if (!open) {
-		open = true
+		openDropdown()
 		return
 	}
 	const count = selectableOptions.length
@@ -324,6 +351,7 @@ function onArrow (dir) {
 }
 
 function onEnter () {
+	if (disabled || readonly) return
 	if (open && activeIndex >= 0 && activeIndex < selectableOptions.length) {
 		handleDropdownSelect(selectableOptions[activeIndex])
 	}
@@ -332,6 +360,12 @@ function onEnter () {
 watch($$(open), (isOpen) => {
 	activeIndex = isOpen ? selectableOptions.findIndex(option => isOptionSelected(option)) : -1
 })
+
+watch($$(disabled), value => {
+	if (!value) return
+	if (dropdownRef?.contains(document.activeElement)) focus()
+	open = false
+}, { flush: 'sync' })
 
 watch($$(search), () => {
 	activeIndex = selectableOptions.length ? 0 : -1
@@ -343,10 +377,13 @@ function renderOptionLi (option, selectableIndex, group, isFirstOfGroup) {
 	const active = selectableIndex === activeIndex
 	return h('li', {
 		key: selectableIndex,
+		id: `${id()}-option-${selectableIndex}`,
+		role: 'option',
+		'aria-selected': selected,
 		ref: el => setOptionRef(el, selectableIndex),
 		class: ['bunt-select-option', { active: selected, highlighted: active }],
 		onClick: withModifiers(() => handleDropdownSelect(option), ['prevent', 'stop']),
-		onMousemove: () => { activeIndex = selectableIndex }
+		onMousemove: () => { if (!disabled) activeIndex = selectableIndex }
 	}, slots.default
 		? slots.default({ option, index: selectableIndex, selected, active, group, isFirstOfGroup })
 		: [getOptionLabel(option, customizerArgs)])
@@ -412,18 +449,15 @@ const { Outline, updateOutline, floatingLabelWidth } = useInputOutline($$(label)
 	bottom: computed(() => dropdownPlacement.value === 'bottom' && open)
 })
 
-// TODO watchEffect instead?
-watch($$(modelValue), (newVal, oldVal) => {
-	if (newVal === oldVal) return
-	const option = findOptionByValue(newVal, customizerArgs)
-	inputValue = getOptionLabel(option, customizerArgs)
+const selectedLabel = $computed(() => {
+	const args = { ...customizerArgs, options }
+	return getOptionLabel(findOptionByValue(modelValue, args), args)
+})
+watch([$$(modelValue), $$(selectedLabel)], () => {
+	inputValue = selectedLabel
+	search = ''
 }, { immediate: true })
-
-watch($$(options), () => {
-	customizerArgs.options = options
-	const option = findOptionByValue(modelValue, customizerArgs)
-	inputValue = getOptionLabel(option, customizerArgs)
-}, { deep: true })
+watch($$(options), () => { customizerArgs.options = options })
 
 watch($$(radius), (newVal, oldVal) => {
 	if (newVal === oldVal) return
@@ -459,7 +493,7 @@ const classes = $computed(() => {
 	return [
 		...computedClasses,
 		{
-			focused,
+			focused: focused.value,
 			'floating-label': floatingLabel,
 			invalid,
 			disabled,
@@ -500,45 +534,73 @@ onUnmounted(() => {
 	unregisterThemeChange?.()
 })
 
-defineExpose({ el: $$(el) })
+defineExpose({ el: $$(el), focus })
 </script>
 <template lang="pug">
-.bunt-select.bunt-input(ref="el", v-resize-observer="updateOutline", v-bind="$attrs", :class="classes", :style="style", @click="handleClick")
+.bunt-select.bunt-input(ref="el", v-resize-observer="updateOutline", v-bind="rootAttrs()", :class="classes", :style="style")
 	//- teleport(:to="dropdownInputTarget", :disabled="!dropdownInputTarget")
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
-		label
-			span(v-show="!open") {{ label }}
-			input(ref="inputEl", :type="type", :value="inputValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="handleInput($event)", @focus="handleFocus", @blur="handleBlur", @keydown.down.prevent="onArrow(1)", @keydown.up.prevent="onArrow(-1)", @keydown.enter.prevent="onEnter", @keydown.esc="open = false")
+		label(:for="id()")
+			span(v-show="!open", :id="`${id()}-label`") {{ label }}
+			input(
+				ref="inputEl",
+				v-bind="inputAttrs(hasHint() ? `${id()}-hint` : undefined, label)",
+				:type="type",
+				:value="inputValue",
+				:readonly="readonly || disabled",
+				:aria-disabled="disabled || undefined",
+				:aria-readonly="readonly || disabled || undefined",
+				:aria-invalid="invalid || undefined",
+				role="combobox",
+				aria-autocomplete="list",
+				:aria-expanded="open",
+				:aria-controls="open ? `${id()}-listbox` : undefined",
+				:aria-activedescendant="open && activeIndex >= 0 && activeIndex < selectableOptions.length ? `${id()}-option-${activeIndex}` : undefined",
+				:placeholder="placeholder",
+				@input="handleInput($event)",
+				@change="emit('change', $event)",
+				@beforeinput="preventFieldEdit($event, disabled || readonly)",
+				@paste="preventFieldEdit($event, disabled || readonly)",
+				@drop="preventFieldEdit($event, disabled || readonly)",
+				@focus="handleFocus",
+				@click="handleClick",
+				@keydown.down.prevent="onArrow(1)",
+				@keydown.up.prevent="onArrow(-1)",
+				@keydown.enter.prevent="onEnter",
+				@keydown.esc="open = false"
+			)
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		Outline(v-show="!open || dropdownPlacement === 'bottom'")
-	//- .hint(v-if="hintIsHtml", v-html="hintText")
-	.hint {{ hintText }}
+	.hint(v-if="hasHint()", :id="`${id()}-hint`")
+		template(v-if="invalid") {{ hintText }}
+		slot(v-else, name="hint") {{ hint }}
 
-teleport(v-if="open", to="#bunt-teleport-target")
-	.bunt-select-dropdown-menu(ref="dropdownRef", :class="[dropdownClass, `dropdown-placement-${dropdownPlacement}`, ...classes]", :style="{ width: width+'px', ...dropdownFloatingStyles, ...style, ...dropdownThemeStyle }", @mousedown.prevent.stop="")
-		.bunt-select.bunt-input(ref="dropdownInputTarget", :class="classes", :style="style")
-			.label-input-container
-				label
-					span {{ label }}
-			svg.dropdown-outline(:style="{'--label-gap': floatingLabelWidth}")
-				path(:d="`M 0 1 h ${width}`")
-		slot(name="result-header")
-		Scrollbars.scrollable-menu(y="", :style="scrollableStyle")
-			ul.bunt-select-groups(v-if="isGrouped")
-				li.bunt-select-group(v-for="grp, gi of displayGroups", :key="gi")
-					slot(name="group", :group="grp.group", :Options="optionsComponentFor(grp.group)", :options="grp.rows.map(row => row.option)")
-						.bunt-select-group-header
-							slot(name="group-header", :group="grp.group")
-								| {{ getOptionGroupLabel(grp.group, customizerArgs) }}
-						ul.bunt-select-group-options
-							component(:is="optionsComponentFor(grp.group)")
-			ul(v-else)
-				component(:is="FlatOptions")
-			ul(v-if="!selectableOptions.length")
-				li.divider(transition="fade")
-				li.text-center(transition="fade")
-					slot(name="no-options") Sorry, no matching options.
+	teleport(v-if="open", to="#bunt-teleport-target")
+		.bunt-select-dropdown-menu(ref="dropdownRef", v-bind="popupAttrs()", :class="[dropdownClass, `dropdown-placement-${dropdownPlacement}`, ...classes]", :style="{ width: width+'px', ...dropdownFloatingStyles, ...style, ...dropdownThemeStyle }", @mousedown.prevent.stop="")
+			.bunt-select.bunt-input(ref="dropdownInputTarget", aria-hidden="true", :class="classes", :style="style")
+				.label-input-container
+					label
+						span {{ label }}
+				svg.dropdown-outline(:style="{'--label-gap': floatingLabelWidth}")
+					path(:d="`M 0 1 h ${width}`")
+			slot(name="result-header")
+			Scrollbars.scrollable-menu(y="", :style="scrollableStyle")
+				.options(:id="`${id()}-listbox`", role="listbox", v-bind="nameAttrs(label)", :aria-readonly="readonly || undefined")
+					ul.bunt-select-groups(v-if="isGrouped", role="presentation")
+						li.bunt-select-group(role="presentation", v-for="grp, gi of displayGroups", :key="gi")
+							slot(name="group", :group="grp.group", :Options="optionsComponentFor(grp.group)", :options="grp.rows.map(row => row.option)")
+								.bunt-select-group-header
+									slot(name="group-header", :group="grp.group")
+										| {{ getOptionGroupLabel(grp.group, customizerArgs) }}
+								ul.bunt-select-group-options(role="presentation")
+									component(:is="optionsComponentFor(grp.group)")
+					ul(v-else, role="presentation")
+						component(:is="FlatOptions")
+				ul(v-if="!selectableOptions.length")
+					li.divider(transition="fade")
+					li.text-center(transition="fade")
+						slot(name="no-options") Sorry, no matching options.
 </template>
 <style lang="sass">
 .bunt-select
@@ -567,6 +629,8 @@ teleport(v-if="open", to="#bunt-teleport-target")
 	display: flex
 	flex-direction: column
 	pointer-events: none
+	> :not(.bunt-input)
+		pointer-events: auto
 	.bunt-input
 		padding-top: 0
 		height: 34px

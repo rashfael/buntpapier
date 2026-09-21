@@ -66,6 +66,14 @@ test.describe('docs smoke', () => {
 		noVueWarnings(pageLog)
 	})
 
+	test('input docs mount and editable values reach the native entry', async ({ page, pageLog }) => {
+		await page.goto('/components/input')
+		const input = page.locator('.c-showcase .component .bunt-input input').first()
+		await input.fill('Docs smoke')
+		await expect(input).toHaveValue('Docs smoke')
+		noVueWarnings(pageLog)
+	})
+
 	test('select docs mount without runtime errors and the dropdown reaches the teleport target', async ({ page, pageLog }) => {
 		await page.goto('/components/select')
 		const playground = page.locator('.c-showcase').first()

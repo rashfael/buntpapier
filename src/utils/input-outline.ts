@@ -1,4 +1,4 @@
-import { h as createElement, onMounted, nextTick } from 'vue'
+import { h as createElement, onMounted, nextTick, ref } from 'vue'
 import type { Ref } from 'vue'
 import { getTextMetrics } from './text-metrics'
 
@@ -11,8 +11,9 @@ export function useInputOutline (labelRef: Ref<string>, radiusRef: Ref<number>, 
 	let outlineStroke = $ref(null)
 	let outline = $ref(null)
 
+	const isMounted = ref(false)
 	const floatingLabelWidth = $computed(() => {
-		return label ? getTextMetrics(label, '12px \'Roboto\', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif').width + 8 : 0
+		return isMounted.value && label ? getTextMetrics(label, '12px \'Roboto\', "Helvetica Neue", HelveticaNeue, Helvetica, Arial, sans-serif').width + 8 : 0
 	})
 
 	function updateOutline () {
@@ -51,6 +52,7 @@ export function useInputOutline (labelRef: Ref<string>, radiusRef: Ref<number>, 
 	}
 
 	onMounted(async () => {
+		isMounted.value = true
 		await nextTick()
 		updateOutline()
 	})

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 // TODO
 // - label animation WITH icon should go sideways, hint with icon should be on same height as input
-// - apply name and other attrs to input el
 // - rethink padding-top
-import { ref, watch } from 'vue'
+import { useTemplateRef, useSlots, watch } from 'vue'
+import type { PropType } from 'vue'
+import { useFieldRouting, useFieldFocus, preventFieldEdit } from '../utils/field'
 import { useComputedStyle } from '../computedStyle'
 import { getIconClass } from '../utils/icon'
 import { useInputOutline } from '../utils/input-outline'
@@ -27,7 +28,7 @@ const {
 	validation
 } = defineProps({
 	type: {
-		type: String,
+		type: String as PropType<'text' | 'search' | 'email' | 'url' | 'tel' | 'password' | 'number'>,
 		default: 'text'
 	},
 	label: String,
@@ -52,9 +53,27 @@ const {
 	hint: String,
 	validation: Object // vuelidate result
 })
-const emit = defineEmits(['update:modelValue'])
-
-let focused = $ref(false)
+const emit = defineEmits<{
+	'update:modelValue': [value: string | number]
+	input: [event: Event]
+	change: [event: Event]
+	focus: []
+	blur: []
+}>()
+defineOptions({ inheritAttrs: false })
+defineSlots<{ hint?(): unknown }>()
+const slots = useSlots()
+const el = useTemplateRef<HTMLElement>('el')
+const inputEl = useTemplateRef<HTMLInputElement>('inputEl')
+const { id, rootAttrs, inputAttrs } = useFieldRouting()
+const { focused, focus } = useFieldFocus(el, inputEl, event => {
+	if (event === 'focus') emit('focus')
+	else emit('blur')
+	if (event === 'blur' && validation) validation.$touch()
+})
+function hasHint () {
+	return Boolean(invalid ? hintText : slots.hint || hint)
+}
 
 const iconClass = $computed(() => {
 	return getIconClass(icon)
@@ -76,13 +95,13 @@ const floatingLabel = $computed(() => {
 	return Boolean(placeholder || modelValue || modelValue === 0)
 })
 
-function onInput ($event) {
-	emit('update:modelValue', $event.target.value)
-	if (validation) validation.$touch()
-}
-
-function onBlur () {
-	focused = false
+function onInput ($event: Event) {
+	emit('input', $event)
+	if (disabled || readonly) {
+		($event.target as HTMLInputElement).value = String(modelValue ?? '')
+		return
+	}
+	emit('update:modelValue', ($event.target as HTMLInputElement).value)
 	if (validation) validation.$touch()
 }
 
@@ -95,7 +114,6 @@ watch($$(radius), (newVal, oldVal) => {
 	updateOutline()
 })
 
-const el = ref()
 const { classes, style } = useComputedStyle(el, {
 	'--input-shape': 'shape',
 	'--input-size': 'size',
@@ -114,19 +132,34 @@ const { classes, style } = useComputedStyle(el, {
 	return { style, classes }
 })
 
-defineExpose({ el: $$(el) })
+defineExpose({ el, focus })
 </script>
 <template lang="pug">
-.bunt-input(ref="el", v-resize-observer="updateOutline", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled, 'with-icon': icon}]", :style="style")
+.bunt-input(ref="el", v-resize-observer="updateOutline", v-bind="rootAttrs()", :class="[...classes, {focused, 'floating-label': floatingLabel, invalid, disabled, 'with-icon': icon}]", :style="style")
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
-		label
-			span {{ label }}
-			input(:type="type", :value="modelValue", :disabled="disabled", :readonly="readonly", :placeholder="placeholder", @input="onInput($event)", @focus="focused = true", @blur="onBlur")
+		label(:for="id()")
+			span(:id="`${id()}-label`") {{ label }}
+			input(
+				ref="inputEl",
+				v-bind="inputAttrs(hasHint() ? `${id()}-hint` : undefined, label)",
+				:type="type",
+				:value="modelValue",
+				:readonly="readonly || disabled",
+				:aria-disabled="disabled || undefined",
+				:aria-readonly="readonly || disabled || undefined",
+				:aria-invalid="invalid || undefined",
+				:placeholder="placeholder",
+				@input="onInput",
+				@change="emit('change', $event)",
+				@beforeinput="preventFieldEdit($event, disabled || readonly)",
+				@paste="preventFieldEdit($event, disabled || readonly)",
+				@drop="preventFieldEdit($event, disabled || readonly)",
+				@keydown.enter="disabled && $event.preventDefault()"
+			)
 		.error-icon.mdi.mdi-alert-circle(v-show="invalid", :title="hintText")
 		Outline
-	//- .hint(v-if="hintIsHtml", v-html="hintText")
-	.hint {{ hintText }}
+	.hint(v-if="hasHint()", :id="`${id()}-hint`")
+		template(v-if="invalid") {{ hintText }}
+		slot(v-else, name="hint") {{ hint }}
 </template>
-<style lang="stylus">
-</style>

@@ -15,7 +15,7 @@ function fixtureNames () {
 	return readdirSync(root).filter(entry => entry.endsWith('.vue')).map(entry => entry.slice(0, -'.vue'.length)).sort()
 }
 
-function page (name: string) {
+function page (name: string, rendered?: string) {
 	return `<!doctype html>
 <html lang="en">
 	<head>
@@ -24,11 +24,11 @@ function page (name: string) {
 		<title>${name} test fixture</title>
 	</head>
 	<body>
-		<div id="app"></div>
+		<div id="app">${rendered ?? ''}</div>
 		<script type="module">
 			import { mountFixture } from '/mount.ts'
 			import Fixture from '/${name}.vue'
-			mountFixture(Fixture)
+			mountFixture(Fixture, ${rendered !== undefined})
 		</script>
 	</body>
 </html>
@@ -80,7 +80,14 @@ function fixturePages (): Plugin {
 				if (url === '/') return respond(index(names))
 
 				const name = names.find(candidate => normalize(candidate) === normalize(requested))
-				if (name) return respond(page(name))
+				if (name) {
+					if (new URL(req.url, 'http://localhost').searchParams.has('ssr')) {
+						const { default: component } = await server.ssrLoadModule(`/${name}.vue`)
+						const { renderFixture } = await server.ssrLoadModule('/ssr.ts')
+						return respond(page(name, await renderFixture(component)))
+					}
+					return respond(page(name))
+				}
 
 				return respond(`<!doctype html>
 <html lang="en">

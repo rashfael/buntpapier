@@ -26,6 +26,9 @@ const lib = {
 	}
 }
 
+export { useTooltip } from './tooltip'
+export type { TooltipOptions, TooltipContent } from './tooltip'
+
 export default lib
 export { useInputOutline } from './utils/input-outline'
 export { refreshComputedStyles } from './themeWatcher'

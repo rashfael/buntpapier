@@ -2,8 +2,8 @@
 // - better disabled styling
 // - aria-label on icon buttons
 
-import { h as createElement, ref, watch, withDirectives, resolveComponent, mergeProps, DirectiveArguments, ConcreteComponent, watchEffect } from 'vue'
-import tooltipDirective from '../directives/tooltip'
+import { h as createElement, ref, watch, resolveComponent, mergeProps, ConcreteComponent, watchEffect } from 'vue'
+import { useTooltip } from '../tooltip'
 import { useComputedStyle } from '../computedStyle'
 import { ensureReadable } from '../utils/colors'
 import { getIconClass } from '../utils/icon'
@@ -116,6 +116,8 @@ export default {
 		watchEffect(() => {
 			if (props.errorMessage !== undefined) errorMessage = props.errorMessage
 		})
+		useTooltip(el, () => tooltipOptions || { text: tooltipText, show: !!errorMessage, fixed: tooltipFixed })
+
 		let showSuccess = $ref(false)
 		let successTimeout
 
@@ -207,50 +209,41 @@ export default {
 				}))
 			}
 
-			const tooltip: DirectiveArguments = [[
-				tooltipDirective,
-				tooltipOptions || { text: tooltipText, show: !!errorMessage, fixed: tooltipFixed }
-			]]
-
 			if (to) {
 				return createElement(resolveComponent('router-link') as ConcreteComponent, {
 					custom: true,
 					to,
 				}, {
 					default ({ href, navigate, isActive, isExactActive }) {
-						return withDirectives(
-							createElement('a', mergeProps({
-								ref: el,
-								href,
-								class: [
-									...getRootClasses(),
-									{
-										'router-link-active': isActive,
-										'router-link-exact-active': isExactActive
-									}
-								],
-								style,
-								ariaDisabled: disabled,
-								onClick (event) {
-									if (disabled) return
-									navigate(event)
-									onClick(event)
+						return createElement('a', mergeProps({
+							ref: el,
+							href,
+							class: [
+								...getRootClasses(),
+								{
+									'router-link-active': isActive,
+									'router-link-exact-active': isExactActive
 								}
-							}, attrs), content),
-							tooltip)
+							],
+							style,
+							ariaDisabled: disabled,
+							onClick (event) {
+								if (disabled) return
+								navigate(event)
+								onClick(event)
+							}
+						}, attrs), content)
 					}
 				})
 			}
-			return withDirectives(
-				createElement('button', {
-					ref: el,
-					class: getRootClasses(),
-					style,
-					ariaDisabled: disabled,
-					type,
-					onClick
-				}, content),
-				tooltip)
+			return createElement('button', {
+				ref: el,
+				class: getRootClasses(),
+				style,
+				ariaDisabled: disabled,
+				type,
+				onClick
+			}, content)
 		}
 	}
 }
