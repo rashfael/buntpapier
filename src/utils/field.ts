@@ -17,7 +17,8 @@ export function mergeDescriptionIds (...values: unknown[]) {
 export function useFieldRouting () {
 	// Call the getters during rendering: useAttrs exposes current bindings but is not reactive.
 	const attrs = useAttrs()
-	const id = () => String(attrs.id || `bunt-${useId()}`)
+	const generatedId = `bunt-${useId()}`
+	const id = () => String(attrs.id || generatedId)
 	const nameAttrs = (label?: string) => ({
 		'aria-label': attrs['aria-label'],
 		'aria-labelledby': attrs['aria-labelledby'] || (!attrs['aria-label'] && label ? `${id()}-label` : undefined)
