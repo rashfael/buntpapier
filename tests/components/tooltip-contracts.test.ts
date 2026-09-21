@@ -1,19 +1,11 @@
+import type { Page } from '@playwright/test'
 import { test, expect } from '../support/fixtures'
+import { recordTooltipAnimations, tooltipPlayback, settleTooltipAnimations } from '../support/tooltip-animations'
 
 test.beforeEach(async ({ page }) => {
+	await recordTooltipAnimations(page)
 	await page.goto('/tooltip-contracts')
 })
-
-async function counts (page) {
-	return JSON.parse(await page.locator('#counts').textContent())
-}
-
-async function clickTooltip (page, target: string) {
-	await page.locator(target).hover()
-	await page.waitForTimeout(250)
-	const box = await page.locator('.bunt-tooltip').boundingBox()
-	await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
-}
 
 test('tooltip pixels do not activate their button, submit or link owners', async ({ page }) => {
 	for (const target of ['#submit-trigger', '#native-trigger', '#link-trigger']) {
@@ -31,7 +23,7 @@ test('tooltip pixels do not activate their button, submit or link owners', async
 test('forced tooltip pixels and the former surrounding halo click through', async ({ page }) => {
 	await page.getByRole('button', { name: 'Set error' }).click()
 	const tooltip = page.locator('.bunt-tooltip')
-	await tooltip.evaluate(element => Promise.all(element.getAnimations().map(animation => animation.finished)))
+	await settleTooltipAnimations(page)
 	const box = await tooltip.boundingBox()
 	const x = box.x + box.width / 2
 	for (const y of [box.y + box.height / 2, box.y + box.height + 4]) {
@@ -43,33 +35,59 @@ test('forced tooltip pixels and the former surrounding halo click through', asyn
 	expect(await counts(page)).toEqual({ buttonClicks: 0, submits: 0, linkClicks: 0, behindClicks: 2 })
 })
 
-test('slide and fade animation reverses safely and unmount disposes it', async ({ page, pageLog }) => {
+test('slide and fade animation reverses in place during playback', async ({ page }) => {
 	const trigger = page.locator('#native-trigger')
 	await trigger.hover()
 	const tooltip = page.locator('.bunt-tooltip')
 	await expect(tooltip).toBeVisible()
-	await expect.poll(() => tooltip.evaluate(element => element.getAnimations().length)).toBe(1)
-	const animation = await tooltip.evaluate(element => {
-		const current = element.getAnimations()[0]
-		const keyframes = (current.effect as KeyframeEffect).getKeyframes()
+	await page.waitForFunction(() => window.tooltipAnimations.length > 0)
+	const animation = await page.evaluate(() => {
+		const effect = window.tooltipAnimations[0].effect as KeyframeEffect
+		const keyframes = effect.getKeyframes()
 		return {
-			duration: (current.effect as KeyframeEffect).getTiming().duration,
-			easing: (current.effect as KeyframeEffect).getTiming().easing,
-			opacities: keyframes.map(frame => frame.opacity),
-			transforms: keyframes.map(frame => frame.transform)
+			duration: effect.getTiming().duration,
+			easing: effect.getTiming().easing,
+			// Engines serialize keyframes differently; compare numeric opacity and distinct transforms.
+			opacities: keyframes.map(frame => Number(frame.opacity)),
+			transforms: keyframes.map(frame => String(frame.transform))
 		}
 	})
 	expect(animation.duration).toBe(200)
 	expect(animation.easing).toBe('ease-in-out')
-	expect(animation.opacities).toEqual(['0', '1'])
+	expect(animation.opacities).toEqual([0, 1])
 	expect(animation.transforms).toHaveLength(2)
-	await page.mouse.move(0, 0)
-	await expect.poll(() => tooltip.evaluate(element => element.getAnimations()[0]?.playbackRate)).toBe(-1)
+	expect(animation.transforms[0]).not.toBe(animation.transforms[1])
+
+	// Keep both reversals in one browser task so rendering cannot finish the animation between interactions.
+	const reversal = await trigger.evaluate(element => {
+		const original = window.tooltipAnimations[0]
+		original.currentTime = 100
+		element.dispatchEvent(new MouseEvent('mouseleave'))
+		const reverseRate = original.playbackRate
+		element.dispatchEvent(new MouseEvent('mouseenter'))
+		return {
+			reverseRate,
+			forwardRate: original.playbackRate,
+			currentTime: original.currentTime,
+			isConnected: (original.effect as KeyframeEffect).target.isConnected
+		}
+	})
+	expect(reversal).toEqual({ reverseRate: -1, forwardRate: 1, currentTime: 100, isConnected: true })
+	// Allow asynchronous positioning to finish before checking that no replacement animation was created.
+	await settleTooltipAnimations(page)
+	expect(await tooltipPlayback(page)).toEqual({ count: 1, playbackRate: 1 })
+})
+
+test('animation finishes dismissal and unmount disposes the tooltip', async ({ page, pageLog }) => {
+	const trigger = page.locator('#native-trigger')
+	const tooltip = page.locator('.bunt-tooltip')
 	await trigger.hover()
-	await expect.poll(() => tooltip.evaluate(element => element.getAnimations()[0]?.playbackRate)).toBe(1)
+	await settleTooltipAnimations(page)
 	await page.mouse.move(0, 0)
+	await expect.poll(() => tooltipPlayback(page)).toEqual({ count: 1, playbackRate: -1 })
 	await expect(tooltip).toHaveCount(0)
 	await trigger.hover()
+	await expect(tooltip).toBeVisible()
 	await page.getByRole('button', { name: 'Remove triggers' }).click()
 	await expect(tooltip).toHaveCount(0)
 	expect(pageLog.consoleErrors).toEqual([])
@@ -187,3 +205,15 @@ test('inline directive updates content and preserves caller descriptions', async
 	await page.keyboard.press('Escape')
 	await expect(trigger).toHaveAttribute('aria-describedby', 'existing-description')
 })
+
+// Fixture interactions shared by the pointer tests.
+async function counts (page: Page) {
+	return JSON.parse(await page.locator('#counts').textContent())
+}
+
+async function clickTooltip (page: Page, target: string) {
+	await page.locator(target).hover()
+	await settleTooltipAnimations(page)
+	const box = await page.locator('.bunt-tooltip').boundingBox()
+	await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2)
+}
