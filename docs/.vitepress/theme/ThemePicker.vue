@@ -11,7 +11,7 @@ if (!import.meta.env.SSR) {
 		const stored = JSON.parse(localStorage.primaryColor)
 		if (stored.light) lightRef.value = stored.light
 		darkRef.value = stored.dark || ''
-	} catch (e) {
+	} catch {
 		// migrate the legacy plain-string format (hex picks only)
 		if (localStorage.primaryColor?.startsWith('#')) lightRef.value = localStorage.primaryColor
 	}
@@ -44,7 +44,7 @@ function copyDeclaration () {
 	#bunt-theme-picker-popover.picker-popover(popover="")
 		.row
 			label.swatch-input(:style="{'--swatch-color': light}")
-				input(type="color", v-model="light", list="presetColors")
+				input(v-model="light", type="color", list="presetColors")
 			span light
 			datalist#presetColors
 				option(v-for="preset of PRESETS", :key="preset") {{ preset }}
@@ -52,7 +52,7 @@ function copyDeclaration () {
 			label.swatch-input(:class="{auto: !dark}", :style="{'--swatch-color': appliedDark}")
 				input(type="color", :value="appliedDark", @input="dark = $event.target.value")
 			span dark
-			button.reset(v-if="dark", @click="dark = ''", title="re-derive from the light color") auto
+			button.reset(v-if="dark", title="re-derive from the light color", @click="dark = ''") auto
 			span.auto-hint(v-else) (auto)
 		.declaration
 			code {{ declaration }}

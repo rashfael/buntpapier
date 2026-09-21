@@ -125,7 +125,7 @@ function handleKeydown (event: KeyboardEvent, currentDay: Temporal.PlainDate | n
 	if (disabled) return
 	const base = currentDay ?? month.with({ day: 1 })
 
-	let next: Temporal.PlainDate | null = null
+	let next: Temporal.PlainDate | null
 
 	switch (event.key) {
 		case 'ArrowRight':

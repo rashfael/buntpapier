@@ -23,7 +23,6 @@ const {
 	disabled,
 	readonly,
 	icon,
-	iconRight,
 	hint,
 	validation
 } = defineProps({

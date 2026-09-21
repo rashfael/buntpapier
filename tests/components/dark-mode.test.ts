@@ -204,12 +204,12 @@ test.describe('performance', () => {
 			}
 			document.body.appendChild(host)
 			// settle initial style
-			getComputedStyle(host.lastElementChild!).color
+			void getComputedStyle(host.lastElementChild!).color
 
 			document.documentElement.style.colorScheme = 'dark'
 			const start = performance.now()
 			// force a synchronous full style recalc
-			getComputedStyle(host.lastElementChild!).color
+			void getComputedStyle(host.lastElementChild!).color
 			return performance.now() - start
 		})
 		console.log(`theme-flip recalc with 10k extra nodes: ${duration.toFixed(1)}ms`)

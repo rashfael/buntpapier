@@ -14,7 +14,7 @@
 		.custom-props
 			.prop
 				label --button-color:
-				input(type="color", v-model="buttonColor")
+				input(v-model="buttonColor", type="color")
 			.prop
 				label --button-size:
 				select(v-model="buttonSize")

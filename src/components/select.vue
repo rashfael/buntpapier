@@ -457,7 +457,9 @@ watch([$$(modelValue), $$(selectedLabel)], () => {
 	inputValue = selectedLabel
 	search = ''
 }, { immediate: true })
-watch($$(options), () => { customizerArgs.options = options })
+watch($$(options), () => {
+	customizerArgs.options = options
+})
 
 watch($$(radius), (newVal, oldVal) => {
 	if (newVal === oldVal) return
@@ -588,7 +590,7 @@ defineExpose({ el: $$(el), focus })
 			Scrollbars.scrollable-menu(y="", :style="scrollableStyle")
 				.options(:id="`${id()}-listbox`", role="listbox", v-bind="nameAttrs(label)", :aria-readonly="readonly || undefined")
 					ul.bunt-select-groups(v-if="isGrouped", role="presentation")
-						li.bunt-select-group(role="presentation", v-for="grp, gi of displayGroups", :key="gi")
+						li.bunt-select-group(v-for="grp, gi of displayGroups", :key="gi", role="presentation")
 							slot(name="group", :group="grp.group", :Options="optionsComponentFor(grp.group)", :options="grp.rows.map(row => row.option)")
 								.bunt-select-group-header
 									slot(name="group-header", :group="grp.group")

@@ -18,6 +18,7 @@ let selected = $ref<string | number | object>('a')
 let kind = $ref<'text' | 'search' | 'email' | 'url' | 'tel' | 'password' | 'number'>('text')
 let events = $ref<string[]>([])
 let submits = $ref(0)
+// eslint-disable-next-line no-unassigned-vars -- assigned from the template (@input.capture etc.)
 let captured: Event
 const input = useTemplateRef('input')
 const select = useTemplateRef('select')
@@ -64,10 +65,10 @@ main.c-field-contracts
 		select(v-model="kind", aria-label="Type")
 			option(v-for="value in ['text', 'search', 'email', 'url', 'tel', 'password', 'number']", :value="value") {{ value }}
 	form(novalidate, @submit.prevent="submits++", @input.capture="captured = $event", @change.capture="captured = $event", @keydown.capture="captured = $event")
-		Input(v-if="present", ref="input", v-model="text", v-bind="attrs", :id="alternate ? 'changed-input' : 'external'", label="Input label", required, :type="kind", :disabled="disabled", :readonly="readonly", :validation="validation", hint="Fallback hint", @focus="record('input-focus')", @blur="record('input-blur')", @input="record('input', $event)", @change="record('change', $event)", @keydown.enter.prevent="record('enter', $event)")
+		Input(v-if="present", v-bind="attrs", :id="alternate ? 'changed-input' : 'external'", ref="input", v-model="text", label="Input label", required, :type="kind", :disabled="disabled", :readonly="readonly", :validation="validation", hint="Fallback hint", @focus="record('input-focus')", @blur="record('input-blur')", @input="record('input', $event)", @change="record('change', $event)", @keydown.enter.prevent="record('enter', $event)")
 			template(v-if="slotHint", #hint)
 				strong Input guidance
-		Select(v-if="present", ref="select", v-model="selected", v-bind="attrs", :id="alternate ? 'changed-select' : 'select-entry'", label="Select label", required, :disabled="disabled", :readonly="readonly", :validation="validation", :options="[{ label: 'Alpha', value: 'a' }, { label: 'Beta', value: 'b' }]", @focus="record('select-focus')", @blur="record('select-blur')", @input="record('search', $event)", @change="record('select-change', $event)")
+		Select(v-if="present", v-bind="attrs", :id="alternate ? 'changed-select' : 'select-entry'", ref="select", v-model="selected", label="Select label", required, :disabled="disabled", :readonly="readonly", :validation="validation", :options="[{ label: 'Alpha', value: 'a' }, { label: 'Beta', value: 'b' }]", @focus="record('select-focus')", @blur="record('select-blur')", @input="record('search', $event)", @change="record('select-change', $event)")
 			template(v-if="slotHint", #hint) Select guidance
 			template(#result-header)
 				button(type="button", @mousedown.stop="") Popup help

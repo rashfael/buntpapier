@@ -2,7 +2,7 @@ import { reactive, onMounted, onUnmounted } from 'vue'
 import { registerHandler, unregisterHandler } from './requestAnimationFrameMuxxer.js'
 import { onThemeChange } from './themeWatcher'
 
-export function useComputedStyle (el, customPropNames: {[key: string]: string}, computeStyle) {
+export function useComputedStyle (el, customPropNames: { [key: string]: string }, computeStyle) {
 	const customProps: any = reactive({})
 	// TODO duplicate data structure?
 	let prevComputedStyle = {}

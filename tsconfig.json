@@ -1,12 +1,30 @@
 {
+	"include": [
+		"src/**/*",
+		"tests/**/*",
+		"playground/**/*",
+		"docs/.vitepress/**/*",
+		"*.ts",
+		"vite.config.js"
+	],
+	"exclude": ["**/node_modules", "**/dist", "**/cache"],
 	"compilerOptions": {
 		"strict": false,
 		"allowJs": true,
 		"checkJs": true,
 		"target": "esnext",
-		"moduleResolution": "node",
-		"noErrorTruncation": true
-
-		// "lib": ["ESNext", "DOM"]
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"noErrorTruncation": true,
+		"noImplicitThis": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"types": ["node", "vite/client", "@vue-macros/reactivity-transform/macros-global"]
+	},
+	"vueCompilerOptions": {
+		"plugins": ["@vue/language-plugin-pug"]
 	}
 }

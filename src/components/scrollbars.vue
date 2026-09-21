@@ -11,12 +11,12 @@ const {
 
 const emit = defineEmits(['resize', 'scroll'])
 
-const dimensions = $ref<{x?, y?}>({})
+const dimensions = $ref<{ x?, y? }>({})
 let draggingDimension = $ref(null)
 let draggingOffset = $ref(null)
 
 const thumbStyles = $computed(() => {
-	const thumbStyles : {x?, y?} = {}
+	const thumbStyles: { x?, y? } = {}
 	if (dimensions?.x) {
 		thumbStyles.x = {
 			width: dimensions.x.thumbLength + 'px',
@@ -43,6 +43,7 @@ const thumbRefs = $ref({})
 const contentRef = $ref(null)
 
 // TODO expose
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- not wired up yet
 const scrollTop = (y) => {
 	contentRef.scrollTop = y
 }

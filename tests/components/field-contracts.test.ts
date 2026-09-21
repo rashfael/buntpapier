@@ -245,7 +245,6 @@ test('source API consumer mounts string, numeric and object values, slots and pu
 	expect(pageLog.vueWarnings).toEqual([])
 })
 
-
 test('open select keeps unique IDs and accessible option state', async ({ page }) => {
 	await page.locator('#select-entry').click()
 	await expect(page.locator('.bunt-tooltip')).toHaveCount(0)

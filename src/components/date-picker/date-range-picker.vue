@@ -69,12 +69,12 @@ const emit = defineEmits<{
 const weekStartsOn = $computed(() => weekStartsOnProp ?? getLocaleWeekStart(locale))
 
 let currentMonth = $ref<Temporal.PlainDate>(
-	(modelValue?.start ? startOfMonth(modelValue.start) : null) ??
-	Temporal.Now.plainDateISO().with({ day: 1 })
+	(modelValue?.start ? startOfMonth(modelValue.start) : null)
+	?? Temporal.Now.plainDateISO().with({ day: 1 })
 )
 let focusedDay = $ref<Temporal.PlainDate | null>(modelValue?.start ?? Temporal.Now.plainDateISO())
 let open = $ref(false)
-// eslint-disable-next-line prefer-const -- assigned from the template (@focus / @blur)
+
 let focused = $ref(false)
 
 // Selection state machine

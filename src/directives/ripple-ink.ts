@@ -6,7 +6,7 @@
 
 export default function (Vue) {
 	Vue.directive('rippleInk', {
-		created (el, binding, vnode, prevVnode) {
+		created (el) {
 			const rippleContainer = document.createElement('div')
 			rippleContainer.className = 'bunt-ripple-container'
 			el.appendChild(rippleContainer)

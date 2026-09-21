@@ -110,7 +110,7 @@ onUnmounted(() => {
 				@click="surface = option"
 			) {{ option }}
 			label.custom(:class="{active: surface === 'custom'}", :style="{'--value-color': customSurface}")
-				input(type="color", v-model="customSurface", @input="surface = 'custom'")
+				input(v-model="customSurface", type="color", @input="surface = 'custom'")
 		component(:is="componentName", ref="compEl", v-bind="props", v-model="value")
 			template(v-for="slot of slots", #[slot.name])
 				slot(:name="slot.name") {{ slot.content }}
@@ -121,14 +121,14 @@ onUnmounted(() => {
 				template(v-if="booleanPropShorthand && prop.type === 'boolean' && props[prop.name]")
 					.name {{ prop.name }}
 				template(v-else)
-					.name {{ prop.type !== 'string' ? ':' : ''}}{{ prop.name }}
+					.name {{ prop.type !== 'string' ? ':' : '' }}{{ prop.name }}
 					span.html ="
 					template(v-if="editable")
 						label(v-if="prop.type === 'boolean'")
-							input(type="checkbox", v-model="props[prop.name]")
+							input(v-model="props[prop.name]", type="checkbox")
 							.value {{ props[prop.name] }}
-						input(v-else-if="prop.type === 'number'", type="number", :min="prop.min", v-model.number="props[prop.name]")
-						input(v-else, type="text", v-model="props[prop.name]")
+						input(v-else-if="prop.type === 'number'", v-model.number="props[prop.name]", type="number", :min="prop.min")
+						input(v-else, v-model="props[prop.name]", type="text")
 					.value(v-else) {{ prop.value }}
 					span.html "
 			.prop(v-if="propsObj.modelValue")

@@ -145,7 +145,7 @@ class Scrollbars {
 		this.updateThumb(this.dragging)
 	}
 
-	onDocumentMouseup (event) {
+	onDocumentMouseup () {
 		this[this.dragging].railEl.classList.remove('active')
 		this.dragging = null
 		this.el.style.userSelect = ''
@@ -207,7 +207,7 @@ class Scrollbars {
 
 export default function (Vue) {
 	Vue.directive('scrollbar', {
-		mounted (el, binding, vnode) {
+		mounted (el, binding) {
 			el.__buntpapier__scrollbar = new Scrollbars(el, {
 				scrollX: binding.modifiers.x,
 				scrollY: binding.modifiers.y,
@@ -216,7 +216,7 @@ export default function (Vue) {
 			el.__buntpapier__scrollbar.refreshStyling()
 			el.__buntpapier__scrollbar.update()
 		},
-		updated (el, binding, vnode, oldVnode) {
+		updated (el, binding) {
 			if (!el.__buntpapier__scrollbar) {
 				el.__buntpapier__scrollbar = new Scrollbars(el, {
 					scrollX: binding.modifiers.x,
@@ -227,7 +227,7 @@ export default function (Vue) {
 				el.__buntpapier__scrollbar.update()
 			}
 		},
-		beforeUnmount (el, binding, vnode, oldVnode) {
+		beforeUnmount (el) {
 			if (!el.__buntpapier__scrollbar) return
 			el.__buntpapier__scrollbar.destroy()
 		}

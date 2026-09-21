@@ -53,9 +53,7 @@ export default {
 			disabled,
 			type,
 			error,
-			successAfterLoading,
 			tooltip,
-			tooltipPlacement,
 			tooltipFixed,
 			tooltipOptions,
 			// router-link props
@@ -63,7 +61,7 @@ export default {
 		} = $(props)
 		const el = ref()
 
-		const { classes, style, customProps: { iconPlacement } } = useComputedStyle(el, {
+		const { classes, style } = useComputedStyle(el, {
 			'--button-shape': 'shape',
 			'--button-weight': 'weight',
 			'--button-size': 'size',
@@ -108,7 +106,7 @@ export default {
 			return getIconClass(icon)
 		})
 
-		let loading = $ref()
+		let loading = $ref<boolean>()
 		watchEffect(() => {
 			if (props.loading !== undefined && props.loading !== 'auto') loading = props.loading
 		})
@@ -163,9 +161,9 @@ export default {
 
 		return () => {
 			const textContent = slots.default?.() ?? text
-			const hasContent =
-				(typeof textContent === 'string' && textContent.length > 0) ||
-				(Array.isArray(textContent) && textContent.length > 0 && textContent.some(vnode => vnode.children))
+			const hasContent
+				= (typeof textContent === 'string' && textContent.length > 0)
+					|| (Array.isArray(textContent) && textContent.length > 0 && textContent.some(vnode => vnode.children))
 			const iconNode = slots.icon?.() ?? (
 				iconClass && createElement('i', {
 					class: ['bunt-icon', 'mdi', iconClass]

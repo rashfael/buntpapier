@@ -26,7 +26,7 @@ main.c-tooltip-contracts
 		bunt-button#submit-trigger(v-if="present", type="submit", :tooltip="ordinaryText", @click="buttonClicks++") Submit action
 	button#native-trigger(v-if="present", v-tooltip="ordinaryText", type="button", aria-describedby="existing-description", @click="buttonClicks++") Native action
 	a#link-trigger(v-if="present", v-tooltip="ordinaryText", href="#destination", @click="linkClicks++") Destination
-	bunt-button#error-trigger(:tooltip="ordinaryText", :error-message="errorMessage") Error action
+	bunt-button#error-trigger(:tooltip="ordinaryText", :errorMessage="errorMessage") Error action
 	button#behind(type="button", @click="behindClicks++") Behind tooltip
 	button#rerender(type="button", @click="renders++") Rerender {{ renders }}
 	button#change-text(type="button", @click="ordinaryText = 'Changed explanation'") Change explanation
