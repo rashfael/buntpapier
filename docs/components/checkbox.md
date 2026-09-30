@@ -5,17 +5,20 @@ layoutClass: 'component'
 
 <script setup>
 const slots = {
-	default: {description: 'checkbox label'}
+	label: {description: 'Inline label markup; overrides the `label` prop and the default slot'},
+	default: {description: 'Label content used when neither `#label` nor a nonempty `label` prop is given'}
 }
 const props = {
-	modelValue: {type: 'string', description: 'powers v-model'},
-	type: {type: 'string', default: 'text', description: 'native input element type attribute'},
-	label: {type: 'string', description: 'checkbox label, prefer to use default slot'},
-	disabled: {type: 'boolean', default: false},
-	readonly: {type: 'boolean', default: false},
+	modelValue: {type: 'boolean', default: false, description: 'powers v-model'},
+	label: {type: 'string', description: 'Label text; overrides the default slot'},
+	disabled: {type: 'boolean', default: false, description: 'Prevents toggling and form submission with Enter, but you can still focus the checkbox'},
 }
 const events = {
-	'update:modelValue': {}
+	'update:modelValue': {description: 'The new checked state'},
+	input: {description: 'native input event'},
+	change: {description: 'native change event'},
+	focus: {},
+	blur: {}
 }
 const style = {
 	'--checkbox-size': {type: 'enum', values: ['normal', 'small'], default: 'normal'},
@@ -38,6 +41,13 @@ const style = {
 ## API
 
 <ApiDocs :slots="slots" :props="props" :events="events" :style="style"/>
+
+| Exposed member | Description |
+|---|---|
+| `focus(options?: FocusOptions): void` | Focuses the checkbox, even when disabled. Does nothing if the checkbox is hidden, inert or unmounted. |
+| `el` | Component root element. |
+
+`readonly` is no longer supported: a native checkbox ignores it.
 
 ## Examples
 

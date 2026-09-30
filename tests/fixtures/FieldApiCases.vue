@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Source consumer cases for packaging's macro/Pug and declaration checks.
 import { useTemplateRef, reactive } from 'vue'
+import Checkbox from '../../src/components/checkbox.vue'
 import Input from '../../src/components/input.vue'
 import Select from '../../src/components/select.vue'
 
@@ -8,11 +9,16 @@ let text = $ref<string | number>('Text')
 let number = $ref<string | number>(42)
 const objectOption = reactive({ label: 'Object' })
 let selected = $ref<string | number | object>(objectOption)
+let agreed = $ref(false)
 const input = useTemplateRef('input')
 const select = useTemplateRef('select')
+const checkbox = useTemplateRef('checkbox')
 function nativeEvent (event: Event) {
 	const target: EventTarget | null = event.target
 	return target
+}
+function agree (value: boolean) {
+	agreed = value
 }
 function focus () {
 	input.value?.focus({ preventScroll: true })
@@ -34,6 +40,11 @@ main
 			component(:is="Options")
 	Select(:modelValue="1", label="Numeric", :options="[{ label: 'One', value: 1 }]")
 	Select(modelValue="one", label="String", :options="['one']")
+	Checkbox(ref="checkbox", :modelValue="agreed", @update:modelValue="agree", @input="nativeEvent", @change="nativeEvent")
+		template(#label) Agree
+	Checkbox(v-model="agreed", disabled) Default slot
+	output(data-testid="agreed") {{ agreed }}
 	button(@click="focus") Focus
+	button(@click="checkbox?.focus({ preventScroll: true })") Focus checkbox
 	#bunt-teleport-target
 </template>

@@ -7,13 +7,16 @@ Start with [the beta quest](beta/spec.md) for the milestone, shared constraints,
 | [Beta](beta/spec.md) | Dependencies, delivery briefs and release criteria |
 | [Infrastructure and verification](infrastructure/spec.md) | CI and fixture groundwork, ephemeral testing and retention policy, shared accessibility mechanics and evidence collection |
 | [Style observer](style-observer/spec.md) | Observation options, browser spike and registration decision |
-| [Validation and forms](validation-forms/spec.md) | Schema/definition choice, form authoring and validation behavior |
+| [Validation and forms](validation-forms/spec.md) | Schema/definition choice, form authoring, validation behavior and deferred field abstractions |
 | [Overlay lifecycle](overlay-lifecycle/spec.md) | Native transitions, logical open state, focus and dismissal |
-| [Field wiring](field-wiring/spec.md) | Naming, attributes, readonly behavior, feedback, form connection and outline |
+| [Existing input contracts](field-wiring/spec.md) | Current controls’ props, attributes/events, naming, readonly, content slots and SPA submission behavior |
+| [Compact input feedback](compact-feedback/spec.md) | Guidance/error access within compact height constraints; deferred |
+| [Future label placement](label-placement/spec.md) | Optional placements such as labels on the left; deferred, floating-label appearance retained |
 | [Selection and naming](selection/spec.md) | Select/combobox taxonomy, value identity and keyboard selection |
 | [Initialization and strings](app-configuration/spec.md) | Reactive app configuration, dictionaries, isolation and SSR |
 | [Primed-view attachment](primed-components/spec.md) | Workflow selection, mount limits, forwarding, lifetime and cancellation |
 | [Packaging and declarations](packaging/spec.md) | Exports, TypeScript declarations, consumer checks and SSR imports |
+| [Sass linting](sass-lint/spec.md) | Style linting for indented Sass, parser evidence and revisit condition; deferred, indented syntax retained |
 
 Each owning spec is authoritative for status, authorization and the next action; this index does not duplicate those fields. The subject quests are siblings under beta. Infrastructure implementation is reserved for a separate executor.
 

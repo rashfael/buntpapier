@@ -14,9 +14,11 @@ test.describe('docs smoke', () => {
 		test(`${component} docs mount without runtime errors and have editable examples`, async ({ page, pageLog }) => {
 			await page.goto(`/components/${component}`)
 			const showcases = page.locator('.c-showcase')
-			await expect(showcases.first().getByRole('combobox')).toBeVisible()
+			// The showcase's own style pickers are native selects, so scope queries for the picker's control to the preview pane.
+			const control = (showcase: ReturnType<typeof page.locator>) => showcase.locator(`.bunt-${component}`).getByRole('combobox')
+			await expect(control(showcases.first())).toBeVisible()
 			await expect(showcases.last().getByRole('grid').first()).toBeVisible()
-			const inputBox = await showcases.first().getByRole('combobox').boundingBox()
+			const inputBox = await control(showcases.first()).boundingBox()
 			const iconBox = await showcases.first().getByRole('button', { name: 'Open calendar' }).boundingBox()
 			expect(Math.abs(inputBox.y + inputBox.height / 2 - iconBox.y - iconBox.height / 2)).toBeLessThan(2)
 			for (const showcase of [showcases.first(), showcases.last()]) {
@@ -27,12 +29,12 @@ test.describe('docs smoke', () => {
 				expect(picker.x + picker.width).toBeLessThanOrEqual(pane.x + pane.width)
 				expect(picker.y).toBeGreaterThanOrEqual(surface.y + surface.height)
 			}
-			await showcases.first().getByRole('combobox').click()
+			await control(showcases.first()).click()
 			await expect(page.getByRole('dialog')).toBeVisible()
 			await page.keyboard.press('Escape')
 			if (component === 'date-range-picker') {
 				await showcases.first().getByRole('spinbutton').fill('1')
-				await showcases.first().getByRole('combobox').click()
+				await control(showcases.first()).click()
 				await expect(page.getByRole('dialog').getByRole('grid')).toHaveCount(1)
 			}
 			noVueWarnings(pageLog)
@@ -66,7 +68,7 @@ test.describe('docs smoke', () => {
 		noVueWarnings(pageLog)
 	})
 
-	test('input docs mount and editable values reach the native entry', async ({ page, pageLog }) => {
+	test('input docs mount and editable values reach the native control', async ({ page, pageLog }) => {
 		await page.goto('/components/input')
 		const input = page.locator('.c-showcase .component .bunt-input input').first()
 		await input.fill('Docs smoke')

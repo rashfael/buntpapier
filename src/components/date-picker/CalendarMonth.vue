@@ -23,7 +23,9 @@ const {
 	isSelected,
 	getDisabledReason,
 	disabled = false,
-	multiple = false
+	readonly = false,
+	multiple = false,
+	tabbableDays = true
 } = defineProps<{
 	month: Temporal.PlainDate
 	weekStartsOn: WeekStart
@@ -37,7 +39,9 @@ const {
 	isSelected?: (d: Temporal.PlainDate) => boolean
 	getDisabledReason?: (d: Temporal.PlainDate) => string | undefined
 	disabled?: boolean
+	readonly?: boolean
 	multiple?: boolean
+	tabbableDays?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -177,7 +181,7 @@ function handleKeydown (event: KeyboardEvent, currentDay: Temporal.PlainDate | n
 <template lang="pug">
 .c-calendar-month
 	.month-label(:id="gridLabelId") {{ formatMY(month, locale) }}
-	.calendar-grid(role="grid", :aria-labelledby="gridLabelId", :aria-multiselectable="multiple || undefined", :class="{ 'has-week-numbers': showWeekNumbers }")
+	.calendar-grid(role="grid", :aria-labelledby="gridLabelId", :aria-multiselectable="multiple || undefined", :aria-readonly="readonly || undefined", :class="{ 'has-week-numbers': showWeekNumbers }")
 		.calendar-row(role="row")
 			.col-header(v-if="showWeekNumbers", role="columnheader", aria-label="Week") Wk
 			.col-header(
@@ -206,7 +210,7 @@ function handleKeydown (event: KeyboardEvent, currentDay: Temporal.PlainDate | n
 					type="button",
 					:data-date="day.toString()",
 					:data-month="month.toString()",
-					:tabindex="!disabled && sameDay(day, tabDay) ? 0 : -1",
+					:tabindex="!disabled && tabbableDays && sameDay(day, tabDay) ? 0 : -1",
 					:disabled="disabled",
 					:aria-label="dayAriaLabel(day)",
 					:aria-disabled="isDayDisabled(day) || undefined",

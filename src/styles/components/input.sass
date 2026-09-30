@@ -6,6 +6,10 @@
 		padding-top: 16px
 		flex-shrink: 0
 		color: var(--clr-text)
+		// Distance between the outline and whatever sits at the trailing edge — the value itself,
+		// an error icon, a field's own actions. The shape modifiers widen it, because a curved
+		// outline eats into that distance and content ends up sitting on the curve.
+		--_input-gutter: 8px
 		&[hidden]
 			display: none
 		.label-input-container
@@ -26,7 +30,7 @@
 			font-size: 16px
 			font-weight: 400
 			flex: auto
-			padding: 8px 8px 8px 12px
+			padding: 8px var(--_input-gutter) 8px 12px
 			background-color: transparent
 			border-radius: 4px
 		label
@@ -47,7 +51,7 @@
 		.error-icon
 			font-size: 22px
 			color: var(--clr-danger)
-			padding-right: 8px
+			padding-right: var(--_input-gutter)
 		.outline
 			position: absolute
 			top: 0
@@ -140,6 +144,7 @@
 				display: none
 
 	.bunt-input--shape-pill
+		--_input-gutter: 16px
 		label span
 			left: 24px
 		input

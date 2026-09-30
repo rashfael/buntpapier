@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, useId, watch } from 'vue'
+import { nextTick, onBeforeUnmount, useId, useSlots, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
+import { usePickerField } from './picker-field'
 import { useInputOutline } from '../../utils/input-outline'
 import CalendarPanel from './CalendarPanel.vue'
 import {
@@ -28,8 +29,9 @@ const {
 	modelValue,
 	placeholder,
 	disabled,
+	readonly,
 	label,
-	name,
+	hint,
 	minDate,
 	maxDate,
 	disabledDates,
@@ -37,7 +39,6 @@ const {
 	weekStartsOn: weekStartsOnProp,
 	locale,
 	showWeekNumbers = false,
-	clearable = false,
 	inline = false,
 	navigateOnOutsideDayClick = true,
 	presets,
@@ -46,8 +47,9 @@ const {
 	modelValue?: DateRange
 	placeholder?: string
 	disabled?: boolean
+	readonly?: boolean
 	label?: string
-	name?: string
+	hint?: string
 	minDate?: Temporal.PlainDate
 	maxDate?: Temporal.PlainDate
 	disabledDates?: (d: Temporal.PlainDate) => boolean | { disabled: boolean; reason?: string }
@@ -55,7 +57,6 @@ const {
 	weekStartsOn?: WeekStart
 	locale?: string
 	showWeekNumbers?: boolean
-	clearable?: boolean
 	inline?: boolean
 	navigateOnOutsideDayClick?: boolean
 	presets?: DatePreset<DateRange>[]
@@ -64,7 +65,13 @@ const {
 
 const emit = defineEmits<{
 	'update:modelValue': [value: DateRange]
+	focus: []
+	blur: []
 }>()
+defineOptions({ inheritAttrs: false })
+defineSlots<{ hint?(): unknown }>()
+const slots = useSlots()
+const locked = $computed(() => disabled || readonly)
 
 const weekStartsOn = $computed(() => weekStartsOnProp ?? getLocaleWeekStart(locale))
 
@@ -75,8 +82,6 @@ let currentMonth = $ref<Temporal.PlainDate>(
 let focusedDay = $ref<Temporal.PlainDate | null>(modelValue?.start ?? Temporal.Now.plainDateISO())
 let open = $ref(false)
 
-let focused = $ref(false)
-
 // Selection state machine
 let anchor = $ref<Temporal.PlainDate | null>(null)
 let hoverDay = $ref<Temporal.PlainDate | null>(null)
@@ -84,9 +89,31 @@ const selecting = $computed(() => anchor !== null)
 
 const el = $ref<HTMLElement>(null)
 const inputEl = $ref<HTMLInputElement>(null)
+const clearEl = $ref<HTMLElement>(null)
 const popoverEl = $ref<HTMLElement>(null)
 const calendar = $ref<InstanceType<typeof CalendarPanel>>(null)
 const popoverId = `bunt-date-range-picker-popover-${useId()}`
+
+// ── Field wiring ─────────────────────────────────────────
+
+// closePopover also cancels an unfinished range selection, so a disable while open drops it.
+const { id, rootAttrs, controlAttrs, hasHint, tabbableDays, groupTabindex, focused, focus, focusCalendar } = $(usePickerField({
+	root: $$(el),
+	input: $$(inputEl),
+	calendar: $$(calendar),
+	popover: $$(popoverEl),
+	inline: () => inline,
+	disabled: () => disabled,
+	open: () => open,
+	label: () => label,
+	hint: () => hint,
+	hintSlot: () => Boolean(slots.hint),
+	close: (returnFocus) => closePopover(returnFocus),
+	// The typed emit takes a literal, not a union-typed variable.
+	emit: (event) => event === 'focus' ? emit('focus') : emit('blur')
+}))
+
+const clearVisible = $computed(() => !locked && Boolean(modelValue?.start || modelValue?.end))
 
 // ── Day classification ──────────────────────────────────────────────────────
 
@@ -218,6 +245,11 @@ function handlePopoverToggle (event: ToggleEvent) {
 }
 
 function handleInputKeydown (event: KeyboardEvent) {
+	// Enter submits an enclosing form from an enabled textbox, but never from a disabled one.
+	if (event.key === 'Enter' && disabled) {
+		event.preventDefault()
+		return
+	}
 	if (event.key === 'Escape' && open) {
 		event.preventDefault()
 		closePopover()
@@ -237,7 +269,7 @@ function handlePopoverKeydown (event: KeyboardEvent) {
 // ── Day click state machine ─────────────────────────────────────────────────
 
 function handleDayClick (day: Temporal.PlainDate) {
-	if (isDayDisabled(day)) return
+	if (locked || isDayDisabled(day)) return
 	focusedDay = day
 
 	if (!anchor) {
@@ -259,10 +291,11 @@ function handleDayHover (day: Temporal.PlainDate) {
 }
 
 function isPresetDisabled (value: DateRange) {
-	return disabled || Boolean((value.start && isDayDisabled(value.start)) || (value.end && isDayDisabled(value.end)))
+	return locked || Boolean((value.start && isDayDisabled(value.start)) || (value.end && isDayDisabled(value.end)))
 }
 
 function applyPreset (preset: DatePreset<DateRange>) {
+	if (locked) return
 	const value = preset.getValue()
 	if (isPresetDisabled(value)) return
 	if (value.start) {
@@ -275,7 +308,9 @@ function applyPreset (preset: DatePreset<DateRange>) {
 }
 
 function handleClear () {
-	if (disabled) return
+	if (locked) return
+	// Leave the action before the model update stops rendering it, so focus never sits on a removed control.
+	if (inline && clearEl?.contains(document.activeElement)) focusCalendar()
 	cancelSelection()
 	emit('update:modelValue', { start: null, end: null })
 	if (!inline) closePopover(true)
@@ -308,6 +343,8 @@ const { classes: computedClasses } = useComputedStyle($$(el), {
 
 const floatingLabel = $computed(() => Boolean(placeholder || modelValue?.start || modelValue?.end))
 
+defineExpose({ el: $$(el), focus })
+
 const inputClasses = $computed(() => [
 	...computedClasses,
 	{
@@ -320,16 +357,17 @@ const inputClasses = $computed(() => [
 ])
 </script>
 <template lang="pug">
-.bunt-date-range-picker(ref="el", :class="inputClasses")
+.bunt-date-range-picker(ref="el", v-bind="rootAttrs()", :class="inputClasses")
 	.label-input-container(v-if="!inline", v-resize-observer="updateOutline", @click="openPopover()")
-		label
-			span {{ label }}
+		label(:for="id()")
+			span(:id="`${id()}-label`") {{ label }}
 			input(
 				ref="inputEl",
-				:name="name",
+				v-bind="controlAttrs()",
 				:value="displayValue",
 				:placeholder="placeholder",
-				:disabled="disabled",
+				:aria-disabled="disabled || undefined",
+				:aria-readonly="locked || undefined",
 				:aria-expanded="open",
 				:aria-controls="popoverId",
 				role="combobox",
@@ -337,14 +375,13 @@ const inputClasses = $computed(() => [
 				aria-autocomplete="none",
 				readonly,
 				autocomplete="off",
-				@focus="focused = true",
-				@blur="focused = false",
 				@keydown="handleInputKeydown"
 			)
-		button.open-calendar-btn.mdi.mdi-calendar-month(type="button", tabindex="-1", aria-label="Open calendar", :disabled="disabled")
-		button.clear-trigger(v-if="clearable && (modelValue?.start || modelValue?.end)", type="button", aria-label="Clear", :disabled="disabled", @click.stop="handleClear")
+		button.clear-trigger(v-if="clearVisible", ref="clearEl", type="button", aria-label="Clear", @click.stop="handleClear")
 			.mdi.mdi-close(aria-hidden="true")
+		button.open-calendar-btn.mdi.mdi-calendar-month(type="button", tabindex="-1", aria-label="Open calendar", :disabled="disabled")
 		Outline
+	.calendar-caption(v-if="inline && label", :id="`${id()}-label`") {{ label }}
 	div(
 		:id="popoverId",
 		ref="popoverEl",
@@ -357,8 +394,12 @@ const inputClasses = $computed(() => [
 	)
 		CalendarPanel(
 			ref="calendar",
+			v-bind="inline ? controlAttrs() : {}",
 			v-model:month="currentMonth",
 			v-model:focusedDay="focusedDay",
+			:role="inline ? 'group' : undefined",
+			:tabindex="inline ? groupTabindex : undefined",
+			:aria-disabled="inline && disabled || undefined",
 			:monthsToShow="monthsToShow",
 			:weekStartsOn="weekStartsOn",
 			:showWeekNumbers="showWeekNumbers",
@@ -366,6 +407,8 @@ const inputClasses = $computed(() => [
 			:minDate="minDate",
 			:maxDate="maxDate",
 			:disabled="disabled",
+			:readonly="readonly",
+			:tabbableDays="tabbableDays",
 			:navigateOnOutsideDayClick="navigateOnOutsideDayClick",
 			:isDayDisabled="isDayDisabled",
 			:getDisabledReason="getDisabledReason",
@@ -378,7 +421,9 @@ const inputClasses = $computed(() => [
 			@day-hover="handleDayHover"
 		)
 			.sr-only(role="status", aria-atomic="true") {{ selecting ? 'Start selected, choose end date.' : '' }}
-			.presets(v-if="presets || (inline && clearable && (modelValue?.start || modelValue?.end))", :class="{ 'inline-footer': inline }")
+			.presets(v-if="presets || (inline && clearVisible)", :class="{ 'inline-footer': inline }")
 				button.preset-btn(v-for="p in presets", :key="p.label", type="button", :disabled="isPresetDisabled(p.getValue())", @click="applyPreset(p)") {{ p.label }}
-				button.clear-btn(v-if="inline && clearable && (modelValue?.start || modelValue?.end)", type="button", :disabled="disabled", @click="handleClear") Clear
+				button.clear-btn(v-if="inline && clearVisible", ref="clearEl", type="button", @click="handleClear") Clear
+	.hint(v-if="hasHint()", :id="`${id()}-hint`")
+		slot(name="hint") {{ hint }}
 </template>

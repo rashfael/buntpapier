@@ -14,12 +14,17 @@ function disabledWeekends (d) {
 	return d.dayOfWeek >= 6
 }
 
+const slots = {
+	hint: { description: 'Rich hint content; replaces the `hint` prop text' },
+}
+
 const props = {
 	modelValue: { value: null },
 	label: { type: 'string', value: 'Pick a date' },
 	placeholder: { type: 'string' },
+	hint: { type: 'string' },
 	disabled: { type: 'boolean', default: false },
-	clearable: { type: 'boolean', default: false },
+	readonly: { type: 'boolean', default: false },
 	showWeekNumbers: { type: 'boolean', default: false },
 }
 
@@ -27,8 +32,9 @@ const allProps = {
 	modelValue: { type: 'Temporal.PlainDate | null', description: 'Current value (v-model)' },
 	label: { type: 'string', description: 'Input label' },
 	placeholder: { type: 'string', description: 'Input placeholder' },
-	disabled: { type: 'boolean', default: 'false', description: 'Disables the picker' },
-	name: { type: 'string', description: 'Input name attribute' },
+	hint: { type: 'string', description: 'Guidance below the field, associated as its description' },
+	disabled: { type: 'boolean', default: 'false', description: 'Blocks editing, opening, navigation, presets and clearing; the picker stays focusable so it can still be explained' },
+	readonly: { type: 'boolean', default: 'false', description: 'Blocks value changes while focus, copying, opening and calendar navigation remain available' },
 	minDate: { type: 'Temporal.PlainDate', description: 'Earliest selectable date' },
 	maxDate: { type: 'Temporal.PlainDate', description: 'Latest selectable date' },
 	disabledDates: { type: '(d) => boolean | { disabled, reason? }', description: 'Per-day disable callback' },
@@ -36,7 +42,6 @@ const allProps = {
 	weekStartsOn: { type: "'monday' | 'sunday'", default: 'locale', description: 'Week start day' },
 	locale: { type: 'string', default: 'navigator.language', description: 'BCP 47 locale tag' },
 	showWeekNumbers: { type: 'boolean', default: 'false', description: 'Show ISO week numbers' },
-	clearable: { type: 'boolean', default: 'false', description: 'Show × clear button' },
 	inline: { type: 'boolean', default: 'false', description: 'Render without input/popover' },
 	navigateOnOutsideDayClick: { type: 'boolean', default: 'true', description: 'Clicking adjacent-month day advances view' },
 	presets: { type: 'DatePreset<Temporal.PlainDate>[]', description: 'Preset shortcut buttons' },
@@ -45,6 +50,14 @@ const allProps = {
 
 const events = {
 	'update:modelValue': { description: 'Emitted on selection or clear. Payload: Temporal.PlainDate | null' },
+	focus: { description: 'Focus entered the whole component, including its calendar popup' },
+	blur: { description: 'Focus left the whole component' },
+}
+
+const style = {
+	'--input-clear': { type: 'enum', values: ['auto', 'none'], default: 'auto', description: 'Whether the clear action appears for a nonempty editable model' },
+	'--input-shape': { type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill' },
+	'--input-size': { type: 'enum', values: ['normal', 'large', 'compact'], default: 'normal' },
 }
 </script>
 
@@ -57,11 +70,20 @@ Selects a single `Temporal.PlainDate`. The input displays `YYYY-MM-DD` and accep
 	componentName="bunt-date-picker"
 	:props="props"
 	:slots="{}"
+	:style="style"
 />
 
-## Clearable
+## Clear action
 
-<Showcase componentName="bunt-date-picker" :props="{ modelValue: { value: null }, label: { type: 'string', value: 'Pick a date' }, clearable: { type: 'boolean', default: true } }" :slots="{}" />
+`--input-clear` controls the clear action; it inherits, so one declaration configures a whole form. Readonly and disabled pickers do not offer it.
+
+```css
+.booking-filters {
+	--input-clear: none;
+}
+```
+
+<Showcase componentName="bunt-date-picker" :props="{ modelValue: { value: null }, label: { type: 'string', value: 'Pick a date' } }" :slots="{}" />
 
 ## With min/max dates
 
@@ -73,7 +95,7 @@ Selects a single `Temporal.PlainDate`. The input displays `YYYY-MM-DD` and accep
 
 ## With presets
 
-<Showcase componentName="bunt-date-picker" :props="{ modelValue: { value: null }, label: { type: 'string', value: 'Pick a date' }, presets: { value: defaultDatePresets() }, clearable: { type: 'boolean', default: true } }" :slots="{}" />
+<Showcase componentName="bunt-date-picker" :props="{ modelValue: { value: null }, label: { type: 'string', value: 'Pick a date' }, presets: { value: defaultDatePresets() } }" :slots="{}" />
 
 ## Show week numbers
 
@@ -81,7 +103,7 @@ Selects a single `Temporal.PlainDate`. The input displays `YYYY-MM-DD` and accep
 
 ## Inline mode
 
-<Showcase wide componentName="bunt-date-picker" :props="{ modelValue: { value: null }, clearable: { type: 'boolean', default: true }, inline: { type: 'boolean', default: true } }" :slots="{}" />
+<Showcase wide componentName="bunt-date-picker" :props="{ modelValue: { value: null }, label: { type: 'string', value: 'Pick a date' }, inline: { type: 'boolean', default: true } }" :slots="{}" />
 
 ## Accessibility
 
@@ -113,4 +135,11 @@ Automated coverage uses Playwright keyboard tests and ARIA snapshots. Manual NVD
 
 ## API
 
-<ApiDocs :props="allProps" :events="events" />
+Undeclared attributes and listeners are routed: `class`, `style`, `data-*`, `lang`, `dir`, `hidden`, `inert` and `title` reach the component root, everything else — including `id`, `name`, `tabindex` and native listeners — reaches the textbox, or the calendar's named group when `inline`.
+
+<ApiDocs :slots="slots" :props="allProps" :events="events" :style="style" />
+
+| Exposed member | Description |
+|---|---|
+| `focus(options?: FocusOptions): void` | Focuses the textbox, or the calendar's focused day when `inline`, without opening the calendar. Does nothing if the picker is hidden, inert or unmounted. |
+| `el` | Component root element. |

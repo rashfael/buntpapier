@@ -8,7 +8,7 @@ Both pickers share the calendar grid and navigation in `CalendarPanel.vue` and `
 
 `minDate`, `maxDate` and `disabledDates` compose into one availability check for a candidate date. A callback may return a disabled reason. Disabled dates stay focusable so a user can inspect them. Every single-date commit path checks the candidate, and range selection checks each endpoint. A range may currently enclose a date rejected by `disabledDates`; whether interior dates invalidate a range is unresolved. Adjacent-month days remain selectable; `navigateOnOutsideDayClick` controls whether selecting one also moves the visible month.
 
-Popup and inline presentations use the same calendar behavior. The current API exposes `inline`, `monthsToShow`, `showWeekNumbers` and `clearable` props. The accepted future API moves presentation choice, visible month count, week-number visibility and clear-control visibility to CSS while keeping allowed values and application state in props. That migration has not happened. Presentation changes must preserve the selected value, draft and usable focus target; the field and overlay contracts own the remaining mechanics.
+Popup and inline presentations use the same calendar behavior. The current API exposes `inline`, `monthsToShow`, `showWeekNumbers` and `clearable` props. The accepted future API moves presentation choice, visible month count, week-number visibility and clear-control visibility to CSS while keeping allowed values and application state in props. That migration has not happened. Popup and embedded modes work independently; switching between them after mount has unspecified behavior.
 
 ### Single date
 

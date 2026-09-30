@@ -18,7 +18,7 @@ form.c-date-picker-fixture(@submit.prevent="submissions++")
 	fieldset
 		legend Single date
 		button(type="button") Before single
-		bunt-date-picker(v-model="single", label="Single date", locale="en-US", weekStartsOn="monday", clearable, :presets="presets")
+		bunt-date-picker(v-model="single", label="Single date", locale="en-US", weekStartsOn="monday", :presets="presets")
 		button(type="button") After single
 		output(data-testid="single-value") {{ single?.toString() ?? 'empty' }}
 	fieldset
@@ -33,20 +33,20 @@ form.c-date-picker-fixture(@submit.prevent="submissions++")
 		bunt-date-picker(v-model="weekends", label="Weekday", locale="en-US", weekStartsOn="monday", :disabledDates="day => day.dayOfWeek >= 6")
 	fieldset
 		legend Inline date
-		bunt-date-picker(v-model="inline", locale="en-US", weekStartsOn="monday", inline, clearable, showWeekNumbers)
+		bunt-date-picker(v-model="inline", locale="en-US", weekStartsOn="monday", inline, showWeekNumbers)
 		output(data-testid="inline-value") {{ inline?.toString() ?? 'empty' }}
 	fieldset
 		legend Disabled date
-		bunt-date-picker(:modelValue="date", label="Disabled date", disabled, clearable)
+		bunt-date-picker(:modelValue="date", label="Disabled date", disabled)
 	fieldset
 		legend Range
 		button(type="button") Before range
-		bunt-date-range-picker(v-model="range", label="Date range", locale="en-US", weekStartsOn="monday", clearable, :presets="rangePresets")
+		bunt-date-range-picker(v-model="range", label="Date range", locale="en-US", weekStartsOn="monday", :presets="rangePresets")
 		button(type="button") After range
 		output(data-testid="range-value") {{ range.start?.toString() ?? 'empty' }} / {{ range.end?.toString() ?? 'empty' }}
 	fieldset
 		legend Inline range
-		bunt-date-range-picker(v-model="inlineRange", locale="en-US", weekStartsOn="monday", inline, clearable)
+		bunt-date-range-picker(v-model="inlineRange", locale="en-US", weekStartsOn="monday", inline)
 		output(data-testid="inline-range-value") {{ inlineRange.start?.toString() ?? 'empty' }} / {{ inlineRange.end?.toString() ?? 'empty' }}
 	output(data-testid="submissions") {{ submissions }}
 </template>

@@ -30,7 +30,7 @@ const attrs = $computed(() => ({
 	dir: alternate ? 'rtl' : 'ltr',
 	hidden,
 	inert,
-	name: alternate ? 'changed' : 'entry',
+	name: alternate ? 'changed' : 'control',
 	autocomplete: 'off',
 	maxlength: alternate ? 8 : 20,
 	'aria-label': naming ? 'Caller name' : undefined,
@@ -68,7 +68,7 @@ main.c-field-contracts
 		Input(v-if="present", v-bind="attrs", :id="alternate ? 'changed-input' : 'external'", ref="input", v-model="text", label="Input label", required, :type="kind", :disabled="disabled", :readonly="readonly", :validation="validation", hint="Fallback hint", @focus="record('input-focus')", @blur="record('input-blur')", @input="record('input', $event)", @change="record('change', $event)", @keydown.enter.prevent="record('enter', $event)")
 			template(v-if="slotHint", #hint)
 				strong Input guidance
-		Select(v-if="present", v-bind="attrs", :id="alternate ? 'changed-select' : 'select-entry'", ref="select", v-model="selected", label="Select label", required, :disabled="disabled", :readonly="readonly", :validation="validation", :options="[{ label: 'Alpha', value: 'a' }, { label: 'Beta', value: 'b' }]", @focus="record('select-focus')", @blur="record('select-blur')", @input="record('search', $event)", @change="record('select-change', $event)")
+		Select(v-if="present", v-bind="attrs", :id="alternate ? 'changed-select' : 'select-control'", ref="select", v-model="selected", label="Select label", required, :disabled="disabled", :readonly="readonly", :validation="validation", :options="[{ label: 'Alpha', value: 'a' }, { label: 'Beta', value: 'b' }]", @focus="record('select-focus')", @blur="record('select-blur')", @input="record('search', $event)", @change="record('select-change', $event)")
 			template(v-if="slotHint", #hint) Select guidance
 			template(#result-header)
 				button(type="button", @mousedown.stop="") Popup help

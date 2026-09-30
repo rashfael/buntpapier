@@ -2,7 +2,7 @@
 status: planned
 parent: ../spec.md
 activity: design
-next: decide the beta boundary, then design locale, draft, range-field and responsive-transition scenarios within that boundary
+next: decide the beta boundary, then design locale, draft, range-field and supported presentation scenarios
 waiting_on: scope-selection-and-beta-boundary
 profile: current owner-selected Codex session; model and effort not exposed
 ---
@@ -14,18 +14,20 @@ This work owns the remaining input experience around the accepted date-picker ca
 
 The [date-picker interaction record](../../../design/date-picker-interaction.md) is the durable baseline. The [date-picker ground-truth record](date-pickers.md) owns the delivered Phase 0 fixes and remaining browser and assistive-technology evidence for that implementation. This work must preserve `Temporal.PlainDate`, nullable range endpoints, the current calendar selection and preset behavior, Alt+Down entry, bare-arrow segment editing, the non-trapping popup and an empty model that stays empty on focus.
 
+On 2026-09-20 the owner excluded defined behavior for popup/embedded switching after mount and native form resets. Both stable picker modes remain supported. Other responsive/modal cases and application-driven model resets retain their own decisions.
+
 ## Owned decisions
 
 - Define locale-sensitive display, segment order, parsing and paste behavior for a single date, including application defaults, local locale overrides and changes while an edit is in progress.
 - Define two editable range endpoints as one logical field, including drafts, partial values, commit and cancellation, calendar synchronization, endpoint order and focus movement between the two inputs and the shared calendar.
-- Define how the editable field and unfinished work survive live switches between embedded, popup and any selected mobile/modal presentation.
+- Define editing and focus in each supported presentation and any selected popup/modal transition. Popup/embedded switching after mount is unspecified.
 - Decide which of these outcomes are required for beta and which remain later work. The beta owner makes that product-scope decision; this record supplies the scenarios and dependency effects.
 
 This work does not reopen the calendar grid, date-limit composition, range-selection or preset contracts unless evidence shows that an input proposal cannot preserve them. It does not design a generic locale parser ahead of the date and number-input requirements. Time picking, timezone-aware values, multiple-date selection and new calendar views are separate products.
 
 ## Inherited constraints
 
-Committed models and editing drafts stay distinct. A failed parse must be reportable while the previous committed `PlainDate` or `DateRange` remains intact. Calendar selection can update a committed value, but presentation changes must not invent, discard or silently commit a draft. Reset, external model updates and locale changes need explicit conflict rules.
+Committed models and editing drafts stay distinct. A failed parse must be reportable while the previous committed `PlainDate` or `DateRange` remains intact. Calendar selection can update a committed value, but supported presentation changes must not invent, discard or silently commit a draft. Popup/embedded switching has no migration contract. Application-driven reset, external model updates and locale changes need explicit conflict rules; native form reset is unsupported.
 
 Locale is application configuration with a reactive per-component override. Presentation policy belongs in CSS and applies live; JavaScript applies the corresponding native behavior. These accepted boundaries do not decide exact locale fallbacks, token names, native transitions or focus targets.
 
@@ -35,10 +37,12 @@ Forms and observer work stay deferred. This spec may state the date control's re
 
 ## Integration boundaries
 
+The [picker contracts package](../../field-wiring/work/picker-contracts.md) owns ordinary field behavior on the existing single-date editor and range display in their stable popup and embedded modes. It adds readonly/disabled guards, routing, hints, public focus and the accepted clear token without selecting locale editing, editable range endpoints, new presentation APIs or overlay migration here.
+
 | dependency | owning scope | what date inputs need from it | what this work supplies |
 |---|---|---|---|
 | Locale and built-in strings | [Initialization and strings](../../app-configuration/spec.md) | Reactive app locale, local override precedence, SSR/hydration fallback and localized built-in labels | Date-formatting and parsing scenarios, required string meanings and behavior when locale changes mid-draft |
-| Logical field and DOM wiring | [Field wiring](../../field-wiring/spec.md) | One logical name, label, descriptions, attributes, readonly behavior, focus attachment, clear-action policy and the future outline treatment | Endpoint structure, draft/parse state, preferred focus targets and popup/embedded attachment cases |
+| Logical field and DOM wiring | [Field wiring](../../field-wiring/spec.md) | One logical name, label, descriptions, attributes, readonly behavior, focus attachment, clear-action policy and the retained floating-label appearance | Endpoint structure, draft/parse state, preferred focus targets and popup/embedded attachment cases |
 | Form and validation behavior | [Validation and forms](../../validation-forms/spec.md) | Reset, external updates, parse-error reporting, validation participation and submission behavior | A distinction between committed value, one or two drafts and parse results; date-specific reset and invalid-draft scenarios |
 | Overlay lifecycle | [Overlay lifecycle](../../overlay-lifecycle/spec.md) | Native transition, dismissal and focus rules for live popup/modal/embedded changes | The open-calendar scenario, unfinished range state and usable date-field/calendar focus targets before and after a transition |
 | Presentation observation | [Style observer](../../style-observer/spec.md) | Eventual detection of resolved behavior-affecting CSS changes | Required observable presentation changes and state that must survive them; no observer design |
@@ -66,8 +70,8 @@ The number input may face related locale parsing questions. Share a primitive on
 
 ### Responsive presentation and focus
 
-- Change from popup to embedded or modal presentation and back while closed, while the input has a draft, while a calendar day has focus and after the first range endpoint is selected.
-- Preserve committed data, drafts, visible month, focused/active day and unfinished range state according to their owners. Define a usable destination when the previous focused element disappears.
+- Verify each stable popup/embedded presentation independently. For any selected popup/modal transition, cover closed state, input drafts, focused calendar days and an unfinished range. Popup/embedded transitions require no dedicated preservation work.
+- In supported transitions, preserve committed data, drafts, visible month, focused/active day and unfinished range state according to their owners. Define a usable destination when the previous focused element disappears.
 - Cover coarse pointers, narrow viewports, a tablet with a hardware keyboard, the on-screen keyboard covering content, safe areas, scroll containment, dismissal and focus restoration. Pointer type or viewport width may inform CSS but does not by itself select the policy.
 - Keep text editing available if a mobile/modal presentation is selected. The old full-screen calendar-with-input proposal is a candidate to test, not accepted behavior.
 
@@ -76,7 +80,7 @@ The number input may face related locale parsing questions. Share a primitive on
 - Give the single input and two-input range one stable logical name, usable descriptions and consistent readonly/disabled behavior in every presentation.
 - Verify the combobox/dialog relationship, endpoint naming, current endpoint, invalid drafts, range-step announcements and month announcements without duplicate speech.
 - Verify keyboard behavior against the published table, touch and software-keyboard behavior, zoom and reflow, high contrast, reduced motion, NVDA with Firefox and VoiceOver with Safari. Automated role and axe checks support but do not replace those observations.
-- Exercise native form submission or its selected replacement, reset, requiredness and error focus only after the field/forms contracts define them. An embedded calendar without a textbox must still represent one logical field.
+- Exercise SPA submit handlers reading reactive data, requiredness and error focus after the field/forms contracts define them. Application/form reset operations need their own contract; native request serialization and reset are excluded. An embedded calendar without a textbox still represents one logical field.
 
 ## Questions
 

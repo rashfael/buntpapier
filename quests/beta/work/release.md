@@ -1,7 +1,7 @@
 ---
 status: planned
 activity: verify
-next: name the manual-test and narrative-documentation contributors, then attach evidence as each outcome is delivered
+next: attach available delivery evidence and identify narrative-documentation contributors; resume manual screen-reader collection when the owner has a setup
 waiting_on: contributor-assignment-and-delivery-evidence
 profile: release coordination unassigned; owner retains combined acceptance and publication authority
 ---
@@ -26,7 +26,7 @@ The table is the single release matrix. A dash means current evidence has not be
 | Circular progress | [Components](components.md) | — | — | — | — |
 | Scrollbars | [Components](components.md) | — | — | — | — |
 | Ripple directive | [Components](components.md) | — | — | — | — |
-| Field wrapper | [Field wiring](../../field-wiring/spec.md) | — | — | — | — |
+| Field wrapper, deferred with forms | [Forms](../../validation-forms/spec.md#deferred-field-abstractions) | — | — | — | — |
 | Form workflow / public form surface | [Forms](../../validation-forms/spec.md) | — | — | — | — |
 | Date picker | [Date inputs](date-inputs.md) | [Historical baseline only](date-pickers.md#review-boundary-and-evidence) | — | — | — |
 | Date-range picker | [Date inputs](date-inputs.md) | [Historical baseline only](date-pickers.md#review-boundary-and-evidence) | — | — | — |
@@ -57,14 +57,17 @@ Names follow the eventual subject contracts. A shared test can support multiple 
 | Public declarations and package | Packaging | Selected imports, plugin/global components, props/models/events/slots, Pug/editor use, CSS and Node/SSR import from the packed artifact; pending |
 | App configuration and strings | Initialization | English/German coverage, live locale/override changes, two-app isolation, disposal and SSR/hydration; pending |
 | Shared accessibility styles and announcer | Infrastructure | Media-mode, contrast/target/focus cases, app lifetime, repeated messages and native-modal announcement evidence; pending |
-| Live CSS presentation | Observer + overlays + consuming components | Real stylesheet changes while open, reduced motion, consumer transitions, hidden/show recovery and preserved state/focus; deferred prerequisites |
-| Form attachment | Forms + field wiring | Ordinary native submission/reset plus bound validation, invalid drafts, async cancellation/stale results, summaries and usable focus targets; deferred forms prerequisite |
+| Live CSS presentation | Observer + overlays + consuming components | Real stylesheet changes while open, reduced motion, supported transitions, hidden/show recovery and preserved state/focus; popup/embedded switching excluded; deferred prerequisites |
+| SPA form behavior | Existing input contracts + selection + component delivery | Submit handlers read reactive values; Enter consumption follows the selected interaction contract. Native request serialization and native reset are excluded by owner decision |
+| Form attachment | Forms | Bound validation, invalid drafts, async cancellation/stale results, summaries and usable focus targets consuming ordinary input behavior; deferred forms prerequisite |
 | Primed workflow, if published | Primed attachment + packaging | Named beta workflow, stable identity, forwarding, declared mount limit, view absence, scope disposal/cancellation and declarations; workflow selection pending |
 | Settings form with validation and async save | Forms + component delivery | Keyboard, NVDA and VoiceOver, pending/invalid/success/recovery states, and human-authored public explanation; pending |
 | Searchable record list with edit dialog and confirmation | Selection + overlays + component delivery | Keyboard, NVDA and VoiceOver across combined selection, editing, nested confirmation, dismissal and focus return; pending |
-| Locale change during invalid draft and presentation switch | Date inputs + field/forms + overlays | Chosen committed-value/draft/feedback policy followed through failed-submit focus; pending |
+| Locale change during invalid draft | Date inputs + field/forms + overlays | Chosen committed-value/draft/feedback policy followed through failed-submit focus in each supported presentation; popup/embedded switching excluded; pending |
 
 ## People and external evidence
+
+On 2026-09-21 the owner said “we'll defer manual screenreader tests until I have a setup for all quests”. This is the shared deferral for every quest, including per-component and integrated scenarios. Manual screen-reader entries without results are deferred until the owner reports the setup ready; do not solicit or schedule those sessions before then. Each owning package retains its scenarios and limitations. Infrastructure supplies the evidence format, and this matrix collects the eventual observations. Other verification continues. This does not establish manual accessibility acceptance or waive the final release requirement.
 
 The owner described the available environments on 2026-09-20. Availability does not establish a completed test or a named operator. [Infrastructure explains the manual evidence format](../../infrastructure/spec.md#manual-evidence-and-available-coverage) and retains a deferred brief for better iOS tooling. Existing device checks can proceed without that research. Required unavailable combinations remain release gaps until supplied or explicitly revised by the owner.
 

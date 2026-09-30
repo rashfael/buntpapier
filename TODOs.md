@@ -1,6 +1,8 @@
 # buntpapier issues to fix separately
 
-> **Status 2026-09-19:** Items **1–3**, **6** and **7** are recorded resolved. Item **4** and follow-up **A** belong to [selection delivery](quests/selection/spec.md#delivery-brief); item **5** belongs to the [component delivery brief](quests/beta/work/components.md). Open work outside beta remains **B**, **C**, **D** and the later candidates below. These entries are a backlog, not implementation authorization.
+Every entry carries a stable shortcode in its heading. Reference an entry by that code, never by position: entries are not numbered, lettered or alphabetized, and new ones are appended to their section with a fresh code.
+
+> **Status 2026-09-19:** `select-menu-dark`, `disabled-fill`, `button-text-color`, `input-compact` and `select-class-fallthrough` are recorded resolved. `select-value-highlight` and `select-overlay-migration` belong to [selection delivery](quests/selection/spec.md#delivery-brief); `checkbox-emphasis` belongs to the [component delivery brief](quests/beta/work/components.md). Open work outside beta remains `currentcolor-emphasis`, `native-i18n`, `button-icon-css`, `button-aria-disabled`, `tests-lint-gate`, `ids-multi-app` and the later candidates below. These entries are a backlog, not implementation authorization.
 
 Issues found in `buntpapier@^3.0.0-alpha.17` while building the **Control Room**
 (dark) variant (`/f`) of this mock. The mock re-skins the shared components by
@@ -18,7 +20,7 @@ and interact with the **Target** controls in the config editor.
 
 ---
 
-## 1. `bunt-select` dropdown menu is hardcoded white — options unreadable on dark (HIGH)
+## `select-menu-dark` — dropdown menu is hardcoded white, options unreadable on dark (HIGH)
 
 Opening any Target dropdown shows a **white** menu while the option text inherits
 the skin's (light, for dark mode) secondary text colour → light-grey text on a
@@ -34,7 +36,7 @@ Rule (`dist/buntpapier.css`):
   option text + hover on the same surface's contrast pair rather than
   `--clr-primary` directly.
 
-## 2. Disabled / read-only input fill is a fixed black alpha (MEDIUM)
+## `disabled-fill` — disabled / read-only input fill is a fixed black alpha (MEDIUM)
 
 Read-only Target fields (e.g. `Relay 1`) set a black-alpha fill that does nothing
 visible on a dark surface (and the disabled text colour assumes a light bg).
@@ -47,7 +49,7 @@ Rule:
   or `color-mix` against the current surface) so the disabled state reads on both
   light and dark.
 
-## 3. `bunt-button` text-weight default colour is invisible on dark (MEDIUM)
+## `button-text-color` — text-weight button default colour is invisible on dark (MEDIUM)
 
 Text-weight buttons (footer **Cancel** / **Save**) default their label colour to
 `--clr-primary` (deep purple `#330072`) → invisible on a dark surface.
@@ -55,13 +57,13 @@ Text-weight buttons (footer **Cancel** / **Save**) default their label colour to
   prop per skin (`src/styles/skins.sass`), so this is configurable — but the
   default could derive from a text token so it's legible out of the box.
 
-## 4. Selected-value highlight in the closed select (LOW)
+## `select-value-highlight` — selected-value highlight in the closed select (LOW)
 
 The closed `bunt-select` shows the selected value with a native text-selection
 highlight (bright blue block) rather than a styled selected state. Cosmetic;
 noticeable on dark.
 
-## 5. `bunt-checkbox` needs a lighter / lower-emphasis variant (MEDIUM)
+## `checkbox-emphasis` — checkbox needs a lighter / lower-emphasis variant (MEDIUM)
 
 The unchecked box is heavy — a `24px` (or `18px` small) square with a **2px**
 border in `--clr-secondary-text-light`. In a data table that's one box per row, a
@@ -77,7 +79,7 @@ Rule (`dist/buntpapier.css`):
   `--clr-grey-400`), so dense/table contexts can dial the resting state down without
   losing the checked accent.
 
-## 6. `--input-size: compact` is recognised but unstyled — RESOLVED
+## `input-compact` — `--input-size: compact` is recognised but unstyled — RESOLVED
 
 Shipped compact rules in `src/styles/components/input.sass`
 (`.bunt-input--size-compact`): a flat 28px control, `padding-top: 0` (no
@@ -85,7 +87,7 @@ floating-label headroom), 28px input with zeroed vertical padding, `.hint`
 hidden. Applies to `bunt-input` and `bunt-select` (both emit the class).
 The `DeviceDetails.vue` workaround under `.cfg-target` can now be dropped.
 
-## 7. `bunt-select` drops fallthrough classes — RESOLVED
+## `select-class-fallthrough` — select drops fallthrough classes — RESOLVED
 
 `bunt-select.my-class(...)` renders a root of
 `.bunt-select.bunt-input.bunt-input--shape-*` — the fallthrough `my-class`
@@ -97,11 +99,11 @@ scoping styles/custom-property overrides to the wrapping element instead.
 
 ## Follow-ups from the dark-mode rework (2026-06-12)
 
-### A. Select overlay migration
+### `select-overlay-migration` — select overlay migration
 
 Owned by [selection delivery](quests/selection/spec.md#delivery-brief), consuming [overlay lifecycle](quests/overlay-lifecycle/spec.md#delivery-brief). Those records carry scope, dependencies and acceptance; this backlog entry is a pointer.
 
-### B. Sub-emphasis from `currentcolor` (experiment)
+### `currentcolor-emphasis` — sub-emphasis from `currentcolor` (experiment)
 
 Derive label/hint/placeholder inside components from the component's own text
 color (`color-mix(in srgb, currentcolor 69%, transparent)` ≈ 60% ink) instead of
@@ -112,28 +114,34 @@ outline stroke and the outlined/text button hover washes already work this way.)
 
 ---
 
-### C. Native i18n support (idea, 2026-09-18)
+## Later ideas, questions and decisions
+
+### `native-i18n` — native i18n support (idea, 2026-09-18)
 
 Consider native i18n support in buntpapier. Scope is undecided; it may add too much complexity. The current plan already proposes a dictionary for built-in component strings. Whether native i18n extends beyond that is a separate discussion. Record the idea for now; no implementation or API decision is part of Phase 1.3.
 
-### D. Optional CSS fallback for button icons (idea, 2026-09-18)
+### `button-icon-css` — optional CSS fallback for button icons (idea, 2026-09-18)
 
 Consider a CSS custom property that supplies a button icon when no Vue `icon` prop is defined. Keep the icon prop and slot as the primary content API, with the same reactive behavior as the label. The fallback's token name, treatment of an explicitly empty icon and interaction with the icon slot remain undecided. Parked during Phase 1.3; no implementation planned yet. Checkbox icons continue to use cascading CSS through `--checkbox-icon`.
 
-### E. `bunt-button` disabled is `aria-disabled` only (question, 2026-09-20)
+### `button-aria-disabled` — disabled button is `aria-disabled` only (question, 2026-09-20)
 
 `src/components/button.ts` renders a `<button>` with `ariaDisabled` and no native `disabled` attribute, so a disabled button stays focusable and receives real clicks; only the component's internal `onClick` guard prevents activation. That is a defensible pattern — it keeps the control discoverable by keyboard — but it is currently implicit. Decide whether it is the intended contract, then document it. `tests/components/button-a11y.test.ts` asserts the observable behaviour either way. Surfaced by [M1 verification groundwork](quests/infrastructure/work/minimal-verification.md); belongs to the button and accessibility scope.
 
-### F. `tests/` is outside the lint gate (decision, 2026-09-20)
+### `tests-lint-gate` — `tests/` is outside the lint gate (decision, 2026-09-20)
 
 `npm run lint` is `eslint --ext .js,.ts,.vue src`, so the browser suites, fixtures and helpers have no automated convention enforcement. Extending the gate would surface pre-existing findings in assertions that were migrated byte-identical on purpose, so it was deliberately left alone during M1. Decide whether to widen the gate and fix what it reports, or to leave tests to review.
 
-### Notes / non-issues
+### `ids-multi-app` — generated ids across Vue applications (follow-up, 2026-09-20)
+
+Decide how generated control, label and description ids stay unique when several Vue applications share a document. Vue's default `useId()` sequence can repeat across applications; [distinct `app.config.idPrefix` values](https://vuejs.org/api/application.html#app-config-idprefix), matching on server and client, are one option. Determine whether callers configure those prefixes or Buntpapier supplies another mechanism, then verify multiple-app mounting and SSR/hydration. The owner deferred this finding from the [input/select package review](quests/field-wiring/work/input-select-contracts.md) and selected one Vue application per document for now. Revisit before claiming generated-ID support across applications; this adds no gate to the current package.
+
+## Notes / non-issues
 - **Closed** `bunt-input` / `bunt-select` fields themselves are fine on dark:
   `.bunt-input input { background-color: transparent }` + the SVG outline, so they
-  inherit the skin's text colour correctly. Only the **open menu** (#1) is broken.
+  inherit the skin's text colour correctly. Only the **open menu** (`select-menu-dark`) is broken.
 - Everything above is buntpapier-internal; per request, this mock does **not**
-  hand-roll fixes for them (beyond the documented `--button-color` prop in #3).
+  hand-roll fixes for them (beyond the documented `--button-color` prop in `button-text-color`).
 
 ## Later-phase candidates
 
@@ -163,6 +171,12 @@ Candidates with a recipe-versus-component assessment; none is a delivery commitm
 | FileInput / Upload | native file selection, list, removal, progress; app owns transport | component |
 | Drawer, ContextMenu, HoverCard, CommandPalette | dialog and menu derivatives | component, on demand |
 | Tree, Splitter, ColorPicker, OTP, Rating, month/year pickers, virtualised lists | need a real workflow, bounded scope and an AT plan before entering the roadmap | demand-driven |
+
+## `calendar-today-contrast` — the today marker fails AA on the light surface (MEDIUM)
+
+Found on 2026-09-21 by the first axe scan over a calendar, during [picker contracts](quests/field-wiring/work/picker-contracts.md) delivery. `src/styles/components/date-picker.sass` paints `.day-cell .today` in `var(--clr-primary)` at 13px bold. On the default light surface that measures **3.12:1**, below the 4.5:1 AA threshold for text. The rule predates this package and recolouring the marker is a visual decision, so the delivery left it alone and scoped one exception in `tests/components/picker-contracts.test.ts`.
+
+The marker also relies on colour plus weight alone; `aria-current="date"` already carries the meaning for assistive technology. Options: darken the token used here, keep the accent only as a background or underline, or accept it explicitly. Remove the scoped axe exception once decided.
 
 ## Further date-picker candidates
 

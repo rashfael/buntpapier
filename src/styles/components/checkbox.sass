@@ -10,8 +10,12 @@
 	display: flex
 	align-items: center
 	flex-shrink: 0
+	&[hidden]
+		display: none
 	input
 		position: absolute
+		// stays above the box it now precedes, so pointer hits on its pixel reach it
+		z-index: 1
 		cursor: pointer
 		top: 0
 		left: 0
@@ -41,6 +45,10 @@
 			opacity: 0
 			transform:  scale3D(.15, .15, 1)
 			transition: var(--swift-ease-in)
+	// The native checkbox is visually hidden, so its keyboard focus shows on the box.
+	input:focus-visible + .bunt-checkbox-box
+		outline: 2px solid var(--clr-primary)
+		outline-offset: 2px
 	&.checked
 		.bunt-checkbox-box
 			background-color: var(--_checkbox-color)
@@ -74,3 +82,11 @@
 			.mdi
 				// accent as ink: JS contrast guard > raw accent
 				color: var(--_checkbox-ink-color, var(--_checkbox-color))
+
+	// Forced colours flatten the disabled palette into CanvasText; keep it distinguishable.
+	@media (forced-colors: active)
+		&.disabled
+			label, .bunt-checkbox-box .mdi
+				color: GrayText
+			.bunt-checkbox-box
+				border-color: GrayText

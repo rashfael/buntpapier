@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 test('routes changing native attributes, naming and merged hint descriptions', async ({ page, pageLog }) => {
 	const input = page.locator('#external')
 	await expect(input).toHaveAccessibleName('Input label')
-	await expect(input).toHaveAttribute('name', 'entry')
+	await expect(input).toHaveAttribute('name', 'control')
 	await expect(input).toHaveAttribute('maxlength', '20')
 	await expect(input).toHaveAttribute('aria-describedby', 'extra external-hint')
 	await expect(input).toHaveAccessibleDescription('Caller description Input guidance')
@@ -119,7 +119,7 @@ test('hidden/inert departure emits once while unmount remains silent', async ({ 
 for (const name of ['Input', 'Select']) {
 	test(`${name} disabled guidance stays associated through binding changes`, async ({ page, pageLog }) => {
 		await page.getByRole('button', { name: 'Toggle disabled' }).click()
-		const control = page.locator(name === 'Input' ? '#external' : '#select-entry')
+		const control = page.locator(name === 'Input' ? '#external' : '#select-control')
 		await control.focus()
 		await expect(control).toHaveAccessibleDescription(`Caller description ${name} guidance`)
 		await page.getByRole('button', { name: 'Change bindings' }).click()
@@ -149,7 +149,7 @@ for (const type of ['text', 'search', 'email', 'url', 'tel', 'password', 'number
 		await input.press('x')
 		await expect(input).toHaveValue(type === 'number' ? '42' : 'Value')
 		await input.press('Tab')
-		await expect(page.locator('#select-entry')).toBeFocused()
+		await expect(page.locator('#select-control')).toBeFocused()
 	})
 }
 
@@ -163,20 +163,20 @@ test('source SSR hydrates unique stable IDs and associations in one application'
 	expect(new Set(serverIds).size).toBe(4)
 	await page.goto('/ssr-fields?ssr')
 	await expect(page.getByRole('textbox', { name: 'First' })).toHaveValue('One')
-	const clientIds = await page.locator('input').evaluateAll(entries => entries.map(entry => entry.id))
+	const clientIds = await page.locator('input').evaluateAll(nodes => nodes.map(node => node.id))
 	expect(clientIds).toEqual(serverIds)
 	expect(pageLog.matching(/hydration|mismatch/i)).toEqual([])
 	await expect(page.getByRole('textbox', { name: 'First' })).toHaveAccessibleDescription('First hint')
 })
 
 test('caller naming precedence, external labels and tabindex remain native', async ({ page }) => {
-	const entry = page.locator('#external')
+	const control = page.locator('#external')
 	await page.getByText('External name', { exact: true }).click()
-	await expect(entry).toBeFocused()
+	await expect(control).toBeFocused()
 	await page.getByRole('button', { name: 'Change name', exact: true }).click()
-	await expect(entry).toHaveAccessibleName('Caller name')
+	await expect(control).toHaveAccessibleName('Caller name')
 	await page.getByRole('button', { name: 'Change name', exact: true }).click()
-	await expect(entry).toHaveAccessibleName('Second description')
+	await expect(control).toHaveAccessibleName('Second description')
 	await expect(page.getByRole('textbox', { name: 'Disabled required' })).toHaveAttribute('tabindex', '-1')
 	await page.getByRole('textbox', { name: 'Disabled required' }).focus()
 	await expect(page.getByRole('textbox', { name: 'Disabled required' })).toBeFocused()
@@ -185,21 +185,21 @@ test('caller naming precedence, external labels and tabindex remain native', asy
 for (const state of ['disabled', 'readonly']) {
 	test(`${state} blocks paste/drop/beforeinput and ignores late composition input`, async ({ page }) => {
 		await page.getByRole('button', { name: `Toggle ${state}`, exact: true }).click()
-		for (const id of ['external', 'select-entry']) {
-			const entry = page.locator(`#${id}`)
-			const before = await entry.inputValue()
-			await entry.focus()
+		for (const id of ['external', 'select-control']) {
+			const control = page.locator(`#${id}`)
+			const before = await control.inputValue()
+			await control.focus()
 			await page.keyboard.insertText('Inserted')
-			await expect(entry).toHaveValue(before)
-			const cancelled = await entry.evaluate(el => ['paste', 'drop', 'beforeinput'].map(type => !el.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }))))
+			await expect(control).toHaveValue(before)
+			const cancelled = await control.evaluate(el => ['paste', 'drop', 'beforeinput'].map(type => !el.dispatchEvent(new Event(type, { bubbles: true, cancelable: true }))))
 			expect(cancelled).toEqual([true, true, true])
-			await entry.evaluate(el => {
+			await control.evaluate(el => {
 				el.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }))
 				;(el as HTMLInputElement).value = 'Late composition'
 				el.dispatchEvent(new InputEvent('input', { bubbles: true, data: 'Late composition', isComposing: true }))
 				el.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }))
 			})
-			await expect(entry).toHaveValue(before)
+			await expect(control).toHaveValue(before)
 		}
 		await expect(page.getByTestId('text')).toHaveText('Initial')
 		await expect(page.getByTestId('selected')).toHaveText('a')
@@ -207,7 +207,7 @@ for (const state of ['disabled', 'readonly']) {
 }
 
 test('disabled transitions preserve outside focus and owned popup inherits context', async ({ page }) => {
-	const select = page.locator('#select-entry')
+	const select = page.locator('#select-control')
 	await select.click()
 	await page.getByRole('button', { name: 'Change bindings' }).click()
 	await expect(page.getByRole('listbox').locator('xpath=ancestor::*[@dir][1]')).toHaveAttribute('dir', 'rtl')
@@ -219,16 +219,16 @@ test('disabled transitions preserve outside focus and owned popup inherits conte
 test('live hint slots fall back to props and remove absent descriptions', async ({ page }) => {
 	await page.getByRole('button', { name: 'Toggle hint slot' }).click()
 	await expect(page.locator('#external')).toHaveAccessibleDescription('Caller description Fallback hint')
-	await expect(page.locator('#select-entry')).toHaveAttribute('aria-describedby', 'extra')
+	await expect(page.locator('#select-control')).toHaveAttribute('aria-describedby', 'extra')
 	await page.getByRole('button', { name: 'Toggle hint slot' }).click()
 	await expect(page.locator('#external')).toHaveAccessibleDescription('Caller description Input guidance')
-	await expect(page.locator('#select-entry')).toHaveAccessibleDescription('Caller description Select guidance')
+	await expect(page.locator('#select-control')).toHaveAccessibleDescription('Caller description Select guidance')
 })
 
 test('disabled input blocks implicit Enter without a caller key modifier', async ({ page }) => {
-	const entry = page.getByRole('textbox', { name: 'Disabled required' })
-	await entry.focus()
-	await entry.press('Enter')
+	const control = page.getByRole('textbox', { name: 'Disabled required' })
+	await control.focus()
+	await control.press('Enter')
 	await expect(page.getByTestId('submits')).toHaveText('0')
 })
 
@@ -246,7 +246,7 @@ test('source API consumer mounts string, numeric and object values, slots and pu
 })
 
 test('open select keeps unique IDs and accessible option state', async ({ page }) => {
-	await page.locator('#select-entry').click()
+	await page.locator('#select-control').click()
 	await expect(page.locator('.bunt-tooltip')).toHaveCount(0)
 	const ids = await page.locator('[id]').evaluateAll(elements => elements.map(element => element.id))
 	expect(new Set(ids).size).toBe(ids.length)
@@ -254,6 +254,6 @@ test('open select keeps unique IDs and accessible option state', async ({ page }
 	await expect((await axeScan(page, 'main')).violations).toEqual([])
 	await page.getByRole('button', { name: 'Change name', exact: true }).click()
 	await expect(page.getByRole('listbox')).toHaveAccessibleName('Caller name')
-	await page.locator('#select-entry').fill('Missing')
+	await page.locator('#select-control').fill('Missing')
 	await expect((await axeScan(page, 'main')).violations).toEqual([])
 })

@@ -123,6 +123,40 @@ test('segment editing, select-all replacement, invalid input, and clearing', asy
 	await expect(input).toHaveValue('')
 })
 
+test('a draft typed back into shape segments again', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	const selection = () => input.evaluate((el: HTMLInputElement) => [el.selectionStart, el.selectionEnd])
+	await input.focus()
+	// A stray letter and its undo leave the canonical text behind an uncommitted draft.
+	await input.press('End')
+	await input.press('e')
+	await expect(input).toHaveValue('2026-09-16e')
+	await input.press('Backspace')
+	await expect(input).toHaveValue('2026-09-16')
+	// Segment nav, type-over and stepping all work off that text, not off the model behind it.
+	await input.press('Home')
+	await input.press('ArrowRight')
+	await input.press('1')
+	await input.press('1')
+	await expect(input).toHaveValue('2026-11-16')
+	expect(await selection()).toEqual([8, 10])
+	await input.press('ArrowUp')
+	await expect(input).toHaveValue('2026-11-17')
+	await expect(page.getByTestId('single-value')).toHaveText('2026-11-17')
+})
+
+test('a draft that is not a date stays out of segmented editing', async ({ page }) => {
+	const input = page.getByRole('combobox', { name: 'Single date', exact: true })
+	await input.focus()
+	await input.press('End')
+	await input.press('x')
+	await input.press('1')
+	await expect(input).toHaveValue('2026-09-16x1')
+	await expect(page.getByTestId('single-value')).toHaveText('2026-09-16')
+	await input.press('Escape')
+	await expect(input).toHaveValue('2026-09-16')
+})
+
 test('disabled dates are inspectable but cannot be selected; min/max limit navigation', async ({ page }) => {
 	const input = page.getByRole('combobox', { name: 'Weekday', exact: true })
 	await input.press('Alt+ArrowDown')

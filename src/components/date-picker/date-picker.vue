@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, useId, watch } from 'vue'
+import { nextTick, onBeforeUnmount, useId, useSlots, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
+import { preventFieldEdit } from '../../utils/field'
+import { usePickerField } from './picker-field'
 import { useInputOutline } from '../../utils/input-outline'
 import {
 	type Segment,
@@ -32,8 +34,9 @@ const {
 	modelValue,
 	placeholder,
 	disabled,
+	readonly,
 	label,
-	name,
+	hint,
 	minDate,
 	maxDate,
 	disabledDates,
@@ -41,7 +44,6 @@ const {
 	weekStartsOn: weekStartsOnProp,
 	locale,
 	showWeekNumbers = false,
-	clearable = false,
 	inline = false,
 	navigateOnOutsideDayClick = true,
 	presets,
@@ -50,8 +52,9 @@ const {
 	modelValue?: Temporal.PlainDate | null
 	placeholder?: string
 	disabled?: boolean
+	readonly?: boolean
 	label?: string
-	name?: string
+	hint?: string
 	minDate?: Temporal.PlainDate
 	maxDate?: Temporal.PlainDate
 	disabledDates?: (d: Temporal.PlainDate) => boolean | { disabled: boolean; reason?: string }
@@ -59,7 +62,6 @@ const {
 	weekStartsOn?: WeekStart
 	locale?: string
 	showWeekNumbers?: boolean
-	clearable?: boolean
 	inline?: boolean
 	navigateOnOutsideDayClick?: boolean
 	presets?: DatePreset<Temporal.PlainDate>[]
@@ -68,7 +70,13 @@ const {
 
 const emit = defineEmits<{
 	'update:modelValue': [value: Temporal.PlainDate | null]
+	focus: []
+	blur: []
 }>()
+defineOptions({ inheritAttrs: false })
+defineSlots<{ hint?(): unknown }>()
+const slots = useSlots()
+const locked = $computed(() => disabled || readonly)
 
 const weekStartsOn = $computed(() => weekStartsOnProp ?? getLocaleWeekStart(locale))
 
@@ -78,7 +86,6 @@ let currentMonth = $ref<Temporal.PlainDate>(
 let focusedDay = $ref<Temporal.PlainDate | null>(modelValue ?? Temporal.Now.plainDateISO())
 let draftText = $ref<string | null>(null)
 let open = $ref(false)
-let focused = $ref(false)
 
 // Type-over-segment buffer state
 let segmentBuffer = $ref('')
@@ -89,9 +96,15 @@ const el = $ref<HTMLElement>(null)
 // ── Input ──────────────────────────────────────────────
 
 const inputEl = $ref<HTMLInputElement>(null)
+const clearEl = $ref<HTMLElement>(null)
 
 function handleInputInput (event: Event) {
+	if (locked) return
 	const value = (event.target as HTMLInputElement).value
+	// A native edit is not a segment edit, so whatever digits were buffered for a segment no
+	// longer describe the text. Keeping them would apply them to a layout that has moved.
+	segmentBuffer = ''
+	segmentBufferFor = null
 	draftText = value
 	const parsed = parseInputFn(value)
 	if (parsed) {
@@ -101,6 +114,7 @@ function handleInputInput (event: Event) {
 }
 
 function handleInputPaste (event: ClipboardEvent) {
+	if (locked) return event.preventDefault()
 	const pasted = event.clipboardData?.getData('text') ?? ''
 	if (!pasted) return
 	const parsed = parseInputFn(pasted)
@@ -119,7 +133,7 @@ function handleInputPaste (event: ClipboardEvent) {
 }
 
 function commitDraft () {
-	if (draftText === null) return
+	if (locked || draftText === null) return
 	const parsed = parseInputFn(draftText)
 	if (parsed && !isDayDisabled(parsed)) {
 		emit('update:modelValue', parsed)
@@ -132,8 +146,10 @@ function commitDraft () {
 // ── Segmented editing ─────────────────────────────────────
 
 function canSegment (): boolean {
-	// Segmented nav only works against a canonical ISO string (no mid-typing drafts).
-	return draftText === null && isCanonicalISO(displayValue)
+	// Segmented nav needs the segment layout the canonical ISO string gives it. What the field
+	// shows decides that, not where the text came from: an uncommitted draft typed back into
+	// shape — say after a stray letter and a backspace — segments again.
+	return isCanonicalISO(displayValue)
 }
 
 function getCurrentSegment (): Segment | null {
@@ -148,7 +164,6 @@ function selectSegment (segment: Segment) {
 }
 
 function handleInputFocus () {
-	focused = true
 	if (!canSegment()) return
 	// On Tab-focus, select the first segment. Clicks are handled separately (handleInputClick)
 	// so the clicked segment wins when the two events fire together.
@@ -168,7 +183,8 @@ function handleInputClick () {
 }
 
 function handleInputBlur () {
-	focused = false
+	// A locked control keeps whatever the user had typed until it is editable again.
+	if (locked) return
 	// Discard any in-progress segment buffer on blur; don't commit partial typing.
 	if (segmentBufferFor !== null) {
 		segmentBuffer = ''
@@ -189,6 +205,7 @@ function previewSegmentBuffer (segment: Segment, buf: string) {
 }
 
 function commitSegmentBuffer (segment: Segment) {
+	if (locked) return
 	const basis = getBasisDate()
 	const value = Number(segmentBuffer)
 	let newDate: Temporal.PlainDate
@@ -226,6 +243,7 @@ function commitSegmentBuffer (segment: Segment) {
 }
 
 function handleSegmentDigit (digit: string) {
+	if (locked) return
 	const current = getCurrentSegment()
 	if (!current) return
 
@@ -299,9 +317,12 @@ function handleInputKeydown (event: KeyboardEvent) {
 	}
 	if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
 		event.preventDefault()
+		if (locked) return
 		const delta = event.key === 'ArrowUp' ? 1 : -1
 		const newDate = incrementDate(getBasisDate(), current.name, delta)
 		if (isDayDisabled(newDate)) return
+		// The step consumed the draft; leaving it would keep displaying the pre-step text.
+		draftText = null
 		emit('update:modelValue', newDate)
 		currentMonth = startOfMonth(newDate)
 		focusedDay = newDate
@@ -328,6 +349,27 @@ function handleInputKeydown (event: KeyboardEvent) {
 const popoverEl = $ref<HTMLElement>(null)
 const calendar = $ref<InstanceType<typeof CalendarPanel>>(null)
 const popoverId = `bunt-date-picker-popover-${useId()}`
+
+// ── Field wiring ─────────────────────────────────────────
+
+const { id, rootAttrs, controlAttrs, hasHint, tabbableDays, groupTabindex, focused, focus, focusCalendar } = $(usePickerField({
+	root: $$(el),
+	input: $$(inputEl),
+	calendar: $$(calendar),
+	popover: $$(popoverEl),
+	inline: () => inline,
+	disabled: () => disabled,
+	open: () => open,
+	label: () => label,
+	hint: () => hint,
+	hintSlot: () => Boolean(slots.hint),
+	keyboardHelp: () => !inline,
+	close: (returnFocus) => closePopover(returnFocus),
+	// The typed emit takes a literal, not a union-typed variable.
+	emit: (event) => event === 'focus' ? emit('focus') : emit('blur')
+}))
+
+const clearVisible = $computed(() => !locked && modelValue != null)
 
 watch($$(open), (isOpen) => {
 	if (!popoverEl) return
@@ -404,7 +446,9 @@ const displayValue = $computed(() => {
 })
 
 function getBasisDate (): Temporal.PlainDate {
-	return modelValue ?? Temporal.Now.plainDateISO()
+	// Segment edits apply to the date the field shows, so a parseable draft outranks the model.
+	const draft = draftText === null ? null : parseInputFn(draftText)
+	return draft ?? modelValue ?? Temporal.Now.plainDateISO()
 }
 
 const draftInvalid = $computed(() => draftText !== null && !parseInputFn(draftText))
@@ -427,7 +471,7 @@ function getDisabledReason (d: Temporal.PlainDate): string | undefined {
 }
 
 function handleDayClick (day: Temporal.PlainDate) {
-	if (isDayDisabled(day)) return
+	if (locked || isDayDisabled(day)) return
 	focusedDay = day
 	draftText = null
 	emit('update:modelValue', day)
@@ -435,6 +479,7 @@ function handleDayClick (day: Temporal.PlainDate) {
 }
 
 function applyPreset (preset: DatePreset<Temporal.PlainDate>) {
+	if (locked) return
 	const value = preset.getValue()
 	if (isDayDisabled(value)) return
 	draftText = null
@@ -445,7 +490,9 @@ function applyPreset (preset: DatePreset<Temporal.PlainDate>) {
 }
 
 function handleClear () {
-	if (disabled) return
+	if (locked) return
+	// Leave the action before the model update stops rendering it, so focus never sits on a removed control.
+	if (inline && clearEl?.contains(document.activeElement)) focusCalendar()
 	draftText = null
 	segmentBuffer = ''
 	segmentBufferFor = null
@@ -480,6 +527,8 @@ const { classes: computedClasses } = useComputedStyle($$(el), {
 
 const floatingLabel = $computed(() => Boolean(placeholder || modelValue))
 
+defineExpose({ el: $$(el), focus })
+
 const inputClasses = $computed(() => [
 	...computedClasses,
 	{
@@ -491,20 +540,21 @@ const inputClasses = $computed(() => [
 ])
 </script>
 <template lang="pug">
-.bunt-date-picker(ref="el", :class="inputClasses")
+.bunt-date-picker(ref="el", v-bind="rootAttrs()", :class="inputClasses")
 	.label-input-container(v-if="!inline", v-resize-observer="updateOutline", @click="openPopover()")
-		label
-			span {{ label }}
+		label(:for="id()")
+			span(:id="`${id()}-label`") {{ label }}
 			input(
 				ref="inputEl",
-				:name="name",
+				v-bind="controlAttrs()",
 				:value="displayValue",
 				:placeholder="placeholder",
-				:disabled="disabled",
+				:readonly="locked",
+				:aria-disabled="disabled || undefined",
+				:aria-readonly="locked || undefined",
 				:aria-invalid="draftInvalid || undefined",
 				:aria-expanded="open",
 				:aria-controls="popoverId",
-				:aria-describedby="`${popoverId}-help`",
 				role="combobox",
 				aria-haspopup="dialog",
 				aria-autocomplete="none",
@@ -513,14 +563,17 @@ const inputClasses = $computed(() => [
 				@click="handleInputClick",
 				@input="handleInputInput",
 				@paste="handleInputPaste",
+				@beforeinput="preventFieldEdit($event, locked)",
+				@drop="preventFieldEdit($event, locked)",
 				@blur="handleInputBlur",
 				@keydown="handleInputKeydown"
 			)
-		button.open-calendar-btn.mdi.mdi-calendar-month(type="button", tabindex="-1", aria-label="Open calendar", :disabled="disabled")
-		button.clear-trigger(v-if="clearable && modelValue", type="button", aria-label="Clear", :disabled="disabled", @click.stop="handleClear")
+		button.clear-trigger(v-if="clearVisible", ref="clearEl", type="button", aria-label="Clear", @click.stop="handleClear")
 			.mdi.mdi-close(aria-hidden="true")
+		button.open-calendar-btn.mdi.mdi-calendar-month(type="button", tabindex="-1", aria-label="Open calendar", :disabled="disabled")
 		Outline
-	.sr-only(v-if="!inline", :id="`${popoverId}-help`") Date format: YYYY-MM-DD. Alt+Down opens the calendar.
+	.sr-only(v-if="!inline", :id="`${id()}-help`") Date format: YYYY-MM-DD. Alt+Down opens the calendar.
+	.calendar-caption(v-if="inline && label", :id="`${id()}-label`") {{ label }}
 	div(
 		:id="popoverId",
 		ref="popoverEl",
@@ -533,8 +586,12 @@ const inputClasses = $computed(() => [
 	)
 		CalendarPanel(
 			ref="calendar",
+			v-bind="inline ? controlAttrs() : {}",
 			v-model:month="currentMonth",
 			v-model:focusedDay="focusedDay",
+			:role="inline ? 'group' : undefined",
+			:tabindex="inline ? groupTabindex : undefined",
+			:aria-disabled="inline && disabled || undefined",
 			:monthsToShow="monthsToShow",
 			:weekStartsOn="weekStartsOn",
 			:showWeekNumbers="showWeekNumbers",
@@ -542,13 +599,17 @@ const inputClasses = $computed(() => [
 			:minDate="minDate",
 			:maxDate="maxDate",
 			:disabled="disabled",
+			:readonly="readonly",
+			:tabbableDays="tabbableDays",
 			:navigateOnOutsideDayClick="navigateOnOutsideDayClick",
 			:isDayDisabled="isDayDisabled",
 			:getDisabledReason="getDisabledReason",
 			:isSelected="modelValue ? (d) => d.equals(modelValue) : undefined",
 			@day-click="handleDayClick"
 		)
-			.presets(v-if="presets || (inline && clearable && modelValue)", :class="{ 'inline-footer': inline }")
-				button.preset-btn(v-for="p in presets", :key="p.label", type="button", :disabled="isDayDisabled(p.getValue())", @click="applyPreset(p)") {{ p.label }}
-				button.clear-btn(v-if="inline && clearable && modelValue", type="button", :disabled="disabled", @click="handleClear") Clear
+			.presets(v-if="presets || (inline && clearVisible)", :class="{ 'inline-footer': inline }")
+				button.preset-btn(v-for="p in presets", :key="p.label", type="button", :disabled="locked || isDayDisabled(p.getValue())", @click="applyPreset(p)") {{ p.label }}
+				button.clear-btn(v-if="inline && clearVisible", ref="clearEl", type="button", @click="handleClear") Clear
+	.hint(v-if="hasHint()", :id="`${id()}-hint`")
+		slot(name="hint") {{ hint }}
 </template>

@@ -65,6 +65,8 @@ Native-form scenarios must support `FormData`, implicit submit, external form as
 
 ## Manual evidence and available coverage
 
+Manual screen-reader testing is deferred across all quests by the owner’s 2026-09-21 instruction until their setup is ready. The [shared deferral](../beta/work/release.md#people-and-external-evidence) owns the revisit condition and eventual result collection. Keep the scenarios below ready; available device access alone does not resume screen-reader testing. Automated and other device checks can continue.
+
 Manual evidence is a short record of someone performing a named interaction and observing the result: revision, device/OS/browser/AT versions, date, steps, expected result, actual result and limitations. For example: on the iPad with VoiceOver enabled, open the picker, navigate dates, select one and close it; record the announced name/state and where focus returns. Remote DOM inspection supports diagnosis but does not record spoken output or gesture usability by itself. Automated scans cover only part of accessibility testing, as [Playwright's accessibility guidance](https://playwright.dev/docs/accessibility-testing) explains.
 
 | Available environment | Useful evidence | Remaining boundary |

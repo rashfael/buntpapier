@@ -7,14 +7,23 @@ layoutClass: 'component'
 import { ref } from 'vue'
 
 const slots = {
+	hint: {description: 'If you want to render rich text in the hint, use this, otherwise, use the `hint` prop; overridden by validation messages'}
 }
 const props = {
-	modelValue: {type: 'string', description: 'powers v-model'},
+	modelValue: {type: 'string | number | object', description: 'powers v-model, keeps the selected option value type'},
 	options: {type: 'array', value: ['Option 1', 'Option 2', 'Option 3'], description: 'Array of strings or objects. If objects, they must have a `label` and `value` property.'},
 	label: {type: 'string', value: 'Label'},
+	hint: {type: 'string'},
+	disabled: {type: 'boolean', default: false, description: 'Prevents editing, opening the dropdown and selecting options, but you can still focus the input'},
+	readonly: {type: 'boolean', default: false, description: 'You can open the dropdown and look through the options, but cannot edit the text or select an option'},
+	validation: {type: 'object'},
 }
 const events = {
-	click: {}
+	'update:modelValue': {description: 'The selected option value. Selecting an option does not emit input or change.'},
+	input: {description: 'native input event, typing in the search field does not update v-model'},
+	change: {description: 'native change event'},
+	focus: {},
+	blur: {}
 }
 const style = {
 	'--input-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
@@ -83,3 +92,12 @@ For lighter customization, override just the `group-header` slot (receives `grou
 
 
 <div id="bunt-teleport-target"></div>
+
+## API
+
+<ApiDocs :slots="slots" :props="props" :events="events" :style="style"/>
+
+| Exposed member | Description |
+|---|---|
+| `focus(options?: FocusOptions): void` | Focuses the input without opening the dropdown, even when disabled. Does nothing if the input is hidden, inert or unmounted. |
+| `el` | Component root element. |

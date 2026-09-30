@@ -4,7 +4,10 @@
 
 | Read when | Page |
 |---|---|
+| Deciding library scope and UX/DX priorities | [Design philosophy](philosophy.md) |
+| Designing component appearance | [Appearance](appearance.md) |
 | Designing a component API | [API guide](api-guide.md) |
+| Routing input attributes, events and focus | [Input routing](input-routing.md) |
 | Checking authoring decisions or rejected alternatives | [API decisions](api-design.md) |
 | Changing platform or dependency responsibilities | [Architecture direction](architecture.md) |
 | Moving a JavaScript calculation into CSS | [Bridge inventory](js-bridge-inventory.md) |

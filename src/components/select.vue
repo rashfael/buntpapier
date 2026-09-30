@@ -233,7 +233,7 @@ const { focused, focus, isProgrammatic } = useFieldFocus($$(el), inputEl, event 
 		if (validation) validation.$touch()
 		updateOutline()
 	}
-}, $$(dropdownRef))
+}, { popup: $$(dropdownRef) })
 
 function openDropdown () {
 	if (disabled || open) return
@@ -257,13 +257,13 @@ let search = $ref('')
 
 function handleInput ($event: Event) {
 	emit('input', $event)
-	const entry = $event.target as HTMLInputElement
+	const control = $event.target as HTMLInputElement
 	if (disabled || readonly) {
-		entry.value = inputValue ?? ''
+		control.value = inputValue ?? ''
 		return
 	}
 	openDropdown()
-	inputValue = entry.value
+	inputValue = control.value
 	search = inputValue
 	// emit('update:modelValue', $event.target.value)
 	// if (validation) validation.$touch()

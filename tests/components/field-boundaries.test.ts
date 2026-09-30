@@ -33,7 +33,7 @@ test('an open select retains valid listbox and option structure', async ({ page 
 	expect(result.violations).toEqual([])
 })
 
-test('the root hidden attribute hides its native entry', async ({ page }) => {
+test('the root hidden attribute hides its native control', async ({ page }) => {
 	await page.locator('#input').focus()
 	await page.locator('#input').evaluate(el => el.closest('.bunt-input').setAttribute('hidden', ''))
 	await expect(page.locator('#input')).toBeHidden()

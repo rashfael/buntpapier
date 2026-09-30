@@ -1,0 +1,72 @@
+[
+  {
+    "engine": "chromium",
+    "name": "keyboard escape survives unrelated update and reopens after new focus",
+    "result": "pass"
+  },
+  {
+    "engine": "chromium",
+    "name": "mouse focus does not pin; reentry opens",
+    "result": "pass"
+  },
+  {
+    "engine": "chromium",
+    "name": "keyboard activation dismisses until new interaction",
+    "result": "pass"
+  },
+  {
+    "engine": "chromium",
+    "name": "forced error ignores mouse leave but escape survives rerender; new error opens",
+    "result": "pass"
+  },
+  {
+    "engine": "chromium",
+    "name": "rapid exit reversal preserves element and visible final position",
+    "result": "pass"
+  },
+  {
+    "engine": "chromium",
+    "name": "entry description merged, updated and removed",
+    "result": "pass"
+  },
+  {
+    "engine": "chromium",
+    "name": "select description merged, updated and removed",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "keyboard escape survives unrelated update and reopens after new focus",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "mouse focus does not pin; reentry opens",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "keyboard activation dismisses until new interaction",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "forced error ignores mouse leave but escape survives rerender; new error opens",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "rapid exit reversal preserves element and visible final position",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "entry description merged, updated and removed",
+    "result": "pass"
+  },
+  {
+    "engine": "firefox",
+    "name": "select description merged, updated and removed",
+    "result": "pass"
+  }
+]

@@ -13,15 +13,15 @@ Own validation behavior, schema/definition boundaries and form authoring. Inheri
 
 Status: deferred by the owner, 2026-09-18. This discussion is closed for now; the forms contract is incomplete. Buntpapier will own its validation stack, use `useForm` and remove Vuelidate support without a migration phase. Exact signatures, schema integration, template authoring and remaining behavior below are proposals. This page owns [beta's form outcome](../beta/spec.md#milestone-scope-and-delivery-ownership) under the [shared field vocabulary](../../design/api-design.md). Component implementation has not been requested.
 
-When resumed: consider TypeScript-oriented schemas such as Valibot or Zod together with the form definition and template API. Preserve the handwritten-form and JSON Schema builder use cases. Until then, the [dependency assessment](#what-can-proceed-without-the-template-api) identifies independent work; it is not a request to continue the deferred form design. The [field-wiring quest](../field-wiring/spec.md) owns internal signatures, registration and DOM wiring.
+When resumed: consider TypeScript-oriented schemas such as Valibot or Zod together with the form definition and template API. Preserve the handwritten-form and JSON Schema builder use cases. Until then, the [dependency assessment](#what-can-proceed-without-the-template-api) identifies independent work; it is not a request to continue the deferred form design. The [existing input contracts quest](../field-wiring/spec.md) owns ordinary control behavior; this quest owns the deferred field abstractions and their form connection.
 
 ## Settled direction
 
-Ordinary fields remain usable through props/models. `invalid` and `errors` accept application feedback without depending on a validation library. Buntpapier owns rule execution and form validation. Remove the Vuelidate-shaped `validation` prop and its `$error`/`$errors`/`$touch` coupling when introducing the replacement, without an adapter, deprecation period or compatibility release.
+Ordinary fields remain usable through props/models. The owner deferred new standalone `invalid`/`errors` props on 2026-09-20; the small use case is recorded below. Buntpapier owns rule execution and form validation. Remove the Vuelidate-shaped `validation` prop and its `$error`/`$errors`/`$touch` coupling when introducing the replacement, without an adapter, deprecation period or compatibility release.
 
 The owner considers `useForm` settled in direction, with `useForm(data, definition)` as the working shape. DRY templates and JSON Schema form builders remain requirements. This does not settle rule nesting, the return object's members, field rendering or array-helper names. The owner dislikes `bunt-repeat`, mostly its name; no repeater component is selected.
 
-Native validation cannot orchestrate async rules because its constraint-validation API is synchronous. [HTML constraint validation](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#the-constraint-validation-api).
+On 2026-09-20 the owner excluded native validation and required library-owned validation with correct accessibility semantics. Inherit the [SPA submission contract](../../design/api-guide.md#spa-submission): `novalidate`, application-data submission, no native constraint-validation or validity-synchronization integration. This narrows the deferred design without resuming it.
 
 ## Schema libraries to revisit
 
@@ -29,16 +29,32 @@ The owner identified TypeScript-oriented schemas such as Valibot or Zod as a sub
 
 On resumption, compare a native definition, schema-backed definitions and an interoperability interface such as Standard Schema. Decide where types come from, how schema input/output transformations relate to application values and control drafts, and where editor/label metadata belongs. Include async and cross-field checks, nested error paths and JSON Schema integration in that comparison. Schema validation and automatic editor selection are separate capabilities to evaluate. No schema library, mandatory dependency or adapter API is selected.
 
+## Deferred field abstractions
+
+On 2026-09-20 the owner directed that field abstractions wait until the form feature with validation. This quest now owns the optional `bunt-field` wrapper, custom/group control attachment and any `useFormField` helper together with form authoring. The deferral does not remove the beta outcome or resume this discussion. Revisit when the owner selects forms design; the usefulness and public shape of a wrapper must be established by actual form and custom-control cases.
+
+Design one connection for value access, draft/parse reporting, whole-field interaction, feedback and focus targets, consuming the ordinary input contracts. Define registration, participation/reset plumbing and accessible feedback associations without a second logical-field registry. Keep the proposed editor-selecting `Field` renderer distinct from the label/hint/error wrapper until their relationship is decided. Public spelling may be a prop, binding object, slot or renderer; none is selected.
+
+Preserve custom-control and group cases, including slot/text precedence, fieldset/legend semantics, error associations and summary focus. Each stable popup/embedded mode needs a usable focus target. The owner made transitions between those modes unspecified; they require no state-migration contract. The accessibility and failed-submit scenarios below remain required integration evidence; infrastructure owns announcement mechanics and overlays own native transitions.
+
+## Standalone input feedback
+
+On 2026-09-20 the owner deferred external-feedback props because none exist and the future form workflow should cover the main use case. Preserve the smaller case of a “single input where a form isn't worth it”: for example, one input with an application or server error and no form workflow. Revisit when that case is selected or when form design can show a useful shared implementation; do not add props now.
+
+`invalid` and `errors` remain candidate names, not a delivery commitment. The earlier proposal was a boolean invalid flag and messages as `string | string[]`, with nonempty messages implying invalidity, hints alongside errors, and parser failures independent of clearing external messages. Their composition, timing and rendering still need a decision. An error-rendering slot is also unselected. Prefer reusing the form feedback rendering if the case proves useful.
+
+Source inspection: current input/select expose a Vuelidate-shaped `validation` object; no current control exposes standalone `invalid`/`errors` props. This deferral supersedes the earlier plan to add those props ahead of forms and does not remove existing behavior. [Compact feedback](../compact-feedback/spec.md) owns the separate gap caused by intentional hint suppression.
+
 ## What can proceed without the template API
 
 This is a dependency assessment and proposed local work order. It does not complete the forms contract or change beta's release criteria.
 
-The owner accepted the ownership clarification on 2026-09-19: this quest owns logical field identity, committed values and draft semantics, validation lifecycle, participation and reset meaning. [Field wiring](../field-wiring/spec.md#handoff-from-forms) owns the single mounted-control attachment signature, DOM ids, interaction reporting, focus and ARIA projection. Supply the semantics needed by that adapter; consume its signature instead of maintaining a second internal connection API. This clarification does not resume the deferred behavior discussion.
+The 2026-09-20 owner direction supersedes the earlier split of form semantics and control attachment between two quests. This quest owns logical field identity, committed values and draft semantics, validation lifecycle, participation, reset meaning and the single mounted-control attachment signature. [Existing input contracts](../field-wiring/spec.md) supplies ordinary DOM naming, attributes, label/hint content and focus behavior for that integration to consume. Forms remains deferred.
 
 | work | decision needed before it proceeds | template dependency |
 |---|---|---|
-| Overlay lifecycle, selection, initialization/strings, outline prototype, packaging | Their own contract decisions; validation message keys can follow the error model | None; validation does not block their design |
-| Ordinary control labels, hints, attribute routing, readonly behavior and external feedback | Shared field vocabulary and the relevant accessibility behavior | No choice between slots, a `field` prop and a renderer is needed |
+| Overlay lifecycle, selection, initialization/strings, packaging | Their own contract decisions; validation message keys can follow the error model | None; validation does not block their design |
+| Ordinary control labels, hints, attribute routing and readonly behavior | Shared field vocabulary and the relevant accessibility behavior | No choice between slots, a `field` prop and a renderer is needed |
 | Connecting controls to `useForm` | Value ownership, draft/parse reporting, whole-field interaction, feedback state, focus targets and reset participation | Define these responsibilities before selecting the public spelling |
 | Validation engine and form aggregation | Declared-field lifetime and participation, async result/dependency handling, structured error locations and reset semantics | Can be designed independently of template syntax |
 | Nested arrays and schema adapters | Object/array structure, collection-level failures and row identity separate from array position | Ordinary loops, slot helpers and generated rendering can share this model |
@@ -89,7 +105,7 @@ Keep validation pending distinct from the save request's pending state. Submissi
 | [select.vue](../../src/components/select.vue) | Same error/hint rendering; touches on blur, with the touch call during filtering commented out; selection emits the model without touching validation | Search drafts, committed selection and blur currently have inconsistent validation triggers |
 | [date-picker.vue](../../src/components/date-picker/date-picker.vue) | Local `draftInvalid` sets `aria-invalid`; `commitDraft()` discards an invalid draft and leaves the previous model in place | Model-only validation can accept a previous value after a failed edit |
 | [date-range-picker.vue](../../src/components/date-picker/date-range-picker.vue) | Its textbox is always readonly, while calendar interaction changes `DateRange`; embedded mode has no textbox | DOM text-input validity cannot represent the logical field in every presentation |
-| [input.sass](../../src/styles/components/input.sass) | Compact layout hides the hint element, which also contains errors | New feedback must remain available in compact layouts |
+| [input.sass](../../src/styles/components/input.sass) | Compact layout intentionally hides the hint element, which also contains errors | The [compact-feedback quest](../compact-feedback/spec.md) owns message access within the height constraint |
 | [src/index.ts](../../src/index.ts), [package.json](../../package.json) | No form component, form composable or validator exports; no Vuelidate dependency | This is new public behavior, not documentation of an existing form API |
 | [current validation page](../../docs/validation.md) | Says Vuelidate is required and imports a nonexistent v3 path | Rewrite when the validation replacement ships; keep future examples clearly marked meanwhile |
 
@@ -97,27 +113,29 @@ Source inspection: current working tree, 2026-09-18. The [v2 validators](../../.
 
 ## Feedback and timing proposal
 
+The direct `invalid`/`errors` inputs below are deferred candidates for [standalone input feedback](#standalone-input-feedback). Form validation still needs its own result and display semantics; this section does not authorize adding those props.
+
 `invalid` adds an application-invalid state; nonempty `errors` imply it too. `invalid=false` does not erase a parser failure or failed rule. Applications that need full external control omit local rules. Empty messages are ignored; invalidity without a message remains representable and needs a summary fallback.
 
 Keep hints available alongside errors. They often explain how to repair the value. Recommend displaying all current messages in supplied order, with external messages followed by local parse/constraint/rule messages. This revises the initial roadmap's “first one shown, all announced on request” proposal, whose request interaction was unspecified. Compact size removes reserved space, not feedback. Announcement timing and the exact description markup belong to the field contract after this display policy is decided.
 
 Keep known invalidity distinct from whether feedback has been revealed. Recommend `validateOn='blur'` as the default: reveal local failures on leaving the whole field, then recheck on value changes once that field has shown a failure, until validation state is reset. Moving focus from a picker input into its calendar is still inside the field. Explicit `input` and `submit` modes remain useful; `submit` mode stays quiet until an explicit validation request. Application-supplied errors are already actionable and appear when supplied.
 
-An explicit `validate()` checks every participating field and reveals failures regardless of its automatic timing mode. A form with checks not yet run must not imply success merely because no error has appeared. Native user-validity timing and external errors are different inputs, so `:user-invalid` alone cannot represent the combined display state. ARIA invalidity must reflect the feedback policy, including its delayed initial presentation. [WAI-ARIA `aria-invalid`](https://www.w3.org/TR/wai-aria-1.2/#aria-invalid).
+An explicit `validate()` checks every participating field and reveals failures regardless of its automatic timing mode. A form with checks not yet run must not imply success merely because no error has appeared. Visual invalidity follows our validation state and feedback timing; native user-validity pseudo-classes are not its source. ARIA invalidity must reflect the feedback policy, including its delayed initial presentation. [WAI-ARIA `aria-invalid`](https://www.w3.org/TR/wai-aria-1.2/#aria-invalid).
 
 ## Accessibility
 
-Proposal: expose our validation state and visible messages through ARIA. `setCustomValidity()` can contribute native invalid state, but accessibility should work without calling it. The field component should generate these associations from its bound state so application templates stay DRY.
+Expose our validation state and messages through ARIA, independently of native constraint validation. The field component generates associations from bound state so application templates stay DRY. Feedback timing and the exact error relationship below remain proposals.
 
-### Native validity and custom errors
+### Rejected native validity integration
 
 A nonempty `setCustomValidity(message)` sets a native custom error; it does not itself display a popup or announce the message. Chromium's current accessibility code maps that error to an invalid state even without a popup, unless explicit `aria-invalid` overrides it. Its native error-message object depends on a visible or previously created validation popup. This is source evidence for distinguishing invalid state from message exposure, not a screen-reader compatibility result. [Chromium invalid-state mapping](https://raw.githubusercontent.com/chromium/chromium/main/third_party/blink/renderer/modules/accessibility/ax_node_object.cc), [native error-message exposure](https://raw.githubusercontent.com/chromium/chromium/main/third_party/blink/renderer/modules/accessibility/ax_object_cache_impl.cc).
 
-Recommend `<form novalidate>` for our submission workflow and custom feedback. `novalidate` skips automatic constraint validation on submission; it does not clear native validity or prevent an explicit `reportValidity()` from showing browser feedback. Optional native synchronization would need to clear each custom error when it ceases to apply and preserve our feedback timing. It would still expose only the current result, without awaiting async rules. [HTML constraint validation](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#the-constraint-validation-api), [`novalidate`](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fs-novalidate).
+The owner excluded native validation integration on 2026-09-20. The source observations above preserve the investigated alternative; they do not create a `setCustomValidity()` or `reportValidity()` delivery requirement. Supported forms use `novalidate` and our own validation state.
 
 ### Field feedback
 
-Start with `aria-invalid` on the control and visible error text linked through `aria-describedby`, preserving existing hint references. This is a documented WAI pattern. Set the invalid state when feedback is revealed; remove the error reference on correction. Compact layout must retain accessible, visible feedback. Composite controls need associations on their interactive controls or an appropriate group, not just a decorative wrapper. [WAI error identification](https://www.w3.org/WAI/WCAG22/Techniques/aria/ARIA21).
+Start with `aria-invalid` on the control and visible error text linked through `aria-describedby`, preserving existing hint references. This is a documented WAI pattern. Set the invalid state when feedback is revealed; remove the error reference on correction. Compact hint suppression is intentional; the [compact-feedback quest](../compact-feedback/spec.md) owns how to expose messages within its height constraint. Composite controls need associations on their interactive controls or an appropriate group, not just a decorative wrapper. [WAI error identification](https://www.w3.org/WAI/WCAG22/Techniques/aria/ARIA21).
 
 Illustrative rendered markup after validation, generated by the component:
 
@@ -152,7 +170,10 @@ Cross-field checks need explicit dependency behavior. A `sameAs` rule can read a
 
 ## Form participation and reset
 
-Recommend aggregating logical fields once, with messages linked to a usable focus target. Composite controls and groups must not register both their shell and each internal input as separate copies of the same value. Summary order follows the visible form order. This quest owns logical registration, identity and duplicate-name semantics; field wiring attaches mounted views and their focus targets under that policy.
+Owner scope amendment, 2026-09-20: native form reset and browser request serialization are unsupported. The form workflow serves SPA submit handlers reading reactive data. The application/form API reset proposals below remain separate from native reset behavior.
+
+
+Recommend aggregating logical fields once, with messages linked to a usable focus target. Composite controls and groups must not register both their shell and each internal input as separate copies of the same value. Summary order follows the visible form order. This quest owns logical registration, identity and duplicate-name semantics; the form attachment designed here connects mounted views and the focus targets supplied by ordinary controls under that policy.
 
 Disabled fields should be excluded from active form validation. The earlier recommendation to unregister unmounted fields by default is under review: a script-defined form or schema builder may need declared fields to retain validation while their views are absent. Compare those lifetimes using a wizard and conditional fields. CSS hiding alone does not mean unmounting. Whether user-facing readonly fields participate still needs a choice; the range picker's internal readonly textbox must never exclude its editable logical field.
 
@@ -164,9 +185,9 @@ Recommend `resetValidation()` for clearing local results, interaction history an
 |---|---|---|---|
 | Schema and type source | investigate, then decide | Native definitions, Valibot/Zod-style schemas or schema interoperability; retain the JSON Schema builder use case | Definition API, inferred types, validator boundary and transformations |
 | Template authoring | decide, then prototype | `useForm` direction accepted; compare direct field binding, slots and a definition-driven `Field`, including a JSON Schema builder | Published template API and preferred examples |
-| Logical-field handoff | decide | Define identity, value/draft state, participation and reset semantics; [field wiring](../field-wiring/spec.md#handoff-from-forms) owns the attachment signature | Finalizing the control adapter and form integration |
+| Logical-field handoff | decide | Define identity, value/draft state, participation and reset semantics; this quest owns the attachment signature under the [deferred field brief](#deferred-field-abstractions) | Finalizing the control adapter and form integration |
 | Error composition and timing | decide | Additive invalidity, hints alongside all errors, blur then correction checks; alternatives: controlled override, first error only, submit-only default | Field display and validation state |
-| Accessible feedback | decide, then verify | [ARIA feedback proposal](#accessibility); compare error relationships, announcements and failed-submit focus; native synchronization optional | Field accessibility wiring |
+| Accessible feedback | decide, then verify | [ARIA feedback proposal](#accessibility); compare error relationships, announcements and failed-submit focus; native synchronization excluded | Field accessibility wiring |
 | Invalid date draft | decide | Retain and block submit; alternative: revert with explicit feedback | Picker validation correctness |
 | Edits during pending submit | decide | Cancel that submit attempt and require resubmission; alternative: restart checks against new values | Async submit outcome |
 | Rule dependencies | decide, then prototype | Explicit reactive dependencies or explicit revalidation; compare with tracked rule reads using `sameAs` | Cross-field helpers and stale-result handling |
@@ -180,10 +201,10 @@ Template authoring can remain open while independent contract work proceeds. The
 - A pristine required input stays quiet, reports failure after the chosen trigger, and clears feedback after correction.
 - A server error appears on an otherwise valid value; `invalid=false`, local revalidation and local reset cannot erase the application's message.
 - A date draft cannot produce a successful submit of an older committed date without the chosen recovery behavior being visible to the user.
-- Opening a calendar and moving focus inside it does not count as leaving the field; embedded/popup presentation preserves value and validation state.
+- Opening a calendar and moving focus inside it does not count as leaving the field. Verify each stable popup/embedded mode; switching between them is outside the supported transition contract.
 - An older uniqueness response cannot override a newer value; changing a value during submit follows the selected cancel/retry policy; a rejected check cannot count as success.
 - Disabled, readonly, hidden and unmounted fields follow their stated participation policy, including error-summary focus behavior.
 - Reset clears only its documented state, and a late promise cannot restore a cleared error.
-- Error feedback remains usable inside a native modal; changing locale during an invalid draft, switching presentation and requesting submission preserves the chosen value/draft and focus policy.
+- Error feedback remains usable inside a native modal; changing locale during an invalid draft and requesting submission in each supported presentation preserves the chosen value/draft and focus policy.
 
-These are design scenarios, not passing tests. No validation implementation or browser prototype was produced in this session. The forms design completes when its public API and behavior choices are accepted. Independent subject contracts can proceed when selected; field wiring finalizes form integration against the behavior decisions it actually consumes.
+These are design scenarios, not passing tests. No validation implementation or browser prototype was produced in this session. The forms design completes when its public API and behavior choices are accepted. Independent subject contracts can proceed when selected; this quest finalizes form integration against the ordinary input contracts and its own behavior decisions.

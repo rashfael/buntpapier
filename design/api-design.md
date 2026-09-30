@@ -1,6 +1,6 @@
 # API decisions and alternatives
 
-Accepted authoring direction, recorded 2026-09-18. The [API guide](api-guide.md) explains the intended model. Implementation gaps and candidate token spellings below remain explicit; this record preserves rationale without implying that planned APIs already ship.
+Accepted authoring direction. The [API guide](api-guide.md) explains the intended model. Implementation gaps and candidate token spellings below remain explicit; this record preserves rationale without implying that planned APIs already ship.
 
 Ordinary components are the default. Primed components are optional for async workflows and complex integrations such as an editor. Async work alone does not require a composable: a button accepting an async click handler and showing its own loading and error states remains a natural ordinary component.
 
@@ -98,7 +98,7 @@ Live updates are the chosen API contract. Defaults, invalid-value handling, nati
 
 ## Clear controls and icons
 
-Agreed: clear-button visibility belongs in CSS. The existing `clearable` prop in the date pickers shows a control for clearing the value. It does not decide whether an empty value is allowed: [the single picker's `commitDraft()`](../src/components/date-picker/date-picker.vue) already emits `null` for empty input independently of `clearable`. Requiredness and validation remain separate from presenting that control. Exact CSS token names and the prop migration are still to be designed; the current components have not changed.
+Clear-button visibility belongs in CSS: `--input-clear: auto | none` replaces the pickers' `clearable` prop. `auto` shows the action for a nonempty editable model; `none` hides it. Requiredness is independent. The [clearing contract](api-guide.md#readonly-and-clearing) defines defaults and behavior; the current implementation uses the prop.
 
 Button icons are content, like labels. Keep the `icon` prop and custom icon slot. Icon and label can both be literal or reactive and should update through the same normal component mechanisms. Showing the icon in the template also keeps an icon-only button understandable without requiring a class and a stylesheet lookup to identify its content.
 
@@ -127,7 +127,7 @@ Agreed mapping:
 | `locale` | Application configuration with a local prop override | Formatting context is usually shared by the application but can vary per component |
 | `parseInput` | Prop | Application-supplied interpretation of input |
 
-The CSS settings update live while preserving the selected value. Changes between embedded and popup presentation need focus handling in the field/overlay contracts. Exact token names and migration details remain implementation work; the current props still ship.
+CSS settings update live while preserving the selected value, except that switching between embedded and popup presentation after mount has unspecified behavior. Exact token names and migration details remain implementation work; the current props still ship.
 
 The locale direction is an application default supplied through Buntpapier initialization, overridden by a component's `locale` prop. Initialization should establish the shared configuration, with a way to change the locale later; local overrides also remain reactive. The exact configuration/update API and fallback policy, including server rendering, need definition. [The current plugin](../src/index.ts) only registers components and directives and does not yet accept configuration. Its implementation must remain scoped to a Vue application rather than a process-wide singleton.
 
@@ -135,56 +135,56 @@ Locale configuration does not select a translation engine or expand the parked n
 
 ## Shared field vocabulary
 
-Use the existing input/select names and the validation names selected for the intended API. A field is one logical value with a name, guidance and validity feedback; its control may contain several interactive elements. Ordinary components expose these declarations directly. A future `bunt-field` can supply the same vocabulary for custom controls and groups without becoming mandatory around an ordinary input.
+Use the existing input/select names for shared responsibilities. A field is one logical value with a name, guidance and validity feedback; its control may contain several interactive elements. Ordinary components expose these declarations directly. A future `bunt-field` can supply the same vocabulary for custom controls and groups without becoming mandatory around an ordinary input.
 
 | name | meaning | boundary |
 |---|---|---|
 | `modelValue` / `v-model` | The application-owned value | Each control retains its value type; a date's editing draft is distinct from its committed model |
 | `label` | Text identifying the field | Content; the accessible name stays stable when its popup opens |
 | `hint` | Guidance for entering or choosing a value | Content distinct from validation feedback; visibility alongside errors belongs to validation design |
-| `placeholder` | A short cue shown while the entry is empty | Optional content; the field still needs an accessible name |
-| `name` | The field's form name | Distinct from its DOM id and visible label; serialization and registration belong to later contracts |
+| `placeholder` | A short cue shown while the control is empty | Optional content; the field still needs an accessible name |
+| `name` | The field's form name | Distinct from its DOM id and visible label; native serialization is outside the SPA submission contract |
 | `required` | Whether the field requires a value | An application constraint; clear-control visibility remains CSS presentation |
-| `disabled` | The field is unavailable for interaction | Current application state; applies to the whole control, including its built-in actions |
+| `disabled` | The control is unavailable for use | Application state; blocks value-changing actions throughout the control |
 | `readonly` | The user can inspect the field but cannot change its value | Meaningful on editable fields; a readonly textbox inside a picker does not make the whole picker readonly |
-| `invalid` | Application-supplied invalid state | A boolean; combining it with other validation sources belongs to validation design |
-| `errors` | Application-supplied validation messages | `string \| string[]`; message order, display and announcements belong to validation design |
 
-All of these remain reactive declarations. No distinction is made between a literal `disabled` and one derived from permissions. `rules` and `validateOn` describe validation execution and stay in validation design. Rich label/hint/error slot contracts, generated ids, attribute routing and group semantics stay in component contract design.
+All of these remain reactive declarations. No distinction is made between a literal `disabled` and one derived from permissions. `rules` and `validateOn` describe validation execution and stay in validation design. [Input routing](input-routing.md) defines generated ids, attribute targets and focus behavior. Supported content slots override their text props; floating labels are text-only. [Input content](api-guide.md#input-content) defines slot coverage and precedence.
 
 ### Comparison with the current source
 
-Checked against this working tree on 2026-09-18. This comparison records the implementation gaps at that date.
+Implementation gaps in `3.0.0-alpha.18`:
 
 | concern | input | select | date picker / date range picker | intended common API |
 |---|---|---|---|---|
 | Value | String/number model | String/object/number model | `Temporal.PlainDate \| null` / `DateRange` | Keep each value type and `v-model` |
 | Label and empty cue | `label`, `placeholder` | `label`, `placeholder` | Both props on both pickers | Keep names; stable accessible naming belongs to field wiring |
 | Guidance | `hint` text | `hint` text | No `hint` prop; single picker has fixed keyboard/format help | Add the same `hint` declaration to the picker family |
-| Form name and requiredness | Neither explicitly reaches the inner input | Neither explicitly reaches the inner input | `name` reaches the popup input; no `required` prop | Wire common declarations to the logical control; embedded pickers need a submission contract |
+| Form name and requiredness | Neither explicitly reaches the inner input | Neither explicitly reaches the inner input | `name` reaches the popup input; no `required` prop | Wire declarations to their applicable native elements; SPA submit handlers read reactive data |
 | Availability | `disabled` reaches input | `disabled` reaches input; selection handlers need enforcement | Both expose `disabled` | Apply state across all interaction paths |
-| Readonly | Native input attribute | Native input attribute, with selection handlers still able to change value | No public prop; range textbox is always readonly while the calendar remains editable | Support whole-field readonly for input/select/pickers; define popup inspection in the field/overlay contract |
-| Validation feedback | Vuelidate-shaped `validation`; joins messages into hint area | Same coupling | Single picker has local `draftInvalid` and `aria-invalid`; neither accepts external errors | Use `invalid` and `errors`; remove Vuelidate support without a migration phase, per [validation direction](#validation-direction) |
+| Readonly | Native input attribute | Native input attribute, with selection handlers still able to change value | No public prop; range textbox is always readonly while the calendar remains editable | Readonly allows popup inspection while preventing user changes to the value |
+| Validation feedback | Vuelidate-shaped `validation`; joins messages into hint area | Same coupling | Single picker has local `draftInvalid` and `aria-invalid`; neither accepts external errors | Form validation supplies feedback; Vuelidate removal follows [validation direction](#validation-direction) |
 
-Source: [input](../src/components/input.vue), [select](../src/components/select.vue), [single picker](../src/components/date-picker/date-picker.vue), [range picker](../src/components/date-picker/date-range-picker.vue). The input docs advertise a hint slot, but the current template renders text directly; a shared slot API is future work.
+Source: [input](../src/components/input.vue), [select](../src/components/select.vue), [single picker](../src/components/date-picker/date-picker.vue), [range picker](../src/components/date-picker/date-range-picker.vue). Input/select templates render hint text directly; the [content contract](api-guide.md#input-content) includes hint slots.
 
 `readonly` is a shared term where the control supports it, not a requirement to invent it for every native control. The planned removal of the ineffective checkbox `readonly` prop remains unchanged. `disabled` is not a substitute for a readable, focusable readonly text field.
 
 ### Alternatives and scope
 
-Keeping separate names such as `helperText`, `errorMessage` or a library-specific `validation` object would preserve incompatible field APIs. Requiring a new field wrapper around every control would add markup to ordinary forms. The vocabulary keeps existing names, adds library-independent feedback inputs, and lets the field contract share their implementation.
+Keeping separate names such as `helperText`, `errorMessage` or a library-specific `validation` object would preserve incompatible field APIs. Requiring a new field wrapper around every control would add markup to ordinary forms. The vocabulary gives ordinary controls consistent names without requiring a field wrapper.
 
 This settles names and responsibilities. Error precedence, hint/error coexistence, when invalidity is shown, pending checks, form aggregation and reset behavior remain explicit validation design questions. No component implementation changed as part of this vocabulary work.
 
 
 ## Validation direction
 
-Accepted 2026-09-18: Buntpapier owns form and validation orchestration. `useForm` is the chosen direction; `useForm(data, definition)` remains a working shape. Ordinary controls remain usable through props/models, with `invalid` and `errors` carrying application feedback independently of a validation library. Handwritten forms and JSON Schema builders are required use cases.
+Validation belongs to Buntpapier's SPA workflow. Native constraint validation, browser validation messages and native validity synchronization are unsupported. The [SPA submission contract](api-guide.md#spa-submission) uses `novalidate` and exposes library validation state and feedback accessibly.
+
+Buntpapier owns form and validation orchestration. `useForm` is the chosen direction; `useForm(data, definition)` remains a working shape. Ordinary controls remain usable through props/models. Handwritten forms and JSON Schema builders are required use cases.
 
 Remove the Vuelidate-shaped `validation` prop and its `$error`/`$errors`/`$touch` coupling when the replacement lands, without an adapter, deprecation period or compatibility release. Owning orchestration leaves room for a schema library; Valibot, Zod and schema interoperability remain candidates. No validator dependency, template binding, field renderer, repeater, rule nesting or timing/reset policy is selected by this decision.
 
 ## Remaining contract boundaries
 
-Field wiring must define accessible naming, attribute routing, whole-field readonly behavior and validation attachment. Overlay contracts must preserve focus and logical state through live presentation changes. Primed-component contracts must specify DOM attachment, forwarding, types, mount limits and external cancellation. Initialization must keep reactive locale and strings scoped to a Vue application. Those mechanics remain undesigned; the accepted authoring model does not settle their signatures.
+[Input routing](input-routing.md) defines accessible naming, attribute targets and focus behavior. [Readonly, clearing and SPA submission](api-guide.md#readonly-and-clearing) define ordinary input behavior; feedback and form attachment have separate contracts. Overlay contracts preserve focus and logical state through supported live presentation changes; popup/embedded switching is excluded. Primed-component contracts must specify DOM attachment, forwarding, types, mount limits and external cancellation. Initialization must keep reactive locale and strings scoped to a Vue application. The authoring model alone does not define those contracts.
 
 The broader native i18n idea and optional CSS fallback for button icons remain in [TODOs](../TODOs.md). Built-in strings and locale configuration do not select an application translation engine.

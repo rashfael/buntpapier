@@ -1,0 +1,50 @@
+@use "sass:math"
+@layer typography, buntpapier
+
+$gap: 8px
+$sizes: (small: 4px, large: 16px)
+
+=focus-ring($clr)
+	outline: 2px solid $clr
+
+@mixin card
+	border-radius: 4px
+
+%muted
+	opacity: 0.6
+
+.probe
+	display: flex
+	gap: $gap // inline trailing comment
+	padding: math.div($gap, 2)
+	+focus-ring(var(--clr-primary))
+	@include card
+	@extend %muted
+
+	&.is-active
+		color: var(--clr-primary)
+
+	.head,
+	.foot
+		margin: #{$gap} 0
+
+	@media (min-width: 600px)
+		gap: map-get($sizes, large)
+
+	@if $gap > 4px
+		padding-top: $gap
+	@else
+		padding-top: 0
+
+	/* block comment */
+	font:
+		family: Roboto
+		weight: 500
+
+// violations below
+.bad
+	color: #fff
+	color: #ggg
+	colr: red
+	width: 10px
+	width: 12px

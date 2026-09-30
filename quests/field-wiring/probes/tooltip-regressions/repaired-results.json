@@ -1,0 +1,4498 @@
+[
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "hover-animation",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54px",
+      "x": 169,
+      "y": 240,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "hover-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "keyboard-focus",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "click-trigger-then-leave",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 1,
+      "behindClicks": 0,
+      "submits": 1,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "mousedown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "mouseup",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "click",
+        "target": "bunt-button-text"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "click-through-tooltip",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-43px",
+      "x": 175,
+      "y": 240,
+      "width": 123,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "click-invisible-halo",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-43px",
+      "x": 175,
+      "y": 240,
+      "width": 123,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "hover-tooltip-then-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "escape-hover",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "outside",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "outside"
+      }
+    ],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54px",
+      "x": 169,
+      "y": 240,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "forced-escape-rerender",
+    "tooltipCount": 1,
+    "text": "Changed error",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(17px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(17px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -12, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-25px",
+      "x": 184,
+      "y": 240,
+      "width": 105,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "text-update",
+    "tooltipCount": 1,
+    "text": "Much longer changed tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -94, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-189px",
+      "x": 102,
+      "y": 240,
+      "width": 269,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "empty-then-restored-while-hovered",
+    "tooltipCount": 1,
+    "text": "Restored",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 4, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "8px",
+      "x": 200,
+      "y": 240,
+      "width": 72,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "unmount-open",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "forced-off-while-hovered",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "ordinary-tooltip-click",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mousedown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mouseup",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "click",
+        "target": "c-tooltip-audit"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "focus-escape-blur-refocus",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "focusin",
+        "target": "outside"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "forced-escape-only",
+    "tooltipCount": 1,
+    "text": "Error",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(17px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(17px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 17, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "33px",
+      "x": 213,
+      "y": 240,
+      "width": 47,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "top-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, 0px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, -32px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, -32)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 209,
+      "y": 300,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(136px, -2px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 364,
+      "y": 330,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "viewport-edge-flip",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, 59px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 18,
+      "y": 32,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "scroll-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 209,
+      "y": 209,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "fixed-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 209,
+      "y": 359,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "name": "explicit-right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(168px, -34px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 364,
+      "y": 330,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "hover-animation",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54px",
+      "x": 169,
+      "y": 240,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "hover-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "keyboard-focus",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54px",
+      "x": 169,
+      "y": 240,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "click-trigger-then-leave",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 1,
+      "behindClicks": 0,
+      "submits": 1,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "mousedown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "mouseup",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "click",
+        "target": "bunt-button-text"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "click-through-tooltip",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-43px",
+      "x": 175,
+      "y": 240,
+      "width": 123,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "click-invisible-halo",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-43px",
+      "x": 175,
+      "y": 240,
+      "width": 123,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "hover-tooltip-then-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "escape-hover",
+    "tooltipCount": 0,
+    "focus": "outside",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "outside"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "forced-escape-rerender",
+    "tooltipCount": 1,
+    "text": "Changed error",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(17px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(17px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -12, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-25px",
+      "x": 184,
+      "y": 240,
+      "width": 105,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "text-update",
+    "tooltipCount": 1,
+    "text": "Much longer changed tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -94, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-189px",
+      "x": 102,
+      "y": 240,
+      "width": 269,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "empty-then-restored-while-hovered",
+    "tooltipCount": 1,
+    "text": "Restored",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(4px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(4px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 4, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "8px",
+      "x": 200,
+      "y": 240,
+      "width": 72,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "unmount-open",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "forced-off-while-hovered",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 209,
+      "y": 359,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "ordinary-tooltip-click",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mousedown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mouseup",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "click",
+        "target": "c-tooltip-audit"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "focus-escape-blur-refocus",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "focusin",
+        "target": "outside"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54px",
+      "x": 169,
+      "y": 240,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "forced-escape-only",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(17px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(17px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "top-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, 0px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, -32px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, -32)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 209,
+      "y": 300,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(136px, -2px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 364,
+      "y": 330,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "viewport-edge-flip",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 18,
+      "y": 32,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "scroll-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 209,
+      "y": 209,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "fixed-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(209px, 327px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(209px, 359px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "fixed",
+      "transform": "matrix(1, 0, 0, 1, 209, 359)",
+      "top": "0px",
+      "bottom": "776px",
+      "left": "0px",
+      "right": "866px",
+      "x": 209,
+      "y": 359,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "name": "explicit-right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(136px, -2px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "26px",
+      "x": 364,
+      "y": 330,
+      "width": 134,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "hover-animation",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54.55px",
+      "x": 169,
+      "y": 240,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "hover-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "keyboard-focus",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "click-trigger-then-leave",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 1,
+      "behindClicks": 0,
+      "submits": 1,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "mousedown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "mouseup",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "click",
+        "target": "bunt-button-text"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "click-through-tooltip",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-41.6833px",
+      "x": 175,
+      "y": 240,
+      "width": 121.68333435058594,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "click-invisible-halo",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-41.6833px",
+      "x": 175,
+      "y": 240,
+      "width": 121.68333435058594,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "hover-tooltip-then-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "escape-hover",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "outside",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "outside"
+      }
+    ],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54.55px",
+      "x": 169,
+      "y": 240,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "forced-escape-rerender",
+    "tooltipCount": 1,
+    "text": "Changed error",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -12, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-24.2667px",
+      "x": 184,
+      "y": 240,
+      "width": 104.26666259765625,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "text-update",
+    "tooltipCount": 1,
+    "text": "Much longer changed tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -95, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-189.333px",
+      "x": 101,
+      "y": 240,
+      "width": 269.33331298828125,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "empty-then-restored-while-hovered",
+    "tooltipCount": 1,
+    "text": "Restored",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 4, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "8.41667px",
+      "x": 200,
+      "y": 240,
+      "width": 71.58332824707031,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "unmount-open",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "forced-off-while-hovered",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "ordinary-tooltip-click",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mousedown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mouseup",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "click",
+        "target": "c-tooltip-audit"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "focus-escape-blur-refocus",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "focusin",
+        "target": "outside"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "forced-escape-only",
+    "tooltipCount": 1,
+    "text": "Error",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(17px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(17px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 17, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "34px",
+      "x": 213,
+      "y": 240,
+      "width": 46,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "top-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, 0px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, -32px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, -32)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 209,
+      "y": 300,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(136px, -2px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 364,
+      "y": 330,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "viewport-edge-flip",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, 59px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 18,
+      "y": 32,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "scroll-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 209,
+      "y": 209,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "fixed-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 209,
+      "y": 359,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "name": "explicit-right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(168px, -34px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 364,
+      "y": 330,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "hover-animation",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54.55px",
+      "x": 169,
+      "y": 240,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "hover-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "keyboard-focus",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54.55px",
+      "x": 169,
+      "y": 240,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "click-trigger-then-leave",
+    "tooltipCount": 0,
+    "focus": "trigger",
+    "counts": {
+      "clicks": 1,
+      "behindClicks": 0,
+      "submits": 1,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "mousedown",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "mouseup",
+        "target": "bunt-button-text"
+      },
+      {
+        "type": "click",
+        "target": "bunt-button-text"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "click-through-tooltip",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-41.6833px",
+      "x": 175,
+      "y": 240,
+      "width": 121.68333435058594,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "click-invisible-halo",
+    "tooltipCount": 1,
+    "text": "Error explanation",
+    "focus": "behind",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 1,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-21px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-21px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "behind"
+      },
+      {
+        "type": "mousedown",
+        "target": "behind"
+      },
+      {
+        "type": "focusin",
+        "target": "behind"
+      },
+      {
+        "type": "mouseup",
+        "target": "behind"
+      },
+      {
+        "type": "click",
+        "target": "behind"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -21, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-41.6833px",
+      "x": 175,
+      "y": 240,
+      "width": 121.68333435058594,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "hover-tooltip-then-leave",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "escape-hover",
+    "tooltipCount": 0,
+    "focus": "outside",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "outside"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "forced-escape-rerender",
+    "tooltipCount": 1,
+    "text": "Changed error",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -12, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-24.2667px",
+      "x": 184,
+      "y": 240,
+      "width": 104.26666259765625,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "text-update",
+    "tooltipCount": 1,
+    "text": "Much longer changed tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -95, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-189.333px",
+      "x": 101,
+      "y": 240,
+      "width": 269.33331298828125,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "empty-then-restored-while-hovered",
+    "tooltipCount": 1,
+    "text": "Restored",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(4px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(4px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 4, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "8.41667px",
+      "x": 200,
+      "y": 240,
+      "width": 71.58332824707031,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "unmount-open",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "forced-off-while-hovered",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 209,
+      "y": 359,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "ordinary-tooltip-click",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "pointerdown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mousedown",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "mouseup",
+        "target": "c-tooltip-audit"
+      },
+      {
+        "type": "click",
+        "target": "c-tooltip-audit"
+      }
+    ],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "focus-escape-blur-refocus",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "trigger",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ],
+      [
+        [
+          {
+            "transform": "translate3d(-27px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(-27px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [
+      {
+        "type": "focusin",
+        "target": "trigger"
+      },
+      {
+        "type": "focusin",
+        "target": "outside"
+      },
+      {
+        "type": "focusin",
+        "target": "trigger"
+      }
+    ],
+    "description": "trigger-description",
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, -27, 44)",
+      "top": "0px",
+      "bottom": "12px",
+      "left": "0px",
+      "right": "-54.55px",
+      "x": 169,
+      "y": 240,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "forced-escape-only",
+    "tooltipCount": 0,
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(17px, 12px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(17px, 44px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": null,
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "top-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, 0px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, -32px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, -32)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 209,
+      "y": 300,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(136px, -2px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 364,
+      "y": 330,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "viewport-edge-flip",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 18,
+      "y": 32,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "scroll-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(13px, -5px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(13px, 27px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 13, 27)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 209,
+      "y": 209,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "fixed-position",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(209px, 327px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(209px, 359px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "fixed",
+      "transform": "matrix(1, 0, 0, 1, 209, 359)",
+      "top": "0px",
+      "bottom": "776px",
+      "left": "0px",
+      "right": "865.45px",
+      "x": 209,
+      "y": 359,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "name": "explicit-right-placement",
+    "tooltipCount": 1,
+    "text": "Tooltip explanation",
+    "focus": "",
+    "counts": {
+      "clicks": 0,
+      "behindClicks": 0,
+      "submits": 0,
+      "linkClicks": 0
+    },
+    "animations": [
+      [
+        [
+          {
+            "transform": "translate3d(136px, -2px, 0)",
+            "opacity": 0
+          },
+          {
+            "transform": "translate3d(168px, -2px, 0)",
+            "opacity": 1
+          }
+        ],
+        {
+          "duration": 200,
+          "easing": "ease-in-out"
+        }
+      ]
+    ],
+    "events": [],
+    "description": null,
+    "style": {
+      "pointerEvents": "none",
+      "position": "absolute",
+      "transform": "matrix(1, 0, 0, 1, 168, -2)",
+      "top": "0px",
+      "bottom": "-5px",
+      "left": "0px",
+      "right": "25.45px",
+      "x": 364,
+      "y": 330,
+      "width": 134.5500030517578,
+      "height": 24,
+      "placement": null
+    },
+    "errors": []
+  }
+]

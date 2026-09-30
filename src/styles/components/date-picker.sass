@@ -18,29 +18,29 @@
 				min-width: 0
 			input
 				cursor: pointer
-			.open-calendar-btn
+			// The two trailing actions are one pair: same box, same glyph size, same hover. The
+			// calendar action is the outermost, so it keeps its place against the outline whether
+			// or not the field has a value to clear — only the textbox gives up the width.
+			.clear-trigger, .open-calendar-btn
 				display: flex
+				flex: none
 				align-items: center
 				justify-content: center
+				width: 28px
+				height: 28px
 				background: none
 				border: none
-				padding: 4px
+				border-radius: 50%
+				padding: 0
 				font-size: 20px
+				line-height: 1
 				cursor: pointer
 				color: var(--clr-text-secondary)
 				&:hover
+					background: var(--clr-fill-hover)
 					color: var(--clr-text)
-			.clear-trigger
-				display: flex
-				align-items: center
-				justify-content: center
-				background: none
-				border: none
-				padding: 4px
-				cursor: pointer
-				color: var(--clr-text-secondary)
-				&:hover
-					color: var(--clr-text)
+			.open-calendar-btn
+				margin-right: var(--_input-gutter)
 
 		button:focus-visible
 			outline: 2px solid var(--clr-primary)
@@ -268,3 +268,52 @@
 
 	.bunt-date-picker input[aria-invalid="true"]
 		color: var(--clr-danger)
+
+	// ─── Clear visibility policy ────────────────────────────────────────────────
+
+	// --input-clear is a public policy token. It inherits like --input-size, and a style query
+	// keeps it live — including ancestor declarations changed while the picker is open — without
+	// reading computed styles from JavaScript. Only the exact value `none` matches, so unset,
+	// empty and unsupported values keep the default `auto` behaviour. The fallback chain must not
+	// declare the property here: an own declaration would shadow what an ancestor inherits.
+	// The selectors match the structural rules above, which are three classes deep, so the
+	// suppression has to reach the same specificity to win on source order alone.
+	@container style(--input-clear: none)
+		.bunt-date-picker .label-input-container .clear-trigger,
+		.bunt-date-range-picker .label-input-container .clear-trigger,
+		.bunt-date-picker__inline .inline-footer .clear-btn,
+		.bunt-date-range-picker__inline .inline-footer .clear-btn
+			display: none
+
+	// ─── Embedded caption, group and hint ───────────────────────────────────────
+
+	.bunt-date-picker, .bunt-date-range-picker
+		.calendar-caption
+			font-family: var(--font-stack)
+			font-size: 13px
+			font-weight: 600
+			line-height: 18px
+			padding: 0 0 4px 4px
+			color: var(--clr-text-secondary)
+
+		.c-calendar-panel[role="group"]:focus-visible
+			outline: 2px solid var(--clr-primary)
+			outline-offset: 2px
+
+		.c-calendar-panel[aria-disabled="true"]
+			color: var(--clr-text-disabled)
+
+	// The popup presentation carries .bunt-input, so input.sass already styles its hint. The
+	// inline calendar has no input chrome and needs the same treatment on its own.
+	.bunt-date-picker:not(.bunt-input), .bunt-date-range-picker:not(.bunt-input)
+		.hint
+			font-family: var(--font-stack)
+			font-size: 13px
+			padding-top: 4px
+			color: var(--clr-text-secondary)
+			line-height: 18px
+			p // nuke margins for raw html includes
+				margin: 0
+		// compact hides the hint, matching input
+		&.bunt-input--size-compact .hint
+			display: none

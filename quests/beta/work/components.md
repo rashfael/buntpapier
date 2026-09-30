@@ -35,13 +35,15 @@ Candidate direction: add a `label` input for icon-only buttons and a development
 
 Required outcome: `bunt-input` follows the shared field vocabulary, forwards consumer attributes to the native input, reports invalid and readonly behavior consistently, and offers an accessible password reveal action without coupling callers to Vuelidate.
 
-Candidate direction: keep the native input, style `:user-invalid` where it matches the selected policy, and add a dictionary-backed password reveal control for `type=password`. [Field wiring](../../field-wiring/spec.md) owns names, ids, attribute routing, feedback attachment, focus and readonly interaction. [Validation/forms](../../validation-forms/spec.md) owns validation state, timing and logical form participation. This delivery consumes those decisions instead of defining another connection model.
+Candidate direction: use native text editing with validation styling driven by library-exposed ARIA state, and add a dictionary-backed password reveal control for `type=password`. [Field wiring](../../field-wiring/spec.md) owns names, ids, attribute routing, text labels, hint slots, focus and readonly interaction. New standalone external-feedback props are deferred to the [single-input use case](../../validation-forms/spec.md#standalone-input-feedback); the [compact-feedback quest](../../compact-feedback/spec.md) owns feedback access within compact height constraints. [Validation/forms](../../validation-forms/spec.md) owns validation state, timing and logical form participation. This delivery consumes those decisions instead of defining another connection model.
 
 ### Checkbox
 
+The [checkbox contracts package](../../field-wiring/work/checkbox-contracts.md) defines the ordinary field slice, including removal of readonly. Indeterminate state and additional presentation variants below remain outside that package.
+
 Required outcome: `bunt-checkbox` exposes checked and indeterminate state, has a visible focus indicator on its visual box, removes the unsupported readonly promise, and remains distinguishable in forced colours and dense layouts.
 
-Candidate direction: retain the native checkbox, map an `indeterminate` prop to the native property, use `:has(input:focus-visible)` for the visual focus ring when browser-floor evidence supports it, and offer the candidate `--checkbox-weight: subtle` presentation for dense tables. Text follows text contrast; the box boundary and checked indicator follow non-text contrast. Field connections come from [field wiring](../../field-wiring/spec.md), and shared media-mode styles come from [infrastructure](../../infrastructure/spec.md).
+Candidate direction: retain the native checkbox, map an `indeterminate` prop to the native property, use `:has(input:focus-visible)` for the visual focus ring when browser-floor evidence supports it, and offer the candidate `--checkbox-weight: subtle` presentation for dense tables. Text follows text contrast; the box boundary and checked indicator follow non-text contrast. Ordinary input contracts come from [field wiring](../../field-wiring/spec.md); form connections are deferred to [validation/forms](../../validation-forms/spec.md#deferred-field-abstractions), and shared media-mode styles come from [infrastructure](../../infrastructure/spec.md).
 
 ### Circular progress
 
@@ -63,7 +65,7 @@ Candidate direction: keep the current component until a bounded spike shows that
 
 ## New form controls
 
-All controls in this section consume [field wiring](../../field-wiring/spec.md) for DOM attachment and [validation/forms](../../validation-forms/spec.md) for form participation. Group labels and feedback must describe one logical field while preserving native form submission and reset behavior. Local design must cover IME composition, paste and undo, autofill and mobile input where those paths apply.
+All controls in this section consume [field wiring](../../field-wiring/spec.md) for ordinary control behavior and [validation/forms](../../validation-forms/spec.md) for form attachment and participation. Group labels and feedback must describe one logical field with reactive models consumed by SPA submit handlers. Native request serialization and native resets are unsupported. Local design must cover IME composition, paste and undo, autofill and mobile input where those paths apply.
 
 ### Textarea
 
@@ -75,7 +77,7 @@ Local design question: should textarea remain a separate component or become an 
 
 ### Number input
 
-Required outcome: accept, edit, parse and step numeric values without losing invalid drafts, locale intent, native form behavior or usable mobile and assistive-technology interaction.
+Required outcome: accept, edit, parse and step numeric values without losing invalid drafts, locale intent, SPA submission behavior or usable mobile and assistive-technology interaction.
 
 Candidate direction: compare a native number input with a text input using an appropriate decimal input mode, locale-aware parsing and optional stepper buttons. If custom spinbutton semantics are proposed, the keyboard, name/value exposure, mobile editing and screen-reader behavior need direct evidence. Do not create a shared locale parser with date inputs before both contracts reveal the same responsibility.
 
@@ -89,7 +91,7 @@ Candidate direction: use native radio inputs in a `fieldset` with `legend` where
 
 ### Checkbox group
 
-Required outcome: connect several native checkboxes as one labelled logical field while preserving each checkbox's name/value submission, focus and error discoverability.
+Required outcome: connect several native checkboxes as one labelled logical field with reactive values, focus and error discoverability; native name/value serialization is not a delivery requirement.
 
 Candidate direction: use a fieldset/legend group that consumes the existing checkbox and field connection. Refine the model shape, group-level versus item-level invalidity and typed values against concrete consumer cases; validation/forms owns the logical participation rules.
 
@@ -125,6 +127,6 @@ Candidate direction: compare an ordinary toast host with an optional `useToast()
 
 ## Boundaries and sequencing
 
-This record deliberately does not restate the owned designs for [date inputs](date-inputs.md), [select and combobox](../../selection/spec.md), or [tooltip, dialog and popover](../../overlay-lifecycle/spec.md). It also does not define the form wrapper or control connection owned by [validation/forms](../../validation-forms/spec.md) and [field wiring](../../field-wiring/spec.md), or the shared accessibility setup and announcer owned by [infrastructure](../../infrastructure/spec.md). Those records remain the source when a component consumes their decisions.
+This record deliberately does not restate the owned designs for [date inputs](date-inputs.md), [select and combobox](../../selection/spec.md), or [tooltip, dialog and popover](../../overlay-lifecycle/spec.md). It also does not define the form wrapper or control connection deferred to [validation/forms](../../validation-forms/spec.md#deferred-field-abstractions), or the shared accessibility setup and announcer owned by [infrastructure](../../infrastructure/spec.md). Those records remain the source when a component consumes their decisions.
 
 Independent native control design can proceed once its family is selected. Shipping validation integration waits for the forms and field handoff it consumes. Shipping live CSS presentation waits for evidence from [style observation](../../style-observer/spec.md) where applicable. Menu and toast consume the overlay lifecycle; toast also consumes announcement and app-configuration contracts. A family completes only with its type evidence, all applicable accessibility evidence and integrated checks against the contracts it consumes.

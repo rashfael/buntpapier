@@ -1,9 +1,9 @@
 ---
-status: waiting
-active: [../infrastructure/spec.md]
+status: active
+active: [../infrastructure/spec.md, ../field-wiring/spec.md]
 activity: design
-next: assign approved infrastructure M1 to a separate executor; overlay lifecycle remains the recommended next product discussion
-waiting_on: infrastructure-executor-assignment
+next: present checkbox and picker package definitions for execution selection; continue input/select external verification and infrastructure under their existing authority
+waiting_on: field package execution selection; input/select WebKit and packaging type evidence
 profile: current owner-selected Codex session; infrastructure implementation reserved for a separate executor
 ---
 
@@ -15,9 +15,29 @@ Bring the form controls and overlays to `3.0.0-beta.1`, with shared API contract
 
 On 2026-09-18 the owner deferred style observation and validation/forms, then requested focused subquests. On 2026-09-19 the owner requested the [readiness review](research/2026-09-19-readiness-review.md), directed that infrastructure have its own quest without implementation by the reviewing agent, and accepted the review recommendations: “we can integrate the datepicker-plan.md, then delete it. the todos in the readme can just go. agree on your other points, go”. This authorizes the documentation consolidation and the ownership, sequencing and working format below. It does not resume the deferred subjects or start infrastructure implementation.
 
-On 2026-09-20 the owner selected [infrastructure design and planning](../infrastructure/spec.md), chose a minimal first delivery and confirmed that beta keeps reactivity-transform. The owner subsequently approved the delivery proposal with existing behavior tests migrated to owned fixtures and docs smoke clearly separated, and approved test-policy. Infrastructure records the amended M1 and the [accepted testing policy](../../design/testing.md); implementation remains unstarted with no executor assigned. No product subquest is selected. [API decisions](../../design/api-design.md) are adopted; acceptance of the completed API work record remains separate from those decisions. Picker baseline repairs and earlier two-engine checks are reported in [their work record](work/date-pickers.md). Infrastructure subsequently verified the owner-supplied green three-engine CI baseline at `e1e0d4b`; this is historical evidence, not beta acceptance. [Documentation work](work/documentation.md) records the consolidation and its checks.
+On 2026-09-20 the owner selected [infrastructure design and planning](../infrastructure/spec.md), chose a minimal first delivery and confirmed that beta keeps reactivity-transform. The owner subsequently approved the delivery proposal with existing behavior tests migrated to owned fixtures and docs smoke clearly separated, and approved test-policy. Infrastructure records the amended M1 and the [accepted testing policy](../../design/testing.md); implementation remains unstarted with no executor assigned. The subsequent field-wiring selection is recorded below. [API decisions](../../design/api-design.md) are adopted; acceptance of the completed API work record remains separate from those decisions. Picker baseline repairs and earlier two-engine checks are reported in [their work record](work/date-pickers.md). Infrastructure subsequently verified the owner-supplied green three-engine CI baseline at `e1e0d4b`; this is historical evidence, not beta acceptance. [Documentation work](work/documentation.md) records the consolidation and its checks.
+
+On 2026-09-20 the owner selected field-wiring design and deferred field abstractions to the form feature with validation. [Existing input contracts](../field-wiring/spec.md) now scopes current control behavior; [forms](../validation-forms/spec.md#deferred-field-abstractions) owns the wrapper and form attachment together. Detailed input decisions remain proposals. This does not resume forms or authorize product implementation.
+
+On 2026-09-20 the owner accepted the existing-input scope, confirmed that the floating-label appearance stays, and selected attribute/event routing as the next design step. [Future label placement](../label-placement/spec.md) is a separate deferred quest for optional additional placements; it adds no beta gate. The owner subsequently accepted the routing proposal with “agree on your routing proposal”. [Input routing](../../design/input-routing.md) records the contract; implementation and verification remain outstanding. Content slots and external feedback were selected as the next design topic.
+
+On 2026-09-20 the owner accepted text props with matching-slot precedence, deferred Markdown support, and deferred new standalone external-feedback props to the [single-input use case](../validation-forms/spec.md#standalone-input-feedback). The future [compact-feedback quest](../compact-feedback/spec.md) owns feedback hidden by intentional compact hint suppression. It is not active input-contract implementation; accessible feedback remains required before claiming compact validation delivery.
+
+On 2026-09-20 the owner accepted readonly inspection and clearing defaults, reopened disabled discoverability/focus and the need for distinct readonly/disabled states, and narrowed form support to SPA submit handlers reading reactive data. Native request serialization and native resets are excluded. Popup/embedded switching after mount is unspecified, superseding its earlier transition-preservation gate; other live CSS behavior remains required. [Input contracts](../field-wiring/spec.md) records the choices and [selection](../selection/spec.md#enter-and-spa-submission) owns the Enter proposal.
+
+On 2026-09-20 the owner tentatively approved disabled discoverability with blocked activation and control-specific focus handling, select-only Enter opening/accepting without submission, and the proposed input/select-first delivery sequence. These are provisional design directions; implementation is not authorized. Clear-token names and slot coverage are the next design details. [Input contracts](../field-wiring/spec.md) and [selection](../selection/spec.md#enter-and-spa-submission) retain verification and final-acceptance conditions.
+
+On 2026-09-20 the owner accepted the [clear-control and content-slot contract](../field-wiring/spec.md#accepted-clear-control-and-content-slot-api), excluding floating-label slots. Input/select/picker labels are text-only; hint slots, checkbox label-slot precedence and the picker CSS token are accepted. Component implementation remains outstanding.
+
+On 2026-09-20 the owner requested the [input/select work package](../field-wiring/work/input-select-contracts.md). Its definition covers the accepted contracts, minimal tooltip integration and verification dependencies. The owner then selected implementation and a parallel Sol high/Astra medium comparison. Independent Astra review favored Astra’s implementation, now retained with 80 Chromium/Firefox component cases and 12 docs-smoke cases passing. WebKit, manual AT and packaging type evidence remain open; owner acceptance has not been supplied. On 2026-09-21 the owner reopened tooltip compatibility; the [regression investigation](../field-wiring/work/tooltip-regressions.md) records lost motion, click-through and accidental button/link activation. The approved compatibility repair is now implemented and independently reviewed; five broader field/SSR failures reproduced against its before-state remain for diagnosis alongside the outstanding acceptance evidence.
+
+On 2026-09-23 the owner [tentatively accepted](../field-wiring/spec.md#owner-decisions-2026-09-23) the input/select and picker packages, renamed the routing term “entry” to “control”, aligned the inline calendar's compact hint with input and chose to start checkbox separately. The five field/SSR failures were a generated-id defect already fixed in `4fc44fd`. Final acceptance of both packages waits on WebKit CI and packaging declaration evidence.
 
 ## Shared constraints and durable outputs
+
+On 2026-09-21 the owner deferred manual screen-reader testing for all quests until their setup is ready and requested the checkbox and picker package definitions. The [release evidence record](work/release.md#people-and-external-evidence) owns that shared deferral. [Field wiring](../field-wiring/spec.md#first-work-package) now links both defined packages; implementation awaits selection. Automated checks and other evidence collection continue, and manual verification remains explicitly unclaimed.
+
+The owner accepted [disabled focus behavior](../field-wiring/spec.md#accepted-disabled-focus-behavior) on 2026-09-20. A Firefox native-element probe confirmed guarded checkbox activation but found that ARIA-disabled required checkboxes block submission. The owner subsequently accepted [native validation as unsupported](../field-wiring/spec.md#accepted-native-validation-boundary), with library-owned validation and accessible state/feedback. The [product philosophy](../../design/philosophy.md) makes a complete SPA UX/DX the product goal. Component and AT evidence remain outstanding.
 
 - [API guide](../../design/api-guide.md) and [API decisions](../../design/api-design.md): ordinary components by default, selective primed workflows, live CSS presentation and common field vocabulary.
 - [Architecture](../../design/architecture.md): native platform direction, browser floor, internal behavior boundaries and dependency rationale. Verify required subfeatures at the supported floor before retiring a bridge.
@@ -33,13 +53,19 @@ Narrative public docs remain human-authored; agent work in `docs/` is limited to
 |---|---|---|
 | [Infrastructure and verification](../infrastructure/spec.md) | CI baseline, reusable fixtures, ephemeral testing and retention policy, shared accessibility styles and announcement behavior | Implementation belongs to a separate executor; packaging supplies its public type/consumer contract; components supply expected behavior |
 | [Overlay lifecycle](../overlay-lifecycle/spec.md) | Native transitions, focus, dismissal and overlay migration | Native transition design can proceed independently; shipping live CSS behavior requires actual observation evidence |
-| [Field wiring](../field-wiring/spec.md) | DOM naming, attributes, readonly, outline and the control attachment interface | Ordinary fields can proceed; the adapter consumes forms' logical state and participation semantics |
-| [Selection and naming](../selection/spec.md) | Taxonomy, identity, active/selected items and select/combobox delivery | Settle taxonomy before public signatures; consume overlay entry/exit and field attachment |
+| [Existing input contracts](../field-wiring/spec.md) | Current control props, attributes/events, naming, readonly, content slots and SPA submission behavior | Scope, routing and text-prop/slot precedence accepted; readonly/clearing behavior accepted; disabled focus handling accepted; native validation unsupported; input/select and pickers implemented, independently reviewed and tentatively accepted on 2026-09-23, with WebKit and packaging evidence pending for final acceptance; checkbox defined; new standalone feedback props deferred |
+| [Selection and naming](../selection/spec.md) | Taxonomy, identity, active/selected items and select/combobox delivery | Settle taxonomy before public signatures; consume overlay entry/exit and ordinary input contracts |
 | [Initialization and strings](../app-configuration/spec.md) | Reactive locale/dictionaries, local overrides, app isolation and SSR consistency | Infrastructure owns announcement mechanics; validation keys follow forms' error model |
 | [Packaging and declarations](../packaging/spec.md) | Exports, Vue compatibility, declarations, SSR imports and packed consumers | Begin feasibility early; extend evidence when public APIs settle; infrastructure runs the checks |
 | [Primed-view attachment](../primed-components/spec.md) | Stable view identity, mounts, forwarding, lifetime and cancellation | An actual in-scope workflow is required before its factory API; every published primed surface must pass this contract |
 | [Style observer](../style-observer/spec.md) | Observation/registration choice and browser integration evidence | Deferred; affects live presentation delivery, not unrelated contract design |
-| [Validation and forms](../validation-forms/spec.md) | Logical field state, validation/schema behavior and form authoring | Deferred; its semantics precede finalizing form integration, not ordinary field naming or overlay design |
+| [Validation and forms](../validation-forms/spec.md) | Logical field state, validation/schema behavior, form authoring and field attachment | Deferred; its semantics precede finalizing form integration, not ordinary field naming or overlay design |
+
+The [compact-feedback quest](../compact-feedback/spec.md) is deferred and retains the unresolved compact-validation accessibility gap. It does not block unrelated input design.
+
+The separate [future label placement quest](../label-placement/spec.md) owns optional additional placements. It is deferred future work, outside the beta delivery gates; the current floating-label appearance is retained.
+
+The [Sass linting quest](../sass-lint/spec.md) records why no style linter covers the indented Sass sources yet and when to look again. It is deferred and adds no beta gate.
 
 ## Milestone scope and delivery ownership
 
@@ -48,7 +74,7 @@ The inventory commits to outcomes; unresolved component names, signatures and pr
 | Outcome | Delivery owner | Scope still to settle locally |
 |---|---|---|
 | Button, input, checkbox, circular progress, ripple and scrollbars | [Existing controls brief](work/components.md) | Component-specific accessibility fixes and bridge retirement where justified |
-| Field wrapper and custom/group control attachment | [Field wiring](../field-wiring/spec.md) | Wrapper API and control adapter after required forms semantics |
+| Field wrapper and custom/group control attachment | [Validation/forms](../validation-forms/spec.md#deferred-field-abstractions) | Deferred with the form feature; establish wrapper usefulness and adapter shape together |
 | Form workflow and validation replacement | [Validation/forms](../validation-forms/spec.md) | Returned form view versus separate `bunt-form`, schema/definition and template API |
 | Single-date and date-range pickers | [Date-input delivery](work/date-inputs.md) | Locale editing, range drafts and responsive presentation, coordinated with shared contracts |
 | Select and editable/free-text selection | [Selection](../selection/spec.md#delivery-brief) | Select/combobox names and interaction split; multi-select remains a beta scope question |
@@ -68,7 +94,7 @@ A prerequisite for shipping an outcome does not automatically block its design. 
 ```mermaid
 flowchart TD
   I[Infrastructure baseline and fixtures] --> F[Verified ordinary field delivery]
-  FC[Field and outline contract] --> F
+  FC[Existing input contracts] --> F
   I --> O[Verified overlay components]
   OC[Overlay lifecycle contract] --> O
   OC --> S[Select and combobox delivery]
@@ -93,7 +119,7 @@ flowchart TD
 These are outcome dependencies, not a requirement to complete unrelated branches before starting a design. Before implementing a selected outcome, record its starting evidence and applicable checks. Component delivery consumes only the shared foundations and package/type checks it needs; infrastructure setup is not gated on its own completion. A full green CI baseline remains release evidence. Native overlay probes may inject resolved policy values while observation is deferred, but their result cannot stand in for stylesheet-driven update evidence.
 
 1. Use the verified CI baseline and assign the approved minimal infrastructure delivery, including fixture migration and separate docs smoke; begin packaging feasibility independently. Keep reactivity-transform and verify that dependent type tooling supports it.
-2. Design independent app configuration, ordinary field/outline, overlay and selection contracts. Overlay lifecycle is the recommended first product discussion because its open-calendar transition case serves several consumers.
+2. Design independent app configuration, ordinary input, overlay and selection contracts. The owner selected existing input contracts on 2026-09-20; coordinate popup inspection and focus choices with overlays.
 3. Prove one representative control through its required contracts, typing, CSS behavior and early manual AT checks. Use that evidence before expanding the component families.
 4. Resume deferred observation or forms when their consumers require them. Do not ship live presentation or form integration with those criteria unresolved.
 5. Deliver the remaining families, verify their combined behavior, and close the [release evidence](work/release.md). Packaging gains consumer cases throughout delivery.
@@ -112,7 +138,7 @@ On 2026-09-20 the owner decided “for beta: reactivity-transform: keep, definit
 | picker-scope | decide | Which remaining locale/range/mobile editing outcomes must ship in beta? | [Date-input delivery](work/date-inputs.md) prepares the cases before final scope |
 | manual-at-and-docs | unblock | Name manual testers, machines and human narrative authors. | [Release record](work/release.md#people-and-external-evidence) tracks assignments and missing evidence |
 
-Forms authoring, outline treatment, overlay tokens, number input and textarea details are local decisions in the linked scopes. Adoption of the API direction is distinct from acceptance of a completed work item, and neither supplies missing implementation or release evidence.
+Forms authoring, overlay tokens, number input and textarea details are local decisions in the linked scopes. Adoption of the API direction is distinct from acceptance of a completed work item, and neither supplies missing implementation or release evidence.
 
 ## Working format
 

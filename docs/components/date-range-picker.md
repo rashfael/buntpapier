@@ -6,12 +6,17 @@ layoutClass: 'component'
 <script setup>
 import { defaultDateRangePresets } from '../../src/components/date-picker/temporal'
 
+const slots = {
+	hint: { description: 'Rich hint content; replaces the `hint` prop text' },
+}
+
 const props = {
 	modelValue: { value: { start: null, end: null } },
 	label: { type: 'string', value: 'Pick a range' },
 	placeholder: { type: 'string' },
+	hint: { type: 'string' },
 	disabled: { type: 'boolean', default: false },
-	clearable: { type: 'boolean', default: false },
+	readonly: { type: 'boolean', default: false },
 	showWeekNumbers: { type: 'boolean', default: false },
 	monthsToShow: { type: 'number', value: 2, min: 1 },
 }
@@ -20,8 +25,9 @@ const allProps = {
 	modelValue: { type: 'DateRange', description: 'Current value { start, end } (v-model)' },
 	label: { type: 'string', description: 'Input label' },
 	placeholder: { type: 'string', description: 'Input placeholder' },
-	disabled: { type: 'boolean', default: 'false', description: 'Disables the picker' },
-	name: { type: 'string', description: 'Input name attribute' },
+	hint: { type: 'string', description: 'Guidance below the field, associated as its description' },
+	disabled: { type: 'boolean', default: 'false', description: 'Blocks opening, navigation, presets and clearing; the picker stays focusable so it can still be explained' },
+	readonly: { type: 'boolean', default: 'false', description: 'Blocks value changes while focus, copying, opening and calendar navigation remain available' },
 	minDate: { type: 'Temporal.PlainDate', description: 'Earliest selectable date' },
 	maxDate: { type: 'Temporal.PlainDate', description: 'Latest selectable date' },
 	disabledDates: { type: '(d) => boolean | { disabled, reason? }', description: 'Per-day disable callback' },
@@ -29,7 +35,6 @@ const allProps = {
 	weekStartsOn: { type: "'monday' | 'sunday'", default: 'locale', description: 'Week start day' },
 	locale: { type: 'string', default: 'navigator.language', description: 'BCP 47 locale tag' },
 	showWeekNumbers: { type: 'boolean', default: 'false', description: 'Show ISO week numbers' },
-	clearable: { type: 'boolean', default: 'false', description: 'Show × clear button' },
 	inline: { type: 'boolean', default: 'false', description: 'Render without input/popover' },
 	navigateOnOutsideDayClick: { type: 'boolean', default: 'true', description: 'Clicking adjacent-month day advances view' },
 	presets: { type: 'DatePreset<DateRange>[]', description: 'Preset shortcut buttons' },
@@ -37,7 +42,15 @@ const allProps = {
 }
 
 const events = {
-	'update:modelValue': { description: 'Emitted after second click or preset selection. Payload: DateRange' },
+	'update:modelValue': { description: 'Emitted after second click, preset selection or clear. Payload: DateRange' },
+	focus: { description: 'Focus entered the whole component, including its calendar popup' },
+	blur: { description: 'Focus left the whole component' },
+}
+
+const style = {
+	'--input-clear': { type: 'enum', values: ['auto', 'none'], default: 'auto', description: 'Whether the clear action appears when either endpoint is set and the control is editable' },
+	'--input-shape': { type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill' },
+	'--input-size': { type: 'enum', values: ['normal', 'large', 'compact'], default: 'normal' },
 }
 </script>
 
@@ -52,11 +65,22 @@ Click once to set the start, click again to set the end. Hover while selecting t
 	componentName="bunt-date-range-picker"
 	:props="props"
 	:slots="{}"
+	:style="style"
 />
+
+## Clear action
+
+`--input-clear` controls the clear action; it inherits, so one declaration configures a whole form. Readonly and disabled pickers do not offer it.
+
+```css
+.booking-filters {
+	--input-clear: none;
+}
+```
 
 ## With presets
 
-<Showcase componentName="bunt-date-range-picker" :props="{ modelValue: { value: { start: null, end: null } }, label: { type: 'string', value: 'Pick a range' }, presets: { value: defaultDateRangePresets() }, clearable: { type: 'boolean', default: true } }" :slots="{}" />
+<Showcase componentName="bunt-date-range-picker" :props="{ modelValue: { value: { start: null, end: null } }, label: { type: 'string', value: 'Pick a range' }, presets: { value: defaultDateRangePresets() } }" :slots="{}" />
 
 ## Single month
 
@@ -64,7 +88,7 @@ Click once to set the start, click again to set the end. Hover while selecting t
 
 ## Inline mode
 
-<Showcase wide componentName="bunt-date-range-picker" :props="{ modelValue: { value: { start: null, end: null } }, clearable: { type: 'boolean', default: true }, inline: { type: 'boolean', default: true }, presets: { value: defaultDateRangePresets() } }" :slots="{}" />
+<Showcase wide componentName="bunt-date-range-picker" :props="{ modelValue: { value: { start: null, end: null } }, label: { type: 'string', value: 'Pick a range' }, inline: { type: 'boolean', default: true }, presets: { value: defaultDateRangePresets() } }" :slots="{}" />
 
 ## Accessibility
 
@@ -94,4 +118,11 @@ Automated coverage uses Playwright keyboard tests and ARIA snapshots. Manual NVD
 
 ## API
 
-<ApiDocs :props="allProps" :events="events" />
+Undeclared attributes and listeners are routed: `class`, `style`, `data-*`, `lang`, `dir`, `hidden`, `inert` and `title` reach the component root, everything else — including `id`, `name`, `tabindex` and native listeners — reaches the display textbox, or the calendar's named group when `inline`.
+
+<ApiDocs :slots="slots" :props="allProps" :events="events" :style="style" />
+
+| Exposed member | Description |
+|---|---|
+| `focus(options?: FocusOptions): void` | Focuses the display textbox, or the calendar's focused day when `inline`, without opening the calendar. Does nothing if the picker is hidden, inert or unmounted. |
+| `el` | Component root element. |

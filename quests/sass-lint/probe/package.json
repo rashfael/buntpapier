@@ -1,0 +1,19 @@
+{
+	"name": "sass-lint-probe",
+	"private": true,
+	"type": "module",
+	"description": "Throwaway probe: what stylelint parsers see in indented Sass. See ../spec.md.",
+	"scripts": {
+		"constructs": "node constructs.mjs",
+		"lint": "node lint.mjs",
+		"corpus": "node corpus.mjs ../../.."
+	},
+	"devDependencies": {
+		"postcss-html": "2.0.0",
+		"postcss-sass": "0.5.0",
+		"sass": "1.105.0",
+		"sass-parser": "0.4.56",
+		"stylelint": "17.15.0",
+		"sugarss": "5.0.1"
+	}
+}

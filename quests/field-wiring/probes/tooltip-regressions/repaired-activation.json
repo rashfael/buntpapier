@@ -1,0 +1,374 @@
+[
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "target": "trigger",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "target": "native",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "baseline",
+    "target": "link",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "target": "trigger",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "target": "native",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "chromium",
+    "browserVersion": "153.0.8010.12",
+    "variant": "current",
+    "target": "link",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "target": "trigger",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "target": "native",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "baseline",
+    "target": "link",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "target": "trigger",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "target": "native",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  },
+  {
+    "engine": "firefox",
+    "browserVersion": "155.0",
+    "variant": "current",
+    "target": "link",
+    "observations": [
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      },
+      {
+        "active": false,
+        "counts": {
+          "clicks": 0,
+          "behindClicks": 0,
+          "submits": 0,
+          "linkClicks": 0
+        },
+        "hash": "",
+        "focus": ""
+      }
+    ],
+    "remaining": 0
+  }
+]

@@ -2,7 +2,7 @@
 
 buntpapier uses props and slots for content, application state and data. CSS custom properties configure appearance and presentation, including policies such as modality and dismissal. Ordinary Vue components are the default; optional primed components bind a workflow once when that makes the caller's work easier.
 
-This evergreen internal guide describes the intended API. Implementation status was checked against `3.0.0-alpha.18` on 2026-09-18. Primed workflow APIs, shared validation inputs, application locale configuration and the CSS replacements for calendar presentation props are planned. The component pages document the current [input](../docs/components/input.md), [select](../docs/components/select.md), [date picker](../docs/components/date-picker.md) and [date range picker](../docs/components/date-range-picker.md) APIs.
+This evergreen internal guide describes the intended API. Implementation status was checked against `3.0.0-alpha.18` on 2026-09-18. Primed workflow APIs, application locale configuration and the CSS replacements for calendar presentation props are planned. The component pages document the current [input](../docs/components/input.md), [select](../docs/components/select.md), [date picker](../docs/components/date-picker.md) and [date range picker](../docs/components/date-range-picker.md) APIs.
 
 ## Ordinary components
 
@@ -50,10 +50,12 @@ The boundary follows what a value means. Its type and how often it changes do no
 | concern | public API | examples |
 |---|---|---|
 | Content | Props and slots | Labels, hints, button icons, option labels |
-| Application state and data | Props and models | Selected value, options, `disabled`, `required`, date limits, input parser, external errors |
+| Application state and data | Props and models | Selected value, options, `disabled`, `required`, date limits, input parser |
 | Appearance and layout | CSS custom properties | Color, shape, size, weight, placement, spacing |
 | Presentation policy | CSS custom properties, planned where noted below | Modality, dismissal, embedded versus popup calendar, clear-control visibility |
 | Shared workflow | Optional composable with a primed view | Loading a resource or connecting an editor to a document |
+
+Text props supply simple content; where a matching slot is supported, it overrides the prop's rendered content. Floating labels use text props only. The component owns label and description associations.
 
 For example, one selector can give every button in a toolbar the same presentation:
 
@@ -70,28 +72,55 @@ Showing a clear button is presentation. Whether the field permits an empty value
 
 ## Shared field vocabulary
 
-Fields use the same names for the same responsibilities. Support is being brought into alignment; this table describes the target API, including planned `invalid` and `errors` inputs.
+Fields use the same names for the same responsibilities. Support is being brought into alignment; this table describes the target API.
 
 | declaration | meaning |
 |---|---|
 | `v-model` | The application-owned value, with the control's own value type |
 | `label` | Text identifying the field |
 | `hint` | Guidance for entering or choosing a value |
-| `placeholder` | A short cue in an empty entry; the field still needs an accessible name |
+| `placeholder` | A short cue in an empty control; the field still needs an accessible name |
 | `name` | The form name, separate from the visible label and DOM id |
 | `required` | Whether a value is required |
-| `disabled` | The field is unavailable for interaction, including its built-in actions |
+| `disabled` | The control is unavailable for use; value-changing actions are blocked |
 | `readonly` | The user can inspect the field but cannot change its value, where the control supports this state |
-| `invalid` | Application-supplied invalid state |
-| `errors` | Application-supplied messages as a string or array of strings |
 
-Labels, hints and errors carry content, so they stay out of CSS. Date models keep their date types; sharing field vocabulary does not turn every model into a string. A picker's internally readonly textbox also does not mean its calendar is readonly.
+Labels and hints carry content, so they stay out of CSS. Date models keep their date types; sharing field vocabulary does not turn every model into a string. A picker's internally readonly textbox also does not mean its calendar is readonly.
 
-Input and select currently accept a Vuelidate-shaped `validation` object. The date pickers do not yet accept the shared hint and external-error inputs. The future validation API will define how errors combine, when checks run and how forms collect results. These policies are still being designed.
+Input and select currently accept a Vuelidate-shaped `validation` object. The date pickers do not yet accept the shared hint input. The future validation API will define how errors combine, when checks run and how forms collect results. These policies are still being designed.
+
+Attribute targets, accessible naming and focus follow the [input routing contract](input-routing.md). Input and select implement this contract with hint slots, focusable disabled controls and readonly guards. Checkbox implements it with label slots and a focusable disabled state; it has no readonly or hint surface. Picker delivery remains pending. Input supports `text`, `search`, `email`, `url`, `tel`, `password` and `number`; dedicated controls own other interactions.
+
+### Input content
+
+| Control | Label | Hint |
+|---|---|---|
+| Input, select, both date pickers | `label` text prop | `hint` text prop or `#hint` slot |
+| Checkbox | `#label`, then nonempty `label`, then default slot | None |
+
+Content slots have no slot arguments. Checkbox label content is inline and noninteractive; select's default slot renders options. Picker labels name the textbox in popup mode and caption the calendar group in embedded mode. Both picker modes use the text label prop.
+
+Hint slots replace guidance; input/select validation messages retain priority. Hint descriptions merge with keyboard help and caller descriptions. Compact layout hides hints, including validation text in that area.
+
+## Readonly and clearing
+
+Readonly controls allow focus, copying and popup inspection. Navigation can change the viewed options or month, but user editing, selection commits, presets and clearing cannot change the value. Application model updates still apply.
+
+Disabled controls remain focusable for explanations but block opening and navigation as well as value changes. Disabled takes precedence over readonly; checkbox has no readonly contract. [Input routing](input-routing.md#disabled-controls) defines focus targets, state transitions and tooltip access.
+
+`--input-clear: auto | none` controls existing picker clear actions in popup and embedded modes. It inherits and updates live. `auto` shows the action when the model has a value and the control is editable; `none` hides it. Unset, empty and unsupported values resolve to `auto`. Readonly and disabled block clearing regardless of CSS. `required` permits temporary emptiness while editing.
+
+A date model has a value when non-null; a range has a value when either endpoint is non-null. Clearing emits `null` or `{ start: null, end: null }` respectively and discards drafts or unfinished selection. A draft alone does not expose the action. Clearing closes a popup and restores focus; embedded calendars stay mounted. It emits one model update without synthetic native input/change events. Input, select and checkbox have no built-in clear action.
+
+## SPA submission
+
+Forms use `novalidate` and `@submit.prevent` handlers that validate reactive application data before saving. Buntpapier owns validation and feedback; native constraint validation, browser validation messages and native validity synchronization are unsupported. Components do not modify an enclosing form automatically.
+
+Requiredness, invalidity and error associations expose the library's state through appropriate native semantics or ARIA. `aria-invalid` reflects library validation state rather than browser validity. Validation feedback remains accessible by keyboard and assistive technology. Native editing attributes still reach their applicable elements. Browser request submission, composite-value serialization and native form reset are outside the supported contract.
 
 ## Live presentation changes
 
-Presentation follows the resolved CSS configuration as it changes. That includes changing a dialog's modality while open, or switching a calendar between embedded and popup presentation. The selected value and ongoing workflow survive those changes.
+Presentation follows resolved CSS changes, including a dialog's modality while open. Calendar popup and embedded modes are supported individually; switching between them after mount has unspecified behavior. The state-preservation guarantee for live presentation changes excludes that transition.
 
 The following syntax is illustrative. These token names and values are candidates, and no dialog component currently ships:
 
@@ -106,14 +135,14 @@ JavaScript applies the native behavior and semantics required by the resolved pr
 
 The existing style bridge does not yet observe every CSS change automatically. Its current polling opt-in is `--bunt-will-change: all`; replacing that observer remains separate work. The live presentation contract above describes the target behavior.
 
-The calendar mapping is settled, while its CSS spelling is still open:
+The calendar mapping uses these APIs:
 
 | current prop | intended API |
 |---|---|
 | `inline` | CSS for embedded versus popup presentation |
 | `showWeekNumbers` | CSS for week-number visibility |
 | `monthsToShow` | CSS for the number of visible months |
-| `clearable` | CSS for clear-control visibility |
+| `clearable` | `--input-clear: auto \| none` |
 | `minDate`, `maxDate`, `disabledDates` | Remain props describing permitted values |
 | `parseInput` | Remains a prop describing application input parsing |
 | `locale` | Application default with a reactive local prop override |

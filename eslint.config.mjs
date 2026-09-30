@@ -39,6 +39,8 @@ export default defineConfig([
 			globals: {
 				...globals.browser,
 				...globals.node,
+				// A type-only DOM interface, so it is not among the runtime browser globals.
+				FocusOptions: 'readonly',
 				localStorage: false,
 				$: 'readonly',
 				$$: 'readonly',

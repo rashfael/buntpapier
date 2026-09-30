@@ -4,6 +4,10 @@ The library targets WCAG 2.2 AA and native HTML or a named WAI-ARIA APG interact
 
 ## Acceptance criteria
 
+On 2026-09-21 the owner deferred manual screen-reader testing across all quests until their testing setup is ready. Criterion 11 remains deferred evidence, not a passed check or a prerequisite for continuing other quest work. Resume those observations when the owner reports that the setup is available. Automated accessibility, keyboard/focus and browser requirements remain in force; this scheduling decision does not waive the final release evidence requirement.
+
+On 2026-09-21 the owner approved an interim tooltip compatibility contract that preserves click-through and keyboard explanations while deferring persistence over tooltip content. The [input routing contract](input-routing.md#disabled-controls) defines that behavior. SC 1.4.13 hoverability remains an explicit limitation until the fuller tooltip interaction work is delivered; this repair does not establish complete tooltip or library WCAG conformance.
+
 This is the internal acceptance checklist for interactive components. Public component pages record their evidence; public narrative guidance remains human-authored.
 
 1. Named APG pattern, or "native element, no pattern needed", in the docs.

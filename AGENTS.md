@@ -4,6 +4,8 @@
 
 Keep narrative prose in public docs human-written. Agent edits in `docs/` are limited to mechanical documentation, such as component API references. Evergreen internal guides and accepted design decisions belong in `design/`; start with [the internal design index](design/README.md). Plans, unresolved investigations, prototypes and execution state belong in `quests/`; use [the quest index](quests/README.md) to find the owning record. `TODOs.md` is the single backlog for work outside quest scope.
 
+API references assume webdev readers. Describe component-specific behavior in brief, practical terms. Leave standard events such as `focus` and `blur` undescribed unless their behavior differs from web platform expectations.
+
 ## API design
 
 Buntpapier is a Vue 3 component library. Props/models and slots carry content, application state and data. CSS custom properties configure appearance and presentation policy, including modality and dismissal. Those policies update live, including while open; JavaScript applies the corresponding native behavior. `disabled` remains application state in a prop.

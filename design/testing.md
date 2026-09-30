@@ -4,6 +4,8 @@ The owner approved this policy on 2026-09-20. Component behavior tests use dedic
 
 ## Retention policy
 
+Manual screen-reader observations follow the setup-dependent deferral in the [accessibility policy](accessibility.md#acceptance-criteria). Across all quests, retain the scenarios and mark their evidence deferred until the owner has a testing setup; continue automated checks and other authorized work.
+
 For this library, **permanent browser tests primarily protect component contracts**. A few application journeys cannot cover independent consumers' reliance on focus, events, models, native form semantics and live CSS presentation. Keep tests focused enough that failures name the broken behavior; related assertions can share one scenario when failure diagnosis stays clear.
 
 | Change or question | Verification now | Retain when / where |
@@ -58,6 +60,15 @@ The two suites are two steps of the e2e matrix job in [the workflow](../.github/
 | `/theming` | `Theming.vue` | `dark-mode.test.ts`, `light-dark-tokens.test.ts` |
 | `/selects` | `Selects.vue` | `select-groups.test.ts` |
 | `/buttons` | `Buttons.vue` | `button-a11y.test.ts` |
+| `/tooltip-contracts` | `TooltipContracts.vue` | `tooltip-contracts.test.ts`: click-through, activation, modality, forced-error dismissal and animation lifecycle |
+| `/field-contracts` | `FieldContracts.vue` | `field-contracts.test.ts` |
+| `/field-boundaries` | `FieldBoundaries.vue` | `field-boundaries.test.ts` |
+| `/field-api-cases` | `FieldApiCases.vue` | Source API runtime cases in `field-contracts.test.ts` and `checkbox-contracts.test.ts`; published typing remains separate |
+| `/ssr-fields?ssr` | `SsrFields.vue` | Source server-rendered ids and browser hydration in `field-contracts.test.ts` |
+| `/picker-contracts` | `PickerContracts.vue` | `picker-contracts.test.ts`: routing, hints, focus, readonly/disabled and the live clear token in both picker presentations |
+| `/ssr-pickers?ssr` | `SsrPickers.vue` | Source server-rendered picker ids and browser hydration in `picker-contracts.test.ts` |
+| `/checkbox-contracts` | `CheckboxContracts.vue` | `checkbox-contracts.test.ts`: routing, naming, label slots, focus, focusable disabled state and forced colours |
+| `/ssr-checkboxes?ssr` | `SsrCheckboxes.vue` | Source server-rendered checkbox ids and browser hydration in `checkbox-contracts.test.ts` |
 
 The shared host styling lives in `tests/fixtures/host.sass`: it declares `@layer typography, buntpapier` and sets the body surface from the public token. `mount.ts` imports it before `../../src`, so the fixtures establish the layer order the way a host application does. A consumer that teleports carries its own `#bunt-teleport-target`. Fixtures own their data; add a component rather than a switchable fixture registry.
 

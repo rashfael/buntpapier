@@ -13,7 +13,9 @@ const {
 	minDate,
 	maxDate,
 	disabled,
+	readonly,
 	multiple,
+	tabbableDays = true,
 	navigateOnOutsideDayClick = true,
 	isDayDisabled,
 	getDisabledReason,
@@ -31,7 +33,9 @@ const {
 	minDate?: Temporal.PlainDate
 	maxDate?: Temporal.PlainDate
 	disabled?: boolean
+	readonly?: boolean
 	multiple?: boolean
+	tabbableDays?: boolean
 	navigateOnOutsideDayClick?: boolean
 	isDayDisabled: (day: Temporal.PlainDate) => boolean
 	getDisabledReason?: (day: Temporal.PlainDate) => string | undefined
@@ -61,9 +65,12 @@ function changeMonth (offset: number) {
 	emit('update:focusedDay', next.with({ day: focusedDay?.day ?? 1 }))
 }
 
-function focusDay () {
+/** Focuses the currently focused day. Returns false when it cannot take focus, so the caller can fall back to the named group. */
+function focusDay (options?: FocusOptions) {
 	const target = focusedDay ?? month
-	el?.querySelector<HTMLElement>(`button[data-date="${target}"][data-month="${startOfMonth(target)}"]`)?.focus()
+	const day = el?.querySelector<HTMLButtonElement>(`button[data-date="${target}"][data-month="${startOfMonth(target)}"]:not(:disabled)`)
+	day?.focus(options)
+	return Boolean(day && document.activeElement === day)
 }
 
 async function selectDay (day: Temporal.PlainDate) {
@@ -90,7 +97,7 @@ async function navigate (day: Temporal.PlainDate) {
 	focusDay()
 }
 
-defineExpose({ focusDay })
+defineExpose({ focusDay, el: $$(el) })
 </script>
 <template lang="pug">
 .c-calendar-panel(ref="el")
@@ -109,7 +116,9 @@ defineExpose({ focusDay })
 			:showWeekNumbers="showWeekNumbers",
 			:locale="locale",
 			:disabled="disabled",
+			:readonly="readonly",
 			:multiple="multiple",
+			:tabbableDays="tabbableDays",
 			:isDayDisabled="isDayDisabled",
 			:getDisabledReason="getDisabledReason",
 			:isSelected="isSelected",

@@ -1,6 +1,6 @@
 # Architecture direction
 
-The intended architecture uses native platform primitives with a small internal behavior layer. The current alpha still has the JavaScript bridges and positioning dependencies described below. Verify the required browser feature subset when implementing a native replacement.
+The architecture serves the [SPA product philosophy](philosophy.md), using native platform primitives where they fit the component contract. The current alpha still has the JavaScript bridges and positioning dependencies described below. Verify the required browser feature subset when implementing a native replacement.
 
 ## Platform and component boundaries
 
