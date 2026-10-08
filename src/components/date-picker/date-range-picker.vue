@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, useId, useSlots, watch } from 'vue'
+import { nextTick, onBeforeUnmount, useId, useSlots, useTemplateRef, watch } from 'vue'
 import { useComputedStyle } from '../../computedStyle'
 import { usePickerField } from './picker-field'
 import { useInputOutline } from '../../utils/input-outline'
@@ -319,12 +319,7 @@ function handleClear () {
 // ── Outline (input mode only) ─────────────────────────────────────────────
 
 let radius = $ref(4)
-const { Outline, updateOutline } = useInputOutline($$(label), $$(radius))
-
-watch($$(radius), (newVal, oldVal) => {
-	if (newVal === oldVal) return
-	updateOutline()
-})
+const { Outline, updateOutline } = useInputOutline({ label: useTemplateRef('labelEl'), radius: $$(radius) })
 
 const { classes: computedClasses } = useComputedStyle($$(el), {
 	'--input-shape': 'shape',
@@ -360,7 +355,7 @@ const inputClasses = $computed(() => [
 .bunt-date-range-picker(ref="el", v-bind="rootAttrs()", :class="inputClasses")
 	.label-input-container(v-if="!inline", v-resize-observer="updateOutline", @click="openPopover()")
 		label(:for="id()")
-			span(:id="`${id()}-label`") {{ label }}
+			span(:id="`${id()}-label`", ref="labelEl") {{ label }}
 			input(
 				ref="inputEl",
 				v-bind="controlAttrs()",

@@ -445,8 +445,10 @@ const { floatingStyles: dropdownFloatingStyles, placement: dropdownPlacement, is
 
 let radius = $ref(4)
 
-const { Outline, updateOutline, floatingLabelWidth } = useInputOutline($$(label), $$(radius), {
-	bottom: computed(() => dropdownPlacement.value === 'bottom' && open)
+const { Outline, updateOutline, floatingLabelWidth } = useInputOutline({
+	label: useTemplateRef('labelEl'),
+	radius: $$(radius),
+	openSides: { bottom: computed(() => dropdownPlacement.value === 'bottom' && open) }
 })
 
 const selectedLabel = $computed(() => {
@@ -459,11 +461,6 @@ watch([$$(modelValue), $$(selectedLabel)], () => {
 }, { immediate: true })
 watch($$(options), () => {
 	customizerArgs.options = options
-})
-
-watch($$(radius), (newVal, oldVal) => {
-	if (newVal === oldVal) return
-	updateOutline()
 })
 
 watch(isPositioned, async (isPositioned) => {
@@ -544,7 +541,7 @@ defineExpose({ el: $$(el), focus })
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label(:for="id()")
-			span(v-show="!open", :id="`${id()}-label`") {{ label }}
+			span(v-show="!open", :id="`${id()}-label`", ref="labelEl") {{ label }}
 			input(
 				ref="inputEl",
 				v-bind="inputAttrs(hasHint() ? `${id()}-hint` : undefined, label)",

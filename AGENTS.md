@@ -91,8 +91,7 @@ Rely on inference — add explicit types only when the compiler can't infer or w
 
 - `src/utils/colors.ts` — accent contrast correction against the resolved surface and color utilities
 - `src/utils/icon.ts` — `getIconClass(name)`: maps icon name to `mdi-*` class
-- `src/utils/input-outline.ts` — computes SVG dash-array for the animated input border, sets `--label-gap`
-- `src/utils/text-metrics.ts` — measures text width for label gap calculation
+- `src/utils/input-outline.ts` — computes SVG dash-array for the animated input border, sets `--label-gap` from the observed width of the rendered label
 
 ## Key Dependencies
 

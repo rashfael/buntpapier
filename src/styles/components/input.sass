@@ -36,15 +36,18 @@
 		label
 			flex: auto
 		label span
+			// how far the label shrinks when it floats. read by js
+			--_label-scale: 0.75
 			position: absolute
 			top: 8px
 			left: 12px
+			font-family: var(--font-stack)
 			font-size: 16px
 			font-weight: 400
 			line-height: 21px
 			pointer-events: none
 			color: var(--clr-text-secondary)
-			transition: transform 0.25s, width 0.25s
+			transition: transform 0.25s
 			transform-origin: left top
 		::placeholder
 			color: var(--clr-text-secondary)
@@ -68,6 +71,7 @@
 			stroke-dasharray: calc(var(--label-gap)/2 + 4) 0 100000
 			transition: stroke .15s var(--material-easing), stroke-width .15s var(--material-easing), stroke-dasharray .15s var(--material-easing)
 		.hint
+			font-family: var(--font-stack)
 			font-size: 13px
 			padding-top: 0
 			padding-left: 16px
@@ -91,7 +95,7 @@
 			.outline
 				stroke-dasharray: 3 var(--label-gap) 10000
 			label span
-				transform: translateY(-15px) scale(0.75)
+				transform: translateY(-15px) scale(var(--_label-scale))
 
 		&.disabled
 			cursor: not-allowed

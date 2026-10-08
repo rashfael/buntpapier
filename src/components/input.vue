@@ -2,7 +2,7 @@
 // TODO
 // - label animation WITH icon should go sideways, hint with icon should be on same height as input
 // - rethink padding-top
-import { useTemplateRef, useSlots, watch } from 'vue'
+import { useTemplateRef, useSlots } from 'vue'
 import type { PropType } from 'vue'
 import { useFieldRouting, useFieldFocus, preventFieldEdit } from '../utils/field'
 import { useComputedStyle } from '../computedStyle'
@@ -106,12 +106,7 @@ function onInput ($event: Event) {
 
 let radius = $ref(4)
 
-const { Outline, updateOutline } = useInputOutline($$(label), $$(radius))
-
-watch($$(radius), (newVal, oldVal) => {
-	if (newVal === oldVal) return
-	updateOutline()
-})
+const { Outline, updateOutline } = useInputOutline({ label: useTemplateRef('labelEl'), radius: $$(radius) })
 
 const { classes, style } = useComputedStyle(el, {
 	'--input-shape': 'shape',
@@ -138,7 +133,7 @@ defineExpose({ el, focus })
 	.label-input-container
 		.icon.mdi(v-if="icon", :class="[iconClass]")
 		label(:for="id()")
-			span(:id="`${id()}-label`") {{ label }}
+			span(:id="`${id()}-label`", ref="labelEl") {{ label }}
 			input(
 				ref="inputEl",
 				v-bind="inputAttrs(hasHint() ? `${id()}-hint` : undefined, label)",
