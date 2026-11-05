@@ -11,6 +11,13 @@
 		--_button-text-color: var(--button-text-color, contrast-color(var(--_button-color)))
 		--_button-text-color-error: var(--button-text-color, contrast-color(var(--_button-color-error)))
 		--_button-text-color-success: var(--button-text-color, contrast-color(var(--_button-color-success)))
+		// filled face on hover/focus and while pressed; the defaults darken the button colour
+		--_button-color-hover: var(--button-color-hover, hsl(from var(--_button-color) h s calc(l * 0.786)))
+		--_button-color-pressed: var(--button-color-pressed, hsl(from var(--_button-color) h s calc(l * 0.607)))
+		// elevation or bevel at rest and while pressed, and a translate of the content while pressed
+		--_button-shadow: var(--button-shadow, none)
+		--_button-shadow-pressed: var(--button-shadow-pressed, var(--_button-shadow))
+		--_button-pressed-offset: var(--button-pressed-offset, none)
 
 $button-height: 36px
 
@@ -58,6 +65,7 @@ $pressed-wash: 12%
 
 		background-color: var(--_button-color)
 		color: var(--_button-text-color)
+		box-shadow: var(--_button-shadow)
 
 		.bunt-button-content
 			display: flex
@@ -80,15 +88,18 @@ $pressed-wash: 12%
 				padding-right: 0
 
 		&:hover
-			background-color: bunt-lightness(--_button-color, $hover-lightness)
+			background-color: var(--_button-color-hover)
 			color: var(--_button-text-color) // guard against rogue vitepress css
 
 		&:active
-			background-color: bunt-lightness(--_button-color, $pressed-lightness)
+			background-color: var(--_button-color-pressed)
+			box-shadow: var(--_button-shadow-pressed)
+			.bunt-button-content
+				translate: var(--_button-pressed-offset)
 
 		&:focus-visible
 			outline-style: solid
-			background-color: bunt-lightness(--_button-color, $hover-lightness)
+			background-color: var(--_button-color-hover)
 			outline-color: bunt-lightness(--_button-color, 0.75)
 			outline-width: 2px
 			outline-offset: 2px

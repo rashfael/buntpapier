@@ -39,6 +39,8 @@ export function useInputOutline ({ label: labelRef, radius: radiusRef, openSides
 		const r = Math.max(0, Math.min(radius, (height - 2) / 2, (width - 2) / 2))
 		const cornerWidth = r + 1
 		const openOffset = r === 0 ? 0 : 2
+		// a zero-radius arc restarts the dash pattern in Chromium, which would repeat the label's notch at the next corner; square corners get no arcs
+		const arc = (dx: number, dy: number) => r === 0 ? '' : `a ${r} ${r} 0 0 1 ${dx} ${dy}`
 		outlineStroke = `M ${cornerWidth} 1`
 		if (openSides.top?.value) {
 			outlineStroke += `m 0 ${-openOffset}
@@ -47,7 +49,7 @@ export function useInputOutline ({ label: labelRef, radius: radiusRef, openSides
 			`
 		} else {
 			outlineStroke += `h ${width - 2 * cornerWidth}
-				a ${r} ${r} 0 0 1 ${r} ${r}`
+				${arc(r, r)}`
 		}
 		if (openSides.bottom?.value) {
 			outlineStroke += `v ${height - openOffset}
@@ -55,12 +57,12 @@ export function useInputOutline ({ label: labelRef, radius: radiusRef, openSides
 				v ${-height + openOffset}`
 		} else {
 			outlineStroke += `v ${height - 2 * cornerWidth}
-				a ${r} ${r} 0 0 1 ${-r} ${r}
+				${arc(-r, r)}
 				h ${-width + 2 * cornerWidth}
-				a ${r} ${r} 0 0 1 ${-r} ${-r}
+				${arc(-r, -r)}
 				v ${-height + 2 * cornerWidth}`
 		}
-		outlineStroke += `a ${r} ${r} 0 0 1 ${r} ${-r}`
+		outlineStroke += arc(r, -r)
 	}
 
 	watch(radiusRef, updateOutline)

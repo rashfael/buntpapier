@@ -28,6 +28,11 @@ const style = {
 	'--button-color-error': {type: 'color', default: 'var(--clr-danger)', computed: '--_button-color-error'},
 	'--button-color-success': {type: 'color', default: 'var(--clr-success)', computed: '--_button-color-success'},
 	'--button-text-color': {type: 'color', default: 'computed', computed: '--_button-text-color', description: 'Either --clr-primary-text-light or --clr-primary-text-dark, whichever has better contrast with --button-color'},
+	'--button-color-hover': {type: 'color', default: '--button-color at 78.6% lightness', computed: '--_button-color-hover', description: 'Filled face on hover and keyboard focus'},
+	'--button-color-pressed': {type: 'color', default: '--button-color at 60.7% lightness', computed: '--_button-color-pressed', description: 'Filled face while pressed'},
+	'--button-shadow': {type: 'box-shadow', default: 'none', computed: '--_button-shadow', description: 'Elevation or bevel at rest, on hover and on focus'},
+	'--button-shadow-pressed': {type: 'box-shadow', default: 'var(--button-shadow)', computed: '--_button-shadow-pressed', description: 'Shadow while pressed, e.g. an inverted bevel'},
+	'--button-pressed-offset': {type: 'translate', default: 'none', computed: '--_button-pressed-offset', description: 'Moves the content while pressed, e.g. `1px 1px`'},
 	'--button-size': {type: 'enum', values: ['small', 'normal', 'large', 'huge'], default: 'normal'},
 	'--icon-placement': {type: 'enum', values: ['left', 'right', 'top'], default: 'left'},
 	'--tooltip-placement': {type: 'enum', values: ['auto', 'top', 'right', 'bottom', 'left'], default: 'auto', description: 'Supports `-start` and `-end` suffix.'}

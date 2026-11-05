@@ -28,6 +28,8 @@ const events = {
 const style = {
 	'--input-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
 	'--input-size': {type: 'enum', values: ['normal', 'large', 'compact'], default: 'normal'},
+	'--input-background': {type: 'color', default: 'transparent', description: 'Fill of the field box inside the outline'},
+	'--input-outline-color': {type: 'color', default: '38% ink over the surface', description: 'Outline at rest; focus and invalid keep their own colours'},
 }
 </script>
 

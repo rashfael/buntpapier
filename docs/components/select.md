@@ -28,6 +28,17 @@ const events = {
 const style = {
 	'--input-shape': {type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill'},
 	'--input-size': {type: 'enum', values: ['normal', 'large', 'compact'], default: 'normal'},
+	'--input-background': {type: 'color', default: 'transparent', description: 'Fill of the field box inside the outline'},
+	'--input-outline-color': {type: 'color', default: '38% ink over the surface', description: 'Outline at rest; focus and invalid keep their own colours'},
+	'--overlay-background': {type: 'color', default: 'raised surface', description: 'Dropdown list background; inherits through the teleport target, so set it on an ancestor of the target'},
+	'--overlay-shadow': {type: 'box-shadow', default: '0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12)', description: 'Dropdown elevation'},
+	'--select-dropdown-border': {type: 'border', default: '2px solid var(--clr-primary)', description: 'Border joining the open dropdown to the field'},
+	'--select-indicator': {type: 'content', default: 'none', description: 'Content of the decorative indicator at the field\'s trailing end, e.g. `""` with a background or `"▾"`; `none` draws no indicator'},
+	'--select-indicator-width': {type: 'length', default: '0px', description: 'Width of the indicator, reserved at the field box\'s trailing end'},
+	'--select-indicator-background': {type: 'background', default: 'none', description: 'Indicator background; `currentcolor` is the indicator colour'},
+	'--select-indicator-color': {type: 'color', default: 'var(--clr-text-secondary)'},
+	'--select-indicator-shadow': {type: 'box-shadow', default: 'none'},
+	'--select-indicator-shadow-open': {type: 'box-shadow', default: 'var(--select-indicator-shadow)', description: 'Indicator shadow while the dropdown is open'},
 }
 
 // Grouped options: each entry has a label and a nested `items` array.

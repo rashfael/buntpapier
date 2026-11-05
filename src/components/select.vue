@@ -618,11 +618,32 @@ defineExpose({ el: $$(el), focus })
 		transform: rotate(180deg)
 	.bunt-input input
 		padding-right: 20px
+	// The indicator: an optional decorative part at the trailing end of the field box, drawn only when
+	// --select-indicator holds content. --select-indicator-width reserves its room in the field box.
+	// Not on the dropdown's aria-hidden copy of the field, which would cover the open state.
+	&:not([aria-hidden]) > .label-input-container
+		padding-right: var(--select-indicator-width, 0px)
+		&::after
+			content: var(--select-indicator, none)
+			position: absolute
+			top: 2px
+			right: 2px
+			bottom: 2px
+			width: var(--select-indicator-width, 0px)
+			display: grid
+			place-items: center
+			box-sizing: border-box
+			background: var(--select-indicator-background, none)
+			box-shadow: var(--select-indicator-shadow, none)
+			color: var(--select-indicator-color, var(--clr-text-secondary))
+			pointer-events: none
+	&:not([aria-hidden]) > .label-input-container:has([aria-expanded="true"])::after
+		box-shadow: var(--select-indicator-shadow-open, var(--select-indicator-shadow, none))
 .bunt-select-dropdown-menu
 	// card()
 	--bunt-input--radius-px: calc(1px * var(--bunt-input--radius))
 	border-radius: var(--bunt-input--radius-px)
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+	box-shadow: var(--overlay-shadow, 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12))
 	transition: box-shadow .3s
 	z-index: 100
 	display: flex
@@ -641,7 +662,7 @@ defineExpose({ el: $$(el), focus })
 		flex-direction: column
 		flex: auto
 		min-height: 0
-		background-color: var(--_clr-surface-raised)
+		background-color: var(--overlay-background, var(--_clr-surface-raised))
 
 	ul
 		margin: 0
@@ -691,15 +712,19 @@ defineExpose({ el: $$(el), focus })
 		white-space: nowrap
 		overflow: hidden
 		text-overflow: ellipsis
+	// the copy of the field at the dropdown's top keeps the outline continuous; it paints no field box over the field
+	.bunt-select .label-input-container
+		background: none
+		box-shadow: none
 	&.dropdown-placement-bottom
 		// padding-top: 37px
 		.scrollable-menu
-			border: 2px solid var(--clr-primary)
+			border: var(--select-dropdown-border, 2px solid var(--clr-primary))
 			border-top: none
 			border-radius: 0 0 var(--bunt-input--radius-px) var(--bunt-input--radius-px)
 	&.dropdown-placement-top
 		flex-direction: column-reverse
-		border: 2px solid var(--clr-primary)
+		border: var(--select-dropdown-border, 2px solid var(--clr-primary))
 		.bunt-input
 			label
 				z-index: 1

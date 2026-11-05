@@ -63,11 +63,11 @@
 		height: max-content
 		max-width: none
 		max-height: none
-		border: none
+		border: var(--overlay-border, none)
 		padding: 0
-		border-radius: 4px
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16)
-		background: var(--_clr-surface-raised)
+		border-radius: var(--overlay-radius, 4px)
+		box-shadow: var(--overlay-shadow, 0 4px 16px rgba(0, 0, 0, 0.16))
+		background: var(--overlay-background, var(--_clr-surface-raised))
 		outline: none
 		overflow: visible
 

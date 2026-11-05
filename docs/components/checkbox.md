@@ -25,6 +25,8 @@ const style = {
 	'--checkbox-weight': {type: 'enum', values: [/* 'elevated', */ 'filled', 'outlined', 'text'], default: 'filled'},
 	'--checkbox-icon': {type: 'enum', values: ['check', 'check-bold', 'close', 'plus', 'minus'], default: 'check'},
 	'--checkbox-color': {type: 'color', default: 'var(--clr-primary)', computed: '--_checkbox-color'},
+	'--checkbox-box-background': {type: 'color', default: 'transparent', description: 'Fill of the unchecked box (and of the outlined weight\'s checked box)'},
+	'--checkbox-box-shadow': {type: 'box-shadow', default: 'none', description: 'Shadow of the box, e.g. an inset bevel'},
 }
 </script>
 

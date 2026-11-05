@@ -35,6 +35,9 @@
 		border-radius: 2px
 		border: 2px solid var(--clr-text-secondary)
 		margin-right: 8px
+		// a fill and an inset or drop shadow for the unchecked box; a checked box takes the checkbox colour
+		background-color: var(--checkbox-box-background, transparent)
+		box-shadow: var(--checkbox-box-shadow, none)
 		position: relative
 		transition: all .2s ease-out
 
@@ -78,7 +81,7 @@
 
 	&.bunt-checkbox--weight-outlined
 		.bunt-checkbox-box
-			background-color: transparent
+			background-color: var(--checkbox-box-background, transparent)
 			.mdi
 				// accent as ink: JS contrast guard > raw accent
 				color: var(--_checkbox-ink-color, var(--_checkbox-color))

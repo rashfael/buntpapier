@@ -12,10 +12,13 @@
 		--_input-gutter: 8px
 		&[hidden]
 			display: none
+		// the field box: the outline below is drawn around it; --input-background fills it
 		.label-input-container
 			position: relative
 			display: flex
 			align-items: center
+			border-radius: 4px
+			background-color: var(--input-background, transparent)
 		.icon
 			font-size: 22px
 			color: var(--clr-text-secondary)
@@ -64,7 +67,7 @@
 			// ≈ 38% ink, but kept OPAQUE (mixed over the surface, not transparent) so the
 			// focus transition to --clr-primary interpolates cleanly — a translucent
 			// resting colour would dip through low alpha and flash on focus
-			stroke: color-mix(in srgb, var(--_clr-ink) 38%, var(--_clr-surface))
+			stroke: var(--input-outline-color, color-mix(in srgb, var(--_clr-ink) 38%, var(--_clr-surface)))
 			stroke-width: 1px
 			fill: none
 			pointer-events: none
@@ -151,10 +154,11 @@
 		--_input-gutter: 16px
 		label span
 			left: 24px
+		.label-input-container, input
+			border-radius: 17.5px
 		input
 			padding-left: 24px
-			border-radius: 17.5px
 
 	.bunt-input--shape-squared
-		input
+		.label-input-container, input
 			border-radius: 0

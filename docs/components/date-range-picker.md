@@ -51,6 +51,12 @@ const style = {
 	'--input-clear': { type: 'enum', values: ['auto', 'none'], default: 'auto', description: 'Whether the clear action appears when either endpoint is set and the control is editable' },
 	'--input-shape': { type: 'enum', values: ['pill', 'rounded', 'squared'], default: 'pill' },
 	'--input-size': { type: 'enum', values: ['normal', 'large', 'compact'], default: 'normal' },
+	'--input-background': {type: 'color', default: 'transparent', description: 'Fill of the field box inside the outline'},
+	'--input-outline-color': {type: 'color', default: '38% ink over the surface', description: 'Outline at rest; focus and invalid keep their own colours'},
+	'--overlay-background': {type: 'color', default: 'raised surface', description: 'Popover background'},
+	'--overlay-border': {type: 'border', default: 'none', description: 'Popover border'},
+	'--overlay-radius': {type: 'length', default: '4px', description: 'Popover corner radius'},
+	'--overlay-shadow': {type: 'box-shadow', default: '0 4px 16px rgba(0, 0, 0, 0.16)', description: 'Popover elevation'},
 }
 </script>
 
